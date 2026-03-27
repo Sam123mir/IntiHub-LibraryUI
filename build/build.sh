@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Ensure aftman binaries are in PATH
+export PATH="/c/Users/samir/.aftman/bin:$PATH"
+
 MODE=${1:-"build"}
 
 P='\033[38;2;48;255;106m'
@@ -70,7 +73,7 @@ SIZE=$(($(wc -c < "$OUTPUT") / 1024))
 echo ""
 echo -e "[ $(date '+%H:%M:%S') ]"
 echo -e "${P}[ ✓ ]${R} $PREFIX"
-echo -e "${P}[ > ]${R} WindUI Build completed successfully"
+echo -e "${P}[ > ]${R} IntiHub Build completed successfully"
 echo -e "${P}[ > ]${R} Version: ${VER}"
 echo -e "${P}[ > ]${R} Time taken: ${TIME}ms"
 echo -e "${P}[ > ]${R} Size: ${SIZE}KB"

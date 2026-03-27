@@ -1,3 +1,5 @@
+-- Generated from package.json | build/build.sh
+
 return [[
 {
     "name": "IntiHub",
@@ -29,5 +31,4 @@ return [[
         "concurrently": "^9.2.0"
     }
 }
-
 ]]

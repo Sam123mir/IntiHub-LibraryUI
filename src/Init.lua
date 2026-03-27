@@ -265,14 +265,20 @@ function IntiHub:CreateWindow(Config)
 	local CreateWindow = require("./components/window/Init")
 
 	if not RunService:IsStudio() and writefile then
-		if not isfolder("IntiHub") then
-			makefolder("IntiHub")
-		end
-		if Config.Folder then
-			makefolder(Config.Folder)
-		else
-			makefolder(Config.Title)
-		end
+		pcall(function()
+			if not isfolder("IntiHub") then
+				makefolder("IntiHub")
+			end
+			if Config.Folder then
+				if not isfolder(Config.Folder) then
+					makefolder(Config.Folder)
+				end
+			else
+				if not isfolder(Config.Title) then
+					makefolder(Config.Title)
+				end
+			end
+		end)
 	end
 
 	Config.IntiHub = IntiHub

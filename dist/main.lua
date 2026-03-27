@@ -4,17 +4,16 @@
    / // __ \/ __/ / /_/ / / / / __ \
  _/ // / / / /_/ / __  / /_/ / /_/ /
 /___/_/ /_/\__/_/_/ /_/\__,_/_.___/ 
-                                    
+
     v1.6.64  |  2026-03-26  |  Roblox UI Library for scripts
-    
+
     To view the source code, see the `src/` folder on the official GitHub repository.
-    
+
     Author: Sammir_Inti
     Github: https://github.com/Sam123mir/IntiHub-LibraryUI
     Discord: {{DISCORD_URL}}
     License: MIT
 ]]
-
 
 local a a={cache={}, load=function(b)if not a.cache[b]then a.cache[b]={c=a[b]()}end return a.cache[b].c end}do function a.a()local b=(cloneref or clonereference or function(b)return b end)
 
@@ -2086,6 +2085,8 @@ New=a.load'i'.New
 
 }end function a.k()
 
+
+
 return[[
 {
     "name": "IntiHub",
@@ -2117,8 +2118,40 @@ return[[
         "concurrently": "^9.2.0"
     }
 }
+]]end function a.l()
 
-]]end function a.l()local aa={}local ab=a.load'c'local ac=ab.New local ad=ab.Tween function aa.New(ae,af,ag,ah,ai,aj,ak,al)ah=ah or"Primary"local am=al or(not ak and 14 or 99)local an if af and af~=""then an=ac("ImageLabel",{Image=ab.Icon(af)[1],ImageRectSize=ab.Icon(af)[2].ImageRectSize,ImageRectOffset=ab.Icon(af)[2].ImageRectPosition,Size=UDim2.new(0,21,0,21),BackgroundTransparency=1,ImageColor3=ah=="White"and Color3.new(0,0,0)or nil,ImageTransparency=ah=="White"and 0.4 or 0,ThemeTag={ImageColor3=ah~="White"and"Icon"or nil,},})end local ao=ac("TextButton",{Size=UDim2.new(0,0,1,0),AutomaticSize="X",Parent=ai,BackgroundTransparency=1,},{ab.NewRoundFrame(am,"Squircle",{
+local aa={}
+
+local ab=a.load'c'
+local ac=ab.New
+local ad=ab.Tween
+
+function aa.New(ae,af,ag,ah,ai,aj,ak,al)
+ah=ah or"Primary"
+local am=al or(not ak and 14 or 99)
+local an
+if af and af~=""then
+an=ac("ImageLabel",{
+Image=ab.Icon(af)[1],
+ImageRectSize=ab.Icon(af)[2].ImageRectSize,
+ImageRectOffset=ab.Icon(af)[2].ImageRectPosition,
+Size=UDim2.new(0,21,0,21),
+BackgroundTransparency=1,
+ImageColor3=ah=="White"and Color3.new(0,0,0)or nil,
+ImageTransparency=ah=="White"and 0.4 or 0,
+ThemeTag={
+ImageColor3=ah~="White"and"Icon"or nil,
+},
+})
+end
+
+local ao=ac("TextButton",{
+Size=UDim2.new(0,0,1,0),
+AutomaticSize="X",
+Parent=ai,
+BackgroundTransparency=1,
+},{
+ab.NewRoundFrame(am,"Squircle",{
 ThemeTag={
 ImageColor3=ah~="White"and"Button"or nil,
 },
@@ -13550,14 +13583,20 @@ function aa.CreateWindow(av,aw)
 local ax=a.load'_'
 
 if not ak:IsStudio()and writefile then
+pcall(function()
 if not isfolder"IntiHub"then
 makefolder"IntiHub"
 end
 if aw.Folder then
+if not isfolder(aw.Folder)then
 makefolder(aw.Folder)
+end
 else
+if not isfolder(aw.Title)then
 makefolder(aw.Title)
 end
+end
+end)
 end
 
 aw.IntiHub=aa
