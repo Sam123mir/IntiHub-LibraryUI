@@ -116,9 +116,9 @@ function StatusBar.New(Config)
 			}, {
 				New("UICorner", { CornerRadius = UDim.new(0, 6) }),
 				New("ImageLabel", {
-					Image = Creator.Icon(Icon)[1],
-					ImageRectOffset = Creator.Icon(Icon)[2].ImageRectPosition,
-					ImageRectSize = Creator.Icon(Icon)[2].ImageRectSize,
+					Image = Creator.Icon(Icon) and Creator.Icon(Icon)[1] or "",
+					ImageRectOffset = Creator.Icon(Icon) and Creator.Icon(Icon)[2].ImageRectPosition or Vector2.new(0, 0),
+					ImageRectSize = Creator.Icon(Icon) and Creator.Icon(Icon)[2].ImageRectSize or Vector2.new(0, 0),
 					Size = UDim2.new(0, 16, 0, 16),
 					Position = UDim2.new(0.5, 0, 0.5, 0),
 					AnchorPoint = Vector2.new(0.5, 0.5),

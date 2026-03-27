@@ -8,8 +8,8 @@ return function(IntiHub)
 			Outline = Color3.fromHex("#FFC300"),
 			Text = Color3.fromHex("#FFFFFF"),
 			Placeholder = Color3.fromHex("#7a7a7a"),
-			Background = Color3.fromHex("#3D330B"), -- Even stronger Gold Tint
-			BackgroundTransparency = 0.2,
+			Background = Color3.fromHex("#5C4D13"), -- Vibrant Yellowish Gold
+			BackgroundTransparency = 0.08,
 			Button = Color3.fromHex("#1A1A1A"),
 			Icon = Color3.fromHex("#FFC300"),
 			Toggle = Color3.fromHex("#FFC300"),
