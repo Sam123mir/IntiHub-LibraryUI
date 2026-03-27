@@ -1105,16 +1105,18 @@ return function(Config)
 				BackgroundTransparency = 1,
 				Parent = Window.UIElements.Main.Main.Topbar.Left,
 			})
-
-			WindowIcon = Creator.Image(
-				Window.Icon,
-				Window.Title,
+			local IconAsset = Window.Icon
+			if string.find(tostring(IconAsset), "http") then
+				IconAsset = Creator.GetAsset(IconAsset, Window.Folder, "icon", "Logo")
+			end
+			local WindowIcon = Creator.Image(
+				IconAsset,
+				"WindowIcon",
 				Window.IconRadius,
 				Window.Folder,
-				"Window",
-				true,
+				"icon",
 				Window.IconThemed,
-				"WindowTopbarIcon"
+				"Text"
 			)
 			WindowIcon.Parent = WindowIconContainer
 			WindowIcon.Size = UDim2.new(0, Window.IconSize, 0, Window.IconSize)

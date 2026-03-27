@@ -718,6 +718,40 @@ function Creator.SanitizeFilename(url)
 	return filename
 end
 
+function Creator.GetAsset(Url, Folder, Type, Name)
+	Folder = Folder or "Temp"
+	Name = Creator.SanitizeFilename(Name or "Asset")
+	Type = Type or "Image"
+
+	local FileName = "IntiHub_Data/" .. Folder .. "/assets/." .. Type .. "-" .. Name .. ".png"
+
+	if not RunService:IsStudio() and isfile and isfile(FileName) then
+		return getcustomasset(FileName)
+	end
+
+	if string.find(Url, "http") then
+		local success, response = pcall(function()
+			local body = Creator.Request
+					and Creator.Request({
+						Url = Url,
+						Method = "GET",
+					}).Body
+				or ""
+
+			if not RunService:IsStudio() and writefile then
+				makefolder("IntiHub_Data/" .. Folder .. "/assets")
+				writefile(FileName, body)
+				return getcustomasset(FileName)
+			end
+		end)
+		if success and response then
+			return response
+		end
+	end
+
+	return Url
+end
+
 function Creator.Image(Img, Name, Corner, Folder, Type, IsThemeTag, Themed, ThemeTagName)
 	Folder = Folder or "Temp"
 	Name = Creator.SanitizeFilename(Name)

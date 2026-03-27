@@ -48,7 +48,10 @@ function Section.New(SectionConfig, Parent, Folder, UIScale, Window)
             New("UICorner", { CornerRadius = UDim.new(0, 8) }),
             New("UIStroke", {
                 Thickness = 1.2,
-                ThemeTag = { Color = "Accent" },
+                			Color = SectionConfig.IconColor or nil,
+			ThemeTag = not SectionConfig.IconColor and {
+				Color = "Accent",
+			} or nil,
             }),
             InternalIcon
         })
