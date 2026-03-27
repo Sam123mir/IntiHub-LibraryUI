@@ -25,7 +25,8 @@ do
 			IntiHub = require(cloneref(ReplicatedStorage:WaitForChild("IntiHub"):WaitForChild("Init")))
 		else
 			IntiHub =
-				loadstring(game:HttpGet("https://raw.githubusercontent.com/Sam123mir/IntiHub-LibraryUI/main/dist/main.lua"))()
+				loadstring(game:HttpGet("https://raw.githubusercontent.com/Sam123mir/IntiHub-LibraryUI/main/dist/main.lua?v=" .. tick()))()
+
 		end
 	end
 end
