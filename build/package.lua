@@ -1,13 +1,11 @@
--- Generated from package.json | build/build.sh
-
 return [[
 {
-    "name": "windui",
+    "name": "IntiHub",
     "version": "1.6.64",
     "main": "./dist/main.lua",
-    "repository": "https://github.com/Footagesus/WindUI",
-    "discord": "https://discord.gg/ftgs-development-hub-1300692552005189632",
-    "author": "Footagesus",
+    "repository": "https://github.com/Sammir_Inti/IntiHub",
+    "discord": "https://discord.gg/Sammir_Inti-development-hub-1300692552005189632",
+    "author": "Sammir_Inti",
     "description": "Roblox UI Library for scripts",
     "license": "MIT",
     "scripts": {
@@ -31,4 +29,5 @@ return [[
         "concurrently": "^9.2.0"
     }
 }
+
 ]]

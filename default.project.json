@@ -1,10 +1,10 @@
 {
-    "name": "WindUI",
+    "name": "IntiHub",
     "tree": {
         "$className": "DataModel",
 
         "ReplicatedStorage": {
-            "WindUI": {
+            "IntiHub": {
                 "$path": "src/"
             },
             "build": {

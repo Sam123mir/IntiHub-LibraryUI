@@ -1,5 +1,5 @@
 --[[
-    WindUI Example 2
+    IntiHub Example 2
 ]]
 
 local cloneref = (cloneref or clonereference or function(instance)
@@ -8,7 +8,7 @@ end)
 local ReplicatedStorage = cloneref(game:GetService("ReplicatedStorage"))
 local RunService = cloneref(game:GetService("RunService"))
 
-local WindUI
+local IntiHub
 
 do
 	local ok, result = pcall(function()
@@ -16,23 +16,23 @@ do
 	end)
 
 	if ok then
-		WindUI = result
+		IntiHub = result
 	else
 		if RunService:IsStudio() or not writefile then
-			WindUI = require(ReplicatedStorage:WaitForChild("WindUI"):WaitForChild("Init"))
+			IntiHub = require(ReplicatedStorage:WaitForChild("IntiHub"):WaitForChild("Init"))
 		else
-			WindUI =
-				loadstring(game:HttpGet("https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua"))()
+			IntiHub =
+				loadstring(game:HttpGet("https://raw.githubusercontent.com/Sammir_Inti/IntiHub/main/dist/main.lua"))()
 		end
 	end
 end
 
---WindUI.TransparencyValue = .9
+--IntiHub.TransparencyValue = .9
 local ThemeName = "Dark"
 
-local Window = WindUI:CreateWindow({
+local Window = IntiHub:CreateWindow({
 	Title = "Theme '" .. ThemeName .. "'",
-	Author = "by .ftgs",
+	Author = "by .Sammir_Inti",
 	Icon = "solar:compass-big-bold",
 	Theme = ThemeName,
 	NewElements = true,
@@ -149,7 +149,7 @@ Group2:Button({
 	IconAlign = "Left",
 	Size = "Small",
 	Callback = function()
-		WindUI:Notify({
+		IntiHub:Notify({
 			Title = "Success",
 			Content = "Settings saved!",
 		})
@@ -165,7 +165,7 @@ Group2:Button({
 	IconAlign = "Left",
 	Size = "Small",
 	Callback = function()
-		WindUI:Notify({
+		IntiHub:Notify({
 			Title = "Reset",
 			Content = "All parameters restored to default",
 		})
@@ -179,7 +179,7 @@ local TabSettings = Window:Tab({
 
 -- Get all available themes
 local Themes = {}
-local ThemesModule = WindUI.Themes
+local ThemesModule = IntiHub.Themes
 for _ThemeName, ThemeData in pairs(ThemesModule) do
 	table.insert(Themes, _ThemeName)
 end
@@ -201,39 +201,39 @@ TabSettings:Dropdown({
 	Callback = function(value)
 		ThemeName = value
 		Window:SetTitle("Theme '" .. ThemeName .. "'")
-		WindUI:SetTheme(ThemeName)
-		WindUI:Notify({
+		IntiHub:SetTheme(ThemeName)
+		IntiHub:Notify({
 			Title = "Theme Changed",
 			Content = "Now using " .. ThemeName .. " theme",
 		})
 
-		local PRNumber = WindUI.Themes[ThemeName]
-			and WindUI.Themes[ThemeName].Metadata
-			and WindUI.Themes[ThemeName].Metadata.PullRequest
+		local PRNumber = IntiHub.Themes[ThemeName]
+			and IntiHub.Themes[ThemeName].Metadata
+			and IntiHub.Themes[ThemeName].Metadata.PullRequest
 		print(PRNumber)
 		if PRNumber then
 			Window:SetAuthor("Loading...")
 			if not CachedPRData[PRNumber] then
 				local Success, Data = pcall(function()
-					return Remote:InvokeServer("Footagesus", "WindUI", PRNumber)
+					return Remote:InvokeServer("Sammir_Inti", "IntiHub", PRNumber)
 				end)
 
 				if Success and Data and Data.html_url then
 					CachedPRData[PRNumber] = Data
 					Window:SetAuthor(
-						"by " .. Data.user.login .. " | https://github.com/Footagesus/WindUI/pull/" .. PRNumber
+						"by " .. Data.user.login .. " | https://github.com/Sammir_Inti/IntiHub/pull/" .. PRNumber
 					)
 				end
 				print(Data)
 			else
 				local Data = CachedPRData[PRNumber]
 				Window:SetAuthor(
-					"by " .. Data.user.login .. " | https://github.com/Footagesus/WindUI/pull/" .. PRNumber
+					"by " .. Data.user.login .. " | https://github.com/Sammir_Inti/IntiHub/pull/" .. PRNumber
 				)
 				print(Data)
 			end
 		else
-			Window:SetAuthor("by .ftgs")
+			Window:SetAuthor("by .Sammir_Inti")
 		end
 	end,
 })

@@ -23,7 +23,7 @@ end
 
 Icons.SetIconsType("lucide")
 
-local WindUI
+local IntiHub
 
 local Creator = {
 	Font = "rbxassetid://12187365364",
@@ -95,6 +95,11 @@ local Creator = {
 		VideoFrame = {
 			BorderSizePixel = 0,
 		},
+		UIStroke = {
+			Thickness = 1,
+			ApplyStrokeMode = "Border",
+			Transparency = 0,
+		},
 	},
 	Colors = {
 		Red = "#e53935",
@@ -129,8 +134,8 @@ local Creator = {
 	ThemeChangeCallbacks = {},
 }
 
-function Creator.Init(WindUITable)
-	WindUI = WindUITable
+function Creator.Init(IntiHubTable)
+	IntiHub = IntiHubTable
 end
 
 function Creator.AddSignal(Signal, Function)
@@ -153,12 +158,12 @@ function Creator.SafeCallback(Function, ...)
 
 	local Success, Event = pcall(Function, ...)
 	if not Success then
-		if WindUI and WindUI.Window and WindUI.Window.Debug then
+		if IntiHub and IntiHub.Window and IntiHub.Window.Debug then
 			local _, i = Event:find(":%d+: ")
 
-			warn("[ WindUI: DEBUG Mode ] " .. Event)
+			warn("[ IntiHub: DEBUG Mode ] " .. Event)
 
-			return WindUI:Notify({
+			return IntiHub:Notify({
 				Title = "DEBUG Mode: Error",
 				Content = not i and Event or Event:sub(i + 1),
 				Duration = 8,
@@ -168,8 +173,8 @@ function Creator.SafeCallback(Function, ...)
 end
 
 function Creator.Gradient(stops, props)
-	if WindUI and WindUI.Gradient then
-		return WindUI:Gradient(stops, props)
+	if IntiHub and IntiHub.Gradient then
+		return IntiHub:Gradient(stops, props)
 	end
 
 	local colorSequence = {}
@@ -747,7 +752,7 @@ function Creator.Image(Img, Name, Corner, Folder, Type, IsThemeTag, Themed, Them
 		}).IconFrame
 		IconLabel.Parent = ImageFrame
 	elseif string.find(Img, "http") then
-		local FileName = "WindUI/" .. Folder .. "/assets/." .. Type .. "-" .. Name .. ".png"
+		local FileName = "IntiHub/" .. Folder .. "/assets/." .. Type .. "-" .. Name .. ".png"
 		local success, response = pcall(function()
 			task.spawn(function()
 				local response = Creator.Request
@@ -768,7 +773,7 @@ function Creator.Image(Img, Name, Corner, Folder, Type, IsThemeTag, Themed, Them
 				else
 					warn(
 						string.format(
-							"[ WindUI.Creator ] Failed to load custom asset '%s': %s",
+							"[ IntiHub.Creator ] Failed to load custom asset '%s': %s",
 							FileName,
 							tostring(asset)
 						)
@@ -781,7 +786,7 @@ function Creator.Image(Img, Name, Corner, Folder, Type, IsThemeTag, Themed, Them
 		end)
 		if not success then
 			warn(
-				"[ WindUI.Creator ]  '" .. identifyexecutor()
+				"[ IntiHub.Creator ]  '" .. identifyexecutor()
 					or "Studio" .. "' doesnt support the URL Images. Error: " .. response
 			)
 

@@ -6,7 +6,7 @@ local Tween = Creator.Tween
 
 function Button.New(Title, Icon, Callback, Variant, Parent, Dialog, FullRounded, Radius)
 	Variant = Variant or "Primary"
-	local Radius = Radius or (not FullRounded and 10 or 99)
+	local Radius = Radius or (not FullRounded and 14 or 99)
 	local IconButtonFrame
 	if Icon and Icon ~= "" then
 		IconButtonFrame = New("ImageLabel", {
@@ -37,6 +37,14 @@ function Button.New(Title, Icon, Callback, Variant, Parent, Dialog, FullRounded,
 			Size = UDim2.new(1, 0, 1, 0),
 			Name = "Squircle",
 			ImageTransparency = Variant == "Primary" and 0 or Variant == "White" and 0 or 1,
+		}, {
+			Variant == "Primary" and New("UIGradient", {
+				Rotation = 45,
+				Color = ColorSequence.new({
+					ColorSequenceKeypoint.new(0, Color3.fromHex("#FFC300")), -- Inti Gold
+					ColorSequenceKeypoint.new(1, Color3.fromHex("#FF8C00")), -- Orange
+				}),
+			}) or nil,
 		}),
 
 		Creator.NewRoundFrame(Radius, "Squircle", {

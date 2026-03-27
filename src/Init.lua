@@ -1,4 +1,4 @@
-local WindUI = {
+local IntiHub = {
 	Window = nil,
 	Theme = nil,
 	Creator = require("./modules/Creator"),
@@ -26,7 +26,7 @@ local cloneref = (cloneref or clonereference or function(instance)
 	return instance
 end)
 
-WindUI.cloneref = cloneref
+IntiHub.cloneref = cloneref
 
 local HttpService = cloneref(game:GetService("HttpService"))
 local Players = cloneref(game:GetService("Players"))
@@ -37,17 +37,17 @@ local LocalPlayer = Players.LocalPlayer or nil
 
 local Package = HttpService:JSONDecode(require("../build/package"))
 if Package then
-	WindUI.Version = Package.version
+	IntiHub.Version = Package.version
 end
 
 local KeySystem = require("./components/KeySystem")
 
-local Creator = WindUI.Creator
+local Creator = IntiHub.Creator
 
 local New = Creator.New
 
 --local Tween = Creator.Tween
---local ServicesModule = WindUI.Services
+--local ServicesModule = IntiHub.Services
 
 local Acrylic = require("./utils/Acrylic/Init")
 
@@ -56,13 +56,13 @@ local ProtectGui = protectgui or (syn and syn.protect_gui) or function() end
 local GUIParent = gethui and gethui() or (CoreGui or LocalPlayer:WaitForChild("PlayerGui"))
 
 local UIScaleObj = New("UIScale", {
-	Scale = WindUI.UIScale,
+	Scale = IntiHub.UIScale,
 })
 
-WindUI.UIScaleObj = UIScaleObj
+IntiHub.UIScaleObj = UIScaleObj
 
-WindUI.ScreenGui = New("ScreenGui", {
-	Name = "WindUI",
+IntiHub.ScreenGui = New("ScreenGui", {
+	Name = "IntiHub",
 	Parent = GUIParent,
 	IgnoreGuiInset = true,
 	ScreenInsets = "None",
@@ -89,111 +89,111 @@ WindUI.ScreenGui = New("ScreenGui", {
 	}),
 })
 
-WindUI.NotificationGui = New("ScreenGui", {
-	Name = "WindUI/Notifications",
+IntiHub.NotificationGui = New("ScreenGui", {
+	Name = "IntiHub/Notifications",
 	Parent = GUIParent,
 	IgnoreGuiInset = true,
 })
-WindUI.DropdownGui = New("ScreenGui", {
-	Name = "WindUI/Dropdowns",
+IntiHub.DropdownGui = New("ScreenGui", {
+	Name = "IntiHub/Dropdowns",
 	Parent = GUIParent,
 	IgnoreGuiInset = true,
 })
-WindUI.TooltipGui = New("ScreenGui", {
-	Name = "WindUI/Tooltips",
+IntiHub.TooltipGui = New("ScreenGui", {
+	Name = "IntiHub/Tooltips",
 	Parent = GUIParent,
 	IgnoreGuiInset = true,
 })
-ProtectGui(WindUI.ScreenGui)
-ProtectGui(WindUI.NotificationGui)
-ProtectGui(WindUI.DropdownGui)
-ProtectGui(WindUI.TooltipGui)
+ProtectGui(IntiHub.ScreenGui)
+ProtectGui(IntiHub.NotificationGui)
+ProtectGui(IntiHub.DropdownGui)
+ProtectGui(IntiHub.TooltipGui)
 
-Creator.Init(WindUI)
+Creator.Init(IntiHub)
 
-function WindUI:SetParent(parent)
-	if WindUI.ScreenGui then
-		WindUI.ScreenGui.Parent = parent
+function IntiHub:SetParent(parent)
+	if IntiHub.ScreenGui then
+		IntiHub.ScreenGui.Parent = parent
 	end
-	if WindUI.NotificationGui then
-		WindUI.NotificationGui.Parent = parent
+	if IntiHub.NotificationGui then
+		IntiHub.NotificationGui.Parent = parent
 	end
-	if WindUI.DropdownGui then
-		WindUI.DropdownGui.Parent = parent
+	if IntiHub.DropdownGui then
+		IntiHub.DropdownGui.Parent = parent
 	end
-	if WindUI.TooltipGui then
-		WindUI.TooltipGui.Parent = parent
+	if IntiHub.TooltipGui then
+		IntiHub.TooltipGui.Parent = parent
 	end
 end
-math.clamp(WindUI.TransparencyValue, 0, 1)
+math.clamp(IntiHub.TransparencyValue, 0, 1)
 
-local Holder = WindUI.NotificationModule.Init(WindUI.NotificationGui)
+local Holder = IntiHub.NotificationModule.Init(IntiHub.NotificationGui)
 
-function WindUI:Notify(Config)
+function IntiHub:Notify(Config)
 	Config.Holder = Holder.Frame
-	Config.Window = WindUI.Window
-	--Config.WindUI = WindUI
-	return WindUI.NotificationModule.New(Config)
+	Config.Window = IntiHub.Window
+	--Config.IntiHub = IntiHub
+	return IntiHub.NotificationModule.New(Config)
 end
 
-function WindUI:SetNotificationLower(Val)
+function IntiHub:SetNotificationLower(Val)
 	Holder.SetLower(Val)
 end
 
-function WindUI:SetFont(FontId)
+function IntiHub:SetFont(FontId)
 	Creator.UpdateFont(FontId)
 end
 
-function WindUI:OnThemeChange(func)
-	WindUI.OnThemeChangeFunction = func
+function IntiHub:OnThemeChange(func)
+	IntiHub.OnThemeChangeFunction = func
 end
 
-function WindUI:AddTheme(LTheme)
-	WindUI.Themes[LTheme.Name] = LTheme
+function IntiHub:AddTheme(LTheme)
+	IntiHub.Themes[LTheme.Name] = LTheme
 	return LTheme
 end
 
-function WindUI:SetTheme(Value)
-	if WindUI.Themes[Value] then
-		WindUI.Theme = WindUI.Themes[Value]
-		Creator.SetTheme(WindUI.Themes[Value])
+function IntiHub:SetTheme(Value)
+	if IntiHub.Themes[Value] then
+		IntiHub.Theme = IntiHub.Themes[Value]
+		Creator.SetTheme(IntiHub.Themes[Value])
 
-		if WindUI.OnThemeChangeFunction then
-			WindUI.OnThemeChangeFunction(Value)
+		if IntiHub.OnThemeChangeFunction then
+			IntiHub.OnThemeChangeFunction(Value)
 		end
 
-		return WindUI.Themes[Value]
+		return IntiHub.Themes[Value]
 	end
 	return nil
 end
 
-function WindUI:GetThemes()
-	return WindUI.Themes
+function IntiHub:GetThemes()
+	return IntiHub.Themes
 end
-function WindUI:GetCurrentTheme()
-	return WindUI.Theme.Name
+function IntiHub:GetCurrentTheme()
+	return IntiHub.Theme.Name
 end
-function WindUI:GetTransparency()
-	return WindUI.Transparent or false
+function IntiHub:GetTransparency()
+	return IntiHub.Transparent or false
 end
-function WindUI:GetWindowSize()
-	return WindUI.Window.UIElements.Main.Size
+function IntiHub:GetWindowSize()
+	return IntiHub.Window.UIElements.Main.Size
 end
-function WindUI:Localization(LocalizationConfig)
-	return WindUI.LocalizationModule:New(LocalizationConfig, Creator)
+function IntiHub:Localization(LocalizationConfig)
+	return IntiHub.LocalizationModule:New(LocalizationConfig, Creator)
 end
 
-function WindUI:SetLanguage(Value)
+function IntiHub:SetLanguage(Value)
 	if Creator.Localization then
 		return Creator.SetLanguage(Value)
 	end
 	return false
 end
 
-function WindUI:ToggleAcrylic(Value)
-	if WindUI.Window and WindUI.Window.AcrylicPaint and WindUI.Window.AcrylicPaint.Model then
-		WindUI.Window.Acrylic = Value
-		WindUI.Window.AcrylicPaint.Model.Transparency = Value and 0.98 or 1
+function IntiHub:ToggleAcrylic(Value)
+	if IntiHub.Window and IntiHub.Window.AcrylicPaint and IntiHub.Window.AcrylicPaint.Model then
+		IntiHub.Window.Acrylic = Value
+		IntiHub.Window.AcrylicPaint.Model.Transparency = Value and 0.98 or 1
 		if Value then
 			Acrylic.Enable()
 		else
@@ -202,7 +202,7 @@ function WindUI:ToggleAcrylic(Value)
 	end
 end
 
-function WindUI:Gradient(stops, props)
+function IntiHub:Gradient(stops, props)
 	local colorSequence = {}
 	local transparencySequence = {}
 
@@ -249,24 +249,24 @@ function WindUI:Gradient(stops, props)
 	return gradientData
 end
 
-function WindUI:Popup(PopupConfig)
-	PopupConfig.WindUI = WindUI
+function IntiHub:Popup(PopupConfig)
+	PopupConfig.IntiHub = IntiHub
 	return require("./components/popup/Init").new(PopupConfig)
 end
 
-WindUI.Themes = require("./themes/Init")(WindUI)
+IntiHub.Themes = require("./themes/Init")(IntiHub)
 
-Creator.Themes = WindUI.Themes
+Creator.Themes = IntiHub.Themes
 
-WindUI:SetTheme("Dark")
-WindUI:SetLanguage(Creator.Language)
+IntiHub:SetTheme("Dark")
+IntiHub:SetLanguage(Creator.Language)
 
-function WindUI:CreateWindow(Config)
+function IntiHub:CreateWindow(Config)
 	local CreateWindow = require("./components/window/Init")
 
 	if not RunService:IsStudio() and writefile then
-		if not isfolder("WindUI") then
-			makefolder("WindUI")
+		if not isfolder("IntiHub") then
+			makefolder("IntiHub")
 		end
 		if Config.Folder then
 			makefolder(Config.Folder)
@@ -275,19 +275,19 @@ function WindUI:CreateWindow(Config)
 		end
 	end
 
-	Config.WindUI = WindUI
-	Config.Parent = WindUI.ScreenGui.Window
+	Config.IntiHub = IntiHub
+	Config.Parent = IntiHub.ScreenGui.Window
 
-	if WindUI.Window then
+	if IntiHub.Window then
 		warn("You cannot create more than one window")
 		return
 	end
 
 	local CanLoadWindow = true
 
-	local Theme = WindUI.Themes[Config.Theme or "Dark"]
+	local Theme = IntiHub.Themes[Config.Theme or "Dark"]
 
-	--WindUI.Theme = Theme
+	--IntiHub.Theme = Theme
 	Creator.SetTheme(Theme)
 
 	local hwid = gethwid or function()
@@ -340,7 +340,7 @@ function WindUI:CreateWindow(Config)
 				local isSuccess = false
 
 				for _, i in next, Config.KeySystem.API do
-					local serviceData = WindUI.Services[i.Type]
+					local serviceData = IntiHub.Services[i.Type]
 					if serviceData then
 						local args = {}
 						for _, argName in next, serviceData.Args do
@@ -372,19 +372,19 @@ function WindUI:CreateWindow(Config)
 
 	local Window = CreateWindow(Config)
 
-	WindUI.Transparent = Config.Transparent
-	WindUI.Window = Window
+	IntiHub.Transparent = Config.Transparent
+	IntiHub.Window = Window
 
 	if Config.Acrylic then
 		Acrylic.init()
 	end
 
 	-- function Window:ToggleTransparency(Value)
-	--     WindUI.Transparent = Value
-	--     WindUI.Window.Transparent = Value
+	--     IntiHub.Transparent = Value
+	--     IntiHub.Window.Transparent = Value
 
-	--     Window.UIElements.Main.Background.BackgroundTransparency = Value and WindUI.TransparencyValue or 0
-	--     Window.UIElements.Main.Background.ImageLabel.ImageTransparency = Value and WindUI.TransparencyValue or 0
+	--     Window.UIElements.Main.Background.BackgroundTransparency = Value and IntiHub.TransparencyValue or 0
+	--     Window.UIElements.Main.Background.ImageLabel.ImageTransparency = Value and IntiHub.TransparencyValue or 0
 	--     Window.UIElements.Main.Gradient.UIGradient.Transparency = NumberSequence.new{
 	--         NumberSequenceKeypoint.new(0, 1),
 	--         NumberSequenceKeypoint.new(1, Value and 0.85 or 0.7),
@@ -394,4 +394,4 @@ function WindUI:CreateWindow(Config)
 	return Window
 end
 
-return WindUI
+return IntiHub

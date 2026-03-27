@@ -52,7 +52,7 @@ return function(Config)
 
 		ToggleKey = Config.ToggleKey,
 		ElementsRadius = Config.ElementsRadius,
-		Radius = Config.Radius or 16,
+		Radius = Config.Radius or 14,
 		Transparent = Config.Transparent or false,
 		HideSearchBar = Config.HideSearchBar ~= false,
 		ScrollBarEnabled = Config.ScrollBarEnabled or false,
@@ -123,11 +123,11 @@ return function(Config)
 	end
 
 	if not RunService:IsStudio() and Window.Folder and writefile then
-		if not isfolder("WindUI/" .. Window.Folder) then
-			makefolder("WindUI/" .. Window.Folder)
+		if not isfolder("IntiHub/" .. Window.Folder) then
+			makefolder("IntiHub/" .. Window.Folder)
 		end
-		if not isfolder("WindUI/" .. Window.Folder .. "/assets") then
-			makefolder("WindUI/" .. Window.Folder .. "/assets")
+		if not isfolder("IntiHub/" .. Window.Folder .. "/assets") then
+			makefolder("IntiHub/" .. Window.Folder .. "/assets")
 		end
 		if not isfolder(Window.Folder) then
 			makefolder(Window.Folder)
@@ -536,7 +536,7 @@ return function(Config)
 					writefile(videoPath, response.Body)
 				end)
 				if not success then
-					warn("[ WindUI.Window.Background ] Failed to download video: " .. tostring(result))
+					warn("[ IntiHub.Window.Background ] Failed to download video: " .. tostring(result))
 					return
 				end
 			end
@@ -545,10 +545,10 @@ return function(Config)
 				return getcustomasset(videoPath)
 			end)
 			if not success then
-				warn("[ WindUI.Window.Background ] Failed to load custom asset: " .. tostring(customAsset))
+				warn("[ IntiHub.Window.Background ] Failed to load custom asset: " .. tostring(customAsset))
 				return
 			end
-			warn("[ WindUI.Window.Background ] VideoFrame may not work with custom video")
+			warn("[ IntiHub.Window.Background ] VideoFrame may not work with custom video")
 			BGVideo = customAsset
 		end
 
@@ -682,7 +682,7 @@ return function(Config)
 		AnchorPoint = Vector2.new(0.5, 0.5),
 		Active = true,
 	}, {
-		Config.WindUI.UIScaleObj,
+		Config.IntiHub.UIScaleObj,
 		Window.AcrylicPaint and Window.AcrylicPaint.Frame or nil,
 		Blur,
 		Creator.NewRoundFrame(Window.UICorner, "Squircle", {
@@ -818,30 +818,30 @@ return function(Config)
 	Creator.AddSignal(Window.UIElements.Main.Main.Topbar.Left:GetPropertyChangedSignal("AbsoluteSize"), function()
 		local LeftWidth = 0
 		local RightWidth = Window.UIElements.Main.Main.Topbar.Right.UIListLayout.AbsoluteContentSize.X
-			/ Config.WindUI.UIScale
+			/ Config.IntiHub.UIScale
 		-- if WindowTitle and WindowAuthor then
-		--     LeftWidth = math.max(WindowTitle.TextBounds.X / Config.WindUI.UIScale, WindowAuthor.TextBounds.X / Config.WindUI.UIScale)
+		--     LeftWidth = math.max(WindowTitle.TextBounds.X / Config.IntiHub.UIScale, WindowAuthor.TextBounds.X / Config.IntiHub.UIScale)
 		-- else
-		--     LeftWidth = WindowTitle.TextBounds.X / Config.WindUI.UIScale
+		--     LeftWidth = WindowTitle.TextBounds.X / Config.IntiHub.UIScale
 		-- end
-		LeftWidth = Window.UIElements.Main.Main.Topbar.Left.AbsoluteSize.X / Config.WindUI.UIScale
+		LeftWidth = Window.UIElements.Main.Main.Topbar.Left.AbsoluteSize.X / Config.IntiHub.UIScale
 		if Window.Topbar.ButtonsType ~= "Default" then
 			LeftWidth = LeftWidth + RightWidth + Window.UIPadding - 4
 		end
 		-- if WindowIcon then
-		--     LeftWidth = LeftWidth + (Window.IconSize / Config.WindUI.UIScale) + (Window.UIPadding / Config.WindUI.UIScale) + (4 / Config.WindUI.UIScale)
+		--     LeftWidth = LeftWidth + (Window.IconSize / Config.IntiHub.UIScale) + (Window.UIPadding / Config.IntiHub.UIScale) + (4 / Config.IntiHub.UIScale)
 		-- end
 		Window.UIElements.Main.Main.Topbar.Center.Position =
-			UDim2.new(0, LeftWidth + (Window.UIPadding / Config.WindUI.UIScale), 0.5, 0)
+			UDim2.new(0, LeftWidth + (Window.UIPadding / Config.IntiHub.UIScale), 0.5, 0)
 		Window.UIElements.Main.Main.Topbar.Center.Size =
-			UDim2.new(1, -LeftWidth - RightWidth - ((Window.UIPadding * 2) / Config.WindUI.UIScale), 1, 0)
+			UDim2.new(1, -LeftWidth - RightWidth - ((Window.UIPadding * 2) / Config.IntiHub.UIScale), 1, 0)
 	end)
 
 	if Window.Topbar.ButtonsType ~= "Default" then
 		Creator.AddSignal(Window.UIElements.Main.Main.Topbar.Right:GetPropertyChangedSignal("AbsoluteSize"), function()
 			Window.UIElements.Main.Main.Topbar.Left.Position = UDim2.new(
 				0,
-				(Window.UIElements.Main.Main.Topbar.Right.AbsoluteSize.X / Config.WindUI.UIScale) + Window.UIPadding - 4,
+				(Window.UIElements.Main.Main.Topbar.Right.AbsoluteSize.X / Config.IntiHub.UIScale) + Window.UIPadding - 4,
 				0,
 				0
 			)
@@ -1039,7 +1039,7 @@ return function(Config)
 		Window.UIElements.BackgroundGradient = Creator.NewRoundFrame(Window.UICorner, "Squircle", {
 			Size = UDim2.new(1, 0, 1, 0),
 			Parent = Window.UIElements.Main.Background,
-			ImageTransparency = Window.Transparent and Config.WindUI.TransparencyValue or 0,
+			ImageTransparency = Window.Transparent and Config.IntiHub.TransparencyValue or 0,
 		}, {
 			BackgroundGradient,
 		})
@@ -1139,7 +1139,7 @@ return function(Config)
 
 	function Window:SetBackgroundTransparency(v)
 		local rounded = math.floor(tonumber(v) * 10 + 0.5) / 10
-		Config.WindUI.TransparencyValue = rounded
+		Config.IntiHub.TransparencyValue = rounded
 		Window:ToggleTransparency(rounded > 0)
 	end
 
@@ -1214,7 +1214,7 @@ return function(Config)
 		-- end
 		-- if not Notified then
 		--     Notified = not Notified
-		--     Config.WindUI:Notify({
+		--     Config.IntiHub:Notify({
 		--         Title = "Minimize",
 		--         Content = "You've closed the Window. " .. NotifiedText,
 		--         Icon = "eye-off",
@@ -1233,7 +1233,7 @@ return function(Config)
 		Window.OnDestroyCallback = func
 	end
 
-	if Config.WindUI.UseAcrylic then
+	if Config.IntiHub.UseAcrylic then
 		Window.AcrylicPaint.AddParent(Window.UIElements.Main)
 	end
 
@@ -1264,7 +1264,7 @@ return function(Config)
 			Window.Closed = false
 
 			Tween(Window.UIElements.Main.Background, 0.2, {
-				ImageTransparency = Window.Transparent and Config.WindUI.TransparencyValue or 0,
+				ImageTransparency = Window.Transparent and Config.IntiHub.TransparencyValue or 0,
 			}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
 
 			if Window.UIElements.BackgroundGradient then
@@ -1333,7 +1333,7 @@ return function(Config)
 				task.wait(0.05)
 				Window.UIElements.Main:WaitForChild("Main").Visible = true
 
-				Config.WindUI:ToggleAcrylic(true)
+				Config.IntiHub:ToggleAcrylic(true)
 			end)
 		end)
 	end
@@ -1346,7 +1346,7 @@ return function(Config)
 			end)
 		end
 
-		Config.WindUI:ToggleAcrylic(false)
+		Config.IntiHub:ToggleAcrylic(false)
 
 		Window.UIElements.Main:WaitForChild("Main").Visible = false
 
@@ -1419,10 +1419,10 @@ return function(Config)
 				end
 				Window.Destroyed = true
 				task.wait(0.4)
-				Config.WindUI.ScreenGui:Destroy()
-				Config.WindUI.NotificationGui:Destroy()
-				Config.WindUI.DropdownGui:Destroy()
-				Config.WindUI.TooltipGui:Destroy()
+				Config.IntiHub.ScreenGui:Destroy()
+				Config.IntiHub.NotificationGui:Destroy()
+				Config.IntiHub.DropdownGui:Destroy()
+				Config.IntiHub.TooltipGui:Destroy()
 
 				Creator.DisconnectAll()
 
@@ -1446,10 +1446,10 @@ return function(Config)
 	function Window:ToggleTransparency(Value)
 		-- Config.Transparent = Value
 		Window.Transparent = Value
-		Config.WindUI.Transparent = Value
+		Config.IntiHub.Transparent = Value
 
-		Window.UIElements.Main.Background.ImageTransparency = Value and Config.WindUI.TransparencyValue or 0
-		-- Window.UIElements.Main.Background.ImageLabel.ImageTransparency = Value and Config.WindUI.TransparencyValue or 0
+		Window.UIElements.Main.Background.ImageTransparency = Value and Config.IntiHub.TransparencyValue or 0
+		-- Window.UIElements.Main.Background.ImageLabel.ImageTransparency = Value and Config.IntiHub.TransparencyValue or 0
 		--Window.UIElements.MainBar.Background.ImageTransparency = Value and 0.97 or 0.95
 	end
 
@@ -1491,12 +1491,12 @@ return function(Config)
 	end
 
 	function Window:GetUIScale(v)
-		return Config.WindUI.UIScale
+		return Config.IntiHub.UIScale
 	end
 
 	function Window:SetUIScale(v)
-		Config.WindUI.UIScale = v
-		Tween(Config.WindUI.UIScaleObj, 0.2, { Scale = v }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+		Config.IntiHub.UIScale = v
+		Tween(Config.IntiHub.UIScaleObj, 0.2, { Scale = v }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
 		return Window
 	end
 
@@ -1578,7 +1578,7 @@ return function(Config)
 
 	local TabModuleMain = require("./Tab")
 	local SectionModule = require("./Section")
-	local TabModule = TabModuleMain.Init(Window, Config.WindUI, Config.WindUI.TooltipGui)
+	local TabModule = TabModuleMain.Init(Window, Config.IntiHub, Config.IntiHub.TooltipGui)
 	TabModule:OnChange(function(t)
 		Window.CurrentTab = t
 	end)
@@ -1587,7 +1587,7 @@ return function(Config)
 
 	function Window:Tab(TabConfig)
 		TabConfig.Parent = Window.UIElements.SideBar.Frame
-		return TabModule.New(TabConfig, Config.WindUI.UIScale)
+		return TabModule.New(TabConfig, Config.IntiHub.UIScale)
 	end
 
 	function Window:SelectTab(Tab)
@@ -1599,7 +1599,7 @@ return function(Config)
 			SectionConfig,
 			Window.UIElements.SideBar.Frame,
 			Window.Folder,
-			Config.WindUI.UIScale,
+			Config.IntiHub.UIScale,
 			Window
 		)
 	end
@@ -1651,7 +1651,7 @@ return function(Config)
 		return MainDivider
 	end
 
-	local DialogModule = require("./Dialog").Init(Window, Config.WindUI, nil)
+	local DialogModule = require("./Dialog").Init(Window, Config.IntiHub, nil)
 	function Window:Dialog(DialogConfig)
 		local DialogTable = {
 			Title = DialogConfig.Title or "Dialog",
@@ -1811,8 +1811,8 @@ return function(Config)
 
 			wait()
 
-			local totalWidth = ButtonsLayout.AbsoluteContentSize.X / Config.WindUI.UIScale
-			local parentWidth = ButtonsContent.AbsoluteSize.X / Config.WindUI.UIScale
+			local totalWidth = ButtonsLayout.AbsoluteContentSize.X / Config.IntiHub.UIScale
+			local parentWidth = ButtonsContent.AbsoluteSize.X / Config.IntiHub.UIScale
 
 			if totalWidth > parentWidth then
 				ButtonsLayout.FillDirection = Enum.FillDirection.Vertical
@@ -1831,7 +1831,7 @@ return function(Config)
 					local smallestWidth = math.huge
 
 					for _, button in ipairs(Buttons) do
-						local buttonWidth = button.AbsoluteSize.X / Config.WindUI.UIScale
+						local buttonWidth = button.AbsoluteSize.X / Config.IntiHub.UIScale
 						if buttonWidth < smallestWidth then
 							smallestWidth = buttonWidth
 							smallestButton = button

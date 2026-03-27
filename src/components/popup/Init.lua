@@ -17,7 +17,7 @@ function PopupModule.new(PopupConfig)
         IconSize = 22,
     }
     
-    local DialogInit = require("../window/Dialog").Init(nil, PopupConfig.WindUI.ScreenGui.Popups)
+    local DialogInit = require("../window/Dialog").Init(nil, PopupConfig.IntiHub.ScreenGui.Popups)
     local Dialog = DialogInit.Create(true, "Popup")
     
     local ThumbnailSize = 200
@@ -39,7 +39,7 @@ function PopupModule.new(PopupConfig)
             Popup.Icon,
             Popup.Title .. ":" .. Popup.Icon,
             0,
-            PopupConfig.WindUI.Window,
+            PopupConfig.IntiHub.Window,
             "Popup",
             true,
             PopupConfig.IconThemed,

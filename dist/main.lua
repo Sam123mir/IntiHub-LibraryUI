@@ -1,18 +1,20 @@
 --[[
-     _      ___         ____  ______
-    | | /| / (_)__  ___/ / / / /  _/
-    | |/ |/ / / _ \/ _  / /_/ // /  
-    |__/|__/_/_//_/\_,_/\____/___/
-    
-    v1.6.64  |  2026-03-22  |  Roblox UI Library for scripts
+    ___       __  _ __  __      __  
+   /  _/___  / /_(_) / / /_  __/ /_ 
+   / // __ \/ __/ / /_/ / / / / __ \
+ _/ // / / / /_/ / __  / /_/ / /_/ /
+/___/_/ /_/\__/_/_/ /_/\__,_/_.___/ 
+                                    
+    v1.6.64  |  2026-03-26  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
-    Author: Footagesus (Footages, .ftgs, oftgs)
-    Github: https://github.com/Footagesus/WindUI
-    Discord: https://discord.gg/ftgs-development-hub-1300692552005189632
+    Author: Sammir_Inti
+    Github: https://github.com/Sammir_Inti/IntiHub
+    Discord: https://discord.gg/Sammir_Inti-development-hub-1300692552005189632
     License: MIT
 ]]
+
 
 local a a={cache={}, load=function(b)if not a.cache[b]then a.cache[b]={c=a[b]()}end return a.cache[b].c end}do function a.a()local b=(cloneref or clonereference or function(b)return b end)
 
@@ -451,6 +453,11 @@ BorderSizePixel=0,
 VideoFrame={
 BorderSizePixel=0,
 },
+UIStroke={
+Thickness=1,
+ApplyStrokeMode="Border",
+Transparency=0,
+},
 },
 Colors={
 Red="#e53935",
@@ -512,7 +519,7 @@ if not u then
 if m and m.Window and m.Window.Debug then local
 x, z=v:find":%d+: "
 
-warn("[ WindUI: DEBUG Mode ] "..v)
+warn("[ IntiHub: DEBUG Mode ] "..v)
 
 return m:Notify{
 Title="DEBUG Mode: Error",
@@ -1103,7 +1110,7 @@ Colors={
 }.IconFrame
 J.Parent=H
 elseif string.find(v,"http")then
-local J="WindUI/"..A.."/assets/."..B.."-"..x..".png"
+local J="IntiHub/"..A.."/assets/."..B.."-"..x..".png"
 local L,M=pcall(function()
 task.spawn(function()
 local L=p.Request
@@ -1124,7 +1131,7 @@ H.ImageLabel.Image=N
 else
 warn(
 string.format(
-"[ WindUI.Creator ] Failed to load custom asset '%s': %s",
+"[ IntiHub.Creator ] Failed to load custom asset '%s': %s",
 J,
 tostring(N)
 )
@@ -1137,7 +1144,7 @@ end)
 end)
 if not L then
 warn(
-"[ WindUI.Creator ]  '"..identifyexecutor()
+"[ IntiHub.Creator ]  '"..identifyexecutor()
 or"Studio".."' doesnt support the URL Images. Error: "..M
 )
 
@@ -2079,16 +2086,14 @@ New=a.load'i'.New
 
 }end function a.k()
 
-
-
 return[[
 {
-    "name": "windui",
+    "name": "IntiHub",
     "version": "1.6.64",
     "main": "./dist/main.lua",
-    "repository": "https://github.com/Footagesus/WindUI",
-    "discord": "https://discord.gg/ftgs-development-hub-1300692552005189632",
-    "author": "Footagesus",
+    "repository": "https://github.com/Sammir_Inti/IntiHub",
+    "discord": "https://discord.gg/Sammir_Inti-development-hub-1300692552005189632",
+    "author": "Sammir_Inti",
     "description": "Roblox UI Library for scripts",
     "license": "MIT",
     "scripts": {
@@ -2112,40 +2117,8 @@ return[[
         "concurrently": "^9.2.0"
     }
 }
-]]end function a.l()
 
-local aa={}
-
-local ab=a.load'c'
-local ac=ab.New
-local ad=ab.Tween
-
-function aa.New(ae,af,ag,ah,ai,aj,ak,al)
-ah=ah or"Primary"
-local am=al or(not ak and 10 or 99)
-local an
-if af and af~=""then
-an=ac("ImageLabel",{
-Image=ab.Icon(af)[1],
-ImageRectSize=ab.Icon(af)[2].ImageRectSize,
-ImageRectOffset=ab.Icon(af)[2].ImageRectPosition,
-Size=UDim2.new(0,21,0,21),
-BackgroundTransparency=1,
-ImageColor3=ah=="White"and Color3.new(0,0,0)or nil,
-ImageTransparency=ah=="White"and 0.4 or 0,
-ThemeTag={
-ImageColor3=ah~="White"and"Icon"or nil,
-},
-})
-end
-
-local ao=ac("TextButton",{
-Size=UDim2.new(0,0,1,0),
-AutomaticSize="X",
-Parent=ai,
-BackgroundTransparency=1,
-},{
-ab.NewRoundFrame(am,"Squircle",{
+]]end function a.l()local aa={}local ab=a.load'c'local ac=ab.New local ad=ab.Tween function aa.New(ae,af,ag,ah,ai,aj,ak,al)ah=ah or"Primary"local am=al or(not ak and 14 or 99)local an if af and af~=""then an=ac("ImageLabel",{Image=ab.Icon(af)[1],ImageRectSize=ab.Icon(af)[2].ImageRectSize,ImageRectOffset=ab.Icon(af)[2].ImageRectPosition,Size=UDim2.new(0,21,0,21),BackgroundTransparency=1,ImageColor3=ah=="White"and Color3.new(0,0,0)or nil,ImageTransparency=ah=="White"and 0.4 or 0,ThemeTag={ImageColor3=ah~="White"and"Icon"or nil,},})end local ao=ac("TextButton",{Size=UDim2.new(0,0,1,0),AutomaticSize="X",Parent=ai,BackgroundTransparency=1,},{ab.NewRoundFrame(am,"Squircle",{
 ThemeTag={
 ImageColor3=ah~="White"and"Button"or nil,
 },
@@ -2153,6 +2126,14 @@ ImageColor3=ah=="White"and Color3.new(1,1,1)or nil,
 Size=UDim2.new(1,0,1,0),
 Name="Squircle",
 ImageTransparency=ah=="Primary"and 0 or ah=="White"and 0 or 1,
+},{
+ah=="Primary"and ac("UIGradient",{
+Rotation=45,
+Color=ColorSequence.new{
+ColorSequenceKeypoint.new(0,Color3.fromHex"#FFC300"),
+ColorSequenceKeypoint.new(1,Color3.fromHex"#FF8C00"),
+},
+})or nil,
 }),
 
 ab.NewRoundFrame(am,"Squircle",{
@@ -2419,7 +2400,7 @@ UICorner=28,
 UIPadding=12,
 
 Window=ad,
-WindUI=ae,
+IntiHub=ae,
 
 UIElements={},
 }
@@ -2590,7 +2571,7 @@ local ae=a.load'l'.New
 local af=a.load'm'.New
 
 function aa.new(ag,ah,ai,aj)
-local ak=a.load'n'.Init(nil,ag.WindUI,ag.WindUI.ScreenGui.KeySystem)
+local ak=a.load'n'.Init(nil,ag.IntiHub,ag.IntiHub.ScreenGui.KeySystem)
 local al=ak.Create(true)
 
 local am={}
@@ -2887,7 +2868,7 @@ PaddingBottom=UDim.new(0,10),
 })
 
 for j,l in next,ag.KeySystem.API do
-local m=ag.WindUI.Services[l.Type]
+local m=ag.IntiHub.Services[l.Type]
 if m then
 local p={}
 for r,u in next,m.Args do
@@ -2973,7 +2954,7 @@ ad(v,0.08,{ImageTransparency=1}):Play()
 end)
 ab.AddSignal(v.MouseButton1Click,function()
 r.Copy()
-ag.WindUI:Notify{
+ag.IntiHub:Notify{
 Title="Key System",
 Content="Key link copied to clipboard.",
 Image="key",
@@ -3029,7 +3010,7 @@ task.wait(0.4)
 ai(true)
 end
 else
-ag.WindUI:Notify{
+ag.IntiHub:Notify{
 Title="Key System. Error",
 Content="Invalid key.",
 Icon="triangle-alert",
@@ -3062,7 +3043,7 @@ end
 if b then
 handleSuccess(aA)
 else
-ag.WindUI:Notify{
+ag.IntiHub:Notify{
 Title="Key System. Error",
 Content=d,
 Icon="triangle-alert",
@@ -3457,7 +3438,7 @@ Buttons=ae.Buttons,
 IconSize=22,
 }
 
-local ag=a.load'n'.Init(nil,ae.WindUI.ScreenGui.Popups)
+local ag=a.load'n'.Init(nil,ae.IntiHub.ScreenGui.Popups)
 local ah=ag.Create(true,"Popup")
 
 local ai=200
@@ -3479,7 +3460,7 @@ ak=ab.Image(
 af.Icon,
 af.Title..":"..af.Icon,
 0,
-ae.WindUI.Window,
+ae.IntiHub.Window,
 "Popup",
 true,
 ae.IconThemed,
@@ -3636,27 +3617,26 @@ return{
 Dark={
 Name="Dark",
 
-Accent=Color3.fromHex"#18181b",
-Dialog=Color3.fromHex"#161616",
-Outline=Color3.fromHex"#FFFFFF",
+Accent=Color3.fromHex"#FFC300",
+Dialog=Color3.fromHex"#0A0A0A",
+Outline=Color3.fromHex"#FFC300",
 Text=Color3.fromHex"#FFFFFF",
 Placeholder=Color3.fromHex"#7a7a7a",
-Background=Color3.fromHex"#101010",
-Button=Color3.fromHex"#52525b",
-Icon=Color3.fromHex"#a1a1aa",
-Toggle=Color3.fromHex"#33C759",
-Slider=Color3.fromHex"#0091FF",
-Checkbox=Color3.fromHex"#0091FF",
+Background=Color3.fromHex"#000000",
+Button=Color3.fromHex"#1A1A1A",
+Icon=Color3.fromHex"#FFC300",
+Toggle=Color3.fromHex"#FFC300",
+Slider=Color3.fromHex"#FFC300",
+Checkbox=Color3.fromHex"#FFC300",
 
-PanelBackground=Color3.fromHex"#FFFFFF",
-PanelBackgroundTransparency=0.95,
+PanelBackground=Color3.fromHex"#0A0A0A",
+PanelBackgroundTransparency=0.5,
 
-SliderIcon=Color3.fromHex"#908F95",
-Primary=Color3.fromHex"#0091FF",
-
+SliderIcon=Color3.fromHex"#FFC300",
+Primary=Color3.fromHex"#FFC300",
 
 LabelBackground=Color3.fromHex"#000000",
-LabelBackgroundTransparency=0.83,
+LabelBackgroundTransparency=0.8,
 },
 
 Light={
@@ -3943,21 +3923,14 @@ Text=Color3.fromHex"#ffffff",
 Placeholder=Color3.fromHex"#00ff80",
 
 Background=aa:Gradient({
-["0"]={Color=Color3.fromHex"#ff0040",Transparency=0},
-["20"]={Color=Color3.fromHex"#ff4000",Transparency=0},
-["40"]={Color=Color3.fromHex"#ffff00",Transparency=0},
-["60"]={Color=Color3.fromHex"#00ff40",Transparency=0},
-["80"]={Color=Color3.fromHex"#0040ff",Transparency=0},
-["100"]={Color=Color3.fromHex"#4000ff",Transparency=0},
+["0"]={Color=Color3.fromHex"#000000",Transparency=0},
+["100"]={Color=Color3.fromHex"#1A1A1A",Transparency=0},
 },{Rotation=90}),
 
 Button=aa:Gradient({
-["0"]={Color=Color3.fromHex"#ff0080",Transparency=0},
-["25"]={Color=Color3.fromHex"#ff8000",Transparency=0},
-["50"]={Color=Color3.fromHex"#ffff00",Transparency=0},
-["75"]={Color=Color3.fromHex"#80ff00",Transparency=0},
-["100"]={Color=Color3.fromHex"#00ffff",Transparency=0},
-},{Rotation=60}),
+["0"]={Color=Color3.fromHex"#FFC300",Transparency=0},
+["100"]={Color=Color3.fromHex"#FF8C00",Transparency=0},
+},{Rotation=45}),
 
 Icon=Color3.fromHex"#ffffff",
 },
@@ -4507,17 +4480,17 @@ end
 
 function ae.Init(af,ag)
 if not ag.Folder then
-warn"[ WindUI.ConfigManager ] Window.Folder is not specified."
+warn"[ IntiHub.ConfigManager ] Window.Folder is not specified."
 return false
 end
 if ab:IsStudio()or not writefile then
-warn"[ WindUI.ConfigManager ] The config system doesn't work in the studio."
+warn"[ IntiHub.ConfigManager ] The config system doesn't work in the studio."
 return false
 end
 
 ad=ag
 ae.Folder=ad.Folder
-ae.Path="WindUI/"..tostring(ae.Folder).."/config/"
+ae.Path="IntiHub/"..tostring(ae.Folder).."/config/"
 
 if not isfolder(ae.Path)then
 makefolder(ae.Path)
@@ -4536,7 +4509,7 @@ end
 
 function ae.SetPath(af,ag)
 if not ag then
-warn"[ WindUI.ConfigManager ] Custom path is not specified."
+warn"[ IntiHub.ConfigManager ] Custom path is not specified."
 return false
 end
 
@@ -4620,7 +4593,7 @@ end
 
 local ak,al=pcall(function()
 local ak=readfile or function()
-warn"[ WindUI.ConfigManager ] The config system doesn't work in the studio."
+warn"[ IntiHub.ConfigManager ] The config system doesn't work in the studio."
 return nil
 end
 return ac:JSONDecode(ak(ai.Path))
@@ -4707,9 +4680,9 @@ local al,am=pcall(function()
 return ai:Load()
 end)
 if al then
-if ad.Debug then print("[ WindUI.ConfigManager ] AutoLoaded config: "..ag)end
+if ad.Debug then print("[ IntiHub.ConfigManager ] AutoLoaded config: "..ag)end
 else
-warn("[ WindUI.ConfigManager ] Failed to AutoLoad config: "..ag.." - "..tostring(am))
+warn("[ IntiHub.ConfigManager ] Failed to AutoLoad config: "..ag.." - "..tostring(am))
 end
 end)
 end
@@ -7329,7 +7302,7 @@ Position=UDim2.new(-10,0,-10,0),
 Visible=false,
 Active=false,
 
-Parent=am.WindUI.DropdownGui,
+Parent=am.IntiHub.DropdownGui,
 AnchorPoint=Vector2.new(1,0),
 },{
 an.UIElements.Menu,
@@ -8454,7 +8427,7 @@ toclipboard(al.Code)
 if al.OnCopy then al.OnCopy()end
 end)
 if not ao then
-ak.WindUI:Notify{
+ak.IntiHub:Notify{
 Title="Error",
 Content="The "..an.." is not copied. Error: "..ap,
 Icon="x",
@@ -8462,7 +8435,7 @@ Duration=5,
 }
 end
 end
-end,ak.WindUI.UIScale,al)
+end,ak.IntiHub.UIScale,al)
 
 function al.SetCode(ao,ap)
 an.Set(ap)
@@ -9420,7 +9393,7 @@ end
 
 local as=ak.ElementsModule
 
-as.Load(al,ar.Content,as.Elements,ak.Window,ak.WindUI,function()
+as.Load(al,ar.Content,as.Elements,ak.Window,ak.IntiHub,function()
 if not al.Expandable then
 al.Expandable=true
 an.Visible=true
@@ -9649,7 +9622,7 @@ ak,
 al,
 am.Elements,
 aj.Window,
-aj.WindUI,
+aj.IntiHub,
 function(an,ao)
 local ap=aj.Tab and aj.Tab.Gap or(aj.Window.NewElements and 1 or 6)
 
@@ -9729,7 +9702,7 @@ ar.Index=#aa.Elements+1
 ar.GlobalIndex=#ah.AllElements+1
 ar.Parent=ae
 ar.Window=ah
-ar.WindUI=aj
+ar.IntiHub=aj
 ar.UIScale=am
 ar.ElementsModule=al local
 
@@ -9753,7 +9726,7 @@ if aw then
 ah.PendingConfigData[ar.Flag]=nil
 else
 warn(
-"[ WindUI ] Failed to apply pending config for '"
+"[ IntiHub ] Failed to apply pending config for '"
 ..ar.Flag
 .."': "
 ..tostring(ax)
@@ -9874,7 +9847,7 @@ OnChangeFunc=function(am)end,
 
 function am.Init(an,ao,ap,aq)
 Window=an
-WindUI=ao
+IntiHub=ao
 am.ToolTipParent=ap
 am.TabHighlight=aq
 return am
@@ -10286,7 +10259,7 @@ ap,
 ap.UIElements.ContainerFrame,
 ay.Elements,
 Window,
-WindUI,
+IntiHub,
 nil,
 ay,
 ao
@@ -11256,7 +11229,7 @@ TopBarButtonIconSize=at.TopBarButtonIconSize,
 
 ToggleKey=at.ToggleKey,
 ElementsRadius=at.ElementsRadius,
-Radius=at.Radius or 16,
+Radius=at.Radius or 14,
 Transparent=at.Transparent or false,
 HideSearchBar=at.HideSearchBar~=false,
 ScrollBarEnabled=at.ScrollBarEnabled or false,
@@ -11327,11 +11300,11 @@ au.Topbar={Height=52,ButtonsType="Default"}
 end
 
 if not af:IsStudio()and au.Folder and writefile then
-if not isfolder("WindUI/"..au.Folder)then
-makefolder("WindUI/"..au.Folder)
+if not isfolder("IntiHub/"..au.Folder)then
+makefolder("IntiHub/"..au.Folder)
 end
-if not isfolder("WindUI/"..au.Folder.."/assets")then
-makefolder("WindUI/"..au.Folder.."/assets")
+if not isfolder("IntiHub/"..au.Folder.."/assets")then
+makefolder("IntiHub/"..au.Folder.."/assets")
 end
 if not isfolder(au.Folder)then
 makefolder(au.Folder)
@@ -11740,7 +11713,7 @@ local m=game.HttpGet and game:HttpGet(h)
 writefile(l,m.Body)
 end)
 if not m then
-warn("[ WindUI.Window.Background ] Failed to download video: "..tostring(p))
+warn("[ IntiHub.Window.Background ] Failed to download video: "..tostring(p))
 return
 end
 end
@@ -11749,10 +11722,10 @@ local m,p=pcall(function()
 return getcustomasset(l)
 end)
 if not m then
-warn("[ WindUI.Window.Background ] Failed to load custom asset: "..tostring(p))
+warn("[ IntiHub.Window.Background ] Failed to load custom asset: "..tostring(p))
 return
 end
-warn"[ WindUI.Window.Background ] VideoFrame may not work with custom video"
+warn"[ IntiHub.Window.Background ] VideoFrame may not work with custom video"
 h=p
 end
 
@@ -11886,7 +11859,7 @@ Parent=at.Parent,
 AnchorPoint=Vector2.new(0.5,0.5),
 Active=true,
 },{
-at.WindUI.UIScaleObj,
+at.IntiHub.UIScaleObj,
 au.AcrylicPaint and au.AcrylicPaint.Frame or nil,
 aA,
 al.NewRoundFrame(au.UICorner,"Squircle",{
@@ -12022,13 +11995,13 @@ PaddingBottom=UDim.new(0,au.UIPadding),
 al.AddSignal(au.UIElements.Main.Main.Topbar.Left:GetPropertyChangedSignal"AbsoluteSize",function()
 local u=0
 local v=au.UIElements.Main.Main.Topbar.Right.UIListLayout.AbsoluteContentSize.X
-/at.WindUI.UIScale
+/at.IntiHub.UIScale
 
 
 
 
 
-u=au.UIElements.Main.Main.Topbar.Left.AbsoluteSize.X/at.WindUI.UIScale
+u=au.UIElements.Main.Main.Topbar.Left.AbsoluteSize.X/at.IntiHub.UIScale
 if au.Topbar.ButtonsType~="Default"then
 u=u+v+au.UIPadding-4
 end
@@ -12036,16 +12009,16 @@ end
 
 
 au.UIElements.Main.Main.Topbar.Center.Position=
-UDim2.new(0,u+(au.UIPadding/at.WindUI.UIScale),0.5,0)
+UDim2.new(0,u+(au.UIPadding/at.IntiHub.UIScale),0.5,0)
 au.UIElements.Main.Main.Topbar.Center.Size=
-UDim2.new(1,-u-v-((au.UIPadding*2)/at.WindUI.UIScale),1,0)
+UDim2.new(1,-u-v-((au.UIPadding*2)/at.IntiHub.UIScale),1,0)
 end)
 
 if au.Topbar.ButtonsType~="Default"then
 al.AddSignal(au.UIElements.Main.Main.Topbar.Right:GetPropertyChangedSignal"AbsoluteSize",function()
 au.UIElements.Main.Main.Topbar.Left.Position=UDim2.new(
 0,
-(au.UIElements.Main.Main.Topbar.Right.AbsoluteSize.X/at.WindUI.UIScale)+au.UIPadding-4,
+(au.UIElements.Main.Main.Topbar.Right.AbsoluteSize.X/at.IntiHub.UIScale)+au.UIPadding-4,
 0,
 0
 )
@@ -12243,7 +12216,7 @@ end
 au.UIElements.BackgroundGradient=al.NewRoundFrame(au.UICorner,"Squircle",{
 Size=UDim2.new(1,0,1,0),
 Parent=au.UIElements.Main.Background,
-ImageTransparency=au.Transparent and at.WindUI.TransparencyValue or 0,
+ImageTransparency=au.Transparent and at.IntiHub.TransparencyValue or 0,
 },{
 v,
 })
@@ -12343,7 +12316,7 @@ end
 
 function au.SetBackgroundTransparency(v,x)
 local z=math.floor(tonumber(x)*10+0.5)/10
-at.WindUI.TransparencyValue=z
+at.IntiHub.TransparencyValue=z
 au:ToggleTransparency(z>0)
 end
 
@@ -12437,7 +12410,7 @@ function au.OnDestroy(z,A)
 au.OnDestroyCallback=A
 end
 
-if at.WindUI.UseAcrylic then
+if at.IntiHub.UseAcrylic then
 au.AcrylicPaint.AddParent(au.UIElements.Main)
 end
 
@@ -12468,7 +12441,7 @@ task.wait(0.06)
 au.Closed=false
 
 an(au.UIElements.Main.Background,0.2,{
-ImageTransparency=au.Transparent and at.WindUI.TransparencyValue or 0,
+ImageTransparency=au.Transparent and at.IntiHub.TransparencyValue or 0,
 },Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 
 if au.UIElements.BackgroundGradient then
@@ -12537,7 +12510,7 @@ task.spawn(function()
 task.wait(0.05)
 au.UIElements.Main:WaitForChild"Main".Visible=true
 
-at.WindUI:ToggleAcrylic(true)
+at.IntiHub:ToggleAcrylic(true)
 end)
 end)
 end
@@ -12550,7 +12523,7 @@ al.SafeCallback(au.OnCloseCallback)
 end)
 end
 
-at.WindUI:ToggleAcrylic(false)
+at.IntiHub:ToggleAcrylic(false)
 
 au.UIElements.Main:WaitForChild"Main".Visible=false
 
@@ -12623,10 +12596,10 @@ au.AcrylicPaint.Model:Destroy()
 end
 au.Destroyed=true
 task.wait(0.4)
-at.WindUI.ScreenGui:Destroy()
-at.WindUI.NotificationGui:Destroy()
-at.WindUI.DropdownGui:Destroy()
-at.WindUI.TooltipGui:Destroy()
+at.IntiHub.ScreenGui:Destroy()
+at.IntiHub.NotificationGui:Destroy()
+at.IntiHub.DropdownGui:Destroy()
+at.IntiHub.TooltipGui:Destroy()
 
 al.DisconnectAll()
 
@@ -12650,9 +12623,9 @@ end
 function au.ToggleTransparency(z,A)
 
 au.Transparent=A
-at.WindUI.Transparent=A
+at.IntiHub.Transparent=A
 
-au.UIElements.Main.Background.ImageTransparency=A and at.WindUI.TransparencyValue or 0
+au.UIElements.Main.Background.ImageTransparency=A and at.IntiHub.TransparencyValue or 0
 
 
 end
@@ -12695,12 +12668,12 @@ return A
 end
 
 function au.GetUIScale(z,A)
-return at.WindUI.UIScale
+return at.IntiHub.UIScale
 end
 
 function au.SetUIScale(z,A)
-at.WindUI.UIScale=A
-an(at.WindUI.UIScaleObj,0.2,{Scale=A},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+at.IntiHub.UIScale=A
+an(at.IntiHub.UIScaleObj,0.2,{Scale=A},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 return au
 end
 
@@ -12782,7 +12755,7 @@ end
 
 local z=a.load'W'
 local A=a.load'X'
-local B=z.Init(au,at.WindUI,at.WindUI.TooltipGui)
+local B=z.Init(au,at.IntiHub,at.IntiHub.TooltipGui)
 B:OnChange(function(C)
 au.CurrentTab=C
 end)
@@ -12791,7 +12764,7 @@ au.TabModule=B
 
 function au.Tab(C,F)
 F.Parent=au.UIElements.SideBar.Frame
-return B.New(F,at.WindUI.UIScale)
+return B.New(F,at.IntiHub.UIScale)
 end
 
 function au.SelectTab(C,F)
@@ -12803,7 +12776,7 @@ return A.New(
 F,
 au.UIElements.SideBar.Frame,
 au.Folder,
-at.WindUI.UIScale,
+at.IntiHub.UIScale,
 au
 )
 end
@@ -12855,7 +12828,7 @@ F,
 return G
 end
 
-local C=a.load'n'.Init(au,at.WindUI,nil)
+local C=a.load'n'.Init(au,at.IntiHub,nil)
 function au.Dialog(F,G)
 local H={
 Title=G.Title or"Dialog",
@@ -13374,7 +13347,7 @@ Scale=aa.UIScale,
 aa.UIScaleObj=at
 
 aa.ScreenGui=ap("ScreenGui",{
-Name="WindUI",
+Name="IntiHub",
 Parent=as,
 IgnoreGuiInset=true,
 ScreenInsets="None",
@@ -13402,17 +13375,17 @@ Name="ToolTips",
 })
 
 aa.NotificationGui=ap("ScreenGui",{
-Name="WindUI/Notifications",
+Name="IntiHub/Notifications",
 Parent=as,
 IgnoreGuiInset=true,
 })
 aa.DropdownGui=ap("ScreenGui",{
-Name="WindUI/Dropdowns",
+Name="IntiHub/Dropdowns",
 Parent=as,
 IgnoreGuiInset=true,
 })
 aa.TooltipGui=ap("ScreenGui",{
-Name="WindUI/Tooltips",
+Name="IntiHub/Tooltips",
 Parent=as,
 IgnoreGuiInset=true,
 })
@@ -13562,7 +13535,7 @@ return aA
 end
 
 function aa.Popup(av,aw)
-aw.WindUI=aa
+aw.IntiHub=aa
 return a.load't'.new(aw)
 end
 
@@ -13577,8 +13550,8 @@ function aa.CreateWindow(av,aw)
 local ax=a.load'_'
 
 if not ak:IsStudio()and writefile then
-if not isfolder"WindUI"then
-makefolder"WindUI"
+if not isfolder"IntiHub"then
+makefolder"IntiHub"
 end
 if aw.Folder then
 makefolder(aw.Folder)
@@ -13587,7 +13560,7 @@ makefolder(aw.Title)
 end
 end
 
-aw.WindUI=aa
+aw.IntiHub=aa
 aw.Parent=aa.ScreenGui.Window
 
 if aa.Window then

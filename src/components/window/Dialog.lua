@@ -3,7 +3,7 @@ local New = Creator.New
 local Tween = Creator.Tween
 
 local Window
-local WindUI
+local IntiHub
 
 local DialogModule = {
 	Holder = nil,
@@ -11,9 +11,9 @@ local DialogModule = {
 	Parent = nil,
 }
 
-function DialogModule.Init(WindowTable, WindUITable, Parent)
+function DialogModule.Init(WindowTable, IntiHubTable, Parent)
 	Window = WindowTable
-	WindUI = WindUITable
+	IntiHub = IntiHubTable
 	DialogModule.Parent = Parent
 	return DialogModule
 end
@@ -24,7 +24,7 @@ function DialogModule.Create(Key, Type)
 		UIPadding = 12,
 
 		Window = Window,
-		WindUI = WindUI,
+		IntiHub = IntiHub,
 
 		UIElements = {},
 	}

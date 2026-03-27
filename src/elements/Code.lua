@@ -35,7 +35,7 @@ function Element:New(Config)
                 if Code.OnCopy then Code.OnCopy() end
             end)
             if not success then
-                Config.WindUI:Notify({
+                Config.IntiHub:Notify({
                     Title = "Error",
                     Content = "The " .. NewTitle .. " is not copied. Error: " .. result,
                     Icon = "x",
@@ -43,7 +43,7 @@ function Element:New(Config)
                 })
             end
         end
-    end, Config.WindUI.UIScale, Code)
+    end, Config.IntiHub.UIScale, Code)
     
     function Code:SetCode(code)
         CodeElement.Set(code)
