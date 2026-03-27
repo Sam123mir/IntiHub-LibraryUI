@@ -2,6 +2,7 @@
 
 # Ensure aftman binaries are in PATH
 export PATH="/c/Users/samir/.aftman/bin:$PATH"
+ALIAS_AFTMAN="/c/Users/samir/.aftman/bin/aftman"
 
 MODE=${1:-"build"}
 
@@ -50,7 +51,7 @@ console.log(h);
 ")
 
 START=$(date +%s%N)
-DARKLUA_OUT=$(darklua process "$INPUT" dist/temp.lua --config "$CONFIG" 2>&1)
+DARKLUA_OUT=$($ALIAS_AFTMAN run darklua process "$INPUT" dist/temp.lua --config "$CONFIG" 2>&1)
 DARKLUA_EXIT=$?
 
 if [ $DARKLUA_EXIT -ne 0 ]; then

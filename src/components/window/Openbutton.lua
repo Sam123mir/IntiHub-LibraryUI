@@ -39,7 +39,7 @@ function OpenButton.New(Window)
     })
 
     local Drag = New("Frame", {
-        Size = UDim2.new(0,44-8,0,44-8),
+        Size = UDim2.new(0,50-8,0,50-8),
         BackgroundTransparency = 1, 
         Name = "Drag",
     }, {
@@ -81,7 +81,7 @@ function OpenButton.New(Window)
     })
 
     local Button = New("Frame", {
-        Size = UDim2.new(0,0,0,44),
+        Size = UDim2.new(0,0,0,60),
         AutomaticSize = "X",
         Parent = Container,
         Active = false,
@@ -91,23 +91,29 @@ function OpenButton.New(Window)
     }, {
         UIScale,
 	    New("UICorner", {
-            CornerRadius = UDim.new(1,0)
+            CornerRadius = UDim.new(0,14)
         }),
         New("UIStroke", {
-            Thickness = 1,
+            Thickness = 2.5,
             ApplyStrokeMode = "Border",
-            Color = Color3.new(1,1,1),
+            ThemeTag = {
+                Color = "Accent",
+            },
             Transparency = 0,
         }, {
             New("UIGradient", {
-                Color = ColorSequence.new(Color3.fromHex("40c9ff"), Color3.fromHex("e81cff"))
+                Color = ColorSequence.new({
+                    ColorSequenceKeypoint.new(0, Color3.fromHex("#FFD700")),
+                    ColorSequenceKeypoint.new(0.5, Color3.fromHex("#FFFFFF")),
+                    ColorSequenceKeypoint.new(1, Color3.fromHex("#FFD700")),
+                })
             })
         }),
         Drag,
         Divider,
         
         New("UIListLayout", {
-            Padding = UDim.new(0, 4),
+            Padding = UDim.new(0, 8),
             FillDirection = "Horizontal",
             VerticalAlignment = "Center",
         }),
@@ -116,12 +122,12 @@ function OpenButton.New(Window)
             AutomaticSize = "XY",
             Active = true,
             BackgroundTransparency = 1, -- .93
-            Size = UDim2.new(0,0,0,44-(4*2)),
+            Size = UDim2.new(0,0,0,60-(4*2)),
             --Position = UDim2.new(0,20+16+16+1,0,0),
             BackgroundColor3 = Color3.new(1,1,1),
         }, {
             New("UICorner", {
-                CornerRadius = UDim.new(1,-4)
+                CornerRadius = UDim.new(0,10)
             }),
             Icon,
             New("UIListLayout", {
@@ -131,13 +137,13 @@ function OpenButton.New(Window)
             }),
             Title,
             New("UIPadding", {
-                PaddingLeft = UDim.new(0,7+4),
-                PaddingRight = UDim.new(0,7+4),
+                PaddingLeft = UDim.new(0,12),
+                PaddingRight = UDim.new(0,12),
             }),
         }),
         New("UIPadding", {
-            PaddingLeft = UDim.new(0,4),
-            PaddingRight = UDim.new(0,4),
+            PaddingLeft = UDim.new(0,8),
+            PaddingRight = UDim.new(0,8),
         })
     })
     
@@ -209,7 +215,11 @@ function OpenButton.New(Window)
             StrokeThickness = OpenButtonConfig.StrokeThickness or 2,
             Scale = OpenButtonConfig.Scale or 1,
             Color = OpenButtonConfig.Color 
-                or ColorSequence.new(Color3.fromHex("40c9ff"), Color3.fromHex("e81cff")),
+                or ColorSequence.new({
+                    ColorSequenceKeypoint.new(0, Color3.fromHex("#FFC300")),
+                    ColorSequenceKeypoint.new(0.5, Color3.fromHex("#FFFFFF")),
+                    ColorSequenceKeypoint.new(1, Color3.fromHex("#FFC300")),
+                }),
         }
         
         -- wtf lol

@@ -20,6 +20,7 @@ local IntiHub = {
 
 	cloneref = nil,
 	UIScaleObj = nil,
+	StatusBar = nil,
 }
 
 local cloneref = (cloneref or clonereference or function(instance)
@@ -266,17 +267,12 @@ function IntiHub:CreateWindow(Config)
 
 	if not RunService:IsStudio() and writefile then
 		pcall(function()
-			if not isfolder("IntiHub") then
-				makefolder("IntiHub")
+			if not isfolder("IntiHub_Data") then
+				makefolder("IntiHub_Data")
 			end
-			if Config.Folder then
-				if not isfolder(Config.Folder) then
-					makefolder(Config.Folder)
-				end
-			else
-				if not isfolder(Config.Title) then
-					makefolder(Config.Title)
-				end
+			local targetFolder = "IntiHub_Data/" .. (Config.Folder or Config.Title or "Default")
+			if not isfolder(targetFolder) then
+				makefolder(targetFolder)
 			end
 		end)
 	end
@@ -380,6 +376,34 @@ function IntiHub:CreateWindow(Config)
 
 	IntiHub.Transparent = Config.Transparent
 	IntiHub.Window = Window
+
+	IntiHub.StatusBar = require("./components/ui/StatusBar").New({
+		IntiHub = IntiHub,
+		Window = Window,
+	})
+
+	Window:OnOpen(function()
+		if IntiHub.StatusBar then
+			IntiHub.StatusBar:Visible(true)
+		end
+	end)
+
+	Window:OnClose(function()
+		if IntiHub.StatusBar then
+			IntiHub.StatusBar:Visible(false)
+		end
+	end)
+
+	Window:OnDestroy(function()
+		if IntiHub.StatusBar then
+			IntiHub.StatusBar:Destroy()
+			IntiHub.StatusBar = nil
+		end
+	end)
+
+	if IntiHub.StatusBar then
+		IntiHub.StatusBar:Visible(true)
+	end
 
 	if Config.Acrylic then
 		Acrylic.init()

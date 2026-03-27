@@ -1,20 +1,3 @@
---[[
-    ___       __  _ __  __      __  
-   /  _/___  / /_(_) / / /_  __/ /_ 
-   / // __ \/ __/ / /_/ / / / / __ \
- _/ // / / / /_/ / __  / /_/ / /_/ /
-/___/_/ /_/\__/_/_/ /_/\__,_/_.___/ 
-
-    v1.6.64  |  2026-03-26  |  Roblox UI Library for scripts
-
-    To view the source code, see the `src/` folder on the official GitHub repository.
-
-    Author: Sammir_Inti
-    Github: https://github.com/Sam123mir/IntiHub-LibraryUI
-    Discord: {{DISCORD_URL}}
-    License: MIT
-]]
-
 local a a={cache={}, load=function(b)if not a.cache[b]then a.cache[b]={c=a[b]()}end return a.cache[b].c end}do function a.a()local b=(cloneref or clonereference or function(b)return b end)
 
 local d=b(game:GetService"ReplicatedStorage":WaitForChild("GetIcons",99999):InvokeServer())
@@ -3656,8 +3639,8 @@ Dialog=Color3.fromHex"#0A0A0A",
 Outline=Color3.fromHex"#FFC300",
 Text=Color3.fromHex"#FFFFFF",
 Placeholder=Color3.fromHex"#7a7a7a",
-Background=Color3.fromHex"#0F0D00",
-BackgroundTransparency=0.1,
+Background=Color3.fromHex"#3D330B",
+BackgroundTransparency=0.2,
 Button=Color3.fromHex"#1A1A1A",
 Icon=Color3.fromHex"#FFC300",
 Toggle=Color3.fromHex"#FFC300",
@@ -4838,7 +4821,7 @@ AutomaticSize="XY",
 })
 
 local aj=ac("Frame",{
-Size=UDim2.new(0,36,0,36),
+Size=UDim2.new(0,42,0,42),
 BackgroundTransparency=1,
 Name="Drag",
 },{
@@ -4880,7 +4863,7 @@ Scale=1,
 })
 
 local an=ac("Frame",{
-Size=UDim2.new(0,0,0,44),
+Size=UDim2.new(0,0,0,60),
 AutomaticSize="X",
 Parent=al,
 Active=false,
@@ -4890,23 +4873,29 @@ BackgroundColor3=Color3.new(0,0,0),
 },{
 am,
 ac("UICorner",{
-CornerRadius=UDim.new(1,0)
+CornerRadius=UDim.new(0,14)
 }),
 ac("UIStroke",{
-Thickness=1,
+Thickness=2.5,
 ApplyStrokeMode="Border",
-Color=Color3.new(1,1,1),
+ThemeTag={
+Color="Accent",
+},
 Transparency=0,
 },{
 ac("UIGradient",{
-Color=ColorSequence.new(Color3.fromHex"40c9ff",Color3.fromHex"e81cff")
+Color=ColorSequence.new{
+ColorSequenceKeypoint.new(0,Color3.fromHex"#FFD700"),
+ColorSequenceKeypoint.new(0.5,Color3.fromHex"#FFFFFF"),
+ColorSequenceKeypoint.new(1,Color3.fromHex"#FFD700"),
+}
 })
 }),
 aj,
 ak,
 
 ac("UIListLayout",{
-Padding=UDim.new(0,4),
+Padding=UDim.new(0,8),
 FillDirection="Horizontal",
 VerticalAlignment="Center",
 }),
@@ -4915,12 +4904,12 @@ ac("TextButton",{
 AutomaticSize="XY",
 Active=true,
 BackgroundTransparency=1,
-Size=UDim2.new(0,0,0,36),
+Size=UDim2.new(0,0,0,52),
 
 BackgroundColor3=Color3.new(1,1,1),
 },{
 ac("UICorner",{
-CornerRadius=UDim.new(1,-4)
+CornerRadius=UDim.new(0,10)
 }),
 ah,
 ac("UIListLayout",{
@@ -4930,13 +4919,13 @@ VerticalAlignment="Center",
 }),
 ai,
 ac("UIPadding",{
-PaddingLeft=UDim.new(0,11),
-PaddingRight=UDim.new(0,11),
+PaddingLeft=UDim.new(0,12),
+PaddingRight=UDim.new(0,12),
 }),
 }),
 ac("UIPadding",{
-PaddingLeft=UDim.new(0,4),
-PaddingRight=UDim.new(0,4),
+PaddingLeft=UDim.new(0,8),
+PaddingRight=UDim.new(0,8),
 })
 })
 
@@ -5008,7 +4997,11 @@ CornerRadius=aq.CornerRadius or UDim.new(1,0),
 StrokeThickness=aq.StrokeThickness or 2,
 Scale=aq.Scale or 1,
 Color=aq.Color
-or ColorSequence.new(Color3.fromHex"40c9ff",Color3.fromHex"e81cff"),
+or ColorSequence.new{
+ColorSequenceKeypoint.new(0,Color3.fromHex"#FFC300"),
+ColorSequenceKeypoint.new(0.5,Color3.fromHex"#FFFFFF"),
+ColorSequenceKeypoint.new(1,Color3.fromHex"#FFC300"),
+},
 }
 
 
@@ -10509,7 +10502,7 @@ Expandable=false,
 
 local aq
 if ap.Icon then
-aq=ae.Image(
+local ar=ae.Image(
 ap.Icon,
 ap.Icon,
 0,
@@ -10520,8 +10513,23 @@ ap.IconThemed,
 "TabSectionIcon"
 )
 
-aq.Size=UDim2.new(0,ap.IconSize,0,ap.IconSize)
-aq.ImageLabel.ImageTransparency=.25
+ar.Size=UDim2.new(0,ap.IconSize,0,ap.IconSize)
+ar.ImageLabel.ImageTransparency=.25
+ar.Position=UDim2.new(0.5,0,0.5,0)
+ar.AnchorPoint=Vector2.new(0.5,0.5)
+
+aq=af("Frame",{
+Size=UDim2.new(0,30,0,30),
+BackgroundColor3=Color3.fromHex"#1A1605",
+BackgroundTransparency=0.5,
+},{
+af("UICorner",{CornerRadius=UDim.new(0,8)}),
+af("UIStroke",{
+Thickness=1.2,
+ThemeTag={Color="Accent"},
+}),
+ar
+})
 end
 
 local ar=af("Frame",{
@@ -13317,7 +13325,255 @@ end
 
 
 return au
-end end end
+end end function a.aa()
+
+
+
+local aa=(cloneref or clonereference or function(aa)
+return aa
+end)
+
+local ae=aa(game:GetService"RunService")
+local af=aa(game:GetService"Players")
+local ah=aa(game:GetService"Stats")
+
+local aj=a.load'c'
+local ak=aj.New local al=
+aj.Tween
+
+local am={}
+
+function am.New(an)
+local ao=an.IntiHub local ap=
+an.Window
+
+local aq=ak("Frame",{
+Name="StatusBar",
+Size=UDim2.new(0,0,0,45),
+Position=UDim2.new(0.5,0,0,10),
+AnchorPoint=Vector2.new(0.5,0),
+BackgroundColor3=Color3.fromHex"#0F0D00",
+BackgroundTransparency=0.2,
+AutomaticSize="X",
+Visible=true,
+Parent=ao.ScreenGui,
+},{
+ak("UICorner",{
+CornerRadius=UDim.new(0,10),
+}),
+ak("UIStroke",{
+Thickness=1.5,
+ThemeTag={
+Color="Accent",
+},
+Transparency=0.5,
+}),
+ak("UIListLayout",{
+FillDirection="Horizontal",
+Padding=UDim.new(0,25),
+VerticalAlignment="Center",
+SortOrder="LayoutOrder",
+}),
+ak("UIPadding",{
+PaddingLeft=UDim.new(0,20),
+PaddingRight=UDim.new(0,20),
+}),
+})
+
+
+local ar=ak("Frame",{
+Size=UDim2.new(0,0,1,0),
+AutomaticSize="X",
+BackgroundTransparency=1,
+LayoutOrder=1,
+},{
+ak("UIListLayout",{
+FillDirection="Horizontal",
+Padding=UDim.new(0,10),
+VerticalAlignment="Center",
+}),
+ak("Frame",{
+Size=UDim2.new(0,30,0,30),
+BackgroundColor3=Color3.fromHex"#FFC300",
+},{
+ak("UICorner",{CornerRadius=UDim.new(0,4)}),
+ak("TextLabel",{
+Text="/",
+TextSize=18,
+FontFace=Font.new(aj.Font,Enum.FontWeight.Bold),
+TextColor3=Color3.new(0,0,0),
+Size=UDim2.new(1,0,1,0),
+BackgroundTransparency=1,
+}),
+}),
+ak("TextLabel",{
+Text="INTIHUB",
+TextSize=18,
+FontFace=Font.new(aj.Font,Enum.FontWeight.Bold),
+TextColor3=Color3.fromHex"#FFC300",
+AutomaticSize="XY",
+BackgroundTransparency=1,
+}),
+})
+ar.Parent=aq
+
+
+ak("Frame",{
+Size=UDim2.new(0,1,0,25),
+BackgroundColor3=Color3.new(1,1,1),
+BackgroundTransparency=0.8,
+Parent=aq,
+LayoutOrder=2,
+})
+
+
+local function CreateStat(as,at,au,av)
+local aw=ak("Frame",{
+Size=UDim2.new(0,0,1,0),
+AutomaticSize="X",
+BackgroundTransparency=1,
+LayoutOrder=av,
+},{
+ak("UIListLayout",{
+FillDirection="Horizontal",
+Padding=UDim.new(0,10),
+VerticalAlignment="Center",
+}),
+ak("Frame",{
+Size=UDim2.new(0,30,0,30),
+BackgroundColor3=Color3.fromHex"#1A1A1A",
+},{
+ak("UICorner",{CornerRadius=UDim.new(0,6)}),
+ak("ImageLabel",{
+Image=aj.Icon(as)[1],
+ImageRectOffset=aj.Icon(as)[2].ImageRectPosition,
+ImageRectSize=aj.Icon(as)[2].ImageRectSize,
+Size=UDim2.new(0,16,0,16),
+Position=UDim2.new(0.5,0,0.5,0),
+AnchorPoint=Vector2.new(0.5,0.5),
+BackgroundTransparency=1,
+ImageColor3=Color3.fromHex"#FFC300",
+}),
+}),
+ak("Frame",{
+Size=UDim2.new(0,0,0,0),
+AutomaticSize="XY",
+BackgroundTransparency=1,
+},{
+ak("UIListLayout",{FillDirection="Vertical",Padding=UDim.new(0,2)}),
+ak("TextLabel",{
+Text=at:upper(),
+TextSize=11,
+FontFace=Font.new(aj.Font,Enum.FontWeight.Bold),
+TextColor3=Color3.fromHex"#FFC300",
+TextTransparency=0.4,
+AutomaticSize="XY",
+BackgroundTransparency=1,
+}),
+au,
+}),
+})
+aw.Parent=aq
+return au
+end
+
+local as=ak("TextLabel",{
+Text=af.LocalPlayer.DisplayName.." — "..game:GetService"MarketplaceService":GetProductInfo(game.PlaceId).Name,
+TextSize=14,
+FontFace=Font.new(aj.Font,Enum.FontWeight.SemiBold),
+TextColor3=Color3.new(1,1,1),
+AutomaticSize="XY",
+BackgroundTransparency=1,
+})
+CreateStat("user","SESSION",as,3)
+
+local at=ak("TextLabel",{
+Text="0 ms",
+TextSize=14,
+FontFace=Font.new(aj.Font,Enum.FontWeight.Bold),
+TextColor3=Color3.fromHex"#FFC300",
+AutomaticSize="XY",
+BackgroundTransparency=1,
+})
+CreateStat("gauge","PING",at,4)
+
+local au=ak("TextLabel",{
+Text="0 MB",
+TextSize=14,
+FontFace=Font.new(aj.Font,Enum.FontWeight.Bold),
+TextColor3=Color3.fromHex"#FFC300",
+AutomaticSize="XY",
+BackgroundTransparency=1,
+})
+CreateStat("cpu","RAM",au,5)
+
+local av=ak("TextLabel",{
+Text="0 FPS",
+TextSize=14,
+FontFace=Font.new(aj.Font,Enum.FontWeight.Bold),
+TextColor3=Color3.fromHex"#FFC300",
+AutomaticSize="XY",
+BackgroundTransparency=1,
+})
+CreateStat("bar-chart-2","FPS",av,6)
+
+local aw=ak("TextLabel",{
+Text="00:00:00",
+TextSize=14,
+FontFace=Font.new(aj.Font,Enum.FontWeight.Bold),
+TextColor3=Color3.fromHex"#FFC300",
+AutomaticSize="XY",
+BackgroundTransparency=1,
+})
+CreateStat("clock","TIME",aw,7)
+
+
+local ax=tick()
+local ay=0
+local az=0
+
+local aA=ae.RenderStepped:Connect(function()
+ay+=1
+local aA=tick()
+if aA-ax>=1 then
+az=ay
+ay=0
+ax=aA
+
+av.Text=tostring(az).." FPS"
+aw.Text=os.date"%H:%M:%S"
+
+local aB=math.floor(ah.Network.ServerStatsItem["Data Ping"]:GetValue())
+at.Text=tostring(aB).." ms"
+
+local b=math.floor(ah:GetTotalMemoryUsageMb())
+if b>1024 then
+au.Text=string.format("%.1f GB",b/1024)
+else
+au.Text=tostring(b).." MB"
+end
+end
+end)
+
+aq.Position=UDim2.new(0.5,0,1,-60)
+
+aj.Drag(aq)
+
+local aB={}
+
+function aB.Destroy(b)
+aA:Disconnect()
+aq:Destroy()
+end
+
+function aB.Visible(b,d)
+aq.Visible=d
+end
+
+return aB
+end
+
+return am end end
 
 local aa={
 Window=nil,
@@ -13341,6 +13597,7 @@ OnThemeChangeFunction=nil,
 
 cloneref=nil,
 UIScaleObj=nil,
+StatusBar=nil,
 }
 
 local ae=(cloneref or clonereference or function(ae)
@@ -13587,17 +13844,12 @@ local ax=a.load'_'
 
 if not ak:IsStudio()and writefile then
 pcall(function()
-if not isfolder"IntiHub"then
-makefolder"IntiHub"
+if not isfolder"IntiHub_Data"then
+makefolder"IntiHub_Data"
 end
-if aw.Folder then
-if not isfolder(aw.Folder)then
-makefolder(aw.Folder)
-end
-else
-if not isfolder(aw.Title)then
-makefolder(aw.Title)
-end
+local ay="IntiHub_Data/"..(aw.Folder or aw.Title or"Default")
+if not isfolder(ay)then
+makefolder(ay)
 end
 end)
 end
@@ -13701,6 +13953,34 @@ local b=ax(aw)
 
 aa.Transparent=aw.Transparent
 aa.Window=b
+
+aa.StatusBar=a.load'aa'.New{
+IntiHub=aa,
+Window=b,
+}
+
+b:OnOpen(function()
+if aa.StatusBar then
+aa.StatusBar:Visible(true)
+end
+end)
+
+b:OnClose(function()
+if aa.StatusBar then
+aa.StatusBar:Visible(false)
+end
+end)
+
+b:OnDestroy(function()
+if aa.StatusBar then
+aa.StatusBar:Destroy()
+aa.StatusBar=nil
+end
+end)
+
+if aa.StatusBar then
+aa.StatusBar:Visible(true)
+end
 
 if aw.Acrylic then
 aq.init()

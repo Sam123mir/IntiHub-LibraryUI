@@ -22,7 +22,7 @@ function Section.New(SectionConfig, Parent, Folder, UIScale, Window)
     
     local IconFrame
     if SectionModule.Icon then
-        IconFrame = Creator.Image(
+        local InternalIcon = Creator.Image(
             SectionModule.Icon,
             SectionModule.Icon,
             0,
@@ -33,8 +33,23 @@ function Section.New(SectionConfig, Parent, Folder, UIScale, Window)
             "TabSectionIcon"
         )
         
-        IconFrame.Size = UDim2.new(0,SectionModule.IconSize,0,SectionModule.IconSize)
-        IconFrame.ImageLabel.ImageTransparency = .25
+        InternalIcon.Size = UDim2.new(0,SectionModule.IconSize,0,SectionModule.IconSize)
+        InternalIcon.ImageLabel.ImageTransparency = .25
+        InternalIcon.Position = UDim2.new(0.5,0,0.5,0)
+        InternalIcon.AnchorPoint = Vector2.new(0.5,0.5)
+
+        IconFrame = New("Frame", {
+            Size = UDim2.new(0, 30, 0, 30),
+            BackgroundColor3 = Color3.fromHex("#1A1605"),
+            BackgroundTransparency = 0.5,
+        }, {
+            New("UICorner", { CornerRadius = UDim.new(0, 8) }),
+            New("UIStroke", {
+                Thickness = 1.2,
+                ThemeTag = { Color = "Accent" },
+            }),
+            InternalIcon
+        })
     end
     
     local ChevronIconFrame = New("Frame", {
