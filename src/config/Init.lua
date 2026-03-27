@@ -106,7 +106,7 @@ function ConfigManager:Init(WindowTable)
     
     Window = WindowTable
     ConfigManager.Folder = Window.Folder
-    ConfigManager.Path = "IntiHub/" .. tostring(ConfigManager.Folder) .. "/config/"
+    ConfigManager.Path = "IntiHub_Data/" .. tostring(ConfigManager.Folder) .. "/config/"
     
     if not isfolder(ConfigManager.Path) then
         makefolder(ConfigManager.Path)

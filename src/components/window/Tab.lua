@@ -183,13 +183,14 @@ function TabModule.New(Config, UIScale)
 		if Tab.IconColor then
 			Icon.ImageLabel.ImageColor3 = Tab.IconColor
 		end
-		if not Tab.IconShape then
+		if not Tab.IconShape and not Tab.IconColor then
 			Icon.Parent = Tab.UIElements.Main.Frame
 			Tab.UIElements.Icon = Icon
 			Icon.ImageLabel.ImageTransparency = not Tab.Locked and 0 or 0.7
 			TextOffset = -16 - 2 - (Window.UIPadding / 2)
 			Tab.UIElements.Main.Frame.TextLabel.Size = UDim2.new(1, TextOffset, 0, 0)
-		elseif Tab.IconShape then
+		elseif Tab.IconShape or Tab.IconColor then
+			if not Tab.IconShape then Tab.IconShape = "Squircle" end
 			local _IconBG = Creator.NewRoundFrame(
 				Tab.IconShape ~= "Circle" and (Tab.UICorner + 5 - (2 + (Window.UIPadding / 4))) or 9999,
 				"Squircle",
