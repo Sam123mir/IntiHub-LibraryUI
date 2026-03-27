@@ -1,6 +1,6 @@
 # 1.6.64-fix
 
-Fixed version of [1.6.64](https://github.com/Sammir_Inti/IntiHub/blob/8c68c3f221e1f5d9e0d12f53a8919b490aa46ad3/changelog.md)
+Fixed version of [1.6.64](https://github.com/Sam123mir/IntiHub-LibraryUI/blob/8c68c3f221e1f5d9e0d12f53a8919b490aa46ad3/changelog.md)
 
 ## Changelog:
 

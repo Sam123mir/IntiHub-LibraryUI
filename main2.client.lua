@@ -22,7 +22,7 @@ do
 			IntiHub = require(ReplicatedStorage:WaitForChild("IntiHub"):WaitForChild("Init"))
 		else
 			IntiHub =
-				loadstring(game:HttpGet("https://raw.githubusercontent.com/Sammir_Inti/IntiHub/main/dist/main.lua"))()
+				loadstring(game:HttpGet("https://raw.githubusercontent.com/Sam123mir/IntiHub-LibraryUI/main/dist/main.lua"))()
 		end
 	end
 end
@@ -215,20 +215,20 @@ TabSettings:Dropdown({
 			Window:SetAuthor("Loading...")
 			if not CachedPRData[PRNumber] then
 				local Success, Data = pcall(function()
-					return Remote:InvokeServer("Sammir_Inti", "IntiHub", PRNumber)
+					return Remote:InvokeServer("Sam123mir", "IntiHub-LibraryUI", PRNumber)
 				end)
 
 				if Success and Data and Data.html_url then
 					CachedPRData[PRNumber] = Data
 					Window:SetAuthor(
-						"by " .. Data.user.login .. " | https://github.com/Sammir_Inti/IntiHub/pull/" .. PRNumber
+						"by " .. Data.user.login .. " | https://github.com/Sam123mir/IntiHub-LibraryUI/pull/" .. PRNumber
 					)
 				end
 				print(Data)
 			else
 				local Data = CachedPRData[PRNumber]
 				Window:SetAuthor(
-					"by " .. Data.user.login .. " | https://github.com/Sammir_Inti/IntiHub/pull/" .. PRNumber
+					"by " .. Data.user.login .. " | https://github.com/Sam123mir/IntiHub-LibraryUI/pull/" .. PRNumber
 				)
 				print(Data)
 			end

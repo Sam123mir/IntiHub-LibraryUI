@@ -116,7 +116,7 @@ local Window = IntiHub:CreateWindow({
     -- }),
     --Background = "video:https://cdn.discordapp.com/attachments/1337368451865645096/1402703845657673878/VID_20250616_180732_158.webm?ex=68958a01&is=68943881&hm=164c5b04d1076308b38055075f7eb0653c1d73bec9bcee08e918a31321fe3058&",
     --Background = "rbxassetid://88271032881974",
-    --Background = "https://Sammir_Inti.github.io/IntiHub-Docs/banners/thumbnail2.jpg",
+    --Background = "https://Sam123mir.github.io/IntiHub-LibraryUI/banners/thumbnail2.jpg",
     User = {
         Enabled = true,
         Anonymous = true,
@@ -151,7 +151,7 @@ local Window = IntiHub:CreateWindow({
     -- KeySystem = { -- 
     --     -- Key = { "1234", "5678" },  
     --     Note = "Example Key System. With platoboost, etc.",
-    --     -- URL = "https://github.com/Sammir_Inti/IntiHub",
+    --     -- URL = "https://github.com/Sam123mir/IntiHub-LibraryUI",
     --     -- Thumbnail = {
     --     --     Image = "rbxassetid://",
     --     --     Title = "Thumbnail",
@@ -704,7 +704,7 @@ end
 local footerSection = Window:Section({ Title = "IntiHub " .. IntiHub.Version })
 Tabs.Config:Paragraph({
     Title = "Github Repository",
-    Desc = "github.com/Sammir_Inti/IntiHub",
+    Desc = "github.com/Sam123mir/IntiHub-LibraryUI",
     Image = "github",
     ImageSize = 20,
     Color = "Grey",
@@ -714,7 +714,7 @@ Tabs.Config:Paragraph({
             Icon = "copy",
             Variant = "Tertiary",
             Callback = function()
-                setclipboard("https://github.com/Sammir_Inti/IntiHub")
+                setclipboard("https://github.com/Sam123mir/IntiHub-LibraryUI")
                 IntiHub:Notify({
                     Title = "Copied!",
                     Content = "GitHub link copied to clipboard",

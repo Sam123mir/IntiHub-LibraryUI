@@ -2576,12 +2576,12 @@
                             "__type": "Button"
                         },
                         {
-                            "Desc": "github.com/Sammir_Inti/IntiHub",
+                            "Desc": "github.com/Sam123mir/IntiHub-LibraryUI",
                             "Destroy": "function",
                             "Locked": false,
                             "ParagraphFrame": {
                                 "Color": "Grey",
-                                "Desc": "github.com/Sammir_Inti/IntiHub",
+                                "Desc": "github.com/Sam123mir/IntiHub-LibraryUI",
                                 "Destroy": "function",
                                 "Hover": false,
                                 "IconThemed": false,

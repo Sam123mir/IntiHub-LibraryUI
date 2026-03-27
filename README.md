@@ -29,9 +29,9 @@
 ### Links
 
 - [Discord Server](https://discord.gg/Sammir_Inti-development-hub-1300692552005189632)
-- [Documentation](https://Sammir_Inti.github.io/IntiHub-Docs/)
-- [Installation](https://Sammir_Inti.github.io/IntiHub-Docs/docs/installation)
+- [Documentation](https://Sam123mir.github.io/IntiHub-LibraryUI/)
+- [Installation](https://Sam123mir.github.io/IntiHub-LibraryUI/docs/installation)
 - [Example](/main_example.lua) (wip)
     ```luau
-    loadstring(game:HttpGet('https://raw.githubusercontent.com/Sammir_Inti/IntiHub/refs/heads/main/main_example.lua'))()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/Sam123mir/IntiHub-LibraryUI/refs/heads/main/main_example.lua'))()
     ```

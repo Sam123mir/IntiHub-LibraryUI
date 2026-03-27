@@ -25,7 +25,7 @@ do
 			IntiHub = require(cloneref(ReplicatedStorage:WaitForChild("IntiHub"):WaitForChild("Init")))
 		else
 			IntiHub =
-				loadstring(game:HttpGet("https://raw.githubusercontent.com/Sammir_Inti/IntiHub/main/dist/main.lua"))()
+				loadstring(game:HttpGet("https://raw.githubusercontent.com/Sam123mir/IntiHub-LibraryUI/main/dist/main.lua"))()
 		end
 	end
 end
@@ -877,7 +877,7 @@ if not RunService:IsStudio() and writefile and printidentity() then
 			Border = true,
 		})
 
-		-- All elements are taken from the official documentation: https://Sammir_Inti.github.io/IntiHub-Docs/docs
+		-- All elements are taken from the official documentation: https://Sam123mir.github.io/IntiHub-LibraryUI/docs
 
 		-- Saving elements to the config using `Flag`
 
