@@ -5,11 +5,11 @@ return function(IntiHub)
 
 			Accent = Color3.fromHex("#FFC300"), -- Inti Gold
 			Dialog = Color3.fromHex("#0A0A0A"),
-			Outline = Color3.fromHex("#FFC300"),
+			Outline = Color3.fromHex("#FFC300"), -- Stronger Gold Outline
 			Text = Color3.fromHex("#FFFFFF"),
 			Placeholder = Color3.fromHex("#7a7a7a"),
-			Background = Color3.fromHex("#8C731A"), -- Real Gold Tone
-			BackgroundTransparency = 0.12,
+			Background = Color3.fromHex("#000000"), -- Pure Black
+			BackgroundTransparency = 0.1, -- Elegant Transparency
 			Button = Color3.fromHex("#1A1A1A"),
 			Icon = Color3.fromHex("#FFC300"),
 			Toggle = Color3.fromHex("#FFC300"),

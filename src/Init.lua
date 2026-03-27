@@ -382,17 +382,10 @@ function IntiHub:CreateWindow(Config)
 		Window = Window,
 	})
 
-	Window:OnOpen(function()
-		if IntiHub.StatusBar then
-			IntiHub.StatusBar:Visible(true)
-		end
-	end)
-
-	Window:OnClose(function()
-		if IntiHub.StatusBar then
-			IntiHub.StatusBar:Visible(false)
-		end
-	end)
+	IntiHub.StatusBar = require("./components/ui/StatusBar").New({
+		IntiHub = IntiHub,
+		Window = Window,
+	})
 
 	Window:OnDestroy(function()
 		if IntiHub.StatusBar then

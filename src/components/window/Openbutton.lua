@@ -81,13 +81,13 @@ function OpenButton.New(Window)
     })
 
     local Button = New("Frame", {
-        Size = UDim2.new(0,0,0,60),
+        Size = UDim2.new(0,0,0,75), -- Increased Height
         AutomaticSize = "X",
         Parent = Container,
         Active = false,
-        BackgroundTransparency = .25,
+        BackgroundTransparency = .15,
         ZIndex = 99,
-        BackgroundColor3 = Color3.new(0,0,0),
+        BackgroundColor3 = Color3.fromHex("#211B05"), -- Dark Gold Base
     }, {
         UIScale,
 	    New("UICorner", {
@@ -122,7 +122,7 @@ function OpenButton.New(Window)
             AutomaticSize = "XY",
             Active = true,
             BackgroundTransparency = 1, -- .93
-            Size = UDim2.new(0,0,0,60-(4*2)),
+            Size = UDim2.new(0,0,0,75-(4*2)),
             --Position = UDim2.new(0,20+16+16+1,0,0),
             BackgroundColor3 = Color3.new(1,1,1),
         }, {

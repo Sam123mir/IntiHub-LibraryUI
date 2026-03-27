@@ -3639,8 +3639,8 @@ Dialog=Color3.fromHex"#0A0A0A",
 Outline=Color3.fromHex"#FFC300",
 Text=Color3.fromHex"#FFFFFF",
 Placeholder=Color3.fromHex"#7a7a7a",
-Background=Color3.fromHex"#8C731A",
-BackgroundTransparency=0.12,
+Background=Color3.fromHex"#000000",
+BackgroundTransparency=0.1,
 Button=Color3.fromHex"#1A1A1A",
 Icon=Color3.fromHex"#FFC300",
 Toggle=Color3.fromHex"#FFC300",
@@ -4863,13 +4863,13 @@ Scale=1,
 })
 
 local an=ac("Frame",{
-Size=UDim2.new(0,0,0,60),
+Size=UDim2.new(0,0,0,75),
 AutomaticSize="X",
 Parent=al,
 Active=false,
-BackgroundTransparency=.25,
+BackgroundTransparency=.15,
 ZIndex=99,
-BackgroundColor3=Color3.new(0,0,0),
+BackgroundColor3=Color3.fromHex"#211B05",
 },{
 am,
 ac("UICorner",{
@@ -4904,7 +4904,7 @@ ac("TextButton",{
 AutomaticSize="XY",
 Active=true,
 BackgroundTransparency=1,
-Size=UDim2.new(0,0,0,52),
+Size=UDim2.new(0,0,0,67),
 
 BackgroundColor3=Color3.new(1,1,1),
 },{
@@ -13959,17 +13959,10 @@ IntiHub=aa,
 Window=b,
 }
 
-b:OnOpen(function()
-if aa.StatusBar then
-aa.StatusBar:Visible(true)
-end
-end)
-
-b:OnClose(function()
-if aa.StatusBar then
-aa.StatusBar:Visible(false)
-end
-end)
+aa.StatusBar=a.load'aa'.New{
+IntiHub=aa,
+Window=b,
+}
 
 b:OnDestroy(function()
 if aa.StatusBar then
