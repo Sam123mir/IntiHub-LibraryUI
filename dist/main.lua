@@ -10,8 +10,8 @@
     To view the source code, see the `src/` folder on the official GitHub repository.
     
     Author: Sammir_Inti
-    Github: https://github.com/Sammir_Inti/IntiHub
-    Discord: https://discord.gg/Sammir_Inti-development-hub-1300692552005189632
+    Github: https://github.com/Sam123mir/IntiHub-LibraryUI
+    Discord: {{DISCORD_URL}}
     License: MIT
 ]]
 
@@ -2091,8 +2091,8 @@ return[[
     "name": "IntiHub",
     "version": "1.6.64",
     "main": "./dist/main.lua",
-    "repository": "https://github.com/Sammir_Inti/IntiHub",
-    "discord": "https://discord.gg/Sammir_Inti-development-hub-1300692552005189632",
+    "repository": "https://github.com/Sam123mir/IntiHub-LibraryUI",
+    "discord": "{{DISCORD_URL}}",
     "author": "Sammir_Inti",
     "description": "Roblox UI Library for scripts",
     "license": "MIT",
