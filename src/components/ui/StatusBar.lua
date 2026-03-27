@@ -119,7 +119,7 @@ function StatusBar.New(Config)
 					Image = Creator.Icon(Icon) and Creator.Icon(Icon)[1] or "",
 					ImageRectOffset = Creator.Icon(Icon) and Creator.Icon(Icon)[2].ImageRectPosition or Vector2.new(0, 0),
 					ImageRectSize = Creator.Icon(Icon) and Creator.Icon(Icon)[2].ImageRectSize or Vector2.new(0, 0),
-					Size = UDim2.new(0, 16, 0, 16),
+					Size = UDim2.new(0, 20, 0, 20), -- Increased from 16
 					Position = UDim2.new(0.5, 0, 0.5, 0),
 					AnchorPoint = Vector2.new(0.5, 0.5),
 					BackgroundTransparency = 1,
@@ -196,7 +196,7 @@ function StatusBar.New(Config)
 		AutomaticSize = "XY",
 		BackgroundTransparency = 1,
 	})
-	CreateStat("solar:clock-circle-bold", "TIME", TimeText, 7)
+	CreateStat("solar:alarm-clock-bold", "TIME", TimeText, 7)
 
 	-- Update Logic
 	local lastUpdate = tick()

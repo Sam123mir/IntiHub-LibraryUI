@@ -123,17 +123,11 @@ return function(Config)
 	end
 
 	if not RunService:IsStudio() and Window.Folder and writefile then
-		if not isfolder("IntiHub/" .. Window.Folder) then
-			makefolder("IntiHub/" .. Window.Folder)
+		if not isfolder("IntiHub_Data/" .. Window.Folder) then
+			makefolder("IntiHub_Data/" .. Window.Folder)
 		end
-		if not isfolder("IntiHub/" .. Window.Folder .. "/assets") then
-			makefolder("IntiHub/" .. Window.Folder .. "/assets")
-		end
-		if not isfolder(Window.Folder) then
-			makefolder(Window.Folder)
-		end
-		if not isfolder(Window.Folder .. "/assets") then
-			makefolder(Window.Folder .. "/assets")
+		if not isfolder("IntiHub_Data/" .. Window.Folder .. "/assets") then
+			makefolder("IntiHub_Data/" .. Window.Folder .. "/assets")
 		end
 	end
 
@@ -704,7 +698,50 @@ return function(Config)
 			--     Scale = 0.95,
 			-- }),
 		}),
-		--UIStroke,
+		New("UIStroke", {
+			Thickness = 2,
+			ApplyStrokeMode = "Border",
+			ThemeTag = {
+				Color = "Accent",
+			},
+		}, {
+			New("UIGradient", {
+				Name = "AnimatedGradient1",
+				Rotation = 0,
+				Color = ColorSequence.new({
+					ColorSequenceKeypoint.new(0.0, Color3.fromHex("#FFC300")), -- Inti Gold
+					ColorSequenceKeypoint.new(0.5, Color3.fromHex("#000000")), -- Black
+					ColorSequenceKeypoint.new(1.0, Color3.fromHex("#FFC300")), -- Inti Gold
+				}),
+			})
+		}),
+		New("Frame", {
+			Name = "AnimationOverlay",
+			Size = UDim2.new(1, 0, 1, 0),
+			BackgroundTransparency = 1,
+		}, {
+			New("UICorner", {
+				CornerRadius = UDim.new(0, Window.UICorner),
+			}),
+			New("UIStroke", {
+				Thickness = 3,
+				ApplyStrokeMode = "Border",
+				Transparency = 0.5,
+				ThemeTag = {
+					Color = "Accent",
+				},
+			}, {
+				New("UIGradient", {
+					Name = "AnimatedGradient2",
+					Rotation = 0,
+					Color = ColorSequence.new({
+						ColorSequenceKeypoint.new(0.0, Color3.fromHex("#000000")), -- Black
+						ColorSequenceKeypoint.new(0.5, Color3.fromHex("#FFC300")), -- Inti Gold
+						ColorSequenceKeypoint.new(1.0, Color3.fromHex("#000000")), -- Black
+					}),
+				})
+			})
+		}),
 		UICorner,
 		FullScreenIcon,
 		FullScreenBlur,
@@ -2103,6 +2140,24 @@ return function(Config)
 	--         end
 	--     end
 	-- })
+
+	task.spawn(function()
+		local gradient1 = Window.UIElements.Main:FindFirstChild("AnimatedGradient1", true)
+		local overlay = Window.UIElements.Main:FindFirstChild("AnimationOverlay", true)
+		local gradient2 = overlay and overlay:FindFirstChild("AnimatedGradient2", true)
+		
+		local rot = 0
+		local conn
+		conn = RunService.RenderStepped:Connect(function(dt)
+			if Window.Destroyed or not Window.UIElements.Main then 
+				if conn then conn:Disconnect() end
+				return 
+			end
+			rot = rot + (dt * 60)
+			if gradient1 then gradient1.Rotation = rot % 360 end
+			if gradient2 then gradient2.Rotation = (360 - rot) % 360 end
+		end)
+	end)
 
 	return Window
 end

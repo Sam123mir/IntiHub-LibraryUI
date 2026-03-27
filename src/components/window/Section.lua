@@ -40,8 +40,10 @@ function Section.New(SectionConfig, Parent, Folder, UIScale, Window)
 
         IconFrame = New("Frame", {
             Size = UDim2.new(0, 30, 0, 30),
-            BackgroundColor3 = Color3.fromHex("#1A1605"),
-            BackgroundTransparency = 0.5,
+            ThemeTag = {
+                BackgroundColor3 = "Accent",
+            },
+            BackgroundTransparency = 0, -- Fully opaque gold for better "Noble" look
         }, {
             New("UICorner", { CornerRadius = UDim.new(0, 8) }),
             New("UIStroke", {

@@ -189,13 +189,15 @@ function TabModule.New(Config, UIScale)
 			Icon.ImageLabel.ImageTransparency = not Tab.Locked and 0 or 0.7
 			TextOffset = -16 - 2 - (Window.UIPadding / 2)
 			Tab.UIElements.Main.Frame.TextLabel.Size = UDim2.new(1, TextOffset, 0, 0)
-		elseif Tab.IconColor then
+		elseif Tab.IconShape then
 			local _IconBG = Creator.NewRoundFrame(
 				Tab.IconShape ~= "Circle" and (Tab.UICorner + 5 - (2 + (Window.UIPadding / 4))) or 9999,
 				"Squircle",
 				{
 					Size = UDim2.new(0, 26, 0, 26),
-					ImageColor3 = Tab.IconColor,
+					ThemeTag = {
+						ImageColor3 = "Accent",
+					},
 					Parent = Tab.UIElements.Main.Frame,
 				},
 				{
@@ -212,19 +214,6 @@ function TabModule.New(Config, UIScale)
 							Name = "Outline",
 						},
 						{
-							-- New("UIGradient", {
-							--     Rotation = 45,
-							--     Color = ColorSequence.new({
-							--         ColorSequenceKeypoint.new(0.0, Color3.fromRGB(255, 255, 255)),
-							--         ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 255, 255)),
-							--         ColorSequenceKeypoint.new(1.0, Color3.fromRGB(255, 255, 255)),
-							--     }),
-							--     Transparency = NumberSequence.new({
-							--         NumberSequenceKeypoint.new(0.0, 0.1),
-							--         NumberSequenceKeypoint.new(0.5, 1),
-							--         NumberSequenceKeypoint.new(1.0, 0.1),
-							--     })
-							-- }),
 						}
 					),
 				}
@@ -232,7 +221,7 @@ function TabModule.New(Config, UIScale)
 			Icon.AnchorPoint = Vector2.new(0.5, 0.5)
 			Icon.Position = UDim2.new(0.5, 0, 0.5, 0)
 			Icon.ImageLabel.ImageTransparency = 0
-			Icon.ImageLabel.ImageColor3 = Creator.GetTextColorForHSB(Tab.IconColor, 0.68)
+			Icon.ImageLabel.ImageColor3 = Color3.fromHex("#1A1605") -- Dark contrast for Gold
 			TextOffset = -26 - 2 - (Window.UIPadding / 2)
 			Tab.UIElements.Main.Frame.TextLabel.Size = UDim2.new(1, TextOffset, 0, 0)
 		end

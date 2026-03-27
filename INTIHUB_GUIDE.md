@@ -1,38 +1,52 @@
 # Guía de Implementación de IntiHub Premium
 
-¡Bienvenido a **IntiHub**, la librería de UI más avanzada y estética para Roblox! Esta guía te enseñará cómo implementar todos los componentes disponibles para crear scripts profesionales con un estilo **Black & Gold**.
+¡Bienvenido a **IntiHub**, la librería de UI más avanzada y estética para Roblox! Esta guía te enseñará cómo implementar todos los componentes disponibles para crear scripts profesionales con un estilo **Noble Black & Gold**.
 
 ## 🚀 Inicio Rápido
 
-Para empezar, carga la librería usando `loadstring`:
+Para empezar, carga la librería usando el script compilado:
 
 ```lua
-local IntiHub = loadstring(game:HttpGet("https://raw.githubusercontent.com/Sam123mir/IntiHub-LibraryUI/main/dist/main.lua"))()
+local IntiHub = loadstring(game:HttpGet("https://raw.githubusercontent.com/Sam123mir/IntiHub-LibraryUI/main/main.client.lua?v=" .. tick()))()
 
--- Crear la ventana principal
+-- Crear la ventana principal estilo Noble
 local Window = IntiHub:CreateWindow({
-    Title = "Mi Script Premium",
-    Subtitle = "IntiHub Edition",
-    ConfigFolder = "MiConfig", -- Carpeta donde se guardarán las configs
-    Theme = "Dark"
+    Title = "IntiHub Premium",
+    Subtitle = "The Gold Standard",
+    ConfigFolder = "MiConfig",
+    Theme = "Dark" -- Noble Black & Gold por defecto
 })
 ```
 
 ---
 
-## 📂 Pestañas y Secciones
+## ✨ Novedades: Noble Black & Gold Edition
 
-Las pestañas (Tabs) organizan tu script, y las secciones (Sections) agrupan elementos dentro de las pestañas.
+### 1. Animación de Borde Rotativo (Glow)
+La ventana principal ahora cuenta con **dos capas de animación dorada** que rotan en sentidos opuestos, creando un efecto de brillo dinámico y elegante.
+
+### 2. StatusBar Persistente & Draggable
+El widget de estado (`FPS`, `Ping`, `RAM`, `Time`) permanece visible incluso al minimizar la ventana. 
+- **Nuevo Icono**: Reloj detallado (`alarm-clock-bold`).
+- **Movilidad**: Arrástralo a cualquier parte de la pantalla.
+
+### 3. OpenButton Enriquecido
+El botón de reapertura ahora tiene una altura de **75px**, con iconos y texto escalados para una mejor legibilidad y presencia.
+
+---
+
+## 📂 Organización: Tabs y Sections
 
 ```lua
 local Tab = Window:Tab({
     Title = "Inicio",
-    Icon = "home" -- Usa nombres de Lucide Icons
+    Icon = "home",
+    IconShape = "Squircle" -- Los fondos ahora son siempre Dorados
 })
 
 local Section = Tab:Section({
-    Title = "Configuraciones",
-    Icon = "settings"
+    Title = "Módulos de Combate",
+    Icon = "swords"
 })
 ```
 
@@ -40,102 +54,22 @@ local Section = Tab:Section({
 
 ## 🛠️ Componentes de Interacción
 
-### 1. Botón (Button)
-Ideal para acciones instantáneas.
-```lua
-Section:Button({
-    Title = "Ejecutar",
-    Description = "Haz clic para iniciar el proceso",
-    Callback = function()
-        print("Botón presionado")
-    end
-})
-```
-
-### 2. Interruptor (Toggle)
-Para activar o desactivar funciones.
-```lua
-Section:Toggle({
-    Title = "Autofarm",
-    Description = "Activa el farmeo automático",
-    Default = false,
-    Callback = function(Value)
-        print("Estado:", Value)
-    end
-})
-```
-
-### 3. Campo de Entrada (Input)
-Para que el usuario escriba texto o números.
-```lua
-Section:Input({
-    Title = "Nombre de Usuario",
-    Placeholder = "Escribe aquí...",
-    Callback = function(Value)
-        print("Texto ingresado:", Value)
-    end
-})
-```
-
-### 4. Deslizador (Slider)
-Para valores numéricos con un rango.
-```lua
-Section:Slider({
-    Title = "Velocidad",
-    Default = 16,
-    Min = 16,
-    Max = 500,
-    Callback = function(Value)
-        print("Velocidad ajustada a:", Value)
-    end
-})
-```
-
-### 5. Menú Desplegable (Dropdown)
-Para elegir entre múltiples opciones.
-```lua
-Section:Dropdown({
-    Title = "Seleccionar Arma",
-    Options = {"Espada", "Arco", "Hechizo"},
-    Default = "Espada",
-    Callback = function(Value)
-        print("Seleccionaste:", Value)
-    end
-})
-```
+- **Buttons**: `Section:Button({ Title, Description, Callback })`
+- **Toggles**: `Section:Toggle({ Title, Default, Callback })`
+- **Sliders**: `Section:Slider({ Title, Min, Max, Default, Callback })`
+- **Dropdowns**: `Section:Dropdown({ Title, Options, Callback })`
+- **Inputs**: `Section:Input({ Title, Placeholder, Callback })`
 
 ---
 
-## 🔔 Notificaciones y Popups
-
-### Notificaciones (Notifies)
-Pequeños avisos en la esquina de la pantalla.
+## 🔔 Sistema de Notificaciones
 ```lua
 IntiHub:Notify({
-    Title = "Éxito",
-    Content = "Script cargado correctamente",
+    Title = "Sistema Iniciado",
+    Content = "Noble Black & Gold cargado con éxito.",
     Duration = 5
 })
 ```
 
 ---
-
-## ✨ Widgets de Estado (StatusBar)
-IntiHub incluye un widget de estado automático que muestra:
-- **FPS**: Fotogramas por segundo.
-- **Ping**: Latencia de red.
-- **RAM**: Uso de memoria.
-- **Hora**: Reloj en tiempo real.
-
-Este widget es **arrastrable** (puedes moverlo con el ratón) y aparecerá automáticamente al crear tu ventana.
-
----
-
-## 🎨 Personalización Estética
-IntiHub utiliza un sistema de temas dinámico. El tema por defecto es **Black & Gold**, diseñado por **Sammir_Inti** para una apariencia ultra-premium.
-
-- **Bordes Dorados**: Los iconos de las secciones ahora tienen un borde cuadrado redondeado automático.
-- **Transparencia**: El fondo de la ventana tiene un tinte dorado elegante y traslúcido.
-
----
-*Desarrollado con ❤️ para la comunidad de Sammir_Inti.*
+*Desarrollado con ❤️ por el Equipo de IntiHub.*

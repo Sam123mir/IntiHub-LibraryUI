@@ -752,7 +752,7 @@ function Creator.Image(Img, Name, Corner, Folder, Type, IsThemeTag, Themed, Them
 		}).IconFrame
 		IconLabel.Parent = ImageFrame
 	elseif string.find(Img, "http") then
-		local FileName = "IntiHub/" .. Folder .. "/assets/." .. Type .. "-" .. Name .. ".png"
+		local FileName = "IntiHub_Data/" .. Folder .. "/assets/." .. Type .. "-" .. Name .. ".png"
 		local success, response = pcall(function()
 			task.spawn(function()
 				local response = Creator.Request

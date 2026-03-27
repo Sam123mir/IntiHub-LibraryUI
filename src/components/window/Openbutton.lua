@@ -32,10 +32,13 @@ function OpenButton.New(Window)
 
     local Title = New("TextLabel", {
         Text = Window.Title,
-        TextSize = 17,
+        TextSize = 16, -- Increased from 14
         FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
         BackgroundTransparency = 1,
         AutomaticSize = "XY",
+        ThemeTag = {
+            TextColor3 = "Text",
+        },
     })
 
     local Drag = New("Frame", {
@@ -165,7 +168,7 @@ function OpenButton.New(Window)
                 true,
                 Window.IconThemed
             )
-            Icon.Size = UDim2.new(0,22,0,22)
+            Icon.Size = UDim2.new(0, 24, 0, 24)
             Icon.LayoutOrder = -1
             Icon.Parent = OpenButtonMain.Button.TextButton
         end
