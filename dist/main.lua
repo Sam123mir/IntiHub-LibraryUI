@@ -258,6 +258,7 @@ PanelBackground="White",
 PanelBackgroundTransparency=.95,
 
 WindowBackground="Background",
+WindowBackgroundTransparency="BackgroundTransparency",
 
 WindowShadow="Black",
 
@@ -3655,7 +3656,8 @@ Dialog=Color3.fromHex"#0A0A0A",
 Outline=Color3.fromHex"#FFC300",
 Text=Color3.fromHex"#FFFFFF",
 Placeholder=Color3.fromHex"#7a7a7a",
-Background=Color3.fromHex"#000000",
+Background=Color3.fromHex"#0F0D00",
+BackgroundTransparency=0.1,
 Button=Color3.fromHex"#1A1A1A",
 Icon=Color3.fromHex"#FFC300",
 Toggle=Color3.fromHex"#FFC300",
@@ -11903,6 +11905,7 @@ Position=UDim2.new(0.5,0,0.5,0),
 Name="Background",
 ThemeTag={
 ImageColor3="WindowBackground",
+ImageTransparency="WindowBackgroundTransparency",
 },
 
 },{

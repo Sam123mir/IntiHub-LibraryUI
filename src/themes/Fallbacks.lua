@@ -17,6 +17,7 @@ return {
     PanelBackgroundTransparency = .95,
     
     WindowBackground = "Background",
+    WindowBackgroundTransparency = "BackgroundTransparency",
     
     WindowShadow = "Black",
     --WindowShadowTransparency = .7,

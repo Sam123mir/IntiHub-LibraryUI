@@ -693,6 +693,7 @@ return function(Config)
 			Name = "Background",
 			ThemeTag = {
 				ImageColor3 = "WindowBackground",
+				ImageTransparency = "WindowBackgroundTransparency",
 			},
 			--ZIndex = -9999,
 		}, {
