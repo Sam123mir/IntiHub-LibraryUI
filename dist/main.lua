@@ -3639,8 +3639,8 @@ Dialog=Color3.fromHex"#0A0A0A",
 Outline=Color3.fromHex"#FFC300",
 Text=Color3.fromHex"#FFFFFF",
 Placeholder=Color3.fromHex"#7a7a7a",
-Background=Color3.fromHex"#5C4D13",
-BackgroundTransparency=0.08,
+Background=Color3.fromHex"#8C731A",
+BackgroundTransparency=0.12,
 Button=Color3.fromHex"#1A1A1A",
 Icon=Color3.fromHex"#FFC300",
 Toggle=Color3.fromHex"#FFC300",
@@ -13485,7 +13485,7 @@ TextColor3=Color3.new(1,1,1),
 AutomaticSize="XY",
 BackgroundTransparency=1,
 })
-CreateStat("user","SESSION",as,3)
+CreateStat("solar:user-bold","SESSION",as,3)
 
 local at=ak("TextLabel",{
 Text="0 ms",
@@ -13495,7 +13495,7 @@ TextColor3=Color3.fromHex"#FFC300",
 AutomaticSize="XY",
 BackgroundTransparency=1,
 })
-CreateStat("gauge","PING",at,4)
+CreateStat("solar:transmission-bold","PING",at,4)
 
 local au=ak("TextLabel",{
 Text="0 MB",
@@ -13505,7 +13505,7 @@ TextColor3=Color3.fromHex"#FFC300",
 AutomaticSize="XY",
 BackgroundTransparency=1,
 })
-CreateStat("cpu","RAM",au,5)
+CreateStat("solar:cpu-bold","RAM",au,5)
 
 local av=ak("TextLabel",{
 Text="0 FPS",
@@ -13515,7 +13515,7 @@ TextColor3=Color3.fromHex"#FFC300",
 AutomaticSize="XY",
 BackgroundTransparency=1,
 })
-CreateStat("bar-chart-2","FPS",av,6)
+CreateStat("solar:chart-2-bold","FPS",av,6)
 
 local aw=ak("TextLabel",{
 Text="00:00:00",
@@ -13525,7 +13525,7 @@ TextColor3=Color3.fromHex"#FFC300",
 AutomaticSize="XY",
 BackgroundTransparency=1,
 })
-CreateStat("clock","TIME",aw,7)
+CreateStat("solar:clock-circle-bold","TIME",aw,7)
 
 
 local ax=tick()

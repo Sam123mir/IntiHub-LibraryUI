@@ -156,7 +156,7 @@ function StatusBar.New(Config)
 		AutomaticSize = "XY",
 		BackgroundTransparency = 1,
 	})
-	CreateStat("user", "SESSION", SessionText, 3)
+	CreateStat("solar:user-bold", "SESSION", SessionText, 3)
 
 	local PingText = New("TextLabel", {
 		Text = "0 ms",
@@ -166,7 +166,7 @@ function StatusBar.New(Config)
 		AutomaticSize = "XY",
 		BackgroundTransparency = 1,
 	})
-	CreateStat("gauge", "PING", PingText, 4)
+	CreateStat("solar:transmission-bold", "PING", PingText, 4)
 
 	local RamText = New("TextLabel", {
 		Text = "0 MB",
@@ -176,7 +176,7 @@ function StatusBar.New(Config)
 		AutomaticSize = "XY",
 		BackgroundTransparency = 1,
 	})
-	CreateStat("cpu", "RAM", RamText, 5)
+	CreateStat("solar:cpu-bold", "RAM", RamText, 5)
 
 	local FpsText = New("TextLabel", {
 		Text = "0 FPS",
@@ -186,7 +186,7 @@ function StatusBar.New(Config)
 		AutomaticSize = "XY",
 		BackgroundTransparency = 1,
 	})
-	CreateStat("bar-chart-2", "FPS", FpsText, 6)
+	CreateStat("solar:chart-2-bold", "FPS", FpsText, 6)
 
 	local TimeText = New("TextLabel", {
 		Text = "00:00:00",
@@ -196,7 +196,7 @@ function StatusBar.New(Config)
 		AutomaticSize = "XY",
 		BackgroundTransparency = 1,
 	})
-	CreateStat("clock", "TIME", TimeText, 7)
+	CreateStat("solar:clock-circle-bold", "TIME", TimeText, 7)
 
 	-- Update Logic
 	local lastUpdate = tick()
