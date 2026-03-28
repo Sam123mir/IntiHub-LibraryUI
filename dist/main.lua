@@ -11271,6 +11271,14 @@ do
                 end
             end
 
+            local function GetUserThumb(Anonymous)
+                local success, result = pcall(function()
+                    return Players:GetUserThumbnailAsync(Anonymous and 1 or Players.LocalPlayer.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size420x420)
+                end)
+
+                return success and result or 'rbxassetid://0'
+            end
+
             local UICorner = New('UICorner', {
                 CornerRadius = UDim.new(0, Window.UICorner),
             })
@@ -11486,7 +11494,7 @@ do
                             Size = UDim2.new(1, -8, 1, -8),
                             Position = UDim2.new(0.5, 0, 0.5, 0),
                             AnchorPoint = Vector2.new(0.5, 0.5),
-                            Image = GetUserThumb(),
+                            Image = GetUserThumb(false),
                             BackgroundTransparency = 1,
                         }, {
                             New('UICorner', {
@@ -11559,7 +11567,7 @@ do
                             },
                         }),
                         New('TextLabel', {
-                            Text = (identifyexecutor and identifyexecutor() or 'Unknown Executor'),
+                            Text = (typeof(identifyexecutor) == 'function' and identifyexecutor() or 'Unknown Executor'),
                             TextSize = 12,
                             TextColor3 = Color3.new(1, 1, 1),
                             TextTransparency = 0.4,
@@ -11641,12 +11649,6 @@ do
             local UserIcon
 
             if Window.User then
-                local function GetUserThumb()
-                    local ImageId = Players:GetUserThumbnailAsync(Window.User.Anonymous and 1 or Players.LocalPlayer.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size420x420)
-
-                    return ImageId
-                end
-
                 UserIcon = New('TextButton', {
                     Size = UDim2.new(0, Window.UIElements.SideBarContainer.AbsoluteSize.X - (Window.UIPadding / 2), 0, 42 + Window.UIPadding),
                     Position = UDim2.new(0, Window.UIPadding / 2, 1, -(Window.UIPadding / 2)),
@@ -11685,7 +11687,7 @@ do
                         Name = 'UserIcon',
                     }, {
                         New('ImageLabel', {
-                            Image = GetUserThumb(),
+                            Image = GetUserThumb(Window.User.Anonymous),
                             BackgroundTransparency = 1,
                             Size = UDim2.new(0, 42, 0, 42),
                             ThemeTag = {
@@ -11771,7 +11773,7 @@ do
                     end
 
                     Window.User.Anonymous = v
-                    UserIcon.UserIcon.ImageLabel.Image = GetUserThumb()
+                    UserIcon.UserIcon.ImageLabel.Image = GetUserThumb(v)
                     UserIcon.UserIcon.Frame.DisplayName.Text = v and 'Anonymous' or Players.LocalPlayer.DisplayName
                     UserIcon.UserIcon.Frame.UserName.Text = v and 'anonymous' or Players.LocalPlayer.Name
                 end
@@ -12341,14 +12343,11 @@ do
                 Window.Title = text
                 WindowTitle.Text = text
             end
-            function Window:SetAuthor(text)
-                Window.Author = text
+            function Window:SetAuthor(v)
+                Window.Author = v
+                Window.UIElements.Main.Main.Topbar.Left.Author.Text = v
 
-                if not WindowAuthor then
-                    WindowAuthor = createAuthor(Window.Author)
-                end
-
-                WindowAuthor.Text = text
+                return Window
             end
             function Window:SetSize(size)
                 if typeof(size) == 'UDim2' then

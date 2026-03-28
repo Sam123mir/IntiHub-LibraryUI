@@ -131,6 +131,17 @@ return function(Config)
 		end
 	end
 
+	local function GetUserThumb(Anonymous)
+		local success, result = pcall(function()
+			return Players:GetUserThumbnailAsync(
+				Anonymous and 1 or Players.LocalPlayer.UserId,
+				Enum.ThumbnailType.HeadShot,
+				Enum.ThumbnailSize.Size420x420
+			)
+		end)
+		return success and result or "rbxassetid://0"
+	end
+
 	local UICorner = New("UICorner", {
 		CornerRadius = UDim.new(0, Window.UICorner),
 	})
@@ -373,7 +384,7 @@ return function(Config)
                     Size = UDim2.new(1, -8, 1, -8),
                     Position = UDim2.new(0.5, 0, 0.5, 0),
                     AnchorPoint = Vector2.new(0.5, 0.5),
-                    Image = GetUserThumb(), -- Dynamic Avatar
+                    Image = GetUserThumb(false), -- Dynamic Avatar (Executive Panel always shows local player)
                     BackgroundTransparency = 1,
                 }, {
                     New("UICorner", { CornerRadius = UDim.new(1, 0) })
@@ -439,7 +450,7 @@ return function(Config)
                     ThemeTag = { ImageColor3 = "Accent" },
                 }),
                 New("TextLabel", {
-                    Text = (identifyexecutor and identifyexecutor() or "Unknown Executor"),
+                    Text = (typeof(identifyexecutor) == "function" and identifyexecutor() or "Unknown Executor"),
                     TextSize = 12,
                     TextColor3 = Color3.new(1, 1, 1),
                     TextTransparency = .4,
@@ -525,14 +536,6 @@ return function(Config)
 
 	local UserIcon
 	if Window.User then
-		local function GetUserThumb()
-			local ImageId, _ = Players:GetUserThumbnailAsync(
-				Window.User.Anonymous and 1 or Players.LocalPlayer.UserId,
-				Enum.ThumbnailType.HeadShot,
-				Enum.ThumbnailSize.Size420x420
-			)
-			return ImageId
-		end
 
 		UserIcon = New("TextButton", {
 			Size = UDim2.new(
@@ -577,7 +580,7 @@ return function(Config)
 				Name = "UserIcon",
 			}, {
 				New("ImageLabel", {
-					Image = GetUserThumb(),
+					Image = GetUserThumb(Window.User.Anonymous),
 					BackgroundTransparency = 1,
 					Size = UDim2.new(0, 42, 0, 42),
 					ThemeTag = {
@@ -666,7 +669,7 @@ return function(Config)
 				v = true
 			end
 			Window.User.Anonymous = v
-			UserIcon.UserIcon.ImageLabel.Image = GetUserThumb()
+			UserIcon.UserIcon.ImageLabel.Image = GetUserThumb(v)
 			UserIcon.UserIcon.Frame.DisplayName.Text = v and "Anonymous" or Players.LocalPlayer.DisplayName
 			UserIcon.UserIcon.Frame.UserName.Text = v and "anonymous" or Players.LocalPlayer.Name
 		end
@@ -1373,13 +1376,10 @@ return function(Config)
 		WindowTitle.Text = text
 	end
 
-	function Window:SetAuthor(text)
-		Window.Author = text
-		if not WindowAuthor then
-			WindowAuthor = createAuthor(Window.Author)
-		end
-
-		WindowAuthor.Text = text
+	function Window:SetAuthor(v)
+		Window.Author = v
+		Window.UIElements.Main.Main.Topbar.Left.Author.Text = v
+		return Window
 	end
 
 	function Window:SetSize(size)
