@@ -1326,27 +1326,7 @@ return function(Config)
 
 	Window.OpenButtonMain = require("./Openbutton").New(Window)
 
-			-- local WindowIcon = nil
-            -- Folder icon suppressed as requested
-            -- WindowIcon properties removed to prevent nil error
-
-			Window.OpenButtonMain:SetIcon(Window.Icon)
-
-			-- if Creator.Icon(tostring(Window.Icon)) and Creator.Icon(tostring(Window.Icon))[1] then
-			--     -- ImageLabel.Image = Creator.Icon(Window.Icon)[1]
-			--     -- ImageLabel.ImageRectOffset = Creator.Icon(Window.Icon)[2].ImageRectPosition
-			--     -- ImageLabel.ImageRectSize = Creator.Icon(Window.Icon)[2].ImageRectSize
-			--     -- OpenButtonIcon.Image = Creator.Icon(Window.Icon)[1]
-			--     -- OpenButtonIcon.ImageRectOffset = Creator.Icon(Window.Icon)[2].ImageRectPosition
-			--     -- OpenButtonIcon.ImageRectSize = Creator.Icon(Window.Icon)[2].ImageRectSize
-
-			-- end
-			-- end
-		else
-			Window.OpenButtonMain:SetIcon(Window.Icon)
-			--OpenButtonIcon.Visible = false
-		end
-	end)
+	Window.OpenButtonMain:SetIcon(Window.Icon)
 
 	function Window:SetToggleKey(keycode)
 		Window.ToggleKey = keycode
