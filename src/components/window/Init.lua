@@ -2368,16 +2368,6 @@ return function(Config)
 	--     end
 	-- }
 
-	-- / Animations /
-    task.spawn(function()
-        local g1 = Window.UIElements.Main:FindFirstChild("AnimatedGradient1", true)
-        local g2 = Window.UIElements.Main:FindFirstChild("AnimatedGradient2", true)
-        
-        RenderStepped:Connect(function()
-            if g1 then g1.Rotation = (g1.Rotation + 1) % 360 end
-            if g2 then g2.Rotation = (g2.Rotation - 1) % 360 end
-        end)
-    end)
 
     if Window.OpenButtonMain and Window.OpenButtonMain.Button then
         task.spawn(function()
