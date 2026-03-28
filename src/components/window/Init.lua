@@ -298,12 +298,7 @@ return function(Config)
 	end
 
 	Window.UIElements.MainBar = New("Frame", {
-		Size = UDim2.new(
-			1, 
-            -Window.SideBarWidth - 200, -- Always reserve space for Executive Panel
-            1, 
-            -Window.Topbar.Height
-        ),
+		Size = UDim2.new(1, -Window.SideBarWidth, 1, -Window.Topbar.Height),
 		Position = UDim2.new(0, Window.SideBarWidth, 0, Window.Topbar.Height),
 		BackgroundTransparency = 1,
 	}, {
@@ -331,12 +326,209 @@ return function(Config)
 		}),
 	})
 
-    -- Right Panel (Executive User)
-    Window.UIElements.RightPanel = New("Frame", {
-        Size = UDim2.new(0, 200, 0, 500), -- Fixed height for separate panel
-        Position = UDim2.new(1, 15, 0, 0), -- Separated by 15px
+    -- Right Panel Helpers
+    local function CreateMiniStat(Label, ValueName)
+        return New("Frame", {
+            Size = UDim2.new(0.3, 0, 1, 0),
+            BackgroundColor3 = Color3.new(1,1,1),
+            BackgroundTransparency = .97,
+        }, {
+            New("UICorner", { CornerRadius = UDim.new(0, 6) }),
+            New("TextLabel", {
+                Text = Label,
+                TextSize = 9,
+                TextColor3 = Color3.fromHex("#FFD700"),
+                Position = UDim2.new(0.5, 0, 0.3, 0),
+                AnchorPoint = Vector2.new(0.5, 0.5),
+                BackgroundTransparency = 1,
+            }),
+            New("TextLabel", {
+                Name = ValueName,
+                Text = "...",
+                TextSize = 12,
+                TextColor3 = Color3.new(1,1,1),
+                Position = UDim2.new(0.5, 0, 0.7, 0),
+                AnchorPoint = Vector2.new(0.5, 0.5),
+                BackgroundTransparency = 1,
+                FontFace = Font.new(Creator.Font, Enum.FontWeight.SemiBold),
+            })
+        })
+    end
+
+    -- Right Panel (Executive User Sidebar)
+    local RightPanelContent = New("Frame", {
+        Size = UDim2.new(1, 0, 1, 0),
         BackgroundTransparency = 1,
-        Visible = Window.User.Enabled or true,
+    }, {
+        New("UIListLayout", {
+            Padding = UDim.new(0, 20),
+            HorizontalAlignment = "Center",
+            VerticalAlignment = "Top", -- Top-aligned as requested
+            SortOrder = "LayoutOrder",
+        }),
+        New("UIPadding", {
+            PaddingLeft = UDim.new(0, 12),
+            PaddingRight = UDim.new(0, 12),
+            PaddingBottom = UDim.new(0, 12),
+            PaddingTop = UDim.new(0, 12),
+        }),
+
+        -- 🟢 Executive User Header
+        New("Frame", {
+            Size = UDim2.new(1, 0, 0, 130),
+            BackgroundTransparency = 1,
+            LayoutOrder = 1,
+        }, {
+            New("UIListLayout", {
+                Padding = UDim.new(0, 10),
+                HorizontalAlignment = "Center",
+            }),
+            -- Avatar Frame
+            New("Frame", {
+                Size = UDim2.new(0, 85, 0, 85),
+                BackgroundColor3 = Color3.fromHex("#1A1A1A"),
+            }, {
+                New("UICorner", { CornerRadius = UDim.new(0, 15) }),
+                New("UIStroke", { Thickness = 2, Color = Color3.fromHex("#FFD700"), Transparency = .5 }),
+                New("ImageLabel", {
+                    Name = "Avatar",
+                    Size = UDim2.new(1, -10, 1, -10),
+                    Position = UDim2.new(0.5, 0, 0.5, 0),
+                    AnchorPoint = Vector2.new(0.5, 0.5),
+                    Image = GetUserThumb(false),
+                    BackgroundTransparency = 1,
+                }, {
+                    New("UICorner", { CornerRadius = UDim.new(1, 0) })
+                })
+            }),
+            -- Names
+            New("Frame", {
+                Size = UDim2.new(1, 0, 0, 35),
+                BackgroundTransparency = 1,
+            }, {
+                New("UIListLayout", { HorizontalAlignment = "Center", Padding = UDim.new(0, 2) }),
+                New("TextLabel", {
+                    Text = Players.LocalPlayer.DisplayName,
+                    TextSize = 14,
+                    FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+                    TextColor3 = Color3.new(1, 1, 1),
+                    BackgroundTransparency = 1,
+                    AutomaticSize = "XY",
+                }),
+                New("TextLabel", {
+                    Text = "@" .. Players.LocalPlayer.Name,
+                    TextSize = 12,
+                    TextColor3 = Color3.new(1, 1, 1),
+                    TextTransparency = .5,
+                    BackgroundTransparency = 1,
+                    AutomaticSize = "XY",
+                })
+            })
+        }),
+
+        -- 🟢 Separator
+        New("Frame", {
+            Size = UDim2.new(0.8, 0, 0, 1),
+            BackgroundColor3 = Color3.fromHex("#FFD700"),
+            BackgroundTransparency = 0.8,
+            LayoutOrder = 2,
+        }),
+
+        -- 🟢 Game Statistics (Moved from widget)
+        New("Frame", {
+            Size = UDim2.new(1, 0, 0, 150),
+            BackgroundTransparency = 1,
+            LayoutOrder = 3,
+        }, {
+            New("UIListLayout", { Padding = UDim.new(0, 8), HorizontalAlignment = "Center" }),
+            New("TextLabel", {
+                Text = "GAME INFORMATION",
+                TextSize = 10,
+                FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+                TextColor3 = Color3.fromHex("#FFD700"),
+                TextTransparency = .4,
+                BackgroundTransparency = 1,
+                Size = UDim2.new(1, 0, 0, 20),
+            }),
+            
+            -- Game Name Display
+            New("Frame", {
+                Size = UDim2.new(1, 0, 0, 40),
+                BackgroundColor3 = Color3.new(1,1,1),
+                BackgroundTransparency = .95,
+            }, {
+                New("UICorner", { CornerRadius = UDim.new(0, 8) }),
+                New("UIStroke", { Thickness = 1, Color = Color3.fromHex("#FFD700"), Transparency = .9 }),
+                New("TextLabel", {
+                    Name = "GameName",
+                    Text = "Loading...",
+                    TextSize = 12,
+                    TextColor3 = Color3.new(1,1,1),
+                    Size = UDim2.new(1, -20, 1, 0),
+                    Position = UDim2.new(0.5, 0, 0.5, 0),
+                    AnchorPoint = Vector2.new(0.5, 0.5),
+                    BackgroundTransparency = 1,
+                    TextTruncate = "AtEnd",
+                })
+            }),
+
+            -- Live Stats Row
+            New("Frame", {
+                Size = UDim2.new(1, 0, 0, 60),
+                BackgroundTransparency = 1,
+            }, {
+                New("UIListLayout", { FillDirection = "Horizontal", Padding = UDim.new(0, 8), HorizontalAlignment = "Center" }),
+                CreateMiniStat("FPS", "FPSValue"),
+                CreateMiniStat("PING", "PingValue"),
+                CreateMiniStat("RAM", "RamValue"),
+            })
+        }),
+
+         -- 🟢 Executor Status (Consolidated)
+        New("Frame", {
+            Size = UDim2.new(1, 0, 0, 50),
+            BackgroundColor3 = Color3.fromHex("#FFD700"),
+            BackgroundTransparency = .92,
+            LayoutOrder = 4,
+        }, {
+            New("UICorner", { CornerRadius = UDim.new(0, 10) }),
+            New("UIStroke", { Thickness = 1.5, Color = Color3.fromHex("#FFD700"), Transparency = .6 }),
+            New("ImageLabel", {
+                Size = UDim2.new(0, 22, 0, 22),
+                Position = UDim2.new(0, 12, 0.5, 0),
+                AnchorPoint = Vector2.new(0, 0.5),
+                Image = Creator.Icon("zap")[1],
+                ImageRectOffset = Creator.Icon("zap")[2].ImageRectPosition,
+                ImageRectSize = Creator.Icon("zap")[2].ImageRectSize,
+                ThemeTag = { ImageColor3 = "Accent" },
+            }),
+            New("TextLabel", {
+                Text = "EXECUTOR",
+                TextSize = 9,
+                TextColor3 = Color3.new(1, 1, 1),
+                TextTransparency = .5,
+                Position = UDim2.new(0, 42, 0.3, 0),
+                AnchorPoint = Vector2.new(0, 0.5),
+                BackgroundTransparency = 1,
+            }),
+            New("TextLabel", {
+                Text = (typeof(identifyexecutor) == "function" and identifyexecutor() or "Xeno"),
+                TextSize = 13,
+                TextColor3 = Color3.new(1, 1, 1),
+                Position = UDim2.new(0, 42, 0.65, 0),
+                AnchorPoint = Vector2.new(0, 0.5),
+                BackgroundTransparency = 1,
+                FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+            })
+        })
+    })
+
+    Window.UIElements.RightPanel = New("Frame", {
+        Size = UDim2.new(0, 230, 0, 0), -- Fixed width, auto height
+        AutomaticSize = "Y",
+        Position = UDim2.new(1, 15, 0, 0), -- Detached by 15px
+        BackgroundTransparency = 1,
+        Visible = true,
     }, {
         Creator.NewRoundFrame(Window.UICorner - (Window.UIPadding/2), "Squircle", {
             Size = UDim2.new(1, 0, 1, 0),
@@ -349,154 +541,10 @@ return function(Config)
              New("UIStroke", {
                 Thickness = 1,
                 Color = Color3.fromHex("#FFD700"),
-                Transparency = .9,
+                Transparency = .8,
             })
         }),
-        New("UIPadding", {
-            PaddingLeft = UDim.new(0, Window.UIPadding),
-            PaddingRight = UDim.new(0, Window.UIPadding),
-            PaddingBottom = UDim.new(0, Window.UIPadding),
-            PaddingTop = UDim.new(0, Window.UIPadding),
-        }),
-        New("UIListLayout", {
-            Padding = UDim.new(0, 15),
-            HorizontalAlignment = "Center",
-        }),
-
-        -- 🟢 Executive User Header
-        New("Frame", {
-            Size = UDim2.new(1, 0, 0, 120),
-            BackgroundTransparency = 1,
-        }, {
-            New("UIListLayout", {
-                Padding = UDim.new(0, 8),
-                HorizontalAlignment = "Center",
-            }),
-            -- Avatar Frame
-            New("Frame", {
-                Size = UDim2.new(0, 80, 0, 80),
-                BackgroundColor3 = Color3.fromHex("#1A1A1A"),
-            }, {
-                New("UICorner", { CornerRadius = UDim.new(0, 12) }),
-                New("UIStroke", { Thickness = 1.5, Color = Color3.fromHex("#FFD700"), Transparency = .6 }),
-                New("ImageLabel", {
-                    Name = "Avatar",
-                    Size = UDim2.new(1, -8, 1, -8),
-                    Position = UDim2.new(0.5, 0, 0.5, 0),
-                    AnchorPoint = Vector2.new(0.5, 0.5),
-                    Image = GetUserThumb(false), -- Dynamic Avatar (Executive Panel always shows local player)
-                    BackgroundTransparency = 1,
-                }, {
-                    New("UICorner", { CornerRadius = UDim.new(1, 0) })
-                })
-            }),
-            -- Name
-            New("TextLabel", {
-                Text = Players.LocalPlayer.DisplayName, -- Dynamic Display Name
-                TextSize = 14,
-                FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
-                TextColor3 = Color3.new(1, 1, 1),
-                BackgroundTransparency = 1,
-                AutomaticSize = "XY",
-            })
-        }),
-
-        -- 🟢 User Details List
-        New("Frame", {
-            Size = UDim2.new(1, 0, 0, 80),
-            BackgroundTransparency = 1,
-        }, {
-            New("UIListLayout", { Padding = UDim.new(0, 6) }),
-            -- @Handle Button
-            New("Frame", {
-                Size = UDim2.new(1, 0, 0, 32),
-                BackgroundColor3 = Color3.new(1, 1, 1),
-                BackgroundTransparency = .95,
-            }, {
-                New("UICorner", { CornerRadius = UDim.new(0, 6) }),
-                New("ImageLabel", {
-                    Size = UDim2.new(0, 16, 0, 16),
-                    Position = UDim2.new(0, 10, 0.5, 0),
-                    AnchorPoint = Vector2.new(0, 0.5),
-                    Image = Creator.Icon("at-sign")[1],
-                    ImageRectOffset = Creator.Icon("at-sign")[2].ImageRectPosition,
-                    ImageRectSize = Creator.Icon("at-sign")[2].ImageRectSize,
-                    ThemeTag = { ImageColor3 = "Accent" },
-                }),
-                New("TextLabel", {
-                    Text = "@" .. Players.LocalPlayer.Name, -- Dynamic Username
-                    TextSize = 12,
-                    TextColor3 = Color3.new(1, 1, 1),
-                    TextTransparency = .4,
-                    Position = UDim2.new(0, 32, 0.5, 0),
-                    AnchorPoint = Vector2.new(0, 0.5),
-                    BackgroundTransparency = 1,
-                })
-            }),
-             -- Executor Details
-            New("Frame", {
-                Size = UDim2.new(1, 0, 0, 32),
-                BackgroundColor3 = Color3.new(1, 1, 1),
-                BackgroundTransparency = .95,
-            }, {
-                New("UICorner", { CornerRadius = UDim.new(0, 6) }),
-                New("ImageLabel", {
-                    Size = UDim2.new(0, 16, 0, 16),
-                    Position = UDim2.new(0, 10, 0.5, 0),
-                    AnchorPoint = Vector2.new(0, 0.5),
-                    Image = Creator.Icon("cpu")[1], -- CPU icon for executor
-                    ImageRectOffset = Creator.Icon("cpu")[2].ImageRectPosition,
-                    ImageRectSize = Creator.Icon("cpu")[2].ImageRectSize,
-                    ThemeTag = { ImageColor3 = "Accent" },
-                }),
-                New("TextLabel", {
-                    Text = (typeof(identifyexecutor) == "function" and identifyexecutor() or "Unknown Executor"),
-                    TextSize = 12,
-                    TextColor3 = Color3.new(1, 1, 1),
-                    TextTransparency = .4,
-                    Position = UDim2.new(0, 32, 0.5, 0),
-                    AnchorPoint = Vector2.new(0, 0.5),
-                    BackgroundTransparency = 1,
-                })
-            })
-        }),
-
-        -- 🟢 Engine Status
-        New("Frame", {
-            Size = UDim2.new(1, 0, 0, 60),
-            BackgroundColor3 = Color3.fromHex("#FFD700"),
-            BackgroundTransparency = .95,
-        }, {
-            New("UICorner", { CornerRadius = UDim.new(0, 8) }),
-            New("UIStroke", { Thickness = 1, Color = Color3.fromHex("#FFD700"), Transparency = .8 }),
-            New("ImageLabel", {
-                Size = UDim2.new(0, 24, 0, 24),
-                Position = UDim2.new(0, 12, 0.5, 0),
-                AnchorPoint = Vector2.new(0, 0.5),
-                Image = Creator.Icon("zap")[1],
-                ImageRectOffset = Creator.Icon("zap")[2].ImageRectPosition,
-                ImageRectSize = Creator.Icon("zap")[2].ImageRectSize,
-                ThemeTag = { ImageColor3 = "Accent" },
-            }),
-            New("TextLabel", {
-                Text = "CURRENT ENGINE",
-                TextSize = 10,
-                TextColor3 = Color3.new(1, 1, 1),
-                TextTransparency = .5,
-                Position = UDim2.new(0, 44, 0.35, 0),
-                AnchorPoint = Vector2.new(0, 0.5),
-                BackgroundTransparency = 1,
-            }),
-            New("TextLabel", {
-                Text = "Executor: <font color='#FFD700'>" .. (typeof(identifyexecutor) == "function" and identifyexecutor() or "Xeno") .. "</font>",
-                TextSize = 12,
-                TextColor3 = Color3.new(1, 1, 1),
-                Position = UDim2.new(0, 44, 0.65, 0),
-                AnchorPoint = Vector2.new(0, 0.5),
-                BackgroundTransparency = 1,
-                RichText = true,
-            })
-        })
+        RightPanelContent
     })
 
     -- Breadcrumbs / Content Header Removed
@@ -2162,20 +2210,56 @@ return function(Config)
 		end
 	end
 
-	-- local Bindings = {
-	--     Title = function(v)
-	--         Window:SetTitle(v)
-	--     end,
-	--     Author = function(v)
-	--         Window:SetAuthor(v)
-	--     end,
-	--     Size = function(v)
-	--         Window:SetSize(v)
-	--     end,
-	--     HidePanelBackground  = function(v)
-	--         Window:SetPanelBackground(v)
-	--     end
-	-- }
+	-- / Live Stats Update /
+    
+    local Stats = cloneref(game:GetService("Stats"))
+    local MarketplaceService = cloneref(game:GetService("MarketplaceService"))
+    
+    task.spawn(function()
+        local GameNameLabel = RightPanelContent:FindFirstChild("GameName", true)
+        local FPSLabel = RightPanelContent:FindFirstChild("FPSValue", true)
+        local PingLabel = RightPanelContent:FindFirstChild("PingValue", true)
+        local RamLabel = RightPanelContent:FindFirstChild("RamValue", true)
+
+        -- Fetch Game Name
+        pcall(function()
+            local success, info = pcall(function() return MarketplaceService:GetProductInfo(game.PlaceId) end)
+            if success and info and info.Name then
+                GameNameLabel.Text = info.Name
+            else
+                GameNameLabel.Text = game.Name or "Unknown"
+            end
+        end)
+
+        local lastUpdate = tick()
+        local frameCount = 0
+        
+        RunService.RenderStepped:Connect(function()
+            frameCount = frameCount + 1
+            local now = tick()
+            if now - lastUpdate >= 1 then
+                local fps = frameCount
+                frameCount = 0
+                lastUpdate = now
+                
+                if FPSLabel then FPSLabel.Text = tostring(fps) .. " FPS" end
+                
+                if PingLabel then
+                    local ping = math.floor(Stats.Network.ServerStatsItem["Data Ping"]:GetValue())
+                    PingLabel.Text = tostring(ping) .. " ms"
+                end
+                
+                if RamLabel then
+                    local ram = math.floor(Stats:GetTotalMemoryUsageMb())
+                    if ram > 1024 then
+                        RamLabel.Text = string.format("%.1f GB", ram / 1024)
+                    else
+                        RamLabel.Text = tostring(ram) .. " MB"
+                    end
+                end
+            end
+        end)
+    end)
 
 
     if Window.OpenButtonMain and Window.OpenButtonMain.Button then

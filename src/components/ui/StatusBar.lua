@@ -162,67 +162,7 @@ function StatusBar.New(Config)
 		LayoutOrder = 2,
 	})
 
-	-- Game Section
-	local ProductName = "Unknown Game"
-	pcall(function()
-		ProductName = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name
-	end)
-
-	local GameText = New("TextLabel", {
-		Text = ProductName,
-		TextSize = 14,
-		FontFace = Font.new(Creator.Font, Enum.FontWeight.SemiBold),
-		TextColor3 = Color3.new(1, 1, 1),
-		AutomaticSize = "XY",
-		BackgroundTransparency = 1,
-	})
-	CreateStat("solar:gamepad-minimalistic-bold", "GAME", GameText, 3)
-
-	-- Session Section Removed
-
-	local PingText = New("TextLabel", {
-		Text = "0 ms",
-		TextSize = 14,
-		FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
-		TextColor3 = Color3.fromHex("#FFC300"),
-		ThemeTag = { TextColor3 = "Accent" },
-		AutomaticSize = "XY",
-		BackgroundTransparency = 1,
-	})
-	CreateStat("solar:transmission-bold", "PING", PingText, 5)
-
-	local RamText = New("TextLabel", {
-		Text = "0 MB",
-		TextSize = 14,
-		FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
-		TextColor3 = Color3.fromHex("#FFC300"),
-		ThemeTag = { TextColor3 = "Accent" },
-		AutomaticSize = "XY",
-		BackgroundTransparency = 1,
-	})
-	CreateStat("solar:cpu-bold", "RAM", RamText, 6)
-
-	local FpsText = New("TextLabel", {
-		Text = "0 FPS",
-		TextSize = 14,
-		FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
-		TextColor3 = Color3.fromHex("#FFC300"),
-		ThemeTag = { TextColor3 = "Accent" },
-		AutomaticSize = "XY",
-		BackgroundTransparency = 1,
-	})
-	CreateStat("solar:chart-2-bold", "FPS", FpsText, 7)
-
-	local TimeText = New("TextLabel", {
-		Text = "00:00:00",
-		TextSize = 14,
-		FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
-		TextColor3 = Color3.fromHex("#FFC300"),
-		ThemeTag = { TextColor3 = "Accent" },
-		AutomaticSize = "XY",
-		BackgroundTransparency = 1,
-	})
-	CreateStat("solar:clock-circle-bold", "TIME", TimeText, 8)
+	-- Game, Ping, RAM, FPS Section (Moved to Executive Sidebar)
 
 	-- Update Logic
 	local lastUpdate = tick()
@@ -237,18 +177,7 @@ function StatusBar.New(Config)
 			frameCount = 0
 			lastUpdate = now
 
-			FpsText.Text = tostring(fps) .. " FPS"
-			TimeText.Text = os.date("%H:%M:%S")
-			
-			local ping = math.floor(Stats.Network.ServerStatsItem["Data Ping"]:GetValue())
-			PingText.Text = tostring(ping) .. " ms"
-			
-			local ram = math.floor(Stats:GetTotalMemoryUsageMb())
-			if ram > 1024 then
-				RamText.Text = string.format("%.1f GB", ram / 1024)
-			else
-				RamText.Text = tostring(ram) .. " MB"
-			end
+			-- Stats update moved to Executive Sidebar
 		end
 	end)
 
