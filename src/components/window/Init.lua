@@ -139,8 +139,9 @@ return function(Config)
 				Enum.ThumbnailSize.Size420x420
 			)
 		end)
-		return success and result or "rbxassetid://0"
 	end
+	Window.User.Enabled = true -- 🟢 Force Executive User Panel for Noble Deluxe
+    Window.SideBarWidth = Window.SideBarWidth or 200
 
 	local UICorner = New("UICorner", {
 		CornerRadius = UDim.new(0, Window.UICorner),
@@ -298,8 +299,8 @@ return function(Config)
 
 	Window.UIElements.MainBar = New("Frame", {
 		Size = UDim2.new(
-            1, 
-            -Window.SideBarWidth - (Window.User.Enabled and 200 or 0), 
+			1, 
+            -Window.SideBarWidth - 200, -- Always reserve space for Executive Panel
             1, 
             -Window.Topbar.Height
         ),
@@ -498,11 +499,12 @@ return function(Config)
             })
         })
     })
+    Window.UIElements.RightPanel.Parent = Window.UIElements.Main.Main -- 🟢 Explicit Parent
 
     -- Breadcrumbs / Content Header Removed
 
     -- Ajustar ScrollContainer de los Tabs para que comiencen debajo del header
-    Window.UIElements.TabScrollAdjustment = 60
+    Window.UIElements.TabScrollAdjustment = 5
 
 	local Blur = New("ImageLabel", { -- Shadow
 		Image = "rbxassetid://8992230677",
@@ -962,6 +964,7 @@ return function(Config)
 			}),
 			Window.UIElements.SideBarContainer,
 			Window.UIElements.MainBar,
+            Window.UIElements.RightPanel,
 
 			UserIcon,
 
@@ -1516,6 +1519,7 @@ return function(Config)
 	end
 
 	function Window:Open()
+        Window.UIElements.Main.Visible = true
 		task.spawn(function()
 			if Window.OnOpenCallback then
 				task.spawn(function()
@@ -1590,11 +1594,7 @@ return function(Config)
 			end)
 
 			Window.CanDropdown = true
-
-			Window.UIElements.Main.Visible = true
-			task.spawn(function()
-				task.wait(0.05)
-				Window.UIElements.Main:WaitForChild("Main").Visible = true
+            Window.UIElements.Main:WaitForChild("Main").Visible = true
 
 				Config.IntiHub:ToggleAcrylic(true)
 			end)
@@ -2160,6 +2160,7 @@ return function(Config)
 			Window.UIElements.Main.Main.Topbar.Center.Visible = true
 		end
 		TagConfig.Window = Window
+        TagConfig.LayoutOrder = TagConfig.LayoutOrder or 0
 		return Tag:New(TagConfig, Window.UIElements.Main.Main.Topbar.Center)
 	end
 
@@ -2284,8 +2285,56 @@ return function(Config)
 		-- Search Bar in TopBar Center
 		local SearchBarTrigger = CreateLabel("Search...", "search", Window.UIElements.Main.Main.Topbar.Center, true)
         SearchBarTrigger.Size = UDim2.new(0, 150, 0, 30)
-        SearchBarTrigger.LayoutOrder = -1 -- Before version tag
+        SearchBarTrigger.LayoutOrder = 5 -- After version and language
         
+        -- 🟢 Language Selection System
+        local CurrentLang = "EN"
+        local LangTrigger = CreateLabel("EN", "globe", Window.UIElements.Main.Main.Topbar.Center, true)
+        LangTrigger.Size = UDim2.new(0, 50, 0, 30)
+        LangTrigger.LayoutOrder = 2 -- After version
+
+        local LangDropdown = New("Frame", {
+            Size = UDim2.new(0, 60, 0, 0),
+            Position = UDim2.new(0.5, 0, 1, 5),
+            AnchorPoint = Vector2.new(0.5, 0),
+            BackgroundColor3 = Color3.fromHex("#121212"),
+            BorderSizePixel = 0,
+            ClipsDescendants = true,
+            Parent = LangTrigger,
+            ZIndex = 1000,
+        }, {
+            New("UICorner", { CornerRadius = UDim.new(0, 6) }),
+            New("UIStroke", { Thickness = 1, Color = Color3.fromHex("#FFD700"), Transparency = 0.8 }),
+            New("UIListLayout", { Padding = UDim.new(0, 2) }),
+        })
+
+        local function CreateLangItem(lang)
+            local item = New("TextButton", {
+                Size = UDim2.new(1, 0, 0, 25),
+                BackgroundTransparency = 1,
+                Text = lang,
+                TextSize = 12,
+                FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
+                TextColor3 = Color3.new(1, 1, 1),
+                Parent = LangDropdown,
+            })
+            Creator.AddSignal(item.MouseButton1Click, function()
+                CurrentLang = lang
+                LangTrigger.Text = lang
+                Tween(LangDropdown, 0.2, { Size = UDim2.new(0, 60, 0, 0) }):Play()
+            end)
+            return item
+        end
+
+        CreateLangItem("EN")
+        CreateLangItem("ES")
+        CreateLangItem("PT")
+
+        Creator.AddSignal(LangTrigger.MouseButton1Click, function()
+            local targetSize = LangDropdown.Size.Y.Offset == 0 and 80 or 0
+            Tween(LangDropdown, 0.25, { Size = UDim2.new(0, 60, 0, targetSize) }, Enum.EasingStyle.Quint):Play()
+        end)
+
         Window.UIElements.Main.Main.Topbar.Center.Visible = true
 
 		Creator.AddSignal(SearchBarTrigger.MouseButton1Click, function()

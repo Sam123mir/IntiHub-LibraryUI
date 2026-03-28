@@ -222,7 +222,7 @@ function StatusBar.New(Config)
 		AutomaticSize = "XY",
 		BackgroundTransparency = 1,
 	})
-	CreateStat("solar:alarm-clock-bold", "TIME", TimeText, 8)
+	CreateStat("solar:clock-circle-bold", "TIME", TimeText, 8)
 
 	-- Update Logic
 	local lastUpdate = tick()

@@ -56,6 +56,7 @@ function Tag:New(TagConfig, Parent)
 	end
 
 	local TagFrame = Creator.NewRoundFrame(TagModule.Radius, "Squircle", {
+		LayoutOrder = TagConfig.LayoutOrder or 0,
 		AutomaticSize = "X",
 		Size = UDim2.new(0, 0, 0, TagModule.Height),
 		Parent = Parent,

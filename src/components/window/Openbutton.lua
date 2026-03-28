@@ -111,15 +111,15 @@ function OpenButton.New(Window)
         Size = UDim2.new(0,0,0,32),
         AutomaticSize = "X",
         Parent = Container,
-        BackgroundColor3 = Color3.fromHex("#0A0A0A"),
-        BackgroundTransparency = .1,
+        BackgroundColor3 = Color3.fromHex("#0F0D00"),
+        BackgroundTransparency = .2,
     }, {
         UIScale,
-	    New("UICorner", { CornerRadius = UDim.new(0,6) }),
+	    New("UICorner", { CornerRadius = UDim.new(0,10) }),
         New("UIStroke", {
-            Thickness = 1,
+            Thickness = 1.5,
             Color = Color3.fromHex("#FFD700"),
-            Transparency = .7,
+            Transparency = .5,
             Name = "Stroke"
         }),
         
@@ -145,8 +145,14 @@ function OpenButton.New(Window)
             BackgroundTransparency = 1,
             Text = "",
             ZIndex = 10,
+        }, {
+            New("UIScale", { Scale = 1 })
         })
     })
+
+    Creator.AddSignal(Button.TextButton.MouseButton1Click, function()
+        Window:Open()
+    end)
 
     -- Pulsing animation for LightDot
     task.spawn(function()

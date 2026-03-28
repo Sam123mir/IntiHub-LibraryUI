@@ -279,24 +279,41 @@ function TabModule.New(Config, UIScale)
 	-- end)
 
 	Tab.UIElements.ContainerFrameCanvas = New("Frame", {
-		Size = UDim2.new(1, 0, 1, -60), -- Adjusted for the 60px Dashboard Header
+		Size = UDim2.new(1, 0, 1, -5), -- Adjusted for minimal header
 		BackgroundTransparency = 1,
 		Visible = false,
 		Parent = Window.UIElements.MainBar,
 		ZIndex = 5,
-        Position = UDim2.new(0, 0, 0, 60),
+        Position = UDim2.new(0, 0, 0, 5),
 	}, {
-        -- 🟢 Background Watermark ("ARCHIVE")
-        New("TextLabel", {
-            Text = "ARCHIVE",
-            TextSize = 100,
-            FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
-            TextColor3 = Color3.fromHex("#FFD700"),
-            TextTransparency = 0.98,
+        -- 🟢 Background Watermark (INTIHUB)
+        New("Frame", {
+            Size = UDim2.new(0, 300, 0, 100),
+            Position = UDim2.new(0.5, 0, 0.5, 0),
+            AnchorPoint = Vector2.new(0.5, 0.5),
             BackgroundTransparency = 1,
-            Size = UDim2.new(1, 0, 1, 0),
             ZIndex = 1,
-            Rotation = -15,
+        }, {
+            New("ImageLabel", {
+                Size = UDim2.new(0, 48, 0, 48),
+                Position = UDim2.new(0.5, 0, 0, 0),
+                AnchorPoint = Vector2.new(0.5, 0),
+                Image = "rbxassetid://120997033468887", -- Logo ID
+                BackgroundTransparency = 1,
+                ImageColor3 = Color3.fromHex("#FFD700"),
+                ImageTransparency = 0.94,
+            }),
+            New("TextLabel", {
+                Text = "INTI HUB",
+                TextSize = 35,
+                FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+                TextColor3 = Color3.fromHex("#FFD700"),
+                TextTransparency = 0.94,
+                BackgroundTransparency = 1,
+                Size = UDim2.new(1, 0, 0, 40),
+                Position = UDim2.new(0, 0, 1, 0),
+                AnchorPoint = Vector2.new(0, 1),
+            })
         }),
 		Tab.UIElements.ContainerFrame,
 		New("Frame", {
