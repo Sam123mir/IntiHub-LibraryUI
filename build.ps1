@@ -4,8 +4,8 @@
 Write-Host "Iniciando build de IntiHub v1.7.0..." -ForegroundColor Cyan
 
 # 1. Procesar con DarkLua
-Write-Host "Ejecutando DarkLua..."
-& darklua process src/Init.lua dist/temp.lua --config build/darklua.config.json
+Write-Host "Ejecutando DarkLua (Bootstrap)..."
+& darklua process src/main.client.lua dist/temp.lua --config build/darklua.config.json
 
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Error en DarkLua!" -ForegroundColor Red

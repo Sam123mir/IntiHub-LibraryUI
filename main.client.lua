@@ -13246,387 +13246,631 @@ do
 
         return StatusBar
     end
-end
-
-local IntiHub = {
-    Window = nil,
-    Theme = nil,
-    Creator = __DARKLUA_BUNDLE_MODULES.load'c',
-    LocalizationModule = __DARKLUA_BUNDLE_MODULES.load'd',
-    NotificationModule = __DARKLUA_BUNDLE_MODULES.load'e',
-    Themes = nil,
-    Transparent = false,
-    TransparencyValue = 0.15,
-    UIScale = 1,
-    ConfigManager = nil,
-    Version = '0.0.0',
-    Services = __DARKLUA_BUNDLE_MODULES.load'j',
-    OnThemeChangeFunction = nil,
-    cloneref = nil,
-    UIScaleObj = nil,
-    StatusBar = nil,
-}
-local cloneref = (cloneref or clonereference or function(instance)
-    return instance
-end)
-
-IntiHub.cloneref = cloneref
-
-local HttpService = cloneref(game:GetService'HttpService')
-local Players = cloneref(game:GetService'Players')
-local CoreGui = cloneref(game:GetService'CoreGui')
-local RunService = cloneref(game:GetService'RunService')
-local LocalPlayer = Players.LocalPlayer or nil
-local Package = HttpService:JSONDecode(__DARKLUA_BUNDLE_MODULES.load'k')
-
-if Package then
-    IntiHub.Version = Package.version
-end
-
-local KeySystem = __DARKLUA_BUNDLE_MODULES.load'o'
-local Creator = IntiHub.Creator
-local New = Creator.New
-local Acrylic = __DARKLUA_BUNDLE_MODULES.load's'
-local ProtectGui = protectgui or (syn and syn.protect_gui) or function() end
-local GUIParent = gethui and gethui() or (CoreGui or LocalPlayer:WaitForChild'PlayerGui')
-local UIScaleObj = New('UIScale', {
-    Scale = IntiHub.UIScale,
-})
-
-IntiHub.UIScaleObj = UIScaleObj
-IntiHub.ScreenGui = New('ScreenGui', {
-    Name = 'IntiHub',
-    Parent = GUIParent,
-    IgnoreGuiInset = true,
-    ScreenInsets = 'None',
-    DisplayOrder = -99999,
-}, {
-    New('Folder', {
-        Name = 'Window',
-    }),
-    New('Folder', {
-        Name = 'KeySystem',
-    }),
-    New('Folder', {
-        Name = 'Popups',
-    }),
-    New('Folder', {
-        Name = 'ToolTips',
-    }),
-})
-IntiHub.NotificationGui = New('ScreenGui', {
-    Name = 'IntiHub/Notifications',
-    Parent = GUIParent,
-    IgnoreGuiInset = true,
-})
-IntiHub.DropdownGui = New('ScreenGui', {
-    Name = 'IntiHub/Dropdowns',
-    Parent = GUIParent,
-    IgnoreGuiInset = true,
-})
-IntiHub.TooltipGui = New('ScreenGui', {
-    Name = 'IntiHub/Tooltips',
-    Parent = GUIParent,
-    IgnoreGuiInset = true,
-})
-
-ProtectGui(IntiHub.ScreenGui)
-ProtectGui(IntiHub.NotificationGui)
-ProtectGui(IntiHub.DropdownGui)
-ProtectGui(IntiHub.TooltipGui)
-Creator.Init(IntiHub)
-
-function IntiHub:SetParent(parent)
-    if IntiHub.ScreenGui then
-        IntiHub.ScreenGui.Parent = parent
-    end
-    if IntiHub.NotificationGui then
-        IntiHub.NotificationGui.Parent = parent
-    end
-    if IntiHub.DropdownGui then
-        IntiHub.DropdownGui.Parent = parent
-    end
-    if IntiHub.TooltipGui then
-        IntiHub.TooltipGui.Parent = parent
-    end
-end
-
-math.clamp(IntiHub.TransparencyValue, 0, 1)
-
-local Holder = IntiHub.NotificationModule.Init(IntiHub.NotificationGui)
-
-function IntiHub:Notify(Config)
-    Config.Holder = Holder.Frame
-    Config.Window = IntiHub.Window
-
-    return IntiHub.NotificationModule.New(Config)
-end
-function IntiHub:SetNotificationLower(Val)
-    Holder.SetLower(Val)
-end
-function IntiHub:SetFont(FontId)
-    Creator.UpdateFont(FontId)
-end
-function IntiHub:OnThemeChange(func)
-    IntiHub.OnThemeChangeFunction = func
-end
-function IntiHub:AddTheme(LTheme)
-    IntiHub.Themes[LTheme.Name] = LTheme
-
-    return LTheme
-end
-function IntiHub:SetTheme(Value)
-    if IntiHub.Themes[Value] then
-        IntiHub.Theme = IntiHub.Themes[Value]
-
-        Creator.SetTheme(IntiHub.Themes[Value])
-
-        if IntiHub.OnThemeChangeFunction then
-            IntiHub.OnThemeChangeFunction(Value)
-        end
-
-        return IntiHub.Themes[Value]
-    end
-
-    return nil
-end
-function IntiHub:GetThemes()
-    return IntiHub.Themes
-end
-function IntiHub:GetCurrentTheme()
-    return IntiHub.Theme.Name
-end
-function IntiHub:GetTransparency()
-    return IntiHub.Transparent or false
-end
-function IntiHub:GetWindowSize()
-    return IntiHub.Window.UIElements.Main.Size
-end
-function IntiHub:Localization(LocalizationConfig)
-    return IntiHub.LocalizationModule:New(LocalizationConfig, Creator)
-end
-function IntiHub:SetLanguage(Value)
-    if Creator.Localization then
-        return Creator.SetLanguage(Value)
-    end
-
-    return false
-end
-function IntiHub:ToggleAcrylic(Value)
-    if IntiHub.Window and IntiHub.Window.AcrylicPaint and IntiHub.Window.AcrylicPaint.Model then
-        IntiHub.Window.Acrylic = Value
-        IntiHub.Window.AcrylicPaint.Model.Transparency = Value and 0.98 or 1
-
-        if Value then
-            Acrylic.Enable()
-        else
-            Acrylic.Disable()
-        end
-    end
-end
-function IntiHub:Gradient(stops, props)
-    local colorSequence = {}
-    local transparencySequence = {}
-
-    for posStr, stop in next, stops do
-        local position = tonumber(posStr)
-
-        if position then
-            position = math.clamp(position / 100, 0, 1)
-
-            local color = stop.Color
-
-            if typeof(color) == 'string' and string.sub(color, 1, 1) == '#' then
-                color = Color3.fromHex(color)
-            end
-
-            local transparency = stop.Transparency or 0
-
-            table.insert(colorSequence, ColorSequenceKeypoint.new(position, color))
-            table.insert(transparencySequence, NumberSequenceKeypoint.new(position, transparency))
-        end
-    end
-
-    table.sort(colorSequence, function(a, b)
-        return a.Time < b.Time
-    end)
-    table.sort(transparencySequence, function(a, b)
-        return a.Time < b.Time
-    end)
-
-    if #colorSequence < 2 then
-        table.insert(colorSequence, ColorSequenceKeypoint.new(1, colorSequence[1].Value))
-        table.insert(transparencySequence, NumberSequenceKeypoint.new(1, transparencySequence[1].Value))
-    end
-
-    local gradientData = {
-        Color = ColorSequence.new(colorSequence),
-        Transparency = NumberSequence.new(transparencySequence),
-    }
-
-    if props then
-        for k, v in pairs(props)do
-            gradientData[k] = v
-        end
-    end
-
-    return gradientData
-end
-function IntiHub:Popup(PopupConfig)
-    PopupConfig.IntiHub = IntiHub
-
-    return __DARKLUA_BUNDLE_MODULES.load't'.new(PopupConfig)
-end
-
-IntiHub.Themes = __DARKLUA_BUNDLE_MODULES.load'u'(IntiHub)
-Creator.Themes = IntiHub.Themes
-
-IntiHub:SetTheme'Dark'
-IntiHub:SetLanguage(Creator.Language)
-
-function IntiHub:CreateWindow(Config)
-    local CreateWindow = __DARKLUA_BUNDLE_MODULES.load'_'
-
-    if not RunService:IsStudio() and writefile then
-        pcall(function()
-            if not isfolder'IntiHub_Data' then
-                makefolder'IntiHub_Data'
-            end
-
-            local targetFolder = 'IntiHub_Data/' .. (Config.Folder or Config.Title or 'Default')
-
-            if not isfolder(targetFolder) then
-                makefolder(targetFolder)
-            end
+    function __DARKLUA_BUNDLE_MODULES.ab()
+        local IntiHub = {
+            Window = nil,
+            Theme = nil,
+            Creator = __DARKLUA_BUNDLE_MODULES.load'c',
+            LocalizationModule = __DARKLUA_BUNDLE_MODULES.load'd',
+            NotificationModule = __DARKLUA_BUNDLE_MODULES.load'e',
+            Themes = nil,
+            Transparent = false,
+            TransparencyValue = 0.15,
+            UIScale = 1,
+            ConfigManager = nil,
+            Version = '0.0.0',
+            Services = __DARKLUA_BUNDLE_MODULES.load'j',
+            OnThemeChangeFunction = nil,
+            cloneref = nil,
+            UIScaleObj = nil,
+            StatusBar = nil,
+        }
+        local cloneref = (cloneref or clonereference or function(instance)
+            return instance
         end)
-    end
 
-    Config.IntiHub = IntiHub
-    Config.Parent = IntiHub.ScreenGui.Window
+        IntiHub.cloneref = cloneref
 
-    if IntiHub.Window then
-        warn'You cannot create more than one window'
+        local HttpService = cloneref(game:GetService'HttpService')
+        local Players = cloneref(game:GetService'Players')
+        local CoreGui = cloneref(game:GetService'CoreGui')
+        local RunService = cloneref(game:GetService'RunService')
+        local LocalPlayer = Players.LocalPlayer or nil
+        local Package = HttpService:JSONDecode(__DARKLUA_BUNDLE_MODULES.load'k')
 
-        return
-    end
-
-    local CanLoadWindow = true
-    local Theme = IntiHub.Themes[Config.Theme or 'Dark']
-
-    Creator.SetTheme(Theme)
-
-    local hwid = gethwid or function()
-        return Players.LocalPlayer.UserId
-    end
-    local Filename = hwid()
-
-    if Config.KeySystem then
-        CanLoadWindow = false
-
-        local function loadKeysystem()
-            KeySystem.new(Config, Filename, function(c)
-                CanLoadWindow = c
-            end)
+        if Package then
+            IntiHub.Version = Package.version
         end
 
-        local keyPath = (Config.Folder or 'Temp') .. '/' .. Filename .. '.key'
+        local KeySystem = __DARKLUA_BUNDLE_MODULES.load'o'
+        local Creator = IntiHub.Creator
+        local New = Creator.New
+        local Acrylic = __DARKLUA_BUNDLE_MODULES.load's'
+        local ProtectGui = protectgui or (syn and syn.protect_gui) or function() end
+        local GUIParent = gethui and gethui() or (CoreGui or LocalPlayer:WaitForChild'PlayerGui')
+        local UIScaleObj = New('UIScale', {
+            Scale = IntiHub.UIScale,
+        })
 
-        if Config.KeySystem.KeyValidator then
-            if Config.KeySystem.SaveKey and isfile(keyPath) then
-                local savedKey = readfile(keyPath)
-                local isValid = Config.KeySystem.KeyValidator(savedKey)
+        IntiHub.UIScaleObj = UIScaleObj
+        IntiHub.ScreenGui = New('ScreenGui', {
+            Name = 'IntiHub',
+            Parent = GUIParent,
+            IgnoreGuiInset = true,
+            ScreenInsets = 'None',
+            DisplayOrder = -99999,
+        }, {
+            New('Folder', {
+                Name = 'Window',
+            }),
+            New('Folder', {
+                Name = 'KeySystem',
+            }),
+            New('Folder', {
+                Name = 'Popups',
+            }),
+            New('Folder', {
+                Name = 'ToolTips',
+            }),
+        })
+        IntiHub.NotificationGui = New('ScreenGui', {
+            Name = 'IntiHub/Notifications',
+            Parent = GUIParent,
+            IgnoreGuiInset = true,
+        })
+        IntiHub.DropdownGui = New('ScreenGui', {
+            Name = 'IntiHub/Dropdowns',
+            Parent = GUIParent,
+            IgnoreGuiInset = true,
+        })
+        IntiHub.TooltipGui = New('ScreenGui', {
+            Name = 'IntiHub/Tooltips',
+            Parent = GUIParent,
+            IgnoreGuiInset = true,
+        })
 
-                if isValid then
-                    CanLoadWindow = true
-                else
-                    loadKeysystem()
-                end
-            else
-                loadKeysystem()
+        ProtectGui(IntiHub.ScreenGui)
+        ProtectGui(IntiHub.NotificationGui)
+        ProtectGui(IntiHub.DropdownGui)
+        ProtectGui(IntiHub.TooltipGui)
+        Creator.Init(IntiHub)
+
+        function IntiHub:SetParent(parent)
+            if IntiHub.ScreenGui then
+                IntiHub.ScreenGui.Parent = parent
             end
-        elseif not Config.KeySystem.API then
-            if Config.KeySystem.SaveKey and isfile(keyPath) then
-                local savedKey = readfile(keyPath)
-                local isKey = (type(Config.KeySystem.Key) == 'table') and table.find(Config.KeySystem.Key, savedKey) or tostring(Config.KeySystem.Key) == tostring(savedKey)
-
-                if isKey then
-                    CanLoadWindow = true
-                else
-                    loadKeysystem()
-                end
-            else
-                loadKeysystem()
+            if IntiHub.NotificationGui then
+                IntiHub.NotificationGui.Parent = parent
             end
-        else
-            if isfile(keyPath) then
-                local fileKey = readfile(keyPath)
-                local isSuccess = false
+            if IntiHub.DropdownGui then
+                IntiHub.DropdownGui.Parent = parent
+            end
+            if IntiHub.TooltipGui then
+                IntiHub.TooltipGui.Parent = parent
+            end
+        end
 
-                for _, i in next, Config.KeySystem.API do
-                    local serviceData = IntiHub.Services[i.Type]
+        math.clamp(IntiHub.TransparencyValue, 0, 1)
 
-                    if serviceData then
-                        local args = {}
+        local Holder = IntiHub.NotificationModule.Init(IntiHub.NotificationGui)
 
-                        for _, argName in next, serviceData.Args do
-                            table.insert(args, i[argName])
+        function IntiHub:Notify(Config)
+            Config.Holder = Holder.Frame
+            Config.Window = IntiHub.Window
+
+            return IntiHub.NotificationModule.New(Config)
+        end
+        function IntiHub:SetNotificationLower(Val)
+            Holder.SetLower(Val)
+        end
+        function IntiHub:SetFont(FontId)
+            Creator.UpdateFont(FontId)
+        end
+        function IntiHub:OnThemeChange(func)
+            IntiHub.OnThemeChangeFunction = func
+        end
+        function IntiHub:AddTheme(LTheme)
+            IntiHub.Themes[LTheme.Name] = LTheme
+
+            return LTheme
+        end
+        function IntiHub:SetTheme(Value)
+            if IntiHub.Themes[Value] then
+                IntiHub.Theme = IntiHub.Themes[Value]
+
+                Creator.SetTheme(IntiHub.Themes[Value])
+
+                if IntiHub.OnThemeChangeFunction then
+                    IntiHub.OnThemeChangeFunction(Value)
+                end
+
+                return IntiHub.Themes[Value]
+            end
+
+            return nil
+        end
+        function IntiHub:GetThemes()
+            return IntiHub.Themes
+        end
+        function IntiHub:GetCurrentTheme()
+            return IntiHub.Theme.Name
+        end
+        function IntiHub:GetTransparency()
+            return IntiHub.Transparent or false
+        end
+        function IntiHub:GetWindowSize()
+            return IntiHub.Window.UIElements.Main.Size
+        end
+        function IntiHub:Localization(LocalizationConfig)
+            return IntiHub.LocalizationModule:New(LocalizationConfig, Creator)
+        end
+        function IntiHub:SetLanguage(Value)
+            if Creator.Localization then
+                return Creator.SetLanguage(Value)
+            end
+
+            return false
+        end
+        function IntiHub:ToggleAcrylic(Value)
+            if IntiHub.Window and IntiHub.Window.AcrylicPaint and IntiHub.Window.AcrylicPaint.Model then
+                IntiHub.Window.Acrylic = Value
+                IntiHub.Window.AcrylicPaint.Model.Transparency = Value and 0.98 or 1
+
+                if Value then
+                    Acrylic.Enable()
+                else
+                    Acrylic.Disable()
+                end
+            end
+        end
+        function IntiHub:Gradient(stops, props)
+            local colorSequence = {}
+            local transparencySequence = {}
+
+            for posStr, stop in next, stops do
+                local position = tonumber(posStr)
+
+                if position then
+                    position = math.clamp(position / 100, 0, 1)
+
+                    local color = stop.Color
+
+                    if typeof(color) == 'string' and string.sub(color, 1, 1) == '#' then
+                        color = Color3.fromHex(color)
+                    end
+
+                    local transparency = stop.Transparency or 0
+
+                    table.insert(colorSequence, ColorSequenceKeypoint.new(position, color))
+                    table.insert(transparencySequence, NumberSequenceKeypoint.new(position, transparency))
+                end
+            end
+
+            table.sort(colorSequence, function(a, b)
+                return a.Time < b.Time
+            end)
+            table.sort(transparencySequence, function(a, b)
+                return a.Time < b.Time
+            end)
+
+            if #colorSequence < 2 then
+                table.insert(colorSequence, ColorSequenceKeypoint.new(1, colorSequence[1].Value))
+                table.insert(transparencySequence, NumberSequenceKeypoint.new(1, transparencySequence[1].Value))
+            end
+
+            local gradientData = {
+                Color = ColorSequence.new(colorSequence),
+                Transparency = NumberSequence.new(transparencySequence),
+            }
+
+            if props then
+                for k, v in pairs(props)do
+                    gradientData[k] = v
+                end
+            end
+
+            return gradientData
+        end
+        function IntiHub:Popup(PopupConfig)
+            PopupConfig.IntiHub = IntiHub
+
+            return __DARKLUA_BUNDLE_MODULES.load't'.new(PopupConfig)
+        end
+
+        IntiHub.Themes = __DARKLUA_BUNDLE_MODULES.load'u'(IntiHub)
+        Creator.Themes = IntiHub.Themes
+
+        IntiHub:SetTheme'Dark'
+        IntiHub:SetLanguage(Creator.Language)
+
+        function IntiHub:CreateWindow(Config)
+            local CreateWindow = __DARKLUA_BUNDLE_MODULES.load'_'
+
+            if not RunService:IsStudio() and writefile then
+                pcall(function()
+                    if not isfolder'IntiHub_Data' then
+                        makefolder'IntiHub_Data'
+                    end
+
+                    local targetFolder = 'IntiHub_Data/' .. (Config.Folder or Config.Title or 'Default')
+
+                    if not isfolder(targetFolder) then
+                        makefolder(targetFolder)
+                    end
+                end)
+            end
+
+            Config.IntiHub = IntiHub
+            Config.Parent = IntiHub.ScreenGui.Window
+
+            if IntiHub.Window then
+                warn'You cannot create more than one window'
+
+                return
+            end
+
+            local CanLoadWindow = true
+            local Theme = IntiHub.Themes[Config.Theme or 'Dark']
+
+            Creator.SetTheme(Theme)
+
+            local hwid = gethwid or function()
+                return Players.LocalPlayer.UserId
+            end
+            local Filename = hwid()
+
+            if Config.KeySystem then
+                CanLoadWindow = false
+
+                local function loadKeysystem()
+                    KeySystem.new(Config, Filename, function(c)
+                        CanLoadWindow = c
+                    end)
+                end
+
+                local keyPath = (Config.Folder or 'Temp') .. '/' .. Filename .. '.key'
+
+                if Config.KeySystem.KeyValidator then
+                    if Config.KeySystem.SaveKey and isfile(keyPath) then
+                        local savedKey = readfile(keyPath)
+                        local isValid = Config.KeySystem.KeyValidator(savedKey)
+
+                        if isValid then
+                            CanLoadWindow = true
+                        else
+                            loadKeysystem()
+                        end
+                    else
+                        loadKeysystem()
+                    end
+                elseif not Config.KeySystem.API then
+                    if Config.KeySystem.SaveKey and isfile(keyPath) then
+                        local savedKey = readfile(keyPath)
+                        local isKey = (type(Config.KeySystem.Key) == 'table') and table.find(Config.KeySystem.Key, savedKey) or tostring(Config.KeySystem.Key) == tostring(savedKey)
+
+                        if isKey then
+                            CanLoadWindow = true
+                        else
+                            loadKeysystem()
+                        end
+                    else
+                        loadKeysystem()
+                    end
+                else
+                    if isfile(keyPath) then
+                        local fileKey = readfile(keyPath)
+                        local isSuccess = false
+
+                        for _, i in next, Config.KeySystem.API do
+                            local serviceData = IntiHub.Services[i.Type]
+
+                            if serviceData then
+                                local args = {}
+
+                                for _, argName in next, serviceData.Args do
+                                    table.insert(args, i[argName])
+                                end
+
+                                local service = serviceData.New(table.unpack(args))
+                                local success = service.Verify(fileKey)
+
+                                if success then
+                                    isSuccess = true
+
+                                    break
+                                end
+                            end
                         end
 
-                        local service = serviceData.New(table.unpack(args))
-                        local success = service.Verify(fileKey)
+                        CanLoadWindow = isSuccess
 
-                        if success then
-                            isSuccess = true
-
-                            break
+                        if not isSuccess then
+                            loadKeysystem()
                         end
+                    else
+                        loadKeysystem()
                     end
                 end
 
-                CanLoadWindow = isSuccess
+                repeat
+                    task.wait()
+                until CanLoadWindow
+            end
 
-                if not isSuccess then
-                    loadKeysystem()
+            local Window = CreateWindow(Config)
+
+            IntiHub.Transparent = Config.Transparent
+            IntiHub.Window = Window
+            IntiHub.StatusBar = __DARKLUA_BUNDLE_MODULES.load'aa'.New{
+                IntiHub = IntiHub,
+                Window = Window,
+            }
+            IntiHub.StatusBar = __DARKLUA_BUNDLE_MODULES.load'aa'.New{
+                IntiHub = IntiHub,
+                Window = Window,
+            }
+
+            Window:OnDestroy(function()
+                if IntiHub.StatusBar then
+                    IntiHub.StatusBar:Destroy()
+
+                    IntiHub.StatusBar = nil
                 end
-            else
-                loadKeysystem()
+            end)
+
+            if IntiHub.StatusBar then
+                IntiHub.StatusBar:Visible(true)
+            end
+            if Config.Acrylic then
+                Acrylic.init()
+            end
+
+            return Window
+        end
+
+        return IntiHub
+    end
+    function __DARKLUA_BUNDLE_MODULES.ac()
+        local Loading = {}
+
+        Loading.__index = Loading
+
+        local Creator = __DARKLUA_BUNDLE_MODULES.load'c'
+        local New = Creator.New
+        local Tween = Creator.Tween
+
+        function Loading.new(Config)
+            local self = setmetatable({}, Loading)
+            local IntiHub = Config.IntiHub
+            local Parent = Config.Parent or IntiHub.ScreenGui
+
+            self.Main = New('CanvasGroup', {
+                Name = 'LoadingScreen',
+                Size = UDim2.new(1, 0, 1, 0),
+                BackgroundTransparency = 1,
+                Parent = Parent,
+                ZIndex = 100000,
+                GroupTransparency = 1,
+            }, {
+                New('Frame', {
+                    Name = 'Background',
+                    Size = UDim2.new(1, 0, 1, 0),
+                    BackgroundColor3 = Color3.fromRGB(15, 15, 15),
+                    BackgroundTransparency = 0.2,
+                }, {
+                    New('UIGradient', {
+                        Color = ColorSequence.new{
+                            ColorSequenceKeypoint.new(0, Color3.fromRGB(15, 15, 15)),
+                            ColorSequenceKeypoint.new(1, Color3.fromRGB(25, 25, 25)),
+                        },
+                        Rotation = 45,
+                    }),
+                }),
+                New('Frame', {
+                    Name = 'Content',
+                    Size = UDim2.new(0, 350, 0, 200),
+                    AnchorPoint = Vector2.new(0.5, 0.5),
+                    Position = UDim2.new(0.5, 0, 0.45, 0),
+                    BackgroundTransparency = 1,
+                }, {
+                    New('UIListLayout', {
+                        FillDirection = 'Vertical',
+                        HorizontalAlignment = 'Center',
+                        VerticalAlignment = 'Center',
+                        Padding = UDim.new(0, 20),
+                    }),
+                    New('TextLabel', {
+                        Name = 'Title',
+                        Text = 'INTIHUB',
+                        Size = UDim2.new(1, 0, 0, 40),
+                        Font = Enum.Font.GothamBold,
+                        TextSize = 32,
+                        TextColor3 = Color3.fromRGB(255, 215, 0),
+                        BackgroundTransparency = 1,
+                    }, {
+                        New('UIGradient', {
+                            Color = ColorSequence.new{
+                                ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 215, 0)),
+                                ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 255, 200)),
+                                ColorSequenceKeypoint.new(1, Color3.fromRGB(180, 140, 0)),
+                            },
+                        }),
+                    }),
+                    New('Frame', {
+                        Name = 'LoaderTrack',
+                        Size = UDim2.new(0, 200, 0, 4),
+                        BackgroundColor3 = Color3.fromRGB(40, 40, 40),
+                        BorderSizePixel = 0,
+                    }, {
+                        New('UICorner', {
+                            CornerRadius = UDim.new(1, 0),
+                        }),
+                        New('Frame', {
+                            Name = 'Progress',
+                            Size = UDim2.new(0.3, 0, 1, 0),
+                            BackgroundColor3 = Color3.fromRGB(255, 215, 0),
+                            BorderSizePixel = 0,
+                        }, {
+                            New('UICorner', {
+                                CornerRadius = UDim.new(1, 0),
+                            }),
+                        }),
+                    }),
+                    New('TextLabel', {
+                        Name = 'Status',
+                        Text = Config.InitialMessage or 'Cargando componentes...',
+                        Size = UDim2.new(1, 0, 0, 20),
+                        Font = Enum.Font.GothamMedium,
+                        TextSize = 14,
+                        TextColor3 = Color3.fromRGB(200, 200, 200),
+                        BackgroundTransparency = 1,
+                        TextTransparency = 0.2,
+                    }),
+                }),
+            })
+
+            task.spawn(function()
+                local progress = self.Main.Content.LoaderTrack.Progress
+
+                while self.Main and self.Main.Parent do
+                    progress.Position = UDim2.new(-0.3, 0, 0, 0)
+
+                    Tween(progress, 1.5, {
+                        Position = UDim2.new(1, 0, 0, 0),
+                    }, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut):Play()
+                    task.wait(1.5)
+                end
+            end)
+            Tween(self.Main, 0.5, {GroupTransparency = 0}):Play()
+
+            return self
+        end
+        function Loading:Update(message)
+            if self.Main then
+                local statusLabel = self.Main.Content.Status
+
+                Tween(statusLabel, 0.2, {TextTransparency = 1}):Play()
+                task.wait(0.2)
+
+                statusLabel.Text = message
+
+                Tween(statusLabel, 0.2, {TextTransparency = 0.2}):Play()
+            end
+        end
+        function Loading:Destroy()
+            if self.Main then
+                local t = Tween(self.Main, 0.5, {
+                    GroupTransparency = 1,
+                    Position = UDim2.new(0, 0, 0.05, 0),
+                })
+
+                t.Completed:Connect(function()
+                    self.Main:Destroy()
+
+                    self.Main = nil
+                end)
+                t:Play()
             end
         end
 
-        repeat
-            task.wait()
-        until CanLoadWindow
+        return Loading
     end
+    function __DARKLUA_BUNDLE_MODULES.ad()
+        return function(IntiHub, Loading)
+            Loading:Update'Inicializando Interfaz...'
+            task.wait(0.5)
 
-    local Window = CreateWindow(Config)
+            local Window = IntiHub:CreateWindow{
+                Title = 'IntiHub | Noble Deluxe',
+                Folder = 'intihub',
+                Icon = 'solar:folder-2-bold-duotone',
+                NewElements = true,
+                HideSearchBar = false,
+                OpenButton = {
+                    Title = 'Open IntiHub UI',
+                    Enabled = true,
+                    Draggable = true,
+                    Scale = 0.5,
+                },
+                Topbar = {
+                    Height = 44,
+                    ButtonsType = 'Mac',
+                },
+            }
 
-    IntiHub.Transparent = Config.Transparent
-    IntiHub.Window = Window
-    IntiHub.StatusBar = __DARKLUA_BUNDLE_MODULES.load'aa'.New{
-        IntiHub = IntiHub,
-        Window = Window,
-    }
-    IntiHub.StatusBar = __DARKLUA_BUNDLE_MODULES.load'aa'.New{
-        IntiHub = IntiHub,
-        Window = Window,
-    }
+            Loading:Update'Cargando Etiquetas...'
+            task.wait(0.3)
+            Window:Tag{
+                Title = 'v2.1.0',
+                Icon = 'github',
+                Color = Color3.fromHex'#FFD700',
+                Border = true,
+            }
+            Loading:Update'Preparando Secciones...'
 
-    Window:OnDestroy(function()
-        if IntiHub.StatusBar then
-            IntiHub.StatusBar:Destroy()
+            local AboutTab = Window:Tab{
+                Title = 'About IntiHub',
+                Icon = 'solar:info-square-bold',
+                Border = true,
+            }
+            local AboutSection = AboutTab:Section{
+                Title = 'About IntiHub',
+            }
 
-            IntiHub.StatusBar = nil
+            AboutSection:Image{
+                Image = 'rbxassetid://136702870075563',
+                AspectRatio = '16:9',
+                Radius = 9,
+            }
+            AboutSection:Section{
+                Title = 'INTIHUB | Noble Deluxe Edition',
+                TextSize = 24,
+                FontWeight = Enum.FontWeight.SemiBold,
+            }
+            AboutSection:Section{
+                Title = 'La librer\u{ed}a de UI m\u{e1}s avanzada para Roblox. Dise\u{f1}ada para ofrecer una experiencia ejecutiva y premium.',
+                TextSize = 18,
+                TextTransparency = 0.35,
+                FontWeight = Enum.FontWeight.Medium,
+            }
+            Loading:Update'Finalizando...'
+            task.wait(0.4)
+
+            return Window
         end
-    end)
-
-    if IntiHub.StatusBar then
-        IntiHub.StatusBar:Visible(true)
     end
-    if Config.Acrylic then
-        Acrylic.init()
-    end
-
-    return Window
 end
 
-return IntiHub
+local IntiHub = __DARKLUA_BUNDLE_MODULES.load'ab'
+local Loading = __DARKLUA_BUNDLE_MODULES.load'ac'
+local App = __DARKLUA_BUNDLE_MODULES.load'ad'
+local loader = Loading.new{
+    IntiHub = IntiHub,
+    InitialMessage = 'Verificando Versi\u{f3}n Noble Deluxe...',
+}
+
+task.wait(1.2)
+loader:Update'Cargando Motor Gr\u{e1}fico (DarkLua)...'
+task.wait(0.6)
+loader:Update'Sincronizando con IntiHub API...'
+task.wait(0.8)
+
+local success, result = pcall(function()
+    return App(IntiHub, loader)
+end)
+
+if success then
+    loader:Update'Iniciando Dashboard Ejecutivo...'
+    task.wait(1)
+
+    local Window = result
+
+    if Window and Window.Open then
+        Window:Open()
+    end
+
+    loader:Destroy()
+else
+    loader:Update('Error en el arranque: ' .. tostring(result))
+    warn('[IntiHub Critical Error]: ' .. tostring(result))
+end
