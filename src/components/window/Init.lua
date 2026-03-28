@@ -110,12 +110,12 @@ return function(Config)
 		UICorner = Window.ElementsRadius or (Window.NewElements and 23 or 12),
 	}
 
-	local WindowSize = Window.Size or UDim2.new(0, 580, 0, 460)
+	local WindowSize = Window.Size or UDim2.new(0, 780, 0, 500) -- Increased default size for Dashboard
 	Window.Size = UDim2.new(
 		WindowSize.X.Scale,
-		math.clamp(WindowSize.X.Offset, Window.MinSize.X, Window.MaxSize.X),
+		math.clamp(WindowSize.X.Offset, Window.MinSize.X, 1200),
 		WindowSize.Y.Scale,
-		math.clamp(WindowSize.Y.Offset, Window.MinSize.Y, Window.MaxSize.Y)
+		math.clamp(WindowSize.Y.Offset, Window.MinSize.Y, 800)
 	)
 
 	if Window.Topbar == {} then
@@ -246,7 +246,7 @@ return function(Config)
 			0,
 			Window.SideBarWidth,
 			1,
-			Window.User.Enabled and -Window.Topbar.Height - 42 - (Window.UIPadding * 2) or -Window.Topbar.Height
+			-Window.Topbar.Height
 		),
 		Position = UDim2.new(0, 0, 0, Window.Topbar.Height),
 		BackgroundTransparency = 1,
@@ -255,11 +255,19 @@ return function(Config)
 		New("Frame", {
 			Name = "Content",
 			BackgroundTransparency = 1,
-			Size = UDim2.new(1, 0, 1, not Window.HideSearchBar and -39 - 6 - Window.UIPadding / 2 or 0),
+			Size = UDim2.new(1, 0, 1, 0),
 			Position = UDim2.new(0, 0, 1, 0),
 			AnchorPoint = Vector2.new(0, 1),
 		}),
 		Window.UIElements.SideBar,
+        New("Frame", { -- Sidebar Glow/Separator
+            Size = UDim2.new(0, 1, 1, -20),
+            Position = UDim2.new(1, 0, 0.5, 0),
+            AnchorPoint = Vector2.new(0, 0.5),
+            BackgroundColor3 = Color3.fromHex("#FFD700"),
+            BackgroundTransparency = .92,
+            BorderSizePixel = 0,
+        })
 	})
 
 	if Window.ScrollBarEnabled then
@@ -267,9 +275,13 @@ return function(Config)
 	end
 
 	Window.UIElements.MainBar = New("Frame", {
-		Size = UDim2.new(1, -Window.UIElements.SideBarContainer.AbsoluteSize.X, 1, -Window.Topbar.Height),
-		Position = UDim2.new(1, 0, 1, 0),
-		AnchorPoint = Vector2.new(1, 1),
+		Size = UDim2.new(
+            1, 
+            -Window.SideBarWidth - (Window.User.Enabled and 200 or 0), 
+            1, 
+            -Window.Topbar.Height
+        ),
+		Position = UDim2.new(0, Window.SideBarWidth, 0, Window.Topbar.Height),
 		BackgroundTransparency = 1,
 	}, {
 		Creator.NewRoundFrame(Window.UICorner - (Window.UIPadding / 2), "Squircle", {
@@ -278,19 +290,221 @@ return function(Config)
 				ImageColor3 = "PanelBackground",
 				ImageTransparency = "PanelBackgroundTransparency",
 			},
-			-- ImageColor3 = Color3.new(1,1,1),
-			-- ImageTransparency = .95,
 			ZIndex = 3,
 			Name = "Background",
 			Visible = not Window.HidePanelBackground,
-		}),
+		}, {
+            New("UIStroke", {
+                Thickness = 1,
+                Color = Color3.fromHex("#FFD700"),
+                Transparency = .9,
+            })
+        }),
 		New("UIPadding", {
-			--PaddingTop = UDim.new(0,Window.UIPadding/2),
-			PaddingLeft = UDim.new(0, Window.UIPadding / 2),
-			PaddingRight = UDim.new(0, Window.UIPadding / 2),
-			PaddingBottom = UDim.new(0, Window.UIPadding / 2),
+			PaddingLeft = UDim.new(0, Window.UIPadding),
+			PaddingRight = UDim.new(0, Window.UIPadding),
+			PaddingBottom = UDim.new(0, Window.UIPadding),
+            PaddingTop = UDim.new(0, Window.UIPadding),
 		}),
 	})
+
+    -- Right Panel (Executive User)
+    Window.UIElements.RightPanel = New("Frame", {
+        Size = UDim2.new(0, 200, 1, -Window.Topbar.Height),
+        Position = UDim2.new(1, 0, 0, Window.Topbar.Height),
+        AnchorPoint = Vector2.new(1, 0),
+        BackgroundTransparency = 1,
+        Visible = Window.User.Enabled or true, -- Explicitly enabled for this overhaul
+    }, {
+        Creator.NewRoundFrame(Window.UICorner - (Window.UIPadding/2), "Squircle", {
+            Size = UDim2.new(1, 0, 1, 0),
+            ThemeTag = {
+                ImageColor3 = "PanelBackground",
+                ImageTransparency = "PanelBackgroundTransparency",
+            },
+            ZIndex = 3,
+        }, {
+             New("UIStroke", {
+                Thickness = 1,
+                Color = Color3.fromHex("#FFD700"),
+                Transparency = .9,
+            })
+        }),
+        New("UIPadding", {
+            PaddingLeft = UDim.new(0, Window.UIPadding),
+            PaddingRight = UDim.new(0, Window.UIPadding),
+            PaddingBottom = UDim.new(0, Window.UIPadding),
+            PaddingTop = UDim.new(0, Window.UIPadding),
+        }),
+        New("UIListLayout", {
+            Padding = UDim.new(0, 15),
+            HorizontalAlignment = "Center",
+        }),
+
+        -- 🟢 Executive User Header
+        New("Frame", {
+            Size = UDim2.new(1, 0, 0, 120),
+            BackgroundTransparency = 1,
+        }, {
+            New("UIListLayout", {
+                Padding = UDim.new(0, 8),
+                HorizontalAlignment = "Center",
+            }),
+            -- Avatar Frame
+            New("Frame", {
+                Size = UDim2.new(0, 80, 0, 80),
+                BackgroundColor3 = Color3.fromHex("#1A1A1A"),
+            }, {
+                New("UICorner", { CornerRadius = UDim.new(0, 12) }),
+                New("UIStroke", { Thickness = 1.5, Color = Color3.fromHex("#FFD700"), Transparency = .6 }),
+                New("ImageLabel", {
+                    Name = "Avatar",
+                    Size = UDim2.new(1, -8, 1, -8),
+                    Position = UDim2.new(0.5, 0, 0.5, 0),
+                    AnchorPoint = Vector2.new(0.5, 0.5),
+                    Image = "rbxassetid://6033722245", -- Placeholder Avatar
+                    BackgroundTransparency = 1,
+                }, {
+                    New("UICorner", { CornerRadius = UDim.new(1, 0) })
+                })
+            }),
+            -- Name
+            New("TextLabel", {
+                Text = "Executive User",
+                TextSize = 14,
+                FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+                TextColor3 = Color3.new(1, 1, 1),
+                BackgroundTransparency = 1,
+                AutomaticSize = "XY",
+            })
+        }),
+
+        -- 🟢 User Details List
+        New("Frame", {
+            Size = UDim2.new(1, 0, 0, 80),
+            BackgroundTransparency = 1,
+        }, {
+            New("UIListLayout", { Padding = UDim.new(0, 6) }),
+            -- @Handle Button
+            New("Frame", {
+                Size = UDim2.new(1, 0, 0, 32),
+                BackgroundColor3 = Color3.new(1, 1, 1),
+                BackgroundTransparency = .95,
+            }, {
+                New("UICorner", { CornerRadius = UDim.new(0, 6) }),
+                New("ImageLabel", {
+                    Size = UDim2.new(0, 16, 0, 16),
+                    Position = UDim2.new(0, 10, 0.5, 0),
+                    AnchorPoint = Vector2.new(0, 0.5),
+                    Image = Creator.Icon("at-sign")[1],
+                    ImageRectOffset = Creator.Icon("at-sign")[2].ImageRectPosition,
+                    ImageRectSize = Creator.Icon("at-sign")[2].ImageRectSize,
+                    ThemeTag = { ImageColor3 = "Accent" },
+                }),
+                New("TextLabel", {
+                    Text = "@IntiDeveloper",
+                    TextSize = 12,
+                    TextColor3 = Color3.new(1, 1, 1),
+                    TextTransparency = .4,
+                    Position = UDim2.new(0, 32, 0.5, 0),
+                    AnchorPoint = Vector2.new(0, 0.5),
+                    BackgroundTransparency = 1,
+                })
+            }),
+             -- Admin Button
+            New("Frame", {
+                Size = UDim2.new(1, 0, 0, 32),
+                BackgroundColor3 = Color3.new(1, 1, 1),
+                BackgroundTransparency = .95,
+            }, {
+                New("UICorner", { CornerRadius = UDim.new(0, 6) }),
+                New("ImageLabel", {
+                    Size = UDim2.new(0, 16, 0, 16),
+                    Position = UDim2.new(0, 10, 0.5, 0),
+                    AnchorPoint = Vector2.new(0, 0.5),
+                    Image = Creator.Icon("user")[1],
+                    ImageRectOffset = Creator.Icon("user")[2].ImageRectPosition,
+                    ImageRectSize = Creator.Icon("user")[2].ImageRectSize,
+                    ThemeTag = { ImageColor3 = "Accent" },
+                }),
+                New("TextLabel", {
+                    Text = "IntiHub_Admin",
+                    TextSize = 12,
+                    TextColor3 = Color3.new(1, 1, 1),
+                    TextTransparency = .4,
+                    Position = UDim2.new(0, 32, 0.5, 0),
+                    AnchorPoint = Vector2.new(0, 0.5),
+                    BackgroundTransparency = 1,
+                })
+            })
+        }),
+
+        -- 🟢 Engine Status
+        New("Frame", {
+            Size = UDim2.new(1, 0, 0, 60),
+            BackgroundColor3 = Color3.fromHex("#FFD700"),
+            BackgroundTransparency = .95,
+        }, {
+            New("UICorner", { CornerRadius = UDim.new(0, 8) }),
+            New("UIStroke", { Thickness = 1, Color = Color3.fromHex("#FFD700"), Transparency = .8 }),
+            New("ImageLabel", {
+                Size = UDim2.new(0, 24, 0, 24),
+                Position = UDim2.new(0, 12, 0.5, 0),
+                AnchorPoint = Vector2.new(0, 0.5),
+                Image = Creator.Icon("zap")[1],
+                ImageRectOffset = Creator.Icon("zap")[2].ImageRectPosition,
+                ImageRectSize = Creator.Icon("zap")[2].ImageRectSize,
+                ThemeTag = { ImageColor3 = "Accent" },
+            }),
+            New("TextLabel", {
+                Text = "CURRENT ENGINE",
+                TextSize = 10,
+                TextColor3 = Color3.new(1, 1, 1),
+                TextTransparency = .5,
+                Position = UDim2.new(0, 44, 0.35, 0),
+                AnchorPoint = Vector2.new(0, 0.5),
+                BackgroundTransparency = 1,
+            }),
+            New("TextLabel", {
+                Text = "Executor: <font color='#FFD700'>Arceus X</font>",
+                TextSize = 12,
+                TextColor3 = Color3.new(1, 1, 1),
+                Position = UDim2.new(0, 44, 0.65, 0),
+                AnchorPoint = Vector2.new(0, 0.5),
+                BackgroundTransparency = 1,
+                RichText = true,
+            })
+        })
+    })
+
+    -- 🟢 Breadcrumbs / Content Header
+    local ContentHeader = New("Frame", {
+        Size = UDim2.new(1, 0, 0, 60),
+        Parent = Window.UIElements.MainBar,
+        BackgroundTransparency = 1,
+    }, {
+        New("TextLabel", {
+            Text = "MODULE CONTROL",
+            TextSize = 10,
+            FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+            TextColor3 = Color3.fromHex("#FFD700"),
+            TextTransparency = 0.4,
+            BackgroundTransparency = 1,
+            Position = UDim2.new(0, 0, 0, 5),
+        }),
+        New("TextLabel", {
+            Text = "Configuration Dashboard",
+            TextSize = 24,
+            FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+            TextColor3 = Color3.new(1, 1, 1),
+            BackgroundTransparency = 1,
+            Position = UDim2.new(0, 0, 0, 18),
+            AutomaticSize = "XY",
+        })
+    })
+
+    -- Ajustar ScrollContainer de los Tabs para que comiencen debajo del header
+    Window.UIElements.TabScrollAdjustment = 60
 
 	local Blur = New("ImageLabel", { -- Shadow
 		Image = "rbxassetid://8992230677",
@@ -787,6 +1001,37 @@ return function(Config)
 						FillDirection = "Horizontal",
 						VerticalAlignment = "Center",
 					}),
+					New("Frame", { -- Logo Container
+                        AutomaticSize = "XY",
+                        BackgroundTransparency = 1,
+                        LayoutOrder = 1,
+                    }, {
+                        New("UIListLayout", {
+                            Padding = UDim.new(0, 8),
+                            FillDirection = "Horizontal",
+                            VerticalAlignment = "Center",
+                        }),
+                        -- Logo
+                        New("TextLabel", {
+                            Text = "<font color='#FFD700'><b>INTIHUB</b></font>",
+                            TextSize = 16,
+                            FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+                            TextColor3 = Color3.fromHex("#FFD700"),
+                            BackgroundTransparency = 1,
+                            AutomaticSize = "XY",
+                            LayoutOrder = 1,
+                            RichText = true,
+                            Name = "BrandingLogo",
+                        }),
+                        -- Separator
+                        New("Frame", {
+                            Size = UDim2.new(0, 1, 0, 20),
+                            BackgroundColor3 = Color3.new(1, 1, 1),
+                            BackgroundTransparency = .8,
+                            BorderSizePixel = 0,
+                            LayoutOrder = 2,
+                        }),
+                    }),
 					New("Frame", {
 						AutomaticSize = "XY",
 						BackgroundTransparency = 1,
@@ -804,7 +1049,7 @@ return function(Config)
 						WindowAuthor,
 					}),
 					New("UIPadding", {
-						PaddingLeft = UDim.new(0, 4),
+						PaddingLeft = UDim.new(0, 12),
 					}),
 				}),
 				New("ScrollingFrame", { -- Topbar Center Size
@@ -2122,6 +2367,30 @@ return function(Config)
 	--         Window:SetPanelBackground(v)
 	--     end
 	-- }
+
+	-- / Animations /
+    task.spawn(function()
+        local g1 = Window.UIElements.Main:FindFirstChild("AnimatedGradient1", true)
+        local g2 = Window.UIElements.Main:FindFirstChild("AnimatedGradient2", true)
+        
+        RenderStepped:Connect(function()
+            if g1 then g1.Rotation = (g1.Rotation + 1) % 360 end
+            if g2 then g2.Rotation = (g2.Rotation - 1) % 360 end
+        end)
+    end)
+
+    if Window.OpenButtonMain and Window.OpenButtonMain.Button then
+        task.spawn(function()
+            local glow = Window.OpenButtonMain.Button:FindFirstChild("Glow", true)
+            while task.wait(1.5) do
+                if glow then
+                    Tween(glow, 0.75, { ImageTransparency = 0.4 }):Play()
+                    task.wait(0.75)
+                    Tween(glow, 0.75, { ImageTransparency = 0.8 }):Play()
+                end
+            end
+        end)
+    end
 
 	-- setmetatable(Window, {
 	--     __newindex = function(t, key, value)

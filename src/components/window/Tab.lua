@@ -126,6 +126,16 @@ function TabModule.New(Config, UIScale)
 			ImageTransparency = 1, -- .95
 			Name = "Frame",
 		}, {
+            New("Frame", { -- 🟢 Dashboard Active Indicator
+                Size = UDim2.new(0, 2, 0, 14),
+                Position = UDim2.new(0, -6, 0.5, 0),
+                AnchorPoint = Vector2.new(0, 0.5),
+                BackgroundColor3 = Color3.fromHex("#FFD700"),
+                BackgroundTransparency = 1,
+                Name = "Indicator",
+            }, {
+                New("UICorner", { CornerRadius = UDim.new(1, 0) })
+            }),
 			New("UIListLayout", {
 				SortOrder = "LayoutOrder",
 				Padding = UDim.new(0, 2 + (Window.UIPadding / 2)),
@@ -269,12 +279,25 @@ function TabModule.New(Config, UIScale)
 	-- end)
 
 	Tab.UIElements.ContainerFrameCanvas = New("Frame", {
-		Size = UDim2.new(1, 0, 1, 0),
+		Size = UDim2.new(1, 0, 1, -60), -- Adjusted for the 60px Dashboard Header
 		BackgroundTransparency = 1,
 		Visible = false,
 		Parent = Window.UIElements.MainBar,
 		ZIndex = 5,
+        Position = UDim2.new(0, 0, 0, 60),
 	}, {
+        -- 🟢 Background Watermark ("ARCHIVE")
+        New("TextLabel", {
+            Text = "ARCHIVE",
+            TextSize = 100,
+            FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+            TextColor3 = Color3.fromHex("#FFD700"),
+            TextTransparency = 0.98,
+            BackgroundTransparency = 1,
+            Size = UDim2.new(1, 0, 1, 0),
+            ZIndex = 1,
+            Rotation = -15,
+        }),
 		Tab.UIElements.ContainerFrame,
 		New("Frame", {
 			Size = UDim2.new(1, 0, 0, ((Window.UIPadding * 2.4) + 12)),
@@ -601,6 +624,23 @@ function TabModule:SelectTab(TabIndex)
 				ImageTransparency = "TabIconTransparencyActive",
 			}, 0.15)
 		end
+        
+        -- 🟢 Dashboard Indicator Animation
+        local currentFrame = TabModule.Tabs[TabIndex].UIElements.Main.Frame
+        if currentFrame:FindFirstChild("Indicator") then
+            Creator.Tween(currentFrame.Indicator, 0.2, { BackgroundTransparency = 0 }):Play()
+        end
+        
+        -- Reset other indicators
+        for _, otherTab in next, TabModule.Tabs do
+            if otherTab.Index ~= TabIndex then
+                local otherFrame = otherTab.UIElements.Main.Frame
+                if otherFrame:FindFirstChild("Indicator") then
+                    Creator.Tween(otherFrame.Indicator, 0.2, { BackgroundTransparency = 1 }):Play()
+                end
+            end
+        end
+
 		TabModule.Tabs[TabIndex].Selected = true
 
 		task.spawn(function()
@@ -609,6 +649,15 @@ function TabModule:SelectTab(TabIndex)
 				ContainerObject.Visible = false
 			end
 			TabModule.Containers[TabIndex].Visible = true
+            
+            -- 🟢 Update Breadcrumbs
+            if Window.UIElements.MainBar:FindFirstChild("ContentHeader") then
+                local header = Window.UIElements.MainBar.ContentHeader
+                if header:FindFirstChild("TextLabel") then
+                    header.TextLabel.Text = string.upper(TabModule.Tabs[TabIndex].Title) .. " MODULE"
+                end
+            end
+
 			local TweenService = game:GetService("TweenService")
 
 			local tweenInfo = TweenInfo.new(0.15, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)

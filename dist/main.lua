@@ -1,11 +1,11 @@
---[[
+﻿--[[
     ___       __  _ __  __      __  
    /  _/___  / /_(_) / / /_  __/ /_ 
    / // __ \/ __/ / /_/ / / / / __ \
  _/ // / / / /_/ / __  / /_/ / /_/ /
 /___/_/ /_/\__/_/_/ /_/\__,_/_.___/ 
                                     
-    v1.7.0  |  2026-03-27  |  Roblox UI Library for scripts
+    v1.7.0  |  2026-03-28  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -14,6 +14,8 @@
     Discord: {{DISCORD_URL}}
     License: MIT
 ]]
+
+
 
 local a a={cache={}, load=function(b)if not a.cache[b]then a.cache[b]={c=a[b]()}end return a.cache[b].c end}do function a.a()local b=(cloneref or clonereference or function(b)return b end)
 
@@ -2131,7 +2133,27 @@ return[[
     "discord": "{{DISCORD_URL}}",
     "author": "Sammir_Inti",
     "description": "Roblox UI Library for scripts",
-    "license": "MIT"
+    "license": "MIT",
+    "scripts": {
+        "dev": "bash build/build.sh dev $INPUT_FILE",
+        "build": "bash build/build.sh build $INPUT_FILE",
+        "live": "python -m http.server 8642",
+        "watch": "chokidar . -i 'node_modules' -i 'dist' -i 'build' -c 'npm run dev --'",
+        "live-build": "concurrently \"npm run live\" \"npm run watch --\"",
+        "example-live-build": "INPUT_FILE=main_example.lua npm run live-build",
+        "updater": "python3 updater/main.py"
+    },
+    "keywords": [
+        "ui-library",
+        "ui-design",
+        "script",
+        "script-hub",
+        "exploiting"
+    ],
+    "devDependencies": {
+        "chokidar-cli": "^3.0.0",
+        "concurrently": "^9.2.0"
+    }
 }
 ]]end function a.l()
 
@@ -4844,18 +4866,18 @@ local ah
 
 
 local ai=ac("TextLabel",{
-Text=af.Title,
-TextSize=16,
-FontFace=Font.new(ab.Font,Enum.FontWeight.Medium),
+Text=af.Title:upper(),
+TextSize=14,
+FontFace=Font.new(ab.Font,Enum.FontWeight.Bold),
 BackgroundTransparency=1,
 AutomaticSize="XY",
 ThemeTag={
-TextColor3="Text",
+TextColor3="Accent",
 },
 })
 
 local aj=ac("Frame",{
-Size=UDim2.new(0,42,0,42),
+Size=UDim2.new(0,30,0,30),
 BackgroundTransparency=1,
 Name="Drag",
 },{
@@ -4863,27 +4885,54 @@ ac("ImageLabel",{
 Image=ab.Icon"move"[1],
 ImageRectOffset=ab.Icon"move"[2].ImageRectPosition,
 ImageRectSize=ab.Icon"move"[2].ImageRectSize,
-Size=UDim2.new(0,18,0,18),
+Size=UDim2.new(0,14,0,14),
 BackgroundTransparency=1,
 Position=UDim2.new(0.5,0,0.5,0),
 AnchorPoint=Vector2.new(0.5,0.5),
 ThemeTag={
 ImageColor3="Icon",
 },
-ImageTransparency=.3,
+ImageTransparency=.5,
 })
 })
+
 local ak=ac("Frame",{
-Size=UDim2.new(0,1,1,0),
-Position=UDim2.new(0,36,0.5,0),
-AnchorPoint=Vector2.new(0,0.5),
-BackgroundColor3=Color3.new(1,1,1),
-BackgroundTransparency=.9,
+Size=UDim2.new(0,1,0,18),
+BackgroundColor3=Color3.fromHex"#FFD700",
+BackgroundTransparency=.8,
+BorderSizePixel=0,
 })
 
 local al=ac("Frame",{
-Size=UDim2.new(0,0,0,0),
-Position=UDim2.new(0.5,0,0,28),
+Size=UDim2.new(0,45,0,20),
+BackgroundColor3=Color3.new(1,1,1),
+BackgroundTransparency=.92,
+},{
+ac("UICorner",{CornerRadius=UDim.new(1,0)}),
+ac("Frame",{
+Name="Dot",
+Size=UDim2.new(0,6,0,6),
+Position=UDim2.new(0,8,0.5,0),
+AnchorPoint=Vector2.new(0,0.5),
+BackgroundColor3=Color3.fromHex"#FFD700",
+},{
+ac("UICorner",{CornerRadius=UDim.new(1,0)})
+}),
+ac("TextLabel",{
+Text="LIVE",
+TextSize=10,
+FontFace=Font.new(ab.Font,Enum.FontWeight.Bold),
+TextColor3=Color3.new(1,1,1),
+TextTransparency=.4,
+Position=UDim2.new(0,18,0.5,0),
+AnchorPoint=Vector2.new(0,0.5),
+BackgroundTransparency=1,
+})
+})
+
+local am=ac("Frame",{
+Size=UDim2.new(0,200,0,40),
+Position=UDim2.new(0.5,0,0,50),
 AnchorPoint=Vector2.new(0.5,0.5),
 Parent=af.Parent,
 BackgroundTransparency=1,
@@ -4891,89 +4940,73 @@ Active=true,
 Visible=false,
 })
 
+local an=ac("UIScale",{Scale=1})
 
-local am=ac("UIScale",{
-Scale=1,
-})
-
-local an=ac("Frame",{
-Size=UDim2.new(0,0,0,75),
+local ao=ac("Frame",{
+Size=UDim2.new(0,0,0,32),
 AutomaticSize="X",
-Parent=al,
-Active=false,
-BackgroundTransparency=.15,
-ZIndex=99,
-BackgroundColor3=Color3.fromHex"#211B05",
+Parent=am,
+BackgroundColor3=Color3.fromHex"#0A0A0A",
+BackgroundTransparency=.1,
 },{
-am,
-ac("UICorner",{
-CornerRadius=UDim.new(0,14)
-}),
+an,
+ac("UICorner",{CornerRadius=UDim.new(0,6)}),
 ac("UIStroke",{
-Thickness=2.5,
-ApplyStrokeMode="Border",
-ThemeTag={
-Color="Accent",
-},
-Transparency=0,
-},{
-ac("UIGradient",{
-Color=ColorSequence.new{
-ColorSequenceKeypoint.new(0,Color3.fromHex"#FFD700"),
-ColorSequenceKeypoint.new(0.5,Color3.fromHex"#FFFFFF"),
-ColorSequenceKeypoint.new(1,Color3.fromHex"#FFD700"),
-}
-})
+Thickness=1,
+Color=Color3.fromHex"#FFD700",
+Transparency=.7,
+Name="Stroke"
 }),
+
+ac("UIPadding",{
+PaddingLeft=UDim.new(0,10),
+PaddingRight=UDim.new(0,10),
+}),
+
+ac("UIListLayout",{
+Padding=UDim.new(0,10),
+FillDirection="Horizontal",
+VerticalAlignment="Center",
+SortOrder="LayoutOrder",
+}),
+
 aj,
 ak,
-
-ac("UIListLayout",{
-Padding=UDim.new(0,8),
-FillDirection="Horizontal",
-VerticalAlignment="Center",
-}),
+ai,
+al,
 
 ac("TextButton",{
-AutomaticSize="XY",
-Active=true,
+Size=UDim2.new(1,0,1,0),
 BackgroundTransparency=1,
-Size=UDim2.new(0,0,0,67),
-
-BackgroundColor3=Color3.new(1,1,1),
-},{
-ac("UICorner",{
-CornerRadius=UDim.new(0,10)
-}),
-ah,
-ac("UIListLayout",{
-Padding=UDim.new(0,af.UIPadding),
-FillDirection="Horizontal",
-VerticalAlignment="Center",
-}),
-ai,
-ac("UIPadding",{
-PaddingLeft=UDim.new(0,12),
-PaddingRight=UDim.new(0,12),
-}),
-}),
-ac("UIPadding",{
-PaddingLeft=UDim.new(0,8),
-PaddingRight=UDim.new(0,8),
+Text="",
+ZIndex=10,
 })
 })
 
-ag.Button=an
 
+task.spawn(function()
+while true do
+local ap=al:FindFirstChild"Dot"
+if ap then
+ad(ap,0.8,{BackgroundTransparency=0.5},Enum.EasingStyle.Sine,Enum.EasingDirection.InOut):Play()
+task.wait(0.8)
+ad(ap,0.8,{BackgroundTransparency=0},Enum.EasingStyle.Sine,Enum.EasingDirection.InOut):Play()
+task.wait(0.8)
+else
+break
+end
+end
+end)
 
+ag.Button=ao
 
-function ag.SetIcon(ao,ap)
+function ag.SetIcon(ap,aq)
 if ah then
 ah:Destroy()
 end
-if ap then
+if aq then
 ah=ab.Image(
-ap,
+aq,
 af.Title,
 0,
 af.Folder,
@@ -4981,9 +5014,9 @@ af.Folder,
 true,
 af.IconThemed
 )
-ah.Size=UDim2.new(0,24,0,24)
+ah.Size=UDim2.new(0,16,0,16)
 ah.LayoutOrder=-1
-ah.Parent=ag.Button.TextButton
+ah.Parent=ao
 end
 end
 
@@ -4991,117 +5024,92 @@ if af.Icon then
 ag:SetIcon(af.Icon)
 end
 
-
-
-ab.AddSignal(an:GetPropertyChangedSignal"AbsoluteSize",function()
-al.Size=UDim2.new(
-0,an.AbsoluteSize.X,
-0,an.AbsoluteSize.Y
+ab.AddSignal(ao:GetPropertyChangedSignal"AbsoluteSize",function()
+am.Size=UDim2.new(
+0,ao.AbsoluteSize.X,
+0,ao.AbsoluteSize.Y
 )
 end)
 
-ab.AddSignal(an.TextButton.MouseEnter,function()
-ad(an.TextButton,.1,{BackgroundTransparency=.93}):Play()
+ab.AddSignal(ao.TextButton.MouseEnter,function()
+ad(ao,.2,{BackgroundTransparency=0}):Play()
 end)
-ab.AddSignal(an.TextButton.MouseLeave,function()
-ad(an.TextButton,.1,{BackgroundTransparency=1}):Play()
+ab.AddSignal(ao.TextButton.MouseLeave,function()
+ad(ao,.2,{BackgroundTransparency=.1}):Play()
 end)
 
-local ao=ab.Drag(al)
+local ap=ab.Drag(am)
 
-
-function ag.Visible(ap,aq)
-al.Visible=aq
+function ag.Visible(aq,ar)
+am.Visible=ar
 end
 
-function ag.SetScale(ap,aq)
-am.Scale=aq
+function ag.SetScale(aq,ar)
+an.Scale=ar
 end
 
-function ag.Edit(ap,aq)
-local ar={
-Title=aq.Title,
-Icon=aq.Icon,
-Enabled=aq.Enabled,
-Position=aq.Position,
-OnlyIcon=aq.OnlyIcon or false,
-Draggable=aq.Draggable or nil,
-OnlyMobile=aq.OnlyMobile,
-CornerRadius=aq.CornerRadius or UDim.new(1,0),
-StrokeThickness=aq.StrokeThickness or 2,
-Scale=aq.Scale or 1,
-Color=aq.Color
+function ag.Edit(aq,ar)
+local as={
+Title=ar.Title,
+Icon=ar.Icon,
+Enabled=ar.Enabled,
+Position=ar.Position,
+OnlyIcon=ar.OnlyIcon or false,
+Draggable=ar.Draggable or nil,
+OnlyMobile=ar.OnlyMobile,
+CornerRadius=ar.CornerRadius or UDim.new(0,6),
+StrokeThickness=ar.StrokeThickness or 1,
+Scale=ar.Scale or 1,
+Color=ar.Color
 or ColorSequence.new{
-ColorSequenceKeypoint.new(0,Color3.fromHex"#FFC300"),
-ColorSequenceKeypoint.new(0.5,Color3.fromHex"#FFFFFF"),
-ColorSequenceKeypoint.new(1,Color3.fromHex"#FFC300"),
+ColorSequenceKeypoint.new(0,Color3.fromHex"#FFD700"),
+ColorSequenceKeypoint.new(1,Color3.fromHex"#FFD700"),
 },
 }
 
-
-
-if ar.Enabled==false then
+if as.Enabled==false then
 af.IsOpenButtonEnabled=false
 end
 
-if ar.OnlyMobile~=false then
-ar.OnlyMobile=true
-else
-af.IsPC=false
-end
-
-
-if ar.Draggable==false and aj and ak then
-aj.Visible=ar.Draggable
-ak.Visible=ar.Draggable
-
-if ao then
-ao:Set(ar.Draggable)
+if as.Draggable==false and aj and ak then
+aj.Visible=as.Draggable
+if ap then
+ap:Set(as.Draggable)
 end
 end
 
-if ar.Position and al then
-al.Position=ar.Position
+if as.Position and am then
+am.Position=as.Position
 end
 
-if ar.OnlyIcon==true and ai then
+if as.OnlyIcon==true then
 ai.Visible=false
-an.TextButton.UIPadding.PaddingLeft=UDim.new(0,7)
-an.TextButton.UIPadding.PaddingRight=UDim.new(0,7)
-elseif ar.OnlyIcon==false then
+ak.Visible=false
+al.Visible=false
+else
 ai.Visible=true
-an.TextButton.UIPadding.PaddingLeft=UDim.new(0,11)
-an.TextButton.UIPadding.PaddingRight=UDim.new(0,11)
+ak.Visible=true
+al.Visible=true
 end
 
-
-
-
-
-if ai then
-if ar.Title then
-ai.Text=ar.Title
-ab:ChangeTranslationKey(ai,ar.Title)
-elseif ar.Title==nil then
-
-end
+if as.Title then
+ai.Text=as.Title:upper()
 end
 
-if ar.Icon then
-ag:SetIcon(ar.Icon)
+if as.Icon then
+ag:SetIcon(as.Icon)
 end
 
-an.UIStroke.UIGradient.Color=ar.Color
-if Glow then
-Glow.UIGradient.Color=ar.Color
+local at=ao:FindFirstChild"Stroke"
+if at then
+at.Thickness=as.StrokeThickness
+
 end
 
-an.UICorner.CornerRadius=ar.CornerRadius
-an.TextButton.UICorner.CornerRadius=UDim.new(ar.CornerRadius.Scale,ar.CornerRadius.Offset-4)
-an.UIStroke.Thickness=ar.StrokeThickness
-
-ag:SetScale(ar.Scale)
+ao.UICorner.CornerRadius=as.CornerRadius
+ag:SetScale(as.Scale)
 end
+
 
 return ag
 end
@@ -9393,6 +9401,23 @@ ImageColor3="SectionBoxBorder",
 },
 Visible=al.Box and al.BoxBorder,
 Name="Outline",
+},{
+
+ae("UIStroke",{
+Thickness=1.5,
+Color=Color3.fromHex"#FFD700",
+Transparency=0.5,
+ApplyStrokeMode="Border",
+},{
+ae("UIGradient",{
+Rotation=45,
+Color=ColorSequence.new{
+ColorSequenceKeypoint.new(0,Color3.fromHex"#FFD700"),
+ColorSequenceKeypoint.new(0.5,Color3.fromHex"#FFFACD"),
+ColorSequenceKeypoint.new(1,Color3.fromHex"#FFD700"),
+},
+})
+})
 }),
 ae("TextButton",{
 Size=UDim2.new(1,0,0,al.Expandable and 0 or(not aq and al.HeaderSize or 0)),
@@ -10005,6 +10030,16 @@ ImageColor3="Text",
 ImageTransparency=1,
 Name="Frame",
 },{
+aj("Frame",{
+Size=UDim2.new(0,2,0,14),
+Position=UDim2.new(0,-6,0.5,0),
+AnchorPoint=Vector2.new(0,0.5),
+BackgroundColor3=Color3.fromHex"#FFD700",
+BackgroundTransparency=1,
+Name="Indicator",
+},{
+aj("UICorner",{CornerRadius=UDim.new(1,0)})
+}),
 aj("UIListLayout",{
 SortOrder="LayoutOrder",
 Padding=UDim.new(0,2+(Window.UIPadding/2)),
@@ -10148,12 +10183,25 @@ HorizontalAlignment="Center",
 
 
 ap.UIElements.ContainerFrameCanvas=aj("Frame",{
-Size=UDim2.new(1,0,1,0),
+Size=UDim2.new(1,0,1,-60),
 BackgroundTransparency=1,
 Visible=false,
 Parent=Window.UIElements.MainBar,
 ZIndex=5,
+Position=UDim2.new(0,0,0,60),
 },{
+
+aj("TextLabel",{
+Text="ARCHIVE",
+TextSize=100,
+FontFace=Font.new(ah.Font,Enum.FontWeight.Bold),
+TextColor3=Color3.fromHex"#FFD700",
+TextTransparency=0.98,
+BackgroundTransparency=1,
+Size=UDim2.new(1,0,1,0),
+ZIndex=1,
+Rotation=-15,
+}),
 ap.UIElements.ContainerFrame,
 aj("Frame",{
 Size=UDim2.new(1,0,0,((Window.UIPadding*2.4)+12)),
@@ -10480,21 +10528,47 @@ ah.SetThemeTag(am.Tabs[ao].UIElements.Icon.ImageLabel,{
 ImageTransparency="TabIconTransparencyActive",
 },0.15)
 end
+
+
+local ap=am.Tabs[ao].UIElements.Main.Frame
+if ap:FindFirstChild"Indicator"then
+ah.Tween(ap.Indicator,0.2,{BackgroundTransparency=0}):Play()
+end
+
+
+for aq,ar in next,am.Tabs do
+if ar.Index~=ao then
+local as=ar.UIElements.Main.Frame
+if as:FindFirstChild"Indicator"then
+ah.Tween(as.Indicator,0.2,{BackgroundTransparency=1}):Play()
+end
+end
+end
+
 am.Tabs[ao].Selected=true
 
 task.spawn(function()
-for ap,aq in next,am.Containers do
-aq.AnchorPoint=Vector2.new(0,0.05)
-aq.Visible=false
+for aq,ar in next,am.Containers do
+ar.AnchorPoint=Vector2.new(0,0.05)
+ar.Visible=false
 end
 am.Containers[ao].Visible=true
-local ap=game:GetService"TweenService"
 
-local aq=TweenInfo.new(0.15,Enum.EasingStyle.Quart,Enum.EasingDirection.Out)
-local ar=ap:Create(am.Containers[ao],aq,{
+
+if Window.UIElements.MainBar:FindFirstChild"ContentHeader"then
+local aq=Window.UIElements.MainBar.ContentHeader
+if aq:FindFirstChild"TextLabel"then
+aq.TextLabel.Text=string.upper(am.Tabs[ao].Title).." MODULE"
+end
+end
+
+local aq=game:GetService"TweenService"
+
+local ar=TweenInfo.new(0.15,Enum.EasingStyle.Quart,Enum.EasingDirection.Out)
+local as=aq:Create(am.Containers[ao],ar,{
 AnchorPoint=Vector2.new(0,0),
 })
-ar:Play()
+as:Play()
 end)
 
 am.OnChangeFunc(ao)
@@ -11360,12 +11434,12 @@ UIPadding=(au.NewElements and 10 or 13),
 UICorner=au.ElementsRadius or(au.NewElements and 23 or 12),
 }
 
-local av=au.Size or UDim2.new(0,580,0,460)
+local av=au.Size or UDim2.new(0,780,0,500)
 au.Size=UDim2.new(
 av.X.Scale,
-math.clamp(av.X.Offset,au.MinSize.X,au.MaxSize.X),
+math.clamp(av.X.Offset,au.MinSize.X,1200),
 av.Y.Scale,
-math.clamp(av.Y.Offset,au.MinSize.Y,au.MaxSize.Y)
+math.clamp(av.Y.Offset,au.MinSize.Y,800)
 )
 
 if au.Topbar=={}then
@@ -11496,7 +11570,7 @@ Size=UDim2.new(
 0,
 au.SideBarWidth,
 1,
-au.User.Enabled and-au.Topbar.Height-42-(au.UIPadding*2)or-au.Topbar.Height
+-au.Topbar.Height
 ),
 Position=UDim2.new(0,0,0,au.Topbar.Height),
 BackgroundTransparency=1,
@@ -11505,11 +11579,19 @@ Visible=true,
 am("Frame",{
 Name="Content",
 BackgroundTransparency=1,
-Size=UDim2.new(1,0,1,not au.HideSearchBar and-45-au.UIPadding/2 or 0),
+Size=UDim2.new(1,0,1,0),
 Position=UDim2.new(0,0,1,0),
 AnchorPoint=Vector2.new(0,1),
 }),
 au.UIElements.SideBar,
+am("Frame",{
+Size=UDim2.new(0,1,1,-20),
+Position=UDim2.new(1,0,0.5,0),
+AnchorPoint=Vector2.new(0,0.5),
+BackgroundColor3=Color3.fromHex"#FFD700",
+BackgroundTransparency=.92,
+BorderSizePixel=0,
+})
 })
 
 if au.ScrollBarEnabled then
@@ -11517,9 +11599,13 @@ aq(au.UIElements.SideBar,au.UIElements.SideBarContainer.Content,au,3)
 end
 
 au.UIElements.MainBar=am("Frame",{
-Size=UDim2.new(1,-au.UIElements.SideBarContainer.AbsoluteSize.X,1,-au.Topbar.Height),
-Position=UDim2.new(1,0,1,0),
-AnchorPoint=Vector2.new(1,1),
+Size=UDim2.new(
+1,
+-au.SideBarWidth-(au.User.Enabled and 200 or 0),
+1,
+-au.Topbar.Height
+),
+Position=UDim2.new(0,au.SideBarWidth,0,au.Topbar.Height),
 BackgroundTransparency=1,
 },{
 al.NewRoundFrame(au.UICorner-(au.UIPadding/2),"Squircle",{
@@ -11528,19 +11614,221 @@ ThemeTag={
 ImageColor3="PanelBackground",
 ImageTransparency="PanelBackgroundTransparency",
 },
-
-
 ZIndex=3,
 Name="Background",
 Visible=not au.HidePanelBackground,
+},{
+am("UIStroke",{
+Thickness=1,
+Color=Color3.fromHex"#FFD700",
+Transparency=.9,
+})
 }),
 am("UIPadding",{
-
-PaddingLeft=UDim.new(0,au.UIPadding/2),
-PaddingRight=UDim.new(0,au.UIPadding/2),
-PaddingBottom=UDim.new(0,au.UIPadding/2),
+PaddingLeft=UDim.new(0,au.UIPadding),
+PaddingRight=UDim.new(0,au.UIPadding),
+PaddingBottom=UDim.new(0,au.UIPadding),
+PaddingTop=UDim.new(0,au.UIPadding),
 }),
 })
+
+
+au.UIElements.RightPanel=am("Frame",{
+Size=UDim2.new(0,200,1,-au.Topbar.Height),
+Position=UDim2.new(1,0,0,au.Topbar.Height),
+AnchorPoint=Vector2.new(1,0),
+BackgroundTransparency=1,
+Visible=au.User.Enabled or true,
+},{
+al.NewRoundFrame(au.UICorner-(au.UIPadding/2),"Squircle",{
+Size=UDim2.new(1,0,1,0),
+ThemeTag={
+ImageColor3="PanelBackground",
+ImageTransparency="PanelBackgroundTransparency",
+},
+ZIndex=3,
+},{
+am("UIStroke",{
+Thickness=1,
+Color=Color3.fromHex"#FFD700",
+Transparency=.9,
+})
+}),
+am("UIPadding",{
+PaddingLeft=UDim.new(0,au.UIPadding),
+PaddingRight=UDim.new(0,au.UIPadding),
+PaddingBottom=UDim.new(0,au.UIPadding),
+PaddingTop=UDim.new(0,au.UIPadding),
+}),
+am("UIListLayout",{
+Padding=UDim.new(0,15),
+HorizontalAlignment="Center",
+}),
+
+
+am("Frame",{
+Size=UDim2.new(1,0,0,120),
+BackgroundTransparency=1,
+},{
+am("UIListLayout",{
+Padding=UDim.new(0,8),
+HorizontalAlignment="Center",
+}),
+
+am("Frame",{
+Size=UDim2.new(0,80,0,80),
+BackgroundColor3=Color3.fromHex"#1A1A1A",
+},{
+am("UICorner",{CornerRadius=UDim.new(0,12)}),
+am("UIStroke",{Thickness=1.5,Color=Color3.fromHex"#FFD700",Transparency=.6}),
+am("ImageLabel",{
+Name="Avatar",
+Size=UDim2.new(1,-8,1,-8),
+Position=UDim2.new(0.5,0,0.5,0),
+AnchorPoint=Vector2.new(0.5,0.5),
+Image="rbxassetid://6033722245",
+BackgroundTransparency=1,
+},{
+am("UICorner",{CornerRadius=UDim.new(1,0)})
+})
+}),
+
+am("TextLabel",{
+Text="Executive User",
+TextSize=14,
+FontFace=Font.new(al.Font,Enum.FontWeight.Bold),
+TextColor3=Color3.new(1,1,1),
+BackgroundTransparency=1,
+AutomaticSize="XY",
+})
+}),
+
+
+am("Frame",{
+Size=UDim2.new(1,0,0,80),
+BackgroundTransparency=1,
+},{
+am("UIListLayout",{Padding=UDim.new(0,6)}),
+
+am("Frame",{
+Size=UDim2.new(1,0,0,32),
+BackgroundColor3=Color3.new(1,1,1),
+BackgroundTransparency=.95,
+},{
+am("UICorner",{CornerRadius=UDim.new(0,6)}),
+am("ImageLabel",{
+Size=UDim2.new(0,16,0,16),
+Position=UDim2.new(0,10,0.5,0),
+AnchorPoint=Vector2.new(0,0.5),
+Image=al.Icon"at-sign"[1],
+ImageRectOffset=al.Icon"at-sign"[2].ImageRectPosition,
+ImageRectSize=al.Icon"at-sign"[2].ImageRectSize,
+ThemeTag={ImageColor3="Accent"},
+}),
+am("TextLabel",{
+Text="@IntiDeveloper",
+TextSize=12,
+TextColor3=Color3.new(1,1,1),
+TextTransparency=.4,
+Position=UDim2.new(0,32,0.5,0),
+AnchorPoint=Vector2.new(0,0.5),
+BackgroundTransparency=1,
+})
+}),
+
+am("Frame",{
+Size=UDim2.new(1,0,0,32),
+BackgroundColor3=Color3.new(1,1,1),
+BackgroundTransparency=.95,
+},{
+am("UICorner",{CornerRadius=UDim.new(0,6)}),
+am("ImageLabel",{
+Size=UDim2.new(0,16,0,16),
+Position=UDim2.new(0,10,0.5,0),
+AnchorPoint=Vector2.new(0,0.5),
+Image=al.Icon"user"[1],
+ImageRectOffset=al.Icon"user"[2].ImageRectPosition,
+ImageRectSize=al.Icon"user"[2].ImageRectSize,
+ThemeTag={ImageColor3="Accent"},
+}),
+am("TextLabel",{
+Text="IntiHub_Admin",
+TextSize=12,
+TextColor3=Color3.new(1,1,1),
+TextTransparency=.4,
+Position=UDim2.new(0,32,0.5,0),
+AnchorPoint=Vector2.new(0,0.5),
+BackgroundTransparency=1,
+})
+})
+}),
+
+
+am("Frame",{
+Size=UDim2.new(1,0,0,60),
+BackgroundColor3=Color3.fromHex"#FFD700",
+BackgroundTransparency=.95,
+},{
+am("UICorner",{CornerRadius=UDim.new(0,8)}),
+am("UIStroke",{Thickness=1,Color=Color3.fromHex"#FFD700",Transparency=.8}),
+am("ImageLabel",{
+Size=UDim2.new(0,24,0,24),
+Position=UDim2.new(0,12,0.5,0),
+AnchorPoint=Vector2.new(0,0.5),
+Image=al.Icon"zap"[1],
+ImageRectOffset=al.Icon"zap"[2].ImageRectPosition,
+ImageRectSize=al.Icon"zap"[2].ImageRectSize,
+ThemeTag={ImageColor3="Accent"},
+}),
+am("TextLabel",{
+Text="CURRENT ENGINE",
+TextSize=10,
+TextColor3=Color3.new(1,1,1),
+TextTransparency=.5,
+Position=UDim2.new(0,44,0.35,0),
+AnchorPoint=Vector2.new(0,0.5),
+BackgroundTransparency=1,
+}),
+am("TextLabel",{
+Text="Executor: <font color='#FFD700'>Arceus X</font>",
+TextSize=12,
+TextColor3=Color3.new(1,1,1),
+Position=UDim2.new(0,44,0.65,0),
+AnchorPoint=Vector2.new(0,0.5),
+BackgroundTransparency=1,
+RichText=true,
+})
+})
+})
+
+
+am("Frame",{
+Size=UDim2.new(1,0,0,60),
+Parent=au.UIElements.MainBar,
+BackgroundTransparency=1,
+},{
+am("TextLabel",{
+Text="MODULE CONTROL",
+TextSize=10,
+FontFace=Font.new(al.Font,Enum.FontWeight.Bold),
+TextColor3=Color3.fromHex"#FFD700",
+TextTransparency=0.4,
+BackgroundTransparency=1,
+Position=UDim2.new(0,0,0,5),
+}),
+am("TextLabel",{
+Text="Configuration Dashboard",
+TextSize=24,
+FontFace=Font.new(al.Font,Enum.FontWeight.Bold),
+TextColor3=Color3.new(1,1,1),
+BackgroundTransparency=1,
+Position=UDim2.new(0,0,0,18),
+AutomaticSize="XY",
+})
+})
+
+
+au.UIElements.TabScrollAdjustment=60
 
 local aA=am("ImageLabel",{
 Image="rbxassetid://8992230677",
@@ -12040,6 +12328,37 @@ VerticalAlignment="Center",
 am("Frame",{
 AutomaticSize="XY",
 BackgroundTransparency=1,
+LayoutOrder=1,
+},{
+am("UIListLayout",{
+Padding=UDim.new(0,8),
+FillDirection="Horizontal",
+VerticalAlignment="Center",
+}),
+
+am("TextLabel",{
+Text="<font color='#FFD700'><b>INTIHUB</b></font>",
+TextSize=16,
+FontFace=Font.new(al.Font,Enum.FontWeight.Bold),
+TextColor3=Color3.fromHex"#FFD700",
+BackgroundTransparency=1,
+AutomaticSize="XY",
+LayoutOrder=1,
+RichText=true,
+Name="BrandingLogo",
+}),
+
+am("Frame",{
+Size=UDim2.new(0,1,0,20),
+BackgroundColor3=Color3.new(1,1,1),
+BackgroundTransparency=.8,
+BorderSizePixel=0,
+LayoutOrder=2,
+}),
+}),
+am("Frame",{
+AutomaticSize="XY",
+BackgroundTransparency=1,
 Name="Title",
 Size=UDim2.new(0,0,1,0),
 LayoutOrder=2,
@@ -12054,7 +12373,7 @@ r,
 m,
 }),
 am("UIPadding",{
-PaddingLeft=UDim.new(0,4),
+PaddingLeft=UDim.new(0,12),
 }),
 }),
 am("ScrollingFrame",{
@@ -13372,6 +13691,30 @@ end
 
 
 
+
+
+task.spawn(function()
+local M=au.UIElements.Main:FindFirstChild("AnimatedGradient1",true)
+local N=au.UIElements.Main:FindFirstChild("AnimatedGradient2",true)
+
+RenderStepped:Connect(function()
+if M then M.Rotation=(M.Rotation+1)%360 end
+if N then N.Rotation=(N.Rotation-1)%360 end
+end)
+end)
+
+if au.OpenButtonMain and au.OpenButtonMain.Button then
+task.spawn(function()
+local M=au.OpenButtonMain.Button:FindFirstChild("Glow",true)
+while task.wait(1.5)do
+if M then
+an(M,0.75,{ImageTransparency=0.4}):Play()
+task.wait(0.75)
+an(M,0.75,{ImageTransparency=0.8}):Play()
+end
+end
+end)
+end
 
 
 

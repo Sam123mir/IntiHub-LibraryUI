@@ -110,9 +110,9 @@ local Window = IntiHub:CreateWindow({
 -- */  Tags  /* --
 do
 	Window:Tag({
-		Title = "v" .. IntiHub.Version,
+		Title = "v2.0.0",
 		Icon = "github",
-		Color = Color3.fromHex("#1c1c1c"),
+		Color = Color3.fromHex("#FFD700"),
 		Border = true,
 	})
 end

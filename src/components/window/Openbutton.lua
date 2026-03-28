@@ -31,18 +31,18 @@ function OpenButton.New(Window)
     -- })
 
     local Title = New("TextLabel", {
-        Text = Window.Title,
-        TextSize = 16, -- Increased from 14
-        FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
+        Text = Window.Title:upper(),
+        TextSize = 14,
+        FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
         BackgroundTransparency = 1,
         AutomaticSize = "XY",
         ThemeTag = {
-            TextColor3 = "Text",
+            TextColor3 = "Accent",
         },
     })
 
     local Drag = New("Frame", {
-        Size = UDim2.new(0,50-8,0,50-8),
+        Size = UDim2.new(0,30,0,30),
         BackgroundTransparency = 1, 
         Name = "Drag",
     }, {
@@ -50,27 +50,54 @@ function OpenButton.New(Window)
             Image = Creator.Icon("move")[1],
             ImageRectOffset = Creator.Icon("move")[2].ImageRectPosition,
             ImageRectSize = Creator.Icon("move")[2].ImageRectSize,
-            Size = UDim2.new(0,18,0,18),
+            Size = UDim2.new(0,14,0,14),
             BackgroundTransparency = 1,
             Position = UDim2.new(0.5,0,0.5,0),
             AnchorPoint = Vector2.new(0.5,0.5),
             ThemeTag = {
                 ImageColor3 = "Icon",
             },
-            ImageTransparency = .3,
+            ImageTransparency = .5,
         })
     })
+
     local Divider = New("Frame", {
-        Size = UDim2.new(0,1,1,0),
-        Position = UDim2.new(0,20+16,0.5,0),
-        AnchorPoint = Vector2.new(0,0.5),
+        Size = UDim2.new(0,1,0,18),
+        BackgroundColor3 = Color3.fromHex("#FFD700"),
+        BackgroundTransparency = .8,
+        BorderSizePixel = 0,
+    })
+
+    local LiveTag = New("Frame", {
+        Size = UDim2.new(0,45,0,20),
         BackgroundColor3 = Color3.new(1,1,1),
-        BackgroundTransparency = .9,
+        BackgroundTransparency = .92,
+    }, {
+        New("UICorner", { CornerRadius = UDim.new(1,0) }),
+        New("Frame", {
+            Name = "Dot",
+            Size = UDim2.new(0,6,0,6),
+            Position = UDim2.new(0,8,0.5,0),
+            AnchorPoint = Vector2.new(0,0.5),
+            BackgroundColor3 = Color3.fromHex("#FFD700"),
+        }, {
+            New("UICorner", { CornerRadius = UDim.new(1,0) })
+        }),
+        New("TextLabel", {
+            Text = "LIVE",
+            TextSize = 10,
+            FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+            TextColor3 = Color3.new(1,1,1),
+            TextTransparency = .4,
+            Position = UDim2.new(0,18,0.5,0),
+            AnchorPoint = Vector2.new(0,0.5),
+            BackgroundTransparency = 1,
+        })
     })
 
     local Container = New("Frame", {
-        Size = UDim2.new(0,0,0,0),
-        Position = UDim2.new(0.5,0,0,6+44/2),
+        Size = UDim2.new(0,200,0,40),
+        Position = UDim2.new(0.5,0,0,50),
         AnchorPoint = Vector2.new(0.5,0.5),
         Parent = Window.Parent,
         BackgroundTransparency = 1,
@@ -78,82 +105,66 @@ function OpenButton.New(Window)
         Visible = false,
     })
 
-
-    local UIScale = New("UIScale", {
-        Scale = 1,
-    })
+    local UIScale = New("UIScale", { Scale = 1 })
 
     local Button = New("Frame", {
-        Size = UDim2.new(0,0,0,75), -- Increased Height
+        Size = UDim2.new(0,0,0,32),
         AutomaticSize = "X",
         Parent = Container,
-        Active = false,
-        BackgroundTransparency = .15,
-        ZIndex = 99,
-        BackgroundColor3 = Color3.fromHex("#211B05"), -- Dark Gold Base
+        BackgroundColor3 = Color3.fromHex("#0A0A0A"),
+        BackgroundTransparency = .1,
     }, {
         UIScale,
-	    New("UICorner", {
-            CornerRadius = UDim.new(0,14)
-        }),
+	    New("UICorner", { CornerRadius = UDim.new(0,6) }),
         New("UIStroke", {
-            Thickness = 2.5,
-            ApplyStrokeMode = "Border",
-            ThemeTag = {
-                Color = "Accent",
-            },
-            Transparency = 0,
-        }, {
-            New("UIGradient", {
-                Color = ColorSequence.new({
-                    ColorSequenceKeypoint.new(0, Color3.fromHex("#FFD700")),
-                    ColorSequenceKeypoint.new(0.5, Color3.fromHex("#FFFFFF")),
-                    ColorSequenceKeypoint.new(1, Color3.fromHex("#FFD700")),
-                })
-            })
+            Thickness = 1,
+            Color = Color3.fromHex("#FFD700"),
+            Transparency = .7,
+            Name = "Stroke"
         }),
-        Drag,
-        Divider,
+        
+        New("UIPadding", {
+            PaddingLeft = UDim.new(0,10),
+            PaddingRight = UDim.new(0,10),
+        }),
         
         New("UIListLayout", {
-            Padding = UDim.new(0, 8),
+            Padding = UDim.new(0, 10),
             FillDirection = "Horizontal",
             VerticalAlignment = "Center",
+            SortOrder = "LayoutOrder",
         }),
-        
-        New("TextButton",{
-            AutomaticSize = "XY",
-            Active = true,
-            BackgroundTransparency = 1, -- .93
-            Size = UDim2.new(0,0,0,75-(4*2)),
-            --Position = UDim2.new(0,20+16+16+1,0,0),
-            BackgroundColor3 = Color3.new(1,1,1),
-        }, {
-            New("UICorner", {
-                CornerRadius = UDim.new(0,10)
-            }),
-            Icon,
-            New("UIListLayout", {
-                Padding = UDim.new(0, Window.UIPadding),
-                FillDirection = "Horizontal",
-                VerticalAlignment = "Center",
-            }),
-            Title,
-            New("UIPadding", {
-                PaddingLeft = UDim.new(0,12),
-                PaddingRight = UDim.new(0,12),
-            }),
-        }),
-        New("UIPadding", {
-            PaddingLeft = UDim.new(0,8),
-            PaddingRight = UDim.new(0,8),
+
+        Drag,
+        Divider,
+        Title,
+        LiveTag,
+
+        New("TextButton", {
+            Size = UDim2.new(1,0,1,0),
+            BackgroundTransparency = 1,
+            Text = "",
+            ZIndex = 10,
         })
     })
+
+    -- Pulsing animation for LightDot
+    task.spawn(function()
+        while true do
+            local dot = LiveTag:FindFirstChild("Dot")
+            if dot then
+                Tween(dot, 0.8, {BackgroundTransparency = 0.5}, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut):Play()
+                task.wait(0.8)
+                Tween(dot, 0.8, {BackgroundTransparency = 0}, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut):Play()
+                task.wait(0.8)
+            else
+                break
+            end
+        end
+    end)
     
     OpenButtonMain.Button = Button
-    
-    
-    
+
     function OpenButtonMain:SetIcon(newIcon)
         if Icon then
             Icon:Destroy()
@@ -168,18 +179,16 @@ function OpenButton.New(Window)
                 true,
                 Window.IconThemed
             )
-            Icon.Size = UDim2.new(0, 24, 0, 24)
-            Icon.LayoutOrder = -1
-            Icon.Parent = OpenButtonMain.Button.TextButton
+            Icon.Size = UDim2.new(0, 16, 0, 16)
+            Icon.LayoutOrder = -1 -- Ensure it's before Divider
+            Icon.Parent = Button
         end
     end
     
     if Window.Icon then
         OpenButtonMain:SetIcon(Window.Icon)
     end
-    
-    
-    
+
     Creator.AddSignal(Button:GetPropertyChangedSignal("AbsoluteSize"), function()
         Container.Size = UDim2.new(
             0, Button.AbsoluteSize.X,
@@ -188,14 +197,13 @@ function OpenButton.New(Window)
     end)
     
     Creator.AddSignal(Button.TextButton.MouseEnter, function()
-        Tween(Button.TextButton, .1, {BackgroundTransparency = .93}):Play()
+        Tween(Button, .2, {BackgroundTransparency = 0}):Play()
     end)
     Creator.AddSignal(Button.TextButton.MouseLeave, function()
-        Tween(Button.TextButton, .1, {BackgroundTransparency = 1}):Play()
+        Tween(Button, .2, {BackgroundTransparency = .1}):Play()
     end)
     
     local DragModule = Creator.Drag(Container)
-    
     
     function OpenButtonMain:Visible(v)
         Container.Visible = v
@@ -214,34 +222,22 @@ function OpenButton.New(Window)
             OnlyIcon = OpenButtonConfig.OnlyIcon or false,
             Draggable = OpenButtonConfig.Draggable or nil,
             OnlyMobile = OpenButtonConfig.OnlyMobile,
-            CornerRadius = OpenButtonConfig.CornerRadius or UDim.new(1, 0),
-            StrokeThickness = OpenButtonConfig.StrokeThickness or 2,
+            CornerRadius = OpenButtonConfig.CornerRadius or UDim.new(0, 6),
+            StrokeThickness = OpenButtonConfig.StrokeThickness or 1,
             Scale = OpenButtonConfig.Scale or 1,
             Color = OpenButtonConfig.Color 
                 or ColorSequence.new({
-                    ColorSequenceKeypoint.new(0, Color3.fromHex("#FFC300")),
-                    ColorSequenceKeypoint.new(0.5, Color3.fromHex("#FFFFFF")),
-                    ColorSequenceKeypoint.new(1, Color3.fromHex("#FFC300")),
+                    ColorSequenceKeypoint.new(0, Color3.fromHex("#FFD700")),
+                    ColorSequenceKeypoint.new(1, Color3.fromHex("#FFD700")),
                 }),
         }
-        
-        -- wtf lol
         
         if OpenButtonModule.Enabled == false then
             Window.IsOpenButtonEnabled = false
         end
         
-        if OpenButtonModule.OnlyMobile ~= false then
-            OpenButtonModule.OnlyMobile = true
-        else
-            Window.IsPC = false
-        end
-        
-        
         if OpenButtonModule.Draggable == false and Drag and Divider then
             Drag.Visible = OpenButtonModule.Draggable
-            Divider.Visible = OpenButtonModule.Draggable
-            
             if DragModule then
                 DragModule:Set(OpenButtonModule.Draggable)
             end
@@ -251,44 +247,34 @@ function OpenButton.New(Window)
             Container.Position = OpenButtonModule.Position
         end
         
-        if OpenButtonModule.OnlyIcon == true and Title then
+        if OpenButtonModule.OnlyIcon == true then
             Title.Visible = false
-            Button.TextButton.UIPadding.PaddingLeft = UDim.new(0,7)
-            Button.TextButton.UIPadding.PaddingRight = UDim.new(0,7)
-        elseif OpenButtonModule.OnlyIcon == false then
+            Divider.Visible = false
+            LiveTag.Visible = false
+        else
             Title.Visible = true
-            Button.TextButton.UIPadding.PaddingLeft = UDim.new(0,7+4)
-            Button.TextButton.UIPadding.PaddingRight = UDim.new(0,7+4)
+            Divider.Visible = true
+            LiveTag.Visible = true
         end
         
-        --OpenButtonMain:Visible((not OpenButtonModule.OnlyMobile) or (not Window.IsPC))
-        
-        --if not OpenButton.Visible then return end
-        
-        if Title then
-            if OpenButtonModule.Title then
-                Title.Text = OpenButtonModule.Title
-                Creator:ChangeTranslationKey(Title, OpenButtonModule.Title)
-            elseif OpenButtonModule.Title == nil then
-                --Title.Visible = false
-            end
+        if OpenButtonModule.Title then
+            Title.Text = OpenButtonModule.Title:upper()
         end
         
         if OpenButtonModule.Icon then
             OpenButtonMain:SetIcon(OpenButtonModule.Icon)
         end
 
-        Button.UIStroke.UIGradient.Color = OpenButtonModule.Color
-        if Glow then
-            Glow.UIGradient.Color = OpenButtonModule.Color
+        local stroke = Button:FindFirstChild("Stroke")
+        if stroke then
+            stroke.Thickness = OpenButtonModule.StrokeThickness
+            -- Handle Color if needed, but we use gold by default
         end
 
         Button.UICorner.CornerRadius = OpenButtonModule.CornerRadius
-        Button.TextButton.UICorner.CornerRadius = UDim.new(OpenButtonModule.CornerRadius.Scale, OpenButtonModule.CornerRadius.Offset-4)
-        Button.UIStroke.Thickness = OpenButtonModule.StrokeThickness
-        
         OpenButtonMain:SetScale(OpenButtonModule.Scale)
     end
+
 
     return OpenButtonMain
 end

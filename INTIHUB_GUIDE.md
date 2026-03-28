@@ -7,7 +7,24 @@
 Para empezar, carga la librería usando el script compilado:
 
 ```lua
-local IntiHub = loadstring(game:HttpGet("https://raw.githubusercontent.com/Sam123mir/IntiHub-LibraryUI/main/main.client.lua?v=" .. tick()))()
+local function LoadIntiHub()
+    local success, response = pcall(function()
+        return game:HttpGet("https://raw.githubusercontent.com/Sam123mir/IntiHub-LibraryUI/main/dist/main.lua?v=" .. tick())
+    end)
+    
+    if success and response then
+        local loader, err = loadstring(response)
+        if loader then
+            return loader()
+        else
+            warn("IntiHub Loader Error: " .. tostring(err))
+        end
+    else
+        warn("IntiHub Network Error: No se pudo descargar la librería.")
+    end
+end
+
+local IntiHub = LoadIntiHub()
 
 -- Crear la ventana principal estilo Noble
 local Window = IntiHub:CreateWindow({

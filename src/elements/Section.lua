@@ -153,6 +153,23 @@ function Element:New(Config)
             },
             Visible = Section.Box and Section.BoxBorder,
             Name = "Outline",
+        }, {
+            -- 🟢 Noble GOLDEN BORDER
+            New("UIStroke", {
+                Thickness = 1.5,
+                Color = Color3.fromHex("#FFD700"),
+                Transparency = 0.5,
+                ApplyStrokeMode = "Border",
+            }, {
+                New("UIGradient", {
+                    Rotation = 45,
+                    Color = ColorSequence.new({
+                        ColorSequenceKeypoint.new(0, Color3.fromHex("#FFD700")),
+                        ColorSequenceKeypoint.new(0.5, Color3.fromHex("#FFFACD")), -- LemonChiffon for glow
+                        ColorSequenceKeypoint.new(1, Color3.fromHex("#FFD700")),
+                    }),
+                })
+            })
         }),
         New("TextButton", {
             Size = UDim2.new(1,0,0,Section.Expandable and 0 or (not DescFrame and Section.HeaderSize or 0)),
