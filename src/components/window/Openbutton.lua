@@ -31,8 +31,8 @@ function OpenButton.New(Window)
     -- })
 
     local Title = New("TextLabel", {
-        Text = Window.Title:upper(),
-        TextSize = 14,
+        Text = "INTIHUB",
+        TextSize = 13,
         FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
         BackgroundTransparency = 1,
         AutomaticSize = "XY",
@@ -41,25 +41,6 @@ function OpenButton.New(Window)
         },
     })
 
-    local Drag = New("Frame", {
-        Size = UDim2.new(0,30,0,30),
-        BackgroundTransparency = 1, 
-        Name = "Drag",
-    }, {
-        New("ImageLabel", {
-            Image = Creator.Icon("move")[1],
-            ImageRectOffset = Creator.Icon("move")[2].ImageRectPosition,
-            ImageRectSize = Creator.Icon("move")[2].ImageRectSize,
-            Size = UDim2.new(0,14,0,14),
-            BackgroundTransparency = 1,
-            Position = UDim2.new(0.5,0,0.5,0),
-            AnchorPoint = Vector2.new(0.5,0.5),
-            ThemeTag = {
-                ImageColor3 = "Icon",
-            },
-            ImageTransparency = .5,
-        })
-    })
 
     local Divider = New("Frame", {
         Size = UDim2.new(0,1,0,18),
@@ -108,8 +89,8 @@ function OpenButton.New(Window)
     local UIScale = New("UIScale", { Scale = 1 })
 
     local Button = New("Frame", {
-        Size = UDim2.new(0,0,0,32),
-        AutomaticSize = "X",
+        Size = UDim2.new(0, 160, 0, 32), -- Fixed width as requested (corto)
+        AutomaticSize = "None",
         Parent = Container,
         BackgroundColor3 = Color3.fromHex("#0F0D00"),
         BackgroundTransparency = .2,
@@ -135,8 +116,7 @@ function OpenButton.New(Window)
             SortOrder = "LayoutOrder",
         }),
 
-        Drag,
-        Divider,
+        -- Removed folder icon/drag frame
         Title,
         LiveTag,
 
@@ -144,7 +124,7 @@ function OpenButton.New(Window)
             Size = UDim2.new(1,0,1,0),
             BackgroundTransparency = 1,
             Text = "",
-            ZIndex = 10,
+            ZIndex = 11, -- Ensure it's on top
         }, {
             New("UIScale", { Scale = 1 })
         })

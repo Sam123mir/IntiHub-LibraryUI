@@ -334,7 +334,7 @@ return function(Config)
     -- Right Panel (Executive User)
     Window.UIElements.RightPanel = New("Frame", {
         Size = UDim2.new(0, 200, 1, -Window.Topbar.Height),
-        Position = UDim2.new(1, 0, 0, Window.Topbar.Height),
+        Position = UDim2.new(1, -10, 0, Window.Topbar.Height), -- Shifted slightly left to stay in window
         AnchorPoint = Vector2.new(1, 0),
         BackgroundTransparency = 1,
         Visible = Window.User.Enabled or true, -- Explicitly enabled for this overhaul
@@ -489,7 +489,7 @@ return function(Config)
                 BackgroundTransparency = 1,
             }),
             New("TextLabel", {
-                Text = "Executor: <font color='#FFD700'>Arceus X</font>",
+                Text = "Executor: <font color='#FFD700'>" .. (typeof(identifyexecutor) == "function" and identifyexecutor() or "Xeno") .. "</font>",
                 TextSize = 12,
                 TextColor3 = Color3.new(1, 1, 1),
                 Position = UDim2.new(0, 44, 0.65, 0),
@@ -1318,6 +1318,7 @@ return function(Config)
 
 	--Creator.Blur(Window.UIElements.Main.Background)
 	-- local OpenButtonDragModule
+		-- local OpenButtonDragModule
 
 	-- if not Window.IsPC then
 	--     OpenButtonDragModule = Creator.Drag(OpenButtonContainer)
@@ -1325,31 +1326,9 @@ return function(Config)
 
 	Window.OpenButtonMain = require("./Openbutton").New(Window)
 
-	task.spawn(function()
-		if Window.Icon then
-			local WindowIconContainer = New("Frame", {
-				Size = UDim2.new(0, 22, 0, 22),
-				LayoutOrder = 1,
-				BackgroundTransparency = 1,
-				Parent = Window.UIElements.Main.Main.Topbar.Left,
-			})
-			local IconAsset = Window.Icon
-			if string.find(tostring(IconAsset), "http") then
-				IconAsset = Creator.GetAsset(IconAsset, Window.Folder, "icon", "Logo")
-			end
-			local WindowIcon = Creator.Image(
-				IconAsset,
-				"WindowIcon",
-				Window.IconRadius,
-				Window.Folder,
-				"icon",
-				Window.IconThemed,
-				"Text"
-			)
-			WindowIcon.Parent = WindowIconContainer
-			WindowIcon.Size = UDim2.new(0, Window.IconSize, 0, Window.IconSize)
-			WindowIcon.Position = UDim2.new(0.5, 0, 0.5, 0)
-			WindowIcon.AnchorPoint = Vector2.new(0.5, 0.5)
+			-- local WindowIcon = nil
+            -- Folder icon suppressed as requested
+            -- WindowIcon properties removed to prevent nil error
 
 			Window.OpenButtonMain:SetIcon(Window.Icon)
 
@@ -2291,18 +2270,18 @@ return function(Config)
         LangTrigger.LayoutOrder = 2 -- After version
 
         local LangDropdown = New("Frame", {
-            Size = UDim2.new(0, 60, 0, 0),
-            Position = UDim2.new(0.5, 0, 1, 5),
+            Size = UDim2.new(0, 80, 0, 0), -- Wider dropdown
+            Position = UDim2.new(0.5, 0, 1, 8),
             AnchorPoint = Vector2.new(0.5, 0),
             BackgroundColor3 = Color3.fromHex("#121212"),
             BorderSizePixel = 0,
             ClipsDescendants = true,
             Parent = LangTrigger,
-            ZIndex = 1000,
+            ZIndex = 10000, -- Much higher ZIndex
         }, {
-            New("UICorner", { CornerRadius = UDim.new(0, 6) }),
-            New("UIStroke", { Thickness = 1, Color = Color3.fromHex("#FFD700"), Transparency = 0.8 }),
-            New("UIListLayout", { Padding = UDim.new(0, 2) }),
+            New("UICorner", { CornerRadius = UDim.new(0, 8) }),
+            New("UIStroke", { Thickness = 1.5, Color = Color3.fromHex("#FFD700"), Transparency = .4 }),
+            New("UIListLayout", { Padding = UDim.new(0, 4) }),
         })
 
         local function CreateLangItem(lang)
@@ -2318,7 +2297,7 @@ return function(Config)
             Creator.AddSignal(item.MouseButton1Click, function()
                 CurrentLang = lang
                 LangTrigger.Text = lang
-                Tween(LangDropdown, 0.2, { Size = UDim2.new(0, 60, 0, 0) }):Play()
+                Tween(LangDropdown, 0.2, { Size = UDim2.new(0, 80, 0, 0) }):Play()
             end)
             return item
         end
@@ -2328,8 +2307,8 @@ return function(Config)
         CreateLangItem("PT")
 
         Creator.AddSignal(LangTrigger.MouseButton1Click, function()
-            local targetSize = LangDropdown.Size.Y.Offset == 0 and 80 or 0
-            Tween(LangDropdown, 0.25, { Size = UDim2.new(0, 60, 0, targetSize) }, Enum.EasingStyle.Quint):Play()
+            local targetSize = LangDropdown.Size.Y.Offset == 0 and 95 or 0
+            Tween(LangDropdown, 0.25, { Size = UDim2.new(0, 80, 0, targetSize) }, Enum.EasingStyle.Quint):Play()
         end)
 
         Window.UIElements.Main.Main.Topbar.Center.Visible = true
