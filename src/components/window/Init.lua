@@ -202,7 +202,7 @@ return function(Config)
 			1,
 			Window.ScrollBarEnabled and -3 - (Window.UIPadding / 2) or 0,
 			1,
-			not Window.HideSearchBar and -39 - 6 or 0
+			-6 -- Reclaimed search bar space
 		),
 		Position = UDim2.new(0, 0, 1, 0),
 		AnchorPoint = Vector2.new(0, 1),
@@ -226,6 +226,17 @@ return function(Config)
 				--PaddingLeft = UDim.new(0,4+(Window.UIPadding/2)),
 				--PaddingRight = UDim.new(0,4+(Window.UIPadding/2)),
 				PaddingBottom = UDim.new(0, Window.UIPadding / 2),
+			}),
+			New("TextLabel", { -- Sidebar Title
+				Text = "MODULE CONTROL",
+				TextSize = 10,
+				FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+				TextColor3 = Color3.fromHex("#FFD700"),
+				TextTransparency = 0.4,
+				BackgroundTransparency = 1,
+				LayoutOrder = -1,
+				Size = UDim2.new(1, 0, 0, 20),
+				TextXAlignment = "Left",
 			}),
 			New("UIListLayout", {
 				SortOrder = "LayoutOrder",
@@ -362,7 +373,7 @@ return function(Config)
                     Size = UDim2.new(1, -8, 1, -8),
                     Position = UDim2.new(0.5, 0, 0.5, 0),
                     AnchorPoint = Vector2.new(0.5, 0.5),
-                    Image = "rbxassetid://6033722245", -- Placeholder Avatar
+                    Image = GetUserThumb(), -- Dynamic Avatar
                     BackgroundTransparency = 1,
                 }, {
                     New("UICorner", { CornerRadius = UDim.new(1, 0) })
@@ -370,7 +381,7 @@ return function(Config)
             }),
             -- Name
             New("TextLabel", {
-                Text = "Executive User",
+                Text = Players.LocalPlayer.DisplayName, -- Dynamic Display Name
                 TextSize = 14,
                 FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
                 TextColor3 = Color3.new(1, 1, 1),
@@ -402,7 +413,7 @@ return function(Config)
                     ThemeTag = { ImageColor3 = "Accent" },
                 }),
                 New("TextLabel", {
-                    Text = "@IntiDeveloper",
+                    Text = "@" .. Players.LocalPlayer.Name, -- Dynamic Username
                     TextSize = 12,
                     TextColor3 = Color3.new(1, 1, 1),
                     TextTransparency = .4,
@@ -411,7 +422,7 @@ return function(Config)
                     BackgroundTransparency = 1,
                 })
             }),
-             -- Admin Button
+             -- Executor Details
             New("Frame", {
                 Size = UDim2.new(1, 0, 0, 32),
                 BackgroundColor3 = Color3.new(1, 1, 1),
@@ -422,13 +433,13 @@ return function(Config)
                     Size = UDim2.new(0, 16, 0, 16),
                     Position = UDim2.new(0, 10, 0.5, 0),
                     AnchorPoint = Vector2.new(0, 0.5),
-                    Image = Creator.Icon("user")[1],
-                    ImageRectOffset = Creator.Icon("user")[2].ImageRectPosition,
-                    ImageRectSize = Creator.Icon("user")[2].ImageRectSize,
+                    Image = Creator.Icon("cpu")[1], -- CPU icon for executor
+                    ImageRectOffset = Creator.Icon("cpu")[2].ImageRectPosition,
+                    ImageRectSize = Creator.Icon("cpu")[2].ImageRectSize,
                     ThemeTag = { ImageColor3 = "Accent" },
                 }),
                 New("TextLabel", {
-                    Text = "IntiHub_Admin",
+                    Text = (identifyexecutor and identifyexecutor() or "Unknown Executor"),
                     TextSize = 12,
                     TextColor3 = Color3.new(1, 1, 1),
                     TextTransparency = .4,
@@ -477,31 +488,7 @@ return function(Config)
         })
     })
 
-    -- 🟢 Breadcrumbs / Content Header
-    local ContentHeader = New("Frame", {
-        Size = UDim2.new(1, 0, 0, 60),
-        Parent = Window.UIElements.MainBar,
-        BackgroundTransparency = 1,
-    }, {
-        New("TextLabel", {
-            Text = "MODULE CONTROL",
-            TextSize = 10,
-            FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
-            TextColor3 = Color3.fromHex("#FFD700"),
-            TextTransparency = 0.4,
-            BackgroundTransparency = 1,
-            Position = UDim2.new(0, 0, 0, 5),
-        }),
-        New("TextLabel", {
-            Text = "Configuration Dashboard",
-            TextSize = 24,
-            FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
-            TextColor3 = Color3.new(1, 1, 1),
-            BackgroundTransparency = 1,
-            Position = UDim2.new(0, 0, 0, 18),
-            AutomaticSize = "XY",
-        })
-    })
+    -- Breadcrumbs / Content Header Removed
 
     -- Ajustar ScrollContainer de los Tabs para que comiencen debajo del header
     Window.UIElements.TabScrollAdjustment = 60
@@ -1678,7 +1665,7 @@ return function(Config)
 			task.wait(0.4)
 			Window.UIElements.Main.Visible = false
 
-			if Window.OpenButtonMain and not Window.Destroyed and not Window.IsPC and Window.IsOpenButtonEnabled then
+			if Window.OpenButtonMain and not Window.Destroyed and Window.IsOpenButtonEnabled then
 				Window.OpenButtonMain:Visible(true)
 			end
 		end)
@@ -2293,32 +2280,15 @@ return function(Config)
 	if not Window.HideSearchBar then
 		local SearchBar = require("../search/Init")
 		local IsOpen = false
-		local CurrentSearchBar
 
-		-- local SearchButton
-		-- SearchButton = Window:CreateTopbarButton("search", function()
-		--     if IsOpen then return end
+		-- Search Bar in TopBar Center
+		local SearchBarTrigger = CreateLabel("Search...", "search", Window.UIElements.Main.Main.Topbar.Center, true)
+        SearchBarTrigger.Size = UDim2.new(0, 150, 0, 30)
+        SearchBarTrigger.LayoutOrder = -1 -- Before version tag
+        
+        Window.UIElements.Main.Main.Topbar.Center.Visible = true
 
-		--     SearchBar.new(Window.TabModule, Window.UIElements.Main, function()
-		--         -- OnClose
-		--         IsOpen = false
-		--         Window.CanResize = true
-
-		--         Tween(FullScreenBlur, 0.1, {ImageTransparency = 1}):Play()
-		--         FullScreenBlur.Active = false
-		--     end)
-		--     Tween(FullScreenBlur, 0.1, {ImageTransparency = .65}):Play()
-		--     FullScreenBlur.Active = true
-
-		--     IsOpen = true
-		--     Window.CanResize = false
-		-- end, 996)
-
-		local SearchLabel = CreateLabel("Search", "search", Window.UIElements.SideBarContainer, true)
-		SearchLabel.Size = UDim2.new(1, -Window.UIPadding / 2, 0, 39)
-		SearchLabel.Position = UDim2.new(0, Window.UIPadding / 2, 0,--[[Window.UIPadding/2]] 0)
-
-		Creator.AddSignal(SearchLabel.MouseButton1Click, function()
+		Creator.AddSignal(SearchBarTrigger.MouseButton1Click, function()
 			if IsOpen then
 				return
 			end

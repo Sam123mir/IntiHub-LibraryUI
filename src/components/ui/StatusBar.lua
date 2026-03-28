@@ -178,16 +178,7 @@ function StatusBar.New(Config)
 	})
 	CreateStat("solar:gamepad-minimalistic-bold", "GAME", GameText, 3)
 
-	-- Session Section
-	local SessionText = New("TextLabel", {
-		Text = Players.LocalPlayer.DisplayName,
-		TextSize = 14,
-		FontFace = Font.new(Creator.Font, Enum.FontWeight.SemiBold),
-		TextColor3 = Color3.new(1, 1, 1),
-		AutomaticSize = "XY",
-		BackgroundTransparency = 1,
-	})
-	CreateStat("solar:user-bold", "SESSION", SessionText, 4)
+	-- Session Section Removed
 
 	local PingText = New("TextLabel", {
 		Text = "0 ms",

@@ -11330,8 +11330,8 @@ do
             })
 
             Window.UIElements.SideBar = New('ScrollingFrame', {
-                Size = UDim2.new(1, Window.ScrollBarEnabled and -3 - (Window.UIPadding / 2) or 0, 1, not Window.HideSearchBar and 
--39 - 6 or 0),
+                Size = UDim2.new(1, Window.ScrollBarEnabled and -3 - (Window.UIPadding / 2) or 0, 1, 
+-6),
                 Position = UDim2.new(0, 0, 1, 0),
                 AnchorPoint = Vector2.new(0, 1),
                 BackgroundTransparency = 1,
@@ -11351,6 +11351,17 @@ do
                 }, {
                     New('UIPadding', {
                         PaddingBottom = UDim.new(0, Window.UIPadding / 2),
+                    }),
+                    New('TextLabel', {
+                        Text = 'MODULE CONTROL',
+                        TextSize = 10,
+                        FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+                        TextColor3 = Color3.fromHex'#FFD700',
+                        TextTransparency = 0.4,
+                        BackgroundTransparency = 1,
+                        LayoutOrder = -1,
+                        Size = UDim2.new(1, 0, 0, 20),
+                        TextXAlignment = 'Left',
                     }),
                     New('UIListLayout', {
                         SortOrder = 'LayoutOrder',
@@ -11475,7 +11486,7 @@ do
                             Size = UDim2.new(1, -8, 1, -8),
                             Position = UDim2.new(0.5, 0, 0.5, 0),
                             AnchorPoint = Vector2.new(0.5, 0.5),
-                            Image = 'rbxassetid://6033722245',
+                            Image = GetUserThumb(),
                             BackgroundTransparency = 1,
                         }, {
                             New('UICorner', {
@@ -11484,7 +11495,7 @@ do
                         }),
                     }),
                     New('TextLabel', {
-                        Text = 'Executive User',
+                        Text = Players.LocalPlayer.DisplayName,
                         TextSize = 14,
                         FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
                         TextColor3 = Color3.new(1, 1, 1),
@@ -11519,7 +11530,7 @@ do
                             },
                         }),
                         New('TextLabel', {
-                            Text = '@IntiDeveloper',
+                            Text = '@' .. Players.LocalPlayer.Name,
                             TextSize = 12,
                             TextColor3 = Color3.new(1, 1, 1),
                             TextTransparency = 0.4,
@@ -11540,15 +11551,15 @@ do
                             Size = UDim2.new(0, 16, 0, 16),
                             Position = UDim2.new(0, 10, 0.5, 0),
                             AnchorPoint = Vector2.new(0, 0.5),
-                            Image = Creator.Icon'user'[1],
-                            ImageRectOffset = Creator.Icon'user'[2].ImageRectPosition,
-                            ImageRectSize = Creator.Icon'user'[2].ImageRectSize,
+                            Image = Creator.Icon'cpu'[1],
+                            ImageRectOffset = Creator.Icon'cpu'[2].ImageRectPosition,
+                            ImageRectSize = Creator.Icon'cpu'[2].ImageRectSize,
                             ThemeTag = {
                                 ImageColor3 = 'Accent',
                             },
                         }),
                         New('TextLabel', {
-                            Text = 'IntiHub_Admin',
+                            Text = (identifyexecutor and identifyexecutor() or 'Unknown Executor'),
                             TextSize = 12,
                             TextColor3 = Color3.new(1, 1, 1),
                             TextTransparency = 0.4,
@@ -11602,32 +11613,6 @@ do
                     }),
                 }),
             })
-
-            New('Frame', {
-                Size = UDim2.new(1, 0, 0, 60),
-                Parent = Window.UIElements.MainBar,
-                BackgroundTransparency = 1,
-            }, {
-                New('TextLabel', {
-                    Text = 'MODULE CONTROL',
-                    TextSize = 10,
-                    FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
-                    TextColor3 = Color3.fromHex'#FFD700',
-                    TextTransparency = 0.4,
-                    BackgroundTransparency = 1,
-                    Position = UDim2.new(0, 0, 0, 5),
-                }),
-                New('TextLabel', {
-                    Text = 'Configuration Dashboard',
-                    TextSize = 24,
-                    FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
-                    TextColor3 = Color3.new(1, 1, 1),
-                    BackgroundTransparency = 1,
-                    Position = UDim2.new(0, 0, 0, 18),
-                    AutomaticSize = 'XY',
-                }),
-            })
-
             Window.UIElements.TabScrollAdjustment = 60
 
             local Blur = New('ImageLabel', {
@@ -12584,7 +12569,7 @@ do
 
                     Window.UIElements.Main.Visible = false
 
-                    if Window.OpenButtonMain and not Window.Destroyed and not Window.IsPC and Window.IsOpenButtonEnabled then
+                    if Window.OpenButtonMain and not Window.Destroyed and Window.IsOpenButtonEnabled then
                         Window.OpenButtonMain:Visible(true)
                     end
                 end)
@@ -13078,12 +13063,13 @@ do
             if not Window.HideSearchBar then
                 local SearchBar = __DARKLUA_BUNDLE_MODULES.load'Z'
                 local IsOpen = false
-                local SearchLabel = CreateLabel('Search', 'search', Window.UIElements.SideBarContainer, true)
+                local SearchBarTrigger = CreateLabel('Search...', 'search', Window.UIElements.Main.Main.Topbar.Center, true)
 
-                SearchLabel.Size = UDim2.new(1, -Window.UIPadding / 2, 0, 39)
-                SearchLabel.Position = UDim2.new(0, Window.UIPadding / 2, 0, 0)
+                SearchBarTrigger.Size = UDim2.new(0, 150, 0, 30)
+                SearchBarTrigger.LayoutOrder = -1
+                Window.UIElements.Main.Main.Topbar.Center.Visible = true
 
-                Creator.AddSignal(SearchLabel.MouseButton1Click, function()
+                Creator.AddSignal(SearchBarTrigger.MouseButton1Click, function()
                     if IsOpen then
                         return
                     end
@@ -13167,7 +13153,9 @@ do
             return instance
         end)
         local RunService = cloneref(game:GetService'RunService')
-        local Players = cloneref(game:GetService'Players')
+
+        cloneref(game:GetService'Players')
+
         local Stats = cloneref(game:GetService'Stats')
         local Creator = __DARKLUA_BUNDLE_MODULES.load'c'
         local New = Creator.New
@@ -13348,17 +13336,6 @@ do
             })
 
             CreateStat('solar:gamepad-minimalistic-bold', 'GAME', GameText, 3)
-
-            local SessionText = New('TextLabel', {
-                Text = Players.LocalPlayer.DisplayName,
-                TextSize = 14,
-                FontFace = Font.new(Creator.Font, Enum.FontWeight.SemiBold),
-                TextColor3 = Color3.new(1, 1, 1),
-                AutomaticSize = 'XY',
-                BackgroundTransparency = 1,
-            })
-
-            CreateStat('solar:user-bold', 'SESSION', SessionText, 4)
 
             local PingText = New('TextLabel', {
                 Text = '0 ms',
