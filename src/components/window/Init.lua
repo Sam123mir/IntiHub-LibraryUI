@@ -830,8 +830,8 @@ return function(Config)
 				New("Frame", { -- Topbar Right Side -- Window.UIElements.Main.Main.Topbar.Right
 					AutomaticSize = "XY",
 					BackgroundTransparency = 1,
-					Position = UDim2.new(Window.Topbar.ButtonsType == "Default" and 1 or 0, 0, 0.5, 0),
-					AnchorPoint = Vector2.new(Window.Topbar.ButtonsType == "Default" and 1 or 0, 0.5),
+					Position = UDim2.new(1, 0, 0.5, 0),
+					AnchorPoint = Vector2.new(1, 0.5),
 					Name = "Right",
 				}, {
 					New("UIListLayout", {
@@ -863,9 +863,8 @@ return function(Config)
 		--     LeftWidth = WindowTitle.TextBounds.X / Config.IntiHub.UIScale
 		-- end
 		LeftWidth = Window.UIElements.Main.Main.Topbar.Left.AbsoluteSize.X / Config.IntiHub.UIScale
-		if Window.Topbar.ButtonsType ~= "Default" then
-			LeftWidth = LeftWidth + RightWidth + Window.UIPadding - 4
-		end
+		-- Always calculation from Left
+		LeftWidth = Window.UIElements.Main.Main.Topbar.Left.AbsoluteSize.X / Config.IntiHub.UIScale
 		-- if WindowIcon then
 		--     LeftWidth = LeftWidth + (Window.IconSize / Config.IntiHub.UIScale) + (Window.UIPadding / Config.IntiHub.UIScale) + (4 / Config.IntiHub.UIScale)
 		-- end
@@ -875,16 +874,7 @@ return function(Config)
 			UDim2.new(1, -LeftWidth - RightWidth - ((Window.UIPadding * 2) / Config.IntiHub.UIScale), 1, 0)
 	end)
 
-	if Window.Topbar.ButtonsType ~= "Default" then
-		Creator.AddSignal(Window.UIElements.Main.Main.Topbar.Right:GetPropertyChangedSignal("AbsoluteSize"), function()
-			Window.UIElements.Main.Main.Topbar.Left.Position = UDim2.new(
-				0,
-				(Window.UIElements.Main.Main.Topbar.Right.AbsoluteSize.X / Config.IntiHub.UIScale) + Window.UIPadding - 4,
-				0,
-				0
-			)
-		end)
-	end
+	-- Parent Right logic is now fixed to Right container
 
 	function Window:CreateTopbarButton(Name, Icon, Callback, LayoutOrder, IconThemed, Color, IconSize)
 		local IconFrame = Creator.Image(
@@ -1102,6 +1092,7 @@ return function(Config)
 		if Window.Icon then
 			local WindowIconContainer = New("Frame", {
 				Size = UDim2.new(0, 22, 0, 22),
+				LayoutOrder = 1,
 				BackgroundTransparency = 1,
 				Parent = Window.UIElements.Main.Main.Topbar.Left,
 			})
