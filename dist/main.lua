@@ -11644,8 +11644,6 @@ do
                     }),
                 }),
             })
-            Window.UIElements.RightPanel.Parent = Window.UIElements.Main.Main
-            Window.UIElements.TabScrollAdjustment = 5
 
             local Blur = New('ImageLabel', {
                 Image = 'rbxassetid://8992230677',
@@ -12205,6 +12203,9 @@ do
                 Window.UIElements.Main.Main.Topbar.Center.Position = UDim2.new(0, LeftWidth + (Window.UIPadding / Config.IntiHub.UIScale), 0.5, 0)
                 Window.UIElements.Main.Main.Topbar.Center.Size = UDim2.new(1, -LeftWidth - RightWidth - ((Window.UIPadding * 2) / Config.IntiHub.UIScale), 1, 0)
             end)
+
+            Window.UIElements.RightPanel.Parent = Window.UIElements.Main.Main
+            Window.UIElements.TabScrollAdjustment = 5
 
             function Window:CreateTopbarButton(
                 Name,

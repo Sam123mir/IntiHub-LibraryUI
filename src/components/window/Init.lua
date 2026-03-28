@@ -499,12 +499,8 @@ return function(Config)
             })
         })
     })
-    Window.UIElements.RightPanel.Parent = Window.UIElements.Main.Main -- 🟢 Explicit Parent
 
     -- Breadcrumbs / Content Header Removed
-
-    -- Ajustar ScrollContainer de los Tabs para que comiencen debajo del header
-    Window.UIElements.TabScrollAdjustment = 5
 
 	local Blur = New("ImageLabel", { -- Shadow
 		Image = "rbxassetid://8992230677",
@@ -1111,6 +1107,9 @@ return function(Config)
 		Window.UIElements.Main.Main.Topbar.Center.Size =
 			UDim2.new(1, -LeftWidth - RightWidth - ((Window.UIPadding * 2) / Config.IntiHub.UIScale), 1, 0)
 	end)
+
+    Window.UIElements.RightPanel.Parent = Window.UIElements.Main.Main -- 🟢 Explicit Parent
+    Window.UIElements.TabScrollAdjustment = 5
 
 	-- Parent Right logic is now fixed to Right container
 
