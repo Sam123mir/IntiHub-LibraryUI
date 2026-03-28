@@ -24,8 +24,21 @@ do
 		if cloneref(game:GetService("RunService")):IsStudio() then
 			IntiHub = require(cloneref(ReplicatedStorage:WaitForChild("IntiHub"):WaitForChild("Init")))
 		else
-			IntiHub =
-				loadstring(game:HttpGet("https://raw.githubusercontent.com/Sam123mir/IntiHub-LibraryUI/main/dist/main.lua?v=" .. tick()))()
+			local success, result = pcall(function()
+				local code = game:HttpGet("https://raw.githubusercontent.com/Sam123mir/IntiHub-LibraryUI/main/dist/main.lua?v=" .. tick())
+				local func, err = loadstring(code)
+				if not func then
+					error("Failed to compile IntiHub: " .. tostring(err))
+				end
+				return func()
+			end)
+
+			if not success then
+				warn("[IntiHub Loader Error]: " .. tostring(result))
+				return
+			end
+
+			IntiHub = result
 
 		end
 	end

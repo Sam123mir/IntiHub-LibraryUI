@@ -34,7 +34,7 @@ $header = $header -replace '\{\{LICENSE\}\}', $license
 # 4. Combinar y Guardar
 Write-Host "Combinando header y bundle..."
 $final = $header + "`n`n" + $bundle
-$final | Out-File -FilePath "dist/main.lua" -Encoding utf8
+[System.IO.File]::WriteAllText("$PSScriptRoot/dist/main.lua", $final)
 
 # 5. Limpiar
 Remove-Item -Path "dist/temp.lua" -ErrorAction SilentlyContinue
