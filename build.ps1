@@ -36,7 +36,11 @@ Write-Host "Combinando header y bundle..."
 $final = $header + "`n`n" + $bundle
 [System.IO.File]::WriteAllText("$PSScriptRoot/dist/main.lua", $final)
 
+# Copy to root for deployment/loader
+[System.IO.File]::WriteAllText("$PSScriptRoot/main.client.lua", $final)
+[System.IO.File]::WriteAllText("$PSScriptRoot/main.lua", $final)
+
 # 5. Limpiar
 Remove-Item -Path "dist/temp.lua" -ErrorAction SilentlyContinue
 
-Write-Host "Build completado con éxito: dist/main.lua" -ForegroundColor Green
+Write-Host "Build completado con éxito: dist/main.lua y root scripts." -ForegroundColor Green

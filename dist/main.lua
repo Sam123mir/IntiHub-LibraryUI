@@ -5157,7 +5157,7 @@ do
         return ConfigManager
     end
     function __DARKLUA_BUNDLE_MODULES.z()
-        local OpenButton = {}
+        local OpenButtonModule = {}
         local Creator = __DARKLUA_BUNDLE_MODULES.load'c'
         local New = Creator.New
         local Tween = Creator.Tween
@@ -5167,9 +5167,8 @@ do
 
         cloneref(game:GetService'UserInputService')
 
-        function OpenButton.New(Window)
+        function OpenButtonModule.New(Window)
             local OpenButtonMain = {Button = nil}
-            local Icon
             local Title = New('TextLabel', {
                 Text = 'INTIHUB',
                 TextSize = 13,
@@ -5179,17 +5178,13 @@ do
                 ThemeTag = {
                     TextColor3 = 'Accent',
                 },
-            })
-            local Divider = New('Frame', {
-                Size = UDim2.new(0, 1, 0, 18),
-                BackgroundColor3 = Color3.fromHex'#FFD700',
-                BackgroundTransparency = 0.8,
-                BorderSizePixel = 0,
+                LayoutOrder = 1,
             })
             local LiveTag = New('Frame', {
                 Size = UDim2.new(0, 45, 0, 20),
                 BackgroundColor3 = Color3.new(1, 1, 1),
                 BackgroundTransparency = 0.92,
+                LayoutOrder = 2,
             }, {
                 New('UICorner', {
                     CornerRadius = UDim.new(1, 0),
@@ -5231,7 +5226,7 @@ do
                 AutomaticSize = 'None',
                 Parent = Container,
                 BackgroundColor3 = Color3.fromHex'#0F0D00',
-                BackgroundTransparency = 0.2,
+                BackgroundTransparency = 0.4,
             }, {
                 UIScale,
                 New('UICorner', {
@@ -5244,13 +5239,14 @@ do
                     Name = 'Stroke',
                 }),
                 New('UIPadding', {
-                    PaddingLeft = UDim.new(0, 10),
-                    PaddingRight = UDim.new(0, 10),
+                    PaddingLeft = UDim.new(0, 15),
+                    PaddingRight = UDim.new(0, 15),
                 }),
                 New('UIListLayout', {
-                    Padding = UDim.new(0, 10),
+                    Padding = UDim.new(0, 12),
                     FillDirection = 'Horizontal',
                     VerticalAlignment = 'Center',
+                    HorizontalAlignment = 'Center',
                     SortOrder = 'LayoutOrder',
                 }),
                 Title,
@@ -5260,12 +5256,12 @@ do
                     BackgroundTransparency = 1,
                     Text = '',
                     ZIndex = 11,
-                }, {
-                    New('UIScale', {Scale = 1}),
+                    Name = 'ClickButton',
                 }),
             })
 
-            Creator.AddSignal(Button.TextButton.MouseButton1Click, function()
+            Creator.Drag(Container)
+            Creator.AddSignal(Button.ClickButton.MouseButton1Click, function()
                 Window:Open()
             end)
             task.spawn(function()
@@ -5283,105 +5279,28 @@ do
                 end
             end)
 
-            OpenButtonMain.Button = Button
-
-            function OpenButtonMain:SetIcon(newIcon)
-                if Icon then
-                    Icon:Destroy()
-                end
-                if newIcon then
-                    Icon = Creator.Image(newIcon, Window.Title, 0, Window.Folder, 'OpenButton', true, Window.IconThemed)
-                    Icon.Size = UDim2.new(0, 16, 0, 16)
-                    Icon.LayoutOrder = -1
-                    Icon.Parent = Button
-                end
-            end
-
-            if Window.Icon then
-                OpenButtonMain:SetIcon(Window.Icon)
-            end
-
-            Creator.AddSignal(Button:GetPropertyChangedSignal'AbsoluteSize', function(
-            )
-                Container.Size = UDim2.new(0, Button.AbsoluteSize.X, 0, Button.AbsoluteSize.Y)
-            end)
-            Creator.AddSignal(Button.TextButton.MouseEnter, function()
-                Tween(Button, 0.2, {BackgroundTransparency = 0}):Play()
-            end)
-            Creator.AddSignal(Button.TextButton.MouseLeave, function()
-                Tween(Button, 0.2, {BackgroundTransparency = 0.1}):Play()
-            end)
-
-            local DragModule = Creator.Drag(Container)
-
             function OpenButtonMain:Visible(v)
                 Container.Visible = v
             end
             function OpenButtonMain:SetScale(scale)
                 UIScale.Scale = scale
             end
+            function OpenButtonMain:SetIcon() end
             function OpenButtonMain:Edit(OpenButtonConfig)
-                local OpenButtonModule = {
-                    Title = OpenButtonConfig.Title,
-                    Icon = OpenButtonConfig.Icon,
-                    Enabled = OpenButtonConfig.Enabled,
-                    Position = OpenButtonConfig.Position,
-                    OnlyIcon = OpenButtonConfig.OnlyIcon or false,
-                    Draggable = OpenButtonConfig.Draggable or nil,
-                    OnlyMobile = OpenButtonConfig.OnlyMobile,
-                    CornerRadius = OpenButtonConfig.CornerRadius or UDim.new(0, 6),
-                    StrokeThickness = OpenButtonConfig.StrokeThickness or 1,
-                    Scale = OpenButtonConfig.Scale or 1,
-                    Color = OpenButtonConfig.Color or ColorSequence.new{
-                        ColorSequenceKeypoint.new(0, Color3.fromHex'#FFD700'),
-                        ColorSequenceKeypoint.new(1, Color3.fromHex'#FFD700'),
-                    },
-                }
-
-                if OpenButtonModule.Enabled == false then
-                    Window.IsOpenButtonEnabled = false
+                if OpenButtonConfig.Title then
+                    Title.Text = OpenButtonConfig.Title:upper()
                 end
-                if OpenButtonModule.Draggable == false and Drag and Divider then
-                    Drag.Visible = OpenButtonModule.Draggable
-
-                    if DragModule then
-                        DragModule:Set(OpenButtonModule.Draggable)
-                    end
+                if OpenButtonConfig.Scale then
+                    OpenButtonMain:SetScale(OpenButtonConfig.Scale)
                 end
-                if OpenButtonModule.Position and Container then
-                    Container.Position = OpenButtonModule.Position
-                end
-                if OpenButtonModule.OnlyIcon == true then
-                    Title.Visible = false
-                    Divider.Visible = false
-                    LiveTag.Visible = false
-                else
-                    Title.Visible = true
-                    Divider.Visible = true
-                    LiveTag.Visible = true
-                end
-                if OpenButtonModule.Title then
-                    Title.Text = OpenButtonModule.Title:upper()
-                end
-                if OpenButtonModule.Icon then
-                    OpenButtonMain:SetIcon(OpenButtonModule.Icon)
-                end
-
-                local stroke = Button:FindFirstChild'Stroke'
-
-                if stroke then
-                    stroke.Thickness = OpenButtonModule.StrokeThickness
-                end
-
-                Button.UICorner.CornerRadius = OpenButtonModule.CornerRadius
-
-                OpenButtonMain:SetScale(OpenButtonModule.Scale)
             end
+
+            OpenButtonMain.Button = Button
 
             return OpenButtonMain
         end
 
-        return OpenButton
+        return OpenButtonModule
     end
     function __DARKLUA_BUNDLE_MODULES.A()
         local Tooltip = {}
@@ -11441,9 +11360,8 @@ do
                 }),
             })
             Window.UIElements.RightPanel = New('Frame', {
-                Size = UDim2.new(0, 200, 1, -Window.Topbar.Height),
-                Position = UDim2.new(1, -10, 0, Window.Topbar.Height),
-                AnchorPoint = Vector2.new(1, 0),
+                Size = UDim2.new(0, 200, 0, 500),
+                Position = UDim2.new(1, 15, 0, 0),
                 BackgroundTransparency = 1,
                 Visible = Window.User.Enabled or true,
             }, {
@@ -11645,158 +11563,6 @@ do
                 Window.IsPC = true
             else
                 Window.IsPC = nil
-            end
-
-            local UserIcon
-
-            if Window.User then
-                UserIcon = New('TextButton', {
-                    Size = UDim2.new(0, Window.UIElements.SideBarContainer.AbsoluteSize.X - (Window.UIPadding / 2), 0, 42 + Window.UIPadding),
-                    Position = UDim2.new(0, Window.UIPadding / 2, 1, -(Window.UIPadding / 2)),
-                    AnchorPoint = Vector2.new(0, 1),
-                    BackgroundTransparency = 1,
-                    Visible = Window.User.Enabled or false,
-                }, {
-                    Creator.NewRoundFrame(Window.UICorner - (Window.UIPadding / 2), 'SquircleOutline', {
-                        Size = UDim2.new(1, 0, 1, 0),
-                        ThemeTag = {
-                            ImageColor3 = 'Text',
-                        },
-                        ImageTransparency = 1,
-                        Name = 'Outline',
-                    }, {
-                        New('UIGradient', {
-                            Rotation = 78,
-                            Color = ColorSequence.new{
-                                ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
-                                ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 255, 255)),
-                                ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255)),
-                            },
-                            Transparency = NumberSequence.new{
-                                NumberSequenceKeypoint.new(0, 0.1),
-                                NumberSequenceKeypoint.new(0.5, 1),
-                                NumberSequenceKeypoint.new(1, 0.1),
-                            },
-                        }),
-                    }),
-                    Creator.NewRoundFrame(Window.UICorner - (Window.UIPadding / 2), 'Squircle', {
-                        Size = UDim2.new(1, 0, 1, 0),
-                        ThemeTag = {
-                            ImageColor3 = 'Text',
-                        },
-                        ImageTransparency = 1,
-                        Name = 'UserIcon',
-                    }, {
-                        New('ImageLabel', {
-                            Image = GetUserThumb(Window.User.Anonymous),
-                            BackgroundTransparency = 1,
-                            Size = UDim2.new(0, 42, 0, 42),
-                            ThemeTag = {
-                                BackgroundColor3 = 'Text',
-                            },
-                            BackgroundTransparency = 0.93,
-                        }, {
-                            New('UICorner', {
-                                CornerRadius = UDim.new(1, 0),
-                            }),
-                        }),
-                        New('Frame', {
-                            AutomaticSize = 'XY',
-                            BackgroundTransparency = 1,
-                        }, {
-                            New('TextLabel', {
-                                Text = Window.User.Anonymous and 'Anonymous' or Players.LocalPlayer.DisplayName,
-                                TextSize = 17,
-                                ThemeTag = {
-                                    TextColor3 = 'Text',
-                                },
-                                FontFace = Font.new(Creator.Font, Enum.FontWeight.SemiBold),
-                                AutomaticSize = 'Y',
-                                BackgroundTransparency = 1,
-                                Size = UDim2.new(1, -(42 / 2) - 6, 0, 0),
-                                TextTruncate = 'AtEnd',
-                                TextXAlignment = 'Left',
-                                Name = 'DisplayName',
-                            }),
-                            New('TextLabel', {
-                                Text = Window.User.Anonymous and 'anonymous' or Players.LocalPlayer.Name,
-                                TextSize = 15,
-                                TextTransparency = 0.6,
-                                ThemeTag = {
-                                    TextColor3 = 'Text',
-                                },
-                                FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
-                                AutomaticSize = 'Y',
-                                BackgroundTransparency = 1,
-                                Size = UDim2.new(1, -(42 / 2) - 6, 0, 0),
-                                TextTruncate = 'AtEnd',
-                                TextXAlignment = 'Left',
-                                Name = 'UserName',
-                            }),
-                            New('UIListLayout', {
-                                Padding = UDim.new(0, 4),
-                                HorizontalAlignment = 'Left',
-                            }),
-                        }),
-                        New('UIListLayout', {
-                            Padding = UDim.new(0, Window.UIPadding),
-                            FillDirection = 'Horizontal',
-                            VerticalAlignment = 'Center',
-                        }),
-                        New('UIPadding', {
-                            PaddingLeft = UDim.new(0, Window.UIPadding / 2),
-                            PaddingRight = UDim.new(0, Window.UIPadding / 2),
-                        }),
-                    }),
-                })
-
-                function Window.User:Enable()
-                    Window.User.Enabled = true
-
-                    Tween(Window.UIElements.SideBarContainer, 0.25, {
-                        Size = UDim2.new(0, Window.SideBarWidth, 1, -Window.Topbar.Height - 42 - (Window.UIPadding * 2)),
-                    }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
-
-                    UserIcon.Visible = true
-                end
-                function Window.User:Disable()
-                    Window.User.Enabled = false
-
-                    Tween(Window.UIElements.SideBarContainer, 0.25, {
-                        Size = UDim2.new(0, Window.SideBarWidth, 1, -Window.Topbar.Height),
-                    }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
-
-                    UserIcon.Visible = false
-                end
-                function Window.User:SetAnonymous(v)
-                    if v ~= false then
-                        v = true
-                    end
-
-                    Window.User.Anonymous = v
-                    UserIcon.UserIcon.ImageLabel.Image = GetUserThumb(v)
-                    UserIcon.UserIcon.Frame.DisplayName.Text = v and 'Anonymous' or Players.LocalPlayer.DisplayName
-                    UserIcon.UserIcon.Frame.UserName.Text = v and 'anonymous' or Players.LocalPlayer.Name
-                end
-
-                if Window.User.Enabled then
-                    Window.User:Enable()
-                else
-                    Window.User:Disable()
-                end
-                if Window.User.Callback then
-                    Creator.AddSignal(UserIcon.MouseButton1Click, function()
-                        Window.User.Callback()
-                    end)
-                    Creator.AddSignal(UserIcon.MouseEnter, function()
-                        Tween(UserIcon.UserIcon, 0.04, {ImageTransparency = 0.95}):Play()
-                        Tween(UserIcon.Outline, 0.04, {ImageTransparency = 0.85}):Play()
-                    end)
-                    Creator.AddSignal(UserIcon.InputEnded, function()
-                        Tween(UserIcon.UserIcon, 0.04, {ImageTransparency = 1}):Play()
-                        Tween(UserIcon.Outline, 0.04, {ImageTransparency = 1}):Play()
-                    end)
-                end
             end
 
             local Outline1
@@ -12059,7 +11825,6 @@ do
                     Window.UIElements.SideBarContainer,
                     Window.UIElements.MainBar,
                     Window.UIElements.RightPanel,
-                    UserIcon,
                     Outline2,
                     New('Frame', {
                         Size = UDim2.new(1, 0, 0, Window.Topbar.Height),
@@ -12183,7 +11948,7 @@ do
                 Window.UIElements.Main.Main.Topbar.Center.Size = UDim2.new(1, -LeftWidth - RightWidth - ((Window.UIPadding * 2) / Config.IntiHub.UIScale), 1, 0)
             end)
 
-            Window.UIElements.RightPanel.Parent = Window.UIElements.Main.Main
+            Window.UIElements.RightPanel.Parent = Window.UIElements.Main
             Window.UIElements.TabScrollAdjustment = 5
 
             function Window:CreateTopbarButton(

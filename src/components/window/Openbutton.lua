@@ -1,35 +1,17 @@
-local OpenButton = {}
+local OpenButtonModule = {}
 
 local Creator = require("../../modules/Creator")
 local New = Creator.New
 local Tween = Creator.Tween
 
-
 local cloneref = (cloneref or clonereference or function(instance) return instance end)
-
-
 local UserInputService = cloneref(game:GetService("UserInputService"))
 
-
-function OpenButton.New(Window)
+function OpenButtonModule.New(Window)
     local OpenButtonMain = {
         Button = nil
     }
     
-    local Icon
-    
-    
-    
-    -- Icon = New("ImageLabel", {
-    --     Image = "",
-    --     Size = UDim2.new(0,22,0,22),
-    --     Position = UDim2.new(0.5,0,0.5,0),
-    --     LayoutOrder = -1,
-    --     AnchorPoint = Vector2.new(0.5,0.5),
-    --     BackgroundTransparency = 1,
-    --     Name = "Icon"
-    -- })
-
     local Title = New("TextLabel", {
         Text = "INTIHUB",
         TextSize = 13,
@@ -39,20 +21,14 @@ function OpenButton.New(Window)
         ThemeTag = {
             TextColor3 = "Accent",
         },
-    })
-
-
-    local Divider = New("Frame", {
-        Size = UDim2.new(0,1,0,18),
-        BackgroundColor3 = Color3.fromHex("#FFD700"),
-        BackgroundTransparency = .8,
-        BorderSizePixel = 0,
+        LayoutOrder = 1,
     })
 
     local LiveTag = New("Frame", {
         Size = UDim2.new(0,45,0,20),
         BackgroundColor3 = Color3.new(1,1,1),
         BackgroundTransparency = .92,
+        LayoutOrder = 2,
     }, {
         New("UICorner", { CornerRadius = UDim.new(1,0) }),
         New("Frame", {
@@ -89,11 +65,11 @@ function OpenButton.New(Window)
     local UIScale = New("UIScale", { Scale = 1 })
 
     local Button = New("Frame", {
-        Size = UDim2.new(0, 160, 0, 32), -- Fixed width as requested (corto)
+        Size = UDim2.new(0, 160, 0, 32),
         AutomaticSize = "None",
         Parent = Container,
         BackgroundColor3 = Color3.fromHex("#0F0D00"),
-        BackgroundTransparency = .2,
+        BackgroundTransparency = .4,
     }, {
         UIScale,
 	    New("UICorner", { CornerRadius = UDim.new(0,10) }),
@@ -105,18 +81,18 @@ function OpenButton.New(Window)
         }),
         
         New("UIPadding", {
-            PaddingLeft = UDim.new(0,10),
-            PaddingRight = UDim.new(0,10),
+            PaddingLeft = UDim.new(0,15),
+            PaddingRight = UDim.new(0,15),
         }),
         
         New("UIListLayout", {
-            Padding = UDim.new(0, 10),
+            Padding = UDim.new(0, 12),
             FillDirection = "Horizontal",
             VerticalAlignment = "Center",
+            HorizontalAlignment = "Center",
             SortOrder = "LayoutOrder",
         }),
 
-        -- Removed folder icon/drag frame
         Title,
         LiveTag,
 
@@ -124,13 +100,14 @@ function OpenButton.New(Window)
             Size = UDim2.new(1,0,1,0),
             BackgroundTransparency = 1,
             Text = "",
-            ZIndex = 11, -- Ensure it's on top
-        }, {
-            New("UIScale", { Scale = 1 })
+            ZIndex = 11,
+            Name = "ClickButton"
         })
     })
 
-    Creator.AddSignal(Button.TextButton.MouseButton1Click, function()
+    local DragModule = Creator.Drag(Container)
+
+    Creator.AddSignal(Button.ClickButton.MouseButton1Click, function()
         Window:Open()
     end)
 
@@ -149,48 +126,6 @@ function OpenButton.New(Window)
         end
     end)
     
-    OpenButtonMain.Button = Button
-
-    function OpenButtonMain:SetIcon(newIcon)
-        if Icon then
-            Icon:Destroy()
-        end
-        if newIcon then
-            Icon = Creator.Image(
-                newIcon,
-                Window.Title,
-                0,
-                Window.Folder,
-                "OpenButton",
-                true,
-                Window.IconThemed
-            )
-            Icon.Size = UDim2.new(0, 16, 0, 16)
-            Icon.LayoutOrder = -1 -- Ensure it's before Divider
-            Icon.Parent = Button
-        end
-    end
-    
-    if Window.Icon then
-        OpenButtonMain:SetIcon(Window.Icon)
-    end
-
-    Creator.AddSignal(Button:GetPropertyChangedSignal("AbsoluteSize"), function()
-        Container.Size = UDim2.new(
-            0, Button.AbsoluteSize.X,
-            0, Button.AbsoluteSize.Y
-        )
-    end)
-    
-    Creator.AddSignal(Button.TextButton.MouseEnter, function()
-        Tween(Button, .2, {BackgroundTransparency = 0}):Play()
-    end)
-    Creator.AddSignal(Button.TextButton.MouseLeave, function()
-        Tween(Button, .2, {BackgroundTransparency = .1}):Play()
-    end)
-    
-    local DragModule = Creator.Drag(Container)
-    
     function OpenButtonMain:Visible(v)
         Container.Visible = v
     end
@@ -198,73 +133,22 @@ function OpenButton.New(Window)
     function OpenButtonMain:SetScale(scale)
         UIScale.Scale = scale
     end
+
+    function OpenButtonMain:SetIcon()
+        -- Disabled for Noble Deluxe
+    end
     
     function OpenButtonMain:Edit(OpenButtonConfig)
-        local OpenButtonModule = {
-            Title = OpenButtonConfig.Title,
-            Icon = OpenButtonConfig.Icon,
-            Enabled = OpenButtonConfig.Enabled,
-            Position = OpenButtonConfig.Position,
-            OnlyIcon = OpenButtonConfig.OnlyIcon or false,
-            Draggable = OpenButtonConfig.Draggable or nil,
-            OnlyMobile = OpenButtonConfig.OnlyMobile,
-            CornerRadius = OpenButtonConfig.CornerRadius or UDim.new(0, 6),
-            StrokeThickness = OpenButtonConfig.StrokeThickness or 1,
-            Scale = OpenButtonConfig.Scale or 1,
-            Color = OpenButtonConfig.Color 
-                or ColorSequence.new({
-                    ColorSequenceKeypoint.new(0, Color3.fromHex("#FFD700")),
-                    ColorSequenceKeypoint.new(1, Color3.fromHex("#FFD700")),
-                }),
-        }
-        
-        if OpenButtonModule.Enabled == false then
-            Window.IsOpenButtonEnabled = false
+        if OpenButtonConfig.Title then
+            Title.Text = OpenButtonConfig.Title:upper()
         end
-        
-        if OpenButtonModule.Draggable == false and Drag and Divider then
-            Drag.Visible = OpenButtonModule.Draggable
-            if DragModule then
-                DragModule:Set(OpenButtonModule.Draggable)
-            end
+        if OpenButtonConfig.Scale then
+            OpenButtonMain:SetScale(OpenButtonConfig.Scale)
         end
-        
-        if OpenButtonModule.Position and Container then
-            Container.Position = OpenButtonModule.Position
-        end
-        
-        if OpenButtonModule.OnlyIcon == true then
-            Title.Visible = false
-            Divider.Visible = false
-            LiveTag.Visible = false
-        else
-            Title.Visible = true
-            Divider.Visible = true
-            LiveTag.Visible = true
-        end
-        
-        if OpenButtonModule.Title then
-            Title.Text = OpenButtonModule.Title:upper()
-        end
-        
-        if OpenButtonModule.Icon then
-            OpenButtonMain:SetIcon(OpenButtonModule.Icon)
-        end
-
-        local stroke = Button:FindFirstChild("Stroke")
-        if stroke then
-            stroke.Thickness = OpenButtonModule.StrokeThickness
-            -- Handle Color if needed, but we use gold by default
-        end
-
-        Button.UICorner.CornerRadius = OpenButtonModule.CornerRadius
-        OpenButtonMain:SetScale(OpenButtonModule.Scale)
     end
 
-
+    OpenButtonMain.Button = Button
     return OpenButtonMain
 end
 
-
-
-return OpenButton
+return OpenButtonModule
