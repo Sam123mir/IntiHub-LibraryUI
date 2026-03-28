@@ -1602,13 +1602,7 @@ return function(Config)
 		end
 	end
 
-	if Window.OpenButtonMain and Window.OpenButtonMain.Button then
-		Creator.AddSignal(Window.OpenButtonMain.Button.TextButton.MouseButton1Click, function()
-			-- OpenButtonContainer.Visible = false
-			--Window.OpenButtonMain:Visible(false)
-			Window:Open()
-		end)
-	end
+	-- OpenButton click is handled within the Openbutton module
 
 	Creator.AddSignal(UserInputService.InputBegan, function(input, isProcessed)
 		if isProcessed then

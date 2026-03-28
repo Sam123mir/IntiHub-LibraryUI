@@ -12435,13 +12435,6 @@ do
                 end
             end
 
-            if Window.OpenButtonMain and Window.OpenButtonMain.Button then
-                Creator.AddSignal(Window.OpenButtonMain.Button.TextButton.MouseButton1Click, function(
-                )
-                    Window:Open()
-                end)
-            end
-
             Creator.AddSignal(UserInputService.InputBegan, function(
                 input,
                 isProcessed
