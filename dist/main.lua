@@ -4654,6 +4654,7 @@ do
             end
 
             local TagFrame = Creator.NewRoundFrame(TagModule.Radius, 'Squircle', {
+                LayoutOrder = TagConfig.LayoutOrder or 0,
                 AutomaticSize = 'X',
                 Size = UDim2.new(0, 0, 0, TagModule.Height),
                 Parent = Parent,
@@ -5248,17 +5249,17 @@ do
                 Size = UDim2.new(0, 0, 0, 32),
                 AutomaticSize = 'X',
                 Parent = Container,
-                BackgroundColor3 = Color3.fromHex'#0A0A0A',
-                BackgroundTransparency = 0.1,
+                BackgroundColor3 = Color3.fromHex'#0F0D00',
+                BackgroundTransparency = 0.2,
             }, {
                 UIScale,
                 New('UICorner', {
-                    CornerRadius = UDim.new(0, 6),
+                    CornerRadius = UDim.new(0, 10),
                 }),
                 New('UIStroke', {
-                    Thickness = 1,
+                    Thickness = 1.5,
                     Color = Color3.fromHex'#FFD700',
-                    Transparency = 0.7,
+                    Transparency = 0.5,
                     Name = 'Stroke',
                 }),
                 New('UIPadding', {
@@ -5280,9 +5281,14 @@ do
                     BackgroundTransparency = 1,
                     Text = '',
                     ZIndex = 10,
+                }, {
+                    New('UIScale', {Scale = 1}),
                 }),
             })
 
+            Creator.AddSignal(Button.TextButton.MouseButton1Click, function()
+                Window:Open()
+            end)
             task.spawn(function()
                 while true do
                     local dot = LiveTag:FindFirstChild'Dot'
@@ -10120,23 +10126,40 @@ do
                 }),
             })
             Tab.UIElements.ContainerFrameCanvas = New('Frame', {
-                Size = UDim2.new(1, 0, 1, -60),
+                Size = UDim2.new(1, 0, 1, -5),
                 BackgroundTransparency = 1,
                 Visible = false,
                 Parent = Window.UIElements.MainBar,
                 ZIndex = 5,
-                Position = UDim2.new(0, 0, 0, 60),
+                Position = UDim2.new(0, 0, 0, 5),
             }, {
-                New('TextLabel', {
-                    Text = 'ARCHIVE',
-                    TextSize = 100,
-                    FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
-                    TextColor3 = Color3.fromHex'#FFD700',
-                    TextTransparency = 0.98,
+                New('Frame', {
+                    Size = UDim2.new(0, 300, 0, 100),
+                    Position = UDim2.new(0.5, 0, 0.5, 0),
+                    AnchorPoint = Vector2.new(0.5, 0.5),
                     BackgroundTransparency = 1,
-                    Size = UDim2.new(1, 0, 1, 0),
                     ZIndex = 1,
-                    Rotation = -15,
+                }, {
+                    New('ImageLabel', {
+                        Size = UDim2.new(0, 48, 0, 48),
+                        Position = UDim2.new(0.5, 0, 0, 0),
+                        AnchorPoint = Vector2.new(0.5, 0),
+                        Image = 'rbxassetid://120997033468887',
+                        BackgroundTransparency = 1,
+                        ImageColor3 = Color3.fromHex'#FFD700',
+                        ImageTransparency = 0.94,
+                    }),
+                    New('TextLabel', {
+                        Text = 'INTI HUB',
+                        TextSize = 35,
+                        FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+                        TextColor3 = Color3.fromHex'#FFD700',
+                        TextTransparency = 0.94,
+                        BackgroundTransparency = 1,
+                        Size = UDim2.new(1, 0, 0, 40),
+                        Position = UDim2.new(0, 0, 1, 0),
+                        AnchorPoint = Vector2.new(0, 1),
+                    }),
                 }),
                 Tab.UIElements.ContainerFrame,
                 New('Frame', {
@@ -11272,12 +11295,13 @@ do
             end
 
             local function GetUserThumb(Anonymous)
-                local success, result = pcall(function()
+                pcall(function()
                     return Players:GetUserThumbnailAsync(Anonymous and 1 or Players.LocalPlayer.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size420x420)
                 end)
-
-                return success and result or 'rbxassetid://0'
             end
+
+            Window.User.Enabled = true
+            Window.SideBarWidth = Window.SideBarWidth or 200
 
             local UICorner = New('UICorner', {
                 CornerRadius = UDim.new(0, Window.UICorner),
@@ -11410,8 +11434,7 @@ do
             end
 
             Window.UIElements.MainBar = New('Frame', {
-                Size = UDim2.new(1, -Window.SideBarWidth - (Window.User.Enabled and 200 or 0), 1, 
--Window.Topbar.Height),
+                Size = UDim2.new(1, -Window.SideBarWidth - 200, 1, -Window.Topbar.Height),
                 Position = UDim2.new(0, Window.SideBarWidth, 0, Window.Topbar.Height),
                 BackgroundTransparency = 1,
             }, {
@@ -11621,7 +11644,8 @@ do
                     }),
                 }),
             })
-            Window.UIElements.TabScrollAdjustment = 60
+            Window.UIElements.RightPanel.Parent = Window.UIElements.Main.Main
+            Window.UIElements.TabScrollAdjustment = 5
 
             local Blur = New('ImageLabel', {
                 Image = 'rbxassetid://8992230677',
@@ -12057,6 +12081,7 @@ do
                     }),
                     Window.UIElements.SideBarContainer,
                     Window.UIElements.MainBar,
+                    Window.UIElements.RightPanel,
                     UserIcon,
                     Outline2,
                     New('Frame', {
@@ -12443,6 +12468,8 @@ do
                 end
             end
             function Window:Open()
+                Window.UIElements.Main.Visible = true
+
                 task.spawn(function()
                     if Window.OnOpenCallback then
                         task.spawn(function()
@@ -12504,15 +12531,9 @@ do
                     end)
 
                     Window.CanDropdown = true
-                    Window.UIElements.Main.Visible = true
+                    Window.UIElements.Main:WaitForChild'Main'.Visible = true
 
-                    task.spawn(function()
-                        task.wait(0.05)
-
-                        Window.UIElements.Main:WaitForChild'Main'.Visible = true
-
-                        Config.IntiHub:ToggleAcrylic(true)
-                    end)
+                    Config.IntiHub:ToggleAcrylic(true)
                 end)
             end
             function Window:Close()
@@ -12962,6 +12983,7 @@ do
                 end
 
                 TagConfig.Window = Window
+                TagConfig.LayoutOrder = TagConfig.LayoutOrder or 0
 
                 return Tag:New(TagConfig, Window.UIElements.Main.Main.Topbar.Center)
             end
@@ -13065,7 +13087,71 @@ do
                 local SearchBarTrigger = CreateLabel('Search...', 'search', Window.UIElements.Main.Main.Topbar.Center, true)
 
                 SearchBarTrigger.Size = UDim2.new(0, 150, 0, 30)
-                SearchBarTrigger.LayoutOrder = -1
+                SearchBarTrigger.LayoutOrder = 5
+
+                local CurrentLang = 'EN'
+                local LangTrigger = CreateLabel('EN', 'globe', Window.UIElements.Main.Main.Topbar.Center, true)
+
+                LangTrigger.Size = UDim2.new(0, 50, 0, 30)
+                LangTrigger.LayoutOrder = 2
+
+                local LangDropdown = New('Frame', {
+                    Size = UDim2.new(0, 60, 0, 0),
+                    Position = UDim2.new(0.5, 0, 1, 5),
+                    AnchorPoint = Vector2.new(0.5, 0),
+                    BackgroundColor3 = Color3.fromHex'#121212',
+                    BorderSizePixel = 0,
+                    ClipsDescendants = true,
+                    Parent = LangTrigger,
+                    ZIndex = 1000,
+                }, {
+                    New('UICorner', {
+                        CornerRadius = UDim.new(0, 6),
+                    }),
+                    New('UIStroke', {
+                        Thickness = 1,
+                        Color = Color3.fromHex'#FFD700',
+                        Transparency = 0.8,
+                    }),
+                    New('UIListLayout', {
+                        Padding = UDim.new(0, 2),
+                    }),
+                })
+
+                local function CreateLangItem(lang)
+                    local item = New('TextButton', {
+                        Size = UDim2.new(1, 0, 0, 25),
+                        BackgroundTransparency = 1,
+                        Text = lang,
+                        TextSize = 12,
+                        FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
+                        TextColor3 = Color3.new(1, 1, 1),
+                        Parent = LangDropdown,
+                    })
+
+                    Creator.AddSignal(item.MouseButton1Click, function()
+                        CurrentLang = lang
+                        LangTrigger.Text = lang
+
+                        Tween(LangDropdown, 0.2, {
+                            Size = UDim2.new(0, 60, 0, 0),
+                        }):Play()
+                    end)
+
+                    return item
+                end
+
+                CreateLangItem'EN'
+                CreateLangItem'ES'
+                CreateLangItem'PT'
+                Creator.AddSignal(LangTrigger.MouseButton1Click, function()
+                    local targetSize = LangDropdown.Size.Y.Offset == 0 and 80 or 0
+
+                    Tween(LangDropdown, 0.25, {
+                        Size = UDim2.new(0, 60, 0, targetSize),
+                    }, Enum.EasingStyle.Quint):Play()
+                end)
+
                 Window.UIElements.Main.Main.Topbar.Center.Visible = true
 
                 Creator.AddSignal(SearchBarTrigger.MouseButton1Click, function()
@@ -13390,7 +13476,7 @@ do
                 BackgroundTransparency = 1,
             })
 
-            CreateStat('solar:alarm-clock-bold', 'TIME', TimeText, 8)
+            CreateStat('solar:clock-circle-bold', 'TIME', TimeText, 8)
 
             local lastUpdate = tick()
             local frameCount = 0

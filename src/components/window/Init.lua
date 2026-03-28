@@ -1595,9 +1595,7 @@ return function(Config)
 
 			Window.CanDropdown = true
             Window.UIElements.Main:WaitForChild("Main").Visible = true
-
-				Config.IntiHub:ToggleAcrylic(true)
-			end)
+            Config.IntiHub:ToggleAcrylic(true)
 		end)
 	end
 	function Window:Close()
