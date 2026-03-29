@@ -207,12 +207,14 @@ function NotificationModule.New(Config)
         Position = UDim2.new(2,0,1,0),
         AnchorPoint = Vector2.new(0,1),
         AutomaticSize = "Y",
-        ImageTransparency = .05,
-        ThemeTag = {
-            ImageColor3 = "Notification"
-        },
-        --ZIndex = 20
+        BackgroundColor3 = Color3.fromHex("#0F0D00"),
+        BackgroundTransparency = 0.15,
     }, {
+        New("UIStroke", {
+            Thickness = 2,
+            Color = Color3.fromHex("#FFD700"),
+            Transparency = 0.5,
+        }),
         Creator.NewRoundFrame(NotificationModule.UICorner, "Glass-1", {
             Size = UDim2.new(1,0,1,0),
             ThemeTag = {
@@ -232,11 +234,6 @@ function NotificationModule.New(Config)
             }, {
                 Duration,
             }),
-        
-            -- New("UICorner", {
-            --     CornerRadius = UDim.new(0,NotificationModule.UICorner),
-            -- })
-    
         }),
         New("ImageLabel", {
             Name = "Background",
@@ -245,7 +242,6 @@ function NotificationModule.New(Config)
             Size = UDim2.new(1,0,1,0),
             ScaleType = "Crop",
             ImageTransparency = Notification.BackgroundImageTransparency
-            --ZIndex = 19,
         }, {
             New("UICorner", {
                 CornerRadius = UDim.new(0,NotificationModule.UICorner),

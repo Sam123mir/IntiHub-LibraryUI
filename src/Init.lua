@@ -195,9 +195,9 @@ function IntiHub:ToggleAcrylic(Value)
 	if IntiHub.Window and IntiHub.Window.AcrylicPaint and IntiHub.Window.AcrylicPaint.Model then
 		IntiHub.Window.Acrylic = Value
 		IntiHub.Window.AcrylicPaint.Model.Transparency = Value and 0.98 or 1
-		if Value then
+		if Value and typeof(Acrylic) == "table" and Acrylic.Enable then
 			Acrylic.Enable()
-		else
+		elseif not Value and typeof(Acrylic) == "table" and Acrylic.Disable then
 			Acrylic.Disable()
 		end
 	end

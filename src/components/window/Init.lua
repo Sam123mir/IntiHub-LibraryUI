@@ -30,11 +30,11 @@ return function(Config)
 	local Window = {
 		Title = Config.Title or "UI Library",
 		Author = Config.Author,
-		Icon = Config.Icon,
+		Icon = Config.Icon or "https://raw.githubusercontent.com/Sam123mir/IntiHub-LibraryUI/main/docs/logo.png",
 		IconSize = Config.IconSize or 22,
 		IconThemed = Config.IconThemed,
 		IconRadius = Config.IconRadius or 0,
-		Folder = Config.Folder,
+		Folder = Config.Folder or "IntiHub",
 		Resizable = Config.Resizable ~= false,
 		Background = Config.Background,
 		BackgroundImageTransparency = Config.BackgroundImageTransparency or 0,
@@ -493,70 +493,121 @@ return function(Config)
                 ImageRectSize = Creator.Icon("zap")[2].ImageRectSize,
                 ThemeTag = { ImageColor3 = "Accent" },
             }),
-            New("TextLabel", {
-                Text = "EXECUTOR",
-                TextSize = 9,
-                TextColor3 = Color3.new(1, 1, 1),
-                TextTransparency = .5,
-                Position = UDim2.new(0, 42, 0.3, 0),
-                AnchorPoint = Vector2.new(0, 0.5),
+            New("Frame", {
+                Size = UDim2.new(1, -20, 0, 45),
                 BackgroundTransparency = 1,
-            }),
-            New("TextLabel", {
-                Text = (typeof(identifyexecutor) == "function" and identifyexecutor() or "Xeno"),
-                TextSize = 13,
-                TextColor3 = Color3.new(1, 1, 1),
-                Position = UDim2.new(0, 42, 0.65, 0),
-                AnchorPoint = Vector2.new(0, 0.5),
-                BackgroundTransparency = 1,
-                FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+                Position = UDim2.new(0, 10, 0, 2),
+            }, {
+                New("UIListLayout", {
+                    FillDirection = "Horizontal",
+                    Padding = UDim.new(0, 10),
+                    VerticalAlignment = "Center",
+                }),
+                New("ImageLabel", {
+                    Name = "Avatar",
+                    Size = UDim2.new(0, 32, 0, 32),
+                    BackgroundTransparency = 1,
+                    Image = "rbxthumb://type=AvatarHeadShot&id=" .. (Players.LocalPlayer and Players.LocalPlayer.UserId or 0) .. "&w=150&h=150",
+                }, { New("UICorner", { CornerRadius = UDim.new(1, 0) }) }),
+                New("Frame", {
+                    Size = UDim2.new(1, -42, 1, 0),
+                    BackgroundTransparency = 1,
+                }, {
+                    New("UIListLayout", { VerticalAlignment = "Center", Padding = UDim.new(0, 2) }),
+                    New("TextLabel", {
+                        Text = "@" .. (Players.LocalPlayer and Players.LocalPlayer.Name or "Guest"),
+                        TextSize = 11,
+                        TextColor3 = Color3.fromHex("#FFC300"),
+                        ThemeTag = { TextColor3 = "Accent" },
+                        TextTransparency = 0.5,
+                        AutomaticSize = "XY",
+                        BackgroundTransparency = 1,
+                    }),
+                    New("TextLabel", {
+                        Text = (typeof(identifyexecutor) == "function" and identifyexecutor() or "Xeno"),
+                        TextSize = 13,
+                        TextColor3 = Color3.new(1, 1, 1),
+                        FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+                        AutomaticSize = "XY",
+                        BackgroundTransparency = 1,
+                    })
+                })
             })
         })
     })
 
     Window.UIElements.RightPanel = New("Frame", {
-        Size = UDim2.new(0, 230, 0, 0), -- Fixed width, auto height
+        Size = UDim2.new(0, 230, 0, 0),
         AutomaticSize = "Y",
-        Position = UDim2.new(1, 15, 0, 0), -- Detached by 15px
+        Position = UDim2.new(1, 15, 0, 0),
         BackgroundTransparency = 1,
         Visible = true,
+        ZIndex = 0, -- Slide behind main window
     }, {
-        New("CanvasGroup", { -- For clean fade/slide animations
-            Size = UDim2.new(1,0,1,0),
+        New("CanvasGroup", {
+            Size = UDim2.new(1, 0, 1, 0),
             AutomaticSize = "Y",
             BackgroundTransparency = 1,
             Name = "Group"
         }, {
             Creator.NewRoundFrame(Window.UICorner - (Window.UIPadding/2), "Squircle", {
                 Size = UDim2.new(1, 0, 1, 0),
-                ThemeTag = {
-                    ImageColor3 = "PanelBackground",
-                    ImageTransparency = "PanelBackgroundTransparency",
-                },
+                BackgroundColor3 = Color3.fromHex("#0A0A0A"),
                 ZIndex = 3,
             }, {
                 New("UIStroke", {
                     Thickness = 2,
-                    ApplyStrokeMode = "Border",
+                    ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
                     Color = Color3.fromHex("#FFD700"),
-                    Transparency = .8,
+                }, {
+                    New("UIGradient", {
+                        Color = ColorSequence.new({
+                            ColorSequenceKeypoint.new(0, Color3.fromHex("#FFD700")),
+                            ColorSequenceKeypoint.new(0.5, Color3.fromHex("#4D4300")),
+                            ColorSequenceKeypoint.new(1, Color3.fromHex("#FFD700")),
+                        }),
+                        Rotation = 0,
+                        Name = "GlowTrail"
+                    })
                 })
             }),
             RightPanelContent
         })
     })
 
+    -- Animate Glow Trail
+    task.spawn(function()
+        local Gradient = Window.UIElements.RightPanel.Group.Squircle.UIStroke.GlowTrail
+        while true do
+            for i = 0, 360, 2 do
+                Gradient.Rotation = i
+                task.wait(0.02)
+                if not Window.UIElements.RightPanel then break end
+            end
+            if not Window.UIElements.RightPanel then break end
+        end
+    end)
+
     function Window:ToggleRightPanel()
         local Panel = Window.UIElements.RightPanel
+        local Button = Window.TopBarButtons["SidebarToggle"]
         local Visible = not Panel.Visible
         
         if Visible then
             Panel.Visible = true
-            Tween(Panel, 0.4, { Position = UDim2.new(1, 15, 0, 0) }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+            if Button then 
+                Tween(Button.Icon, 0.3, { Rotation = 0 }):Play()
+                Button.Icon.Image = Creator.Icon("chevron-left")[1]
+            end
+            Tween(Panel, 0.5, { Position = UDim2.new(1, 15, 0, 0) }, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
         else
-            local tween = Tween(Panel, 0.4, { Position = UDim2.new(1, 300, 0, 0) }, Enum.EasingStyle.Quint, Enum.EasingDirection.In)
+            if Button then 
+                Tween(Button.Icon, 0.3, { Rotation = 180 }):Play()
+                Button.Icon.Image = Creator.Icon("chevron-right")[1]
+            end
+            local tween = Tween(Panel, 0.4, { Position = UDim2.new(1, -210, 0, 0) }, Enum.EasingStyle.Quint, Enum.EasingDirection.In)
             tween.Completed:Connect(function()
-                if not Panel.Visible then Panel.Visible = false end
+                if not Visible then Panel.Visible = false end
             end)
             tween:Play()
         end

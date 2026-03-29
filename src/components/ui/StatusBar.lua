@@ -140,7 +140,7 @@ function StatusBar.New(Config)
 			}),
 		}),
 		New("TextLabel", {
-			Text = Window.Title or "INTIHUB",
+			Text = "INTIHUB",
 			TextSize = 16,
 			FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
 			TextColor3 = Color3.fromHex("#FFC300"),
@@ -161,22 +161,6 @@ function StatusBar.New(Config)
 		Parent = UI,
 		LayoutOrder = 2,
 	})
-
-	-- Game Section
-	local ProductName = "Unknown Game"
-	pcall(function()
-		ProductName = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name
-	end)
-
-	local GameText = New("TextLabel", {
-		Text = ProductName,
-		TextSize = 14,
-		FontFace = Font.new(Creator.Font, Enum.FontWeight.SemiBold),
-		TextColor3 = Color3.new(1, 1, 1),
-		AutomaticSize = "XY",
-		BackgroundTransparency = 1,
-	})
-	CreateStat("solar:gamepad-minimalistic-bold", "GAME", GameText, 3)
 
 	local PingText = New("TextLabel", {
 		Text = "0 ms",

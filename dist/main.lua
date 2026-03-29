@@ -1420,11 +1420,14 @@ do
                 Position = UDim2.new(2, 0, 1, 0),
                 AnchorPoint = Vector2.new(0, 1),
                 AutomaticSize = 'Y',
-                ImageTransparency = 0.05,
-                ThemeTag = {
-                    ImageColor3 = 'Notification',
-                },
+                BackgroundColor3 = Color3.fromHex'#0F0D00',
+                BackgroundTransparency = 0.15,
             }, {
+                New('UIStroke', {
+                    Thickness = 2,
+                    Color = Color3.fromHex'#FFD700',
+                    Transparency = 0.5,
+                }),
                 Creator.NewRoundFrame(NotificationModule.UICorner, 'Glass-1', {
                     Size = UDim2.new(1, 0, 1, 0),
                     ThemeTag = {
@@ -3778,31 +3781,29 @@ do
             AcrylicBlur = __DARKLUA_BUNDLE_MODULES.load'q',
             AcrylicPaint = __DARKLUA_BUNDLE_MODULES.load'r',
         }
+        local baseEffect = Instance.new'DepthOfFieldEffect'
 
+        baseEffect.FarIntensity = 0
+        baseEffect.InFocusRadius = 0.1
+        baseEffect.NearIntensity = 1
+
+        local depthOfFieldDefaults = {}
+
+        function Acrylic.Enable()
+            for _, effect in pairs(depthOfFieldDefaults)do
+                effect.Enabled = false
+            end
+
+            baseEffect.Parent = cloneref(game:GetService'Lighting')
+        end
+        function Acrylic.Disable()
+            for _, effect in pairs(depthOfFieldDefaults)do
+                effect.Enabled = effect.enabled
+            end
+
+            baseEffect.Parent = nil
+        end
         function Acrylic.init()
-            local baseEffect = Instance.new'DepthOfFieldEffect'
-
-            baseEffect.FarIntensity = 0
-            baseEffect.InFocusRadius = 0.1
-            baseEffect.NearIntensity = 1
-
-            local depthOfFieldDefaults = {}
-
-            function Acrylic.Enable()
-                for _, effect in pairs(depthOfFieldDefaults)do
-                    effect.Enabled = false
-                end
-
-                baseEffect.Parent = cloneref(game:GetService'Lighting')
-            end
-            function Acrylic.Disable()
-                for _, effect in pairs(depthOfFieldDefaults)do
-                    effect.Enabled = effect.enabled
-                end
-
-                baseEffect.Parent = nil
-            end
-
             local function registerDefaults()
                 local function register(object)
                     if object:IsA'DepthOfFieldEffect' then
@@ -5177,23 +5178,41 @@ do
                 New('UIListLayout', {
                     FillDirection = 'Horizontal',
                     VerticalAlignment = 'Center',
-                    Padding = UDim.new(0, 2),
+                    Padding = UDim.new(0, 6),
                 }),
-                New('TextLabel', {
-                    Text = 'INTI',
-                    TextSize = 13,
-                    FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+                New('ImageLabel', {
+                    Name = 'Logo',
+                    Size = UDim2.new(0, 20, 0, 20),
+                    BackgroundTransparency = 1,
+                    Image = Creator.GetAsset(
+[[https://raw.githubusercontent.com/Sam123mir/IntiHub-LibraryUI/main/docs/logo.png]], 'IntiHub', 'Image', 'Logo'),
+                }),
+                New('Frame', {
+                    Name = 'TextGroup',
                     BackgroundTransparency = 1,
                     AutomaticSize = 'XY',
-                    TextColor3 = Color3.fromHex'#FFD700',
-                }),
-                New('TextLabel', {
-                    Text = 'HUB',
-                    TextSize = 13,
-                    FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
-                    BackgroundTransparency = 1,
-                    AutomaticSize = 'XY',
-                    TextColor3 = Color3.fromHex'#000000',
+                }, {
+                    New('UIListLayout', {
+                        FillDirection = 'Horizontal',
+                        VerticalAlignment = 'Center',
+                        Padding = UDim.new(0, 2),
+                    }),
+                    New('TextLabel', {
+                        Text = 'INTI',
+                        TextSize = 13,
+                        FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+                        BackgroundTransparency = 1,
+                        AutomaticSize = 'XY',
+                        TextColor3 = Color3.fromHex'#FFD700',
+                    }),
+                    New('TextLabel', {
+                        Text = 'HUB',
+                        TextSize = 13,
+                        FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+                        BackgroundTransparency = 1,
+                        AutomaticSize = 'XY',
+                        TextColor3 = Color3.fromHex'#FFFFFF',
+                    }),
                 }),
             })
             local DragHandle = New('ImageLabel', {
@@ -5225,10 +5244,10 @@ do
             local Button = New('Frame', {
                 Name = 'Bar',
                 AutomaticSize = 'X',
-                Size = UDim2.new(0, 100, 0, 32),
+                Size = UDim2.new(0, 120, 0, 32),
                 Parent = Container,
-                BackgroundColor3 = Color3.fromHex'#0F0D00',
-                BackgroundTransparency = 0.35,
+                BackgroundColor3 = Color3.fromHex'#0A0A0A',
+                BackgroundTransparency = 0.1,
                 AnchorPoint = Vector2.new(0.5, 0.5),
                 Position = UDim2.new(0.5, 0, 0.5, 0),
             }, {
@@ -5236,9 +5255,19 @@ do
                     CornerRadius = UDim.new(0, 8),
                 }),
                 New('UIStroke', {
-                    Thickness = 1.2,
+                    Thickness = 2,
+                    ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
                     Color = Color3.fromHex'#FFD700',
-                    Transparency = 0.5,
+                }, {
+                    New('UIGradient', {
+                        Color = ColorSequence.new{
+                            ColorSequenceKeypoint.new(0, Color3.fromHex'#FFD700'),
+                            ColorSequenceKeypoint.new(0.5, Color3.fromHex'#4D4300'),
+                            ColorSequenceKeypoint.new(1, Color3.fromHex'#FFD700'),
+                        },
+                        Rotation = 0,
+                        Name = 'GlowTrail',
+                    }),
                 }),
                 New('UIPadding', {
                     PaddingLeft = UDim.new(0, 12),
@@ -5262,6 +5291,27 @@ do
                 }),
             })
 
+            task.spawn(function()
+                local Gradient = Button:FindFirstChild'UIStroke' and Button.UIStroke:FindFirstChild'GlowTrail'
+
+                if Gradient then
+                    while true do
+                        for i = 0, 360, 2 do
+                            Gradient.Rotation = i
+
+                            task.wait(0.02)
+
+                            if not Button.Parent then
+                                break
+                            end
+                        end
+
+                        if not Button.Parent then
+                            break
+                        end
+                    end
+                end
+            end)
             Creator.Drag(Container)
             Creator.AddSignal(Button.OpenTrigger.MouseButton1Click, function()
                 Window:Open()
@@ -6770,20 +6820,34 @@ do
                 IconFrom,
                 Slider.UIElements.SliderIcon,
                 IconTo,
-                New('TextBox', {
-                    Size = UDim2.new(0, Slider.TextBoxWidth, 0, 0),
-                    TextXAlignment = 'Left',
-                    Text = FormatValue(Value),
-                    ThemeTag = {
-                        TextColor3 = 'Text',
-                    },
-                    TextTransparency = 0.4,
-                    AutomaticSize = 'Y',
-                    TextSize = 15,
-                    FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
-                    BackgroundTransparency = 1,
-                    LayoutOrder = -1,
+                New('Frame', {
+                    Size = UDim2.new(0, Slider.TextBoxWidth + 10, 0, 22),
+                    BackgroundColor3 = Color3.fromHex'#0F0D00',
+                    BackgroundTransparency = 0.5,
                     Visible = Slider.IsTextbox,
+                    LayoutOrder = -1,
+                }, {
+                    New('UICorner', {
+                        CornerRadius = UDim.new(0, 4),
+                    }),
+                    New('UIStroke', {
+                        Thickness = 1,
+                        Color = Color3.fromHex'#FFD700',
+                        Transparency = 0.5,
+                    }),
+                    New('TextBox', {
+                        Size = UDim2.new(1, 0, 1, 0),
+                        TextXAlignment = 'Center',
+                        Text = FormatValue(Value),
+                        ThemeTag = {
+                            TextColor3 = 'Text',
+                        },
+                        TextTransparency = 0.2,
+                        TextSize = 13,
+                        FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+                        BackgroundTransparency = 1,
+                        Name = 'TextBox',
+                    }),
                 }),
             })
 
@@ -7309,6 +7373,7 @@ do
                 Size = UDim2.new(1, 0, 1, 0),
                 AnchorPoint = Vector2.new(1, 0),
                 Position = UDim2.new(1, 0, 0, 0),
+                Name = 'MenuFrame',
             }, {
                 New('UIPadding', {
                     PaddingTop = UDim.new(0, Element.MenuPadding),
@@ -7322,7 +7387,8 @@ do
                 }),
                 New('Frame', {
                     BackgroundTransparency = 1,
-                    Size = UDim2.new(1, 0, 1, Dropdown.SearchBarEnabled and -Element.MenuPadding - Element.SearchBarHeight),
+                    Size = UDim2.new(1, 0, 1, Dropdown.SearchBarEnabled and -Element.MenuPadding - Element.SearchBarHeight or 0),
+                    Name = 'ContentContainer',
                     ClipsDescendants = true,
                     LayoutOrder = 999,
                 }, {
@@ -7337,6 +7403,7 @@ do
                         CanvasSize = UDim2.new(0, 0, 0, 0),
                         BackgroundTransparency = 1,
                         ScrollBarImageTransparency = 1,
+                        Name = 'ScrollingFrame',
                     }, {
                         Dropdown.UIElements.UIListLayout,
                     }),
@@ -7350,6 +7417,8 @@ do
                 Active = false,
                 Parent = Config.IntiHub.DropdownGui,
                 AnchorPoint = Vector2.new(1, 0),
+                Name = 'DropdownCanvas',
+                ZIndex = 1000,
             }, {
                 Dropdown.UIElements.Menu,
                 New('UISizeConstraint', {
@@ -7359,7 +7428,11 @@ do
             })
 
             local function RecalculateCanvasSize()
-                Dropdown.UIElements.Menu.Frame.ScrollingFrame.CanvasSize = UDim2.fromOffset(0, Dropdown.UIElements.UIListLayout.AbsoluteContentSize.Y)
+                local scroller = Dropdown.UIElements.Menu:FindFirstChild'ContentContainer' and Dropdown.UIElements.Menu.ContentContainer:FindFirstChild'ScrollingFrame'
+
+                if scroller then
+                    scroller.CanvasSize = UDim2.fromOffset(0, Dropdown.UIElements.UIListLayout.AbsoluteContentSize.Y)
+                end
             end
             local function RecalculateListSize()
                 local MaxHeight = CurrentCamera.ViewportSize.Y * 0.6
@@ -11090,11 +11163,12 @@ do
             local Window = {
                 Title = Config.Title or 'UI Library',
                 Author = Config.Author,
-                Icon = Config.Icon,
+                Icon = Config.Icon or 
+[[https://raw.githubusercontent.com/Sam123mir/IntiHub-LibraryUI/main/docs/logo.png]],
                 IconSize = Config.IconSize or 22,
                 IconThemed = Config.IconThemed,
                 IconRadius = Config.IconRadius or 0,
-                Folder = Config.Folder,
+                Folder = Config.Folder or 'IntiHub',
                 Resizable = Config.Resizable ~= false,
                 Background = Config.Background,
                 BackgroundImageTransparency = Config.BackgroundImageTransparency or 0,
@@ -11506,23 +11580,54 @@ do
                             ImageColor3 = 'Accent',
                         },
                     }),
-                    New('TextLabel', {
-                        Text = 'EXECUTOR',
-                        TextSize = 9,
-                        TextColor3 = Color3.new(1, 1, 1),
-                        TextTransparency = 0.5,
-                        Position = UDim2.new(0, 42, 0.3, 0),
-                        AnchorPoint = Vector2.new(0, 0.5),
+                    New('Frame', {
+                        Size = UDim2.new(1, -20, 0, 45),
                         BackgroundTransparency = 1,
-                    }),
-                    New('TextLabel', {
-                        Text = (typeof(identifyexecutor) == 'function' and identifyexecutor() or 'Xeno'),
-                        TextSize = 13,
-                        TextColor3 = Color3.new(1, 1, 1),
-                        Position = UDim2.new(0, 42, 0.65, 0),
-                        AnchorPoint = Vector2.new(0, 0.5),
-                        BackgroundTransparency = 1,
-                        FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+                        Position = UDim2.new(0, 10, 0, 2),
+                    }, {
+                        New('UIListLayout', {
+                            FillDirection = 'Horizontal',
+                            Padding = UDim.new(0, 10),
+                            VerticalAlignment = 'Center',
+                        }),
+                        New('ImageLabel', {
+                            Name = 'Avatar',
+                            Size = UDim2.new(0, 32, 0, 32),
+                            BackgroundTransparency = 1,
+                            Image = 'rbxthumb://type=AvatarHeadShot&id=' .. (Players.LocalPlayer and Players.LocalPlayer.UserId or 0) .. '&w=150&h=150',
+                        }, {
+                            New('UICorner', {
+                                CornerRadius = UDim.new(1, 0),
+                            }),
+                        }),
+                        New('Frame', {
+                            Size = UDim2.new(1, -42, 1, 0),
+                            BackgroundTransparency = 1,
+                        }, {
+                            New('UIListLayout', {
+                                VerticalAlignment = 'Center',
+                                Padding = UDim.new(0, 2),
+                            }),
+                            New('TextLabel', {
+                                Text = '@' .. (Players.LocalPlayer and Players.LocalPlayer.Name or 'Guest'),
+                                TextSize = 11,
+                                TextColor3 = Color3.fromHex'#FFC300',
+                                ThemeTag = {
+                                    TextColor3 = 'Accent',
+                                },
+                                TextTransparency = 0.5,
+                                AutomaticSize = 'XY',
+                                BackgroundTransparency = 1,
+                            }),
+                            New('TextLabel', {
+                                Text = (typeof(identifyexecutor) == 'function' and identifyexecutor() or 'Xeno'),
+                                TextSize = 13,
+                                TextColor3 = Color3.new(1, 1, 1),
+                                FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+                                AutomaticSize = 'XY',
+                                BackgroundTransparency = 1,
+                            }),
+                        }),
                     }),
                 }),
             })
@@ -11533,6 +11638,7 @@ do
                 Position = UDim2.new(1, 15, 0, 0),
                 BackgroundTransparency = 1,
                 Visible = true,
+                ZIndex = 0,
             }, {
                 New('CanvasGroup', {
                     Size = UDim2.new(1, 0, 1, 0),
@@ -11542,40 +11648,79 @@ do
                 }, {
                     Creator.NewRoundFrame(Window.UICorner - (Window.UIPadding / 2), 'Squircle', {
                         Size = UDim2.new(1, 0, 1, 0),
-                        ThemeTag = {
-                            ImageColor3 = 'PanelBackground',
-                            ImageTransparency = 'PanelBackgroundTransparency',
-                        },
+                        BackgroundColor3 = Color3.fromHex'#0A0A0A',
                         ZIndex = 3,
                     }, {
                         New('UIStroke', {
                             Thickness = 2,
-                            ApplyStrokeMode = 'Border',
+                            ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
                             Color = Color3.fromHex'#FFD700',
-                            Transparency = 0.8,
+                        }, {
+                            New('UIGradient', {
+                                Color = ColorSequence.new{
+                                    ColorSequenceKeypoint.new(0, Color3.fromHex'#FFD700'),
+                                    ColorSequenceKeypoint.new(0.5, Color3.fromHex'#4D4300'),
+                                    ColorSequenceKeypoint.new(1, Color3.fromHex'#FFD700'),
+                                },
+                                Rotation = 0,
+                                Name = 'GlowTrail',
+                            }),
                         }),
                     }),
                     RightPanelContent,
                 }),
             })
 
+            task.spawn(function()
+                local Gradient = Window.UIElements.RightPanel.Group.Squircle.UIStroke.GlowTrail
+
+                while true do
+                    for i = 0, 360, 2 do
+                        Gradient.Rotation = i
+
+                        task.wait(0.02)
+
+                        if not Window.UIElements.RightPanel then
+                            break
+                        end
+                    end
+
+                    if not Window.UIElements.RightPanel then
+                        break
+                    end
+                end
+            end)
+
             function Window:ToggleRightPanel()
                 local Panel = Window.UIElements.RightPanel
+                local Button = Window.TopBarButtons['SidebarToggle']
                 local Visible = not Panel.Visible
 
                 if Visible then
                     Panel.Visible = true
 
-                    Tween(Panel, 0.4, {
+                    if Button then
+                        Tween(Button.Icon, 0.3, {Rotation = 0}):Play()
+
+                        Button.Icon.Image = Creator.Icon'chevron-left'[1]
+                    end
+
+                    Tween(Panel, 0.5, {
                         Position = UDim2.new(1, 15, 0, 0),
-                    }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+                    }, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
                 else
+                    if Button then
+                        Tween(Button.Icon, 0.3, {Rotation = 180}):Play()
+
+                        Button.Icon.Image = Creator.Icon'chevron-right'[1]
+                    end
+
                     local tween = Tween(Panel, 0.4, {
-                        Position = UDim2.new(1, 300, 0, 0),
+                        Position = UDim2.new(1, -210, 0, 0),
                     }, Enum.EasingStyle.Quint, Enum.EasingDirection.In)
 
                     tween.Completed:Connect(function()
-                        if not Panel.Visible then
+                        if not Visible then
                             Panel.Visible = false
                         end
                     end)
@@ -13192,7 +13337,7 @@ do
                     }),
                 }),
                 New('TextLabel', {
-                    Text = Window.Title or 'INTIHUB',
+                    Text = 'INTIHUB',
                     TextSize = 16,
                     FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
                     TextColor3 = Color3.fromHex'#FFC300',
@@ -13213,23 +13358,6 @@ do
                 Parent = UI,
                 LayoutOrder = 2,
             })
-
-            local ProductName = 'Unknown Game'
-
-            pcall(function()
-                ProductName = game:GetService'MarketplaceService':GetProductInfo(game.PlaceId).Name
-            end)
-
-            local GameText = New('TextLabel', {
-                Text = ProductName,
-                TextSize = 14,
-                FontFace = Font.new(Creator.Font, Enum.FontWeight.SemiBold),
-                TextColor3 = Color3.new(1, 1, 1),
-                AutomaticSize = 'XY',
-                BackgroundTransparency = 1,
-            })
-
-            CreateStat('solar:gamepad-minimalistic-bold', 'GAME', GameText, 3)
 
             local PingText = New('TextLabel', {
                 Text = '0 ms',
@@ -13505,9 +13633,9 @@ do
                 IntiHub.Window.Acrylic = Value
                 IntiHub.Window.AcrylicPaint.Model.Transparency = Value and 0.98 or 1
 
-                if Value then
+                if Value and typeof(Acrylic) == 'table' and Acrylic.Enable then
                     Acrylic.Enable()
-                else
+                elseif not Value and typeof(Acrylic) == 'table' and Acrylic.Disable then
                     Acrylic.Disable()
                 end
             end

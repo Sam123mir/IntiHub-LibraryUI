@@ -184,20 +184,32 @@ function Element:New(Config)
         IconFrom,
         Slider.UIElements.SliderIcon,
         IconTo,
-        New("TextBox", {
-            Size = UDim2.new(0,Slider.TextBoxWidth,0,0),
-            TextXAlignment = "Left",
-            Text = FormatValue(Value),
-            ThemeTag = {
-                TextColor3 = "Text"
-            },
-            TextTransparency = .4,
-            AutomaticSize = "Y",
-            TextSize = 15,
-            FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
-            BackgroundTransparency = 1,
-            LayoutOrder = -1,
+        New("Frame", {
+            Size = UDim2.new(0, Slider.TextBoxWidth + 10, 0, 22),
+            BackgroundColor3 = Color3.fromHex("#0F0D00"),
+            BackgroundTransparency = 0.5,
             Visible = Slider.IsTextbox,
+            LayoutOrder = -1,
+        }, {
+            New("UICorner", { CornerRadius = UDim.new(0, 4) }),
+            New("UIStroke", {
+                Thickness = 1,
+                Color = Color3.fromHex("#FFD700"),
+                Transparency = 0.5,
+            }),
+            New("TextBox", {
+                Size = UDim2.new(1, 0, 1, 0),
+                TextXAlignment = "Center",
+                Text = FormatValue(Value),
+                ThemeTag = {
+                    TextColor3 = "Text"
+                },
+                TextTransparency = .2,
+                TextSize = 13,
+                FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+                BackgroundTransparency = 1,
+                Name = "TextBox"
+            })
         })
     })
     

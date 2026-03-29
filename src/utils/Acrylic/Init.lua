@@ -9,28 +9,28 @@ local Acrylic = {
 	AcrylicPaint = require("./Paint"),
 }
 
+local baseEffect = Instance.new("DepthOfFieldEffect")
+baseEffect.FarIntensity = 0
+baseEffect.InFocusRadius = 0.1
+baseEffect.NearIntensity = 1
+
+local depthOfFieldDefaults = {}
+
+function Acrylic.Enable()
+	for _, effect in pairs(depthOfFieldDefaults) do
+		effect.Enabled = false
+	end
+	baseEffect.Parent = cloneref(game:GetService("Lighting"))
+end
+
+function Acrylic.Disable()
+	for _, effect in pairs(depthOfFieldDefaults) do
+		effect.Enabled = effect.enabled
+	end
+	baseEffect.Parent = nil
+end
+
 function Acrylic.init()
-	local baseEffect = Instance.new("DepthOfFieldEffect")
-	baseEffect.FarIntensity = 0
-	baseEffect.InFocusRadius = 0.1
-	baseEffect.NearIntensity = 1
-
-	local depthOfFieldDefaults = {}
-
-	function Acrylic.Enable()
-		for _, effect in pairs(depthOfFieldDefaults) do
-			effect.Enabled = false
-		end
-		baseEffect.Parent = cloneref(game:GetService("Lighting"))
-	end
-
-	function Acrylic.Disable()
-		for _, effect in pairs(depthOfFieldDefaults) do
-			effect.Enabled = effect.enabled
-		end
-		baseEffect.Parent = nil
-	end
-
 	local function registerDefaults()
 		local function register(object)
 			if object:IsA("DepthOfFieldEffect") then

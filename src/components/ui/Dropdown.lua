@@ -37,6 +37,7 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 		Size = UDim2.new(1, 0, 1, 0),
 		AnchorPoint = Vector2.new(1, 0),
 		Position = UDim2.new(1, 0, 0, 0),
+		Name = "MenuFrame"
 	}, {
 		New("UIPadding", {
 			PaddingTop = UDim.new(0, Element.MenuPadding),
@@ -50,8 +51,8 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 		}),
 		New("Frame", {
 			BackgroundTransparency = 1,
-			Size = UDim2.new(1, 0, 1, Dropdown.SearchBarEnabled and -Element.MenuPadding - Element.SearchBarHeight),
-			--Name = "CanvasGroup",
+			Size = UDim2.new(1, 0, 1, Dropdown.SearchBarEnabled and -Element.MenuPadding - Element.SearchBarHeight or 0),
+			Name = "ContentContainer",
 			ClipsDescendants = true,
 			LayoutOrder = 999,
 		}, {
@@ -66,6 +67,7 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 				CanvasSize = UDim2.new(0, 0, 0, 0),
 				BackgroundTransparency = 1,
 				ScrollBarImageTransparency = 1,
+				Name = "ScrollingFrame"
 			}, {
 				Dropdown.UIElements.UIListLayout,
 			}),
@@ -81,6 +83,8 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 		--GroupTransparency = 1, -- 0
 		Parent = Config.IntiHub.DropdownGui,
 		AnchorPoint = Vector2.new(1, 0),
+		Name = "DropdownCanvas",
+		ZIndex = 1000, -- Ensure it's on top
 	}, {
 		Dropdown.UIElements.Menu,
 		New("UISizeConstraint", {
@@ -90,8 +94,10 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 	})
 
 	local function RecalculateCanvasSize()
-		Dropdown.UIElements.Menu.Frame.ScrollingFrame.CanvasSize =
-			UDim2.fromOffset(0, Dropdown.UIElements.UIListLayout.AbsoluteContentSize.Y)
+		local scroller = Dropdown.UIElements.Menu:FindFirstChild("ContentContainer") and Dropdown.UIElements.Menu.ContentContainer:FindFirstChild("ScrollingFrame")
+		if scroller then
+			scroller.CanvasSize = UDim2.fromOffset(0, Dropdown.UIElements.UIListLayout.AbsoluteContentSize.Y)
+		end
 	end
 
 	local function RecalculateListSize()
