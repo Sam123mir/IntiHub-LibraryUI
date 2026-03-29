@@ -5160,7 +5160,7 @@ do
         local OpenButtonModule = {}
         local Creator = __DARKLUA_BUNDLE_MODULES.load'c'
         local New = Creator.New
-        local Tween = Creator.Tween
+        local _ = Creator.Tween
         local cloneref = (cloneref or clonereference or function(instance)
             return instance
         end)
@@ -5169,129 +5169,114 @@ do
 
         function OpenButtonModule.New(Window)
             local OpenButtonMain = {Button = nil}
-            local Title = New('TextLabel', {
-                Text = 'INTIHUB',
-                TextSize = 13,
-                FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+            local Branding = New('Frame', {
+                Name = 'Branding',
                 BackgroundTransparency = 1,
                 AutomaticSize = 'XY',
-                ThemeTag = {
-                    TextColor3 = 'Accent',
-                },
-                LayoutOrder = 1,
-            })
-            local LiveTag = New('Frame', {
-                Size = UDim2.new(0, 45, 0, 20),
-                BackgroundColor3 = Color3.new(1, 1, 1),
-                BackgroundTransparency = 0.92,
-                LayoutOrder = 2,
             }, {
-                New('UICorner', {
-                    CornerRadius = UDim.new(1, 0),
-                }),
-                New('Frame', {
-                    Name = 'Dot',
-                    Size = UDim2.new(0, 6, 0, 6),
-                    Position = UDim2.new(0, 8, 0.5, 0),
-                    AnchorPoint = Vector2.new(0, 0.5),
-                    BackgroundColor3 = Color3.fromHex'#FFD700',
-                }, {
-                    New('UICorner', {
-                        CornerRadius = UDim.new(1, 0),
-                    }),
+                New('UIListLayout', {
+                    FillDirection = 'Horizontal',
+                    VerticalAlignment = 'Center',
+                    Padding = UDim.new(0, 2),
                 }),
                 New('TextLabel', {
-                    Text = 'LIVE',
-                    TextSize = 10,
+                    Text = 'INTI',
+                    TextSize = 13,
                     FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
-                    TextColor3 = Color3.new(1, 1, 1),
-                    TextTransparency = 0.4,
-                    Position = UDim2.new(0, 18, 0.5, 0),
-                    AnchorPoint = Vector2.new(0, 0.5),
                     BackgroundTransparency = 1,
+                    AutomaticSize = 'XY',
+                    TextColor3 = Color3.fromHex'#FFD700',
+                }),
+                New('TextLabel', {
+                    Text = 'HUB',
+                    TextSize = 13,
+                    FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+                    BackgroundTransparency = 1,
+                    AutomaticSize = 'XY',
+                    TextColor3 = Color3.fromHex'#000000',
                 }),
             })
+            local DragHandle = New('ImageLabel', {
+                Size = UDim2.new(0, 18, 0, 18),
+                BackgroundTransparency = 1,
+                Image = 'rbxassetid://138450125867375',
+                ImageColor3 = Color3.fromHex'#FFD700',
+            })
+            local Separator = New('Frame', {
+                Size = UDim2.new(0, 1, 0, 16),
+                BackgroundColor3 = Color3.new(1, 1, 1),
+                BackgroundTransparency = 0.8,
+                BorderSizePixel = 0,
+            })
             local Container = New('Frame', {
-                Size = UDim2.new(0, 200, 0, 40),
-                Position = UDim2.new(0.5, 0, 0, 50),
-                AnchorPoint = Vector2.new(0.5, 0.5),
+                Size = UDim2.new(0, 150, 0, 40),
+                Position = UDim2.new(0.5, 0, 1, -60),
+                AnchorPoint = Vector2.new(0.5, 1),
                 Parent = Window.Parent,
                 BackgroundTransparency = 1,
                 Active = true,
                 Visible = false,
+            }, {
+                New('UIScale', {
+                    Name = 'UIScale',
+                    Scale = 1,
+                }),
             })
-            local UIScale = New('UIScale', {Scale = 1})
             local Button = New('Frame', {
-                Size = UDim2.new(0, 160, 0, 32),
-                AutomaticSize = 'None',
+                Name = 'Bar',
+                AutomaticSize = 'X',
+                Size = UDim2.new(0, 100, 0, 32),
                 Parent = Container,
                 BackgroundColor3 = Color3.fromHex'#0F0D00',
-                BackgroundTransparency = 0.4,
+                BackgroundTransparency = 0.35,
+                AnchorPoint = Vector2.new(0.5, 0.5),
+                Position = UDim2.new(0.5, 0, 0.5, 0),
             }, {
-                UIScale,
                 New('UICorner', {
-                    CornerRadius = UDim.new(0, 10),
+                    CornerRadius = UDim.new(0, 8),
                 }),
                 New('UIStroke', {
-                    Thickness = 1.5,
+                    Thickness = 1.2,
                     Color = Color3.fromHex'#FFD700',
                     Transparency = 0.5,
-                    Name = 'Stroke',
                 }),
                 New('UIPadding', {
-                    PaddingLeft = UDim.new(0, 15),
-                    PaddingRight = UDim.new(0, 15),
+                    PaddingLeft = UDim.new(0, 12),
+                    PaddingRight = UDim.new(0, 12),
                 }),
                 New('UIListLayout', {
-                    Padding = UDim.new(0, 12),
+                    Padding = UDim.new(0, 10),
                     FillDirection = 'Horizontal',
                     VerticalAlignment = 'Center',
                     HorizontalAlignment = 'Center',
-                    SortOrder = 'LayoutOrder',
                 }),
-                Title,
-                LiveTag,
+                DragHandle,
+                Separator,
+                Branding,
                 New('TextButton', {
                     Size = UDim2.new(1, 0, 1, 0),
                     BackgroundTransparency = 1,
                     Text = '',
-                    ZIndex = 11,
-                    Name = 'ClickButton',
+                    ZIndex = 10,
+                    Name = 'OpenTrigger',
                 }),
             })
 
             Creator.Drag(Container)
-            Creator.AddSignal(Button.ClickButton.MouseButton1Click, function()
+            Creator.AddSignal(Button.OpenTrigger.MouseButton1Click, function()
                 Window:Open()
-            end)
-            task.spawn(function()
-                while true do
-                    local dot = LiveTag:FindFirstChild'Dot'
-
-                    if dot then
-                        Tween(dot, 0.8, {BackgroundTransparency = 0.5}, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut):Play()
-                        task.wait(0.8)
-                        Tween(dot, 0.8, {BackgroundTransparency = 0}, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut):Play()
-                        task.wait(0.8)
-                    else
-                        break
-                    end
-                end
             end)
 
             function OpenButtonMain:Visible(v)
                 Container.Visible = v
             end
             function OpenButtonMain:SetScale(scale)
-                UIScale.Scale = scale
+                Container.UIScale.Scale = scale
             end
             function OpenButtonMain:SetIcon() end
-            function OpenButtonMain:Edit(OpenButtonConfig)
-                if OpenButtonConfig.Title then
-                    Title.Text = OpenButtonConfig.Title:upper()
-                end
-                if OpenButtonConfig.Scale then
-                    OpenButtonMain:SetScale(OpenButtonConfig.Scale)
+            function OpenButtonMain:Edit(Config)
+                if Config.Scale then
+                    OpenButtonMain:SetScale(Config.Scale)
                 end
             end
 
@@ -6643,7 +6628,6 @@ do
         local New = Creator.New
         local Tween = Creator.Tween
         local Element = {}
-        local IsSliderHolding = false
 
         function Element:New(Config)
             local Slider = {
@@ -6664,6 +6648,7 @@ do
                 TextBoxWidth = Config.Window.NewElements and 40 or 30,
                 ThumbSize = 13,
                 IconSize = 26,
+                IsHolding = false,
             }
 
             if Slider.Icons == {} then
@@ -6831,11 +6816,11 @@ do
 
             function Slider:Set(Value, input)
                 if CanCallback then
-                    if not Slider.IsFocusing and not IsSliderHolding and (not input or (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch)) then
+                    if not Slider.IsFocusing and not Slider.IsHolding and (not input or (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch)) then
                         if input then
                             isTouch = (input.UserInputType == Enum.UserInputType.Touch)
                             ScrollingFrameParent.ScrollingEnabled = false
-                            IsSliderHolding = true
+                            Slider.IsHolding = true
 
                             local inputPosition = isTouch and input.Position.X or UserInputService:GetMouseLocation().X
                             local delta = math.clamp((inputPosition - Slider.UIElements.SliderIcon.AbsolutePosition.X) / Slider.UIElements.SliderIcon.AbsoluteSize.X, 0, 1)
@@ -6891,7 +6876,7 @@ do
                                     moveconnection:Disconnect()
                                     releaseconnection:Disconnect()
 
-                                    IsSliderHolding = false
+                                    Slider.IsHolding = false
                                     ScrollingFrameParent.ScrollingEnabled = true
 
                                     if Config.Window.NewElements then
@@ -6983,7 +6968,7 @@ do
             Creator.AddSignal(Slider.UIElements.SliderContainer.InputBegan, function(
                 input
             )
-                if Slider.Locked or IsSliderHolding then
+                if Slider.Locked or Slider.IsHolding then
                     return
                 end
 
@@ -11193,9 +11178,11 @@ do
             end
 
             local function GetUserThumb(Anonymous)
-                pcall(function()
+                local success, result = pcall(function()
                     return Players:GetUserThumbnailAsync(Anonymous and 1 or Players.LocalPlayer.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size420x420)
                 end)
+
+                return success and result or 'rbxassetid://0'
             end
 
             Window.User.Enabled = true
@@ -11411,12 +11398,14 @@ do
                         }),
                     }),
                     New('Frame', {
-                        Size = UDim2.new(1, 0, 0, 35),
+                        Name = 'NamesContainer',
+                        Size = UDim2.new(1, 0, 0, 45),
                         BackgroundTransparency = 1,
                     }, {
                         New('UIListLayout', {
                             HorizontalAlignment = 'Center',
                             Padding = UDim.new(0, 2),
+                            VerticalAlignment = 'Center',
                         }),
                         New('TextLabel', {
                             Text = Players.LocalPlayer.DisplayName,
@@ -11437,7 +11426,7 @@ do
                     }),
                 }),
                 New('Frame', {
-                    Size = UDim2.new(0.8, 0, 0, 1),
+                    Size = UDim2.new(0.9, 0, 0, 1),
                     BackgroundColor3 = Color3.fromHex'#FFD700',
                     BackgroundTransparency = 0.8,
                     LayoutOrder = 2,
@@ -11464,6 +11453,7 @@ do
                         Size = UDim2.new(1, 0, 0, 40),
                         BackgroundColor3 = Color3.new(1, 1, 1),
                         BackgroundTransparency = 0.95,
+                        AutomaticSize = 'Y',
                     }, {
                         New('UICorner', {
                             CornerRadius = UDim.new(0, 8),
@@ -11473,16 +11463,21 @@ do
                             Color = Color3.fromHex'#FFD700',
                             Transparency = 0.8,
                         }),
+                        New('UIPadding', {
+                            PaddingLeft = UDim.new(0, 10),
+                            PaddingRight = UDim.new(0, 10),
+                            PaddingTop = UDim.new(0, 5),
+                            PaddingBottom = UDim.new(0, 5),
+                        }),
                         New('TextLabel', {
                             Name = 'GameName',
                             Text = 'Loading...',
                             TextSize = 12,
                             TextColor3 = Color3.new(1, 1, 1),
-                            Size = UDim2.new(1, -20, 1, 0),
-                            Position = UDim2.new(0.5, 0, 0.5, 0),
-                            AnchorPoint = Vector2.new(0.5, 0.5),
+                            Size = UDim2.new(1, 0, 0, 0),
+                            AutomaticSize = 'Y',
                             BackgroundTransparency = 1,
-                            TextTruncate = 'AtEnd',
+                            TextWrapped = true,
                         }),
                     }),
                 }),
@@ -11539,23 +11534,54 @@ do
                 BackgroundTransparency = 1,
                 Visible = true,
             }, {
-                Creator.NewRoundFrame(Window.UICorner - (Window.UIPadding / 2), 'Squircle', {
+                New('CanvasGroup', {
                     Size = UDim2.new(1, 0, 1, 0),
-                    ThemeTag = {
-                        ImageColor3 = 'PanelBackground',
-                        ImageTransparency = 'PanelBackgroundTransparency',
-                    },
-                    ZIndex = 3,
+                    AutomaticSize = 'Y',
+                    BackgroundTransparency = 1,
+                    Name = 'Group',
                 }, {
-                    New('UIStroke', {
-                        Thickness = 2,
-                        ApplyStrokeMode = 'Border',
-                        Color = Color3.fromHex'#FFD700',
-                        Transparency = 0.8,
+                    Creator.NewRoundFrame(Window.UICorner - (Window.UIPadding / 2), 'Squircle', {
+                        Size = UDim2.new(1, 0, 1, 0),
+                        ThemeTag = {
+                            ImageColor3 = 'PanelBackground',
+                            ImageTransparency = 'PanelBackgroundTransparency',
+                        },
+                        ZIndex = 3,
+                    }, {
+                        New('UIStroke', {
+                            Thickness = 2,
+                            ApplyStrokeMode = 'Border',
+                            Color = Color3.fromHex'#FFD700',
+                            Transparency = 0.8,
+                        }),
                     }),
+                    RightPanelContent,
                 }),
-                RightPanelContent,
             })
+
+            function Window:ToggleRightPanel()
+                local Panel = Window.UIElements.RightPanel
+                local Visible = not Panel.Visible
+
+                if Visible then
+                    Panel.Visible = true
+
+                    Tween(Panel, 0.4, {
+                        Position = UDim2.new(1, 15, 0, 0),
+                    }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+                else
+                    local tween = Tween(Panel, 0.4, {
+                        Position = UDim2.new(1, 300, 0, 0),
+                    }, Enum.EasingStyle.Quint, Enum.EasingDirection.In)
+
+                    tween.Completed:Connect(function()
+                        if not Panel.Visible then
+                            Panel.Visible = false
+                        end
+                    end)
+                    tween:Play()
+                end
+            end
 
             local Blur = New('ImageLabel', {
                 Image = 'rbxassetid://8992230677',
@@ -11925,8 +11951,8 @@ do
                             New('UIListLayout', {
                                 FillDirection = 'Horizontal',
                                 VerticalAlignment = 'Center',
-                                HorizontalAlignment = 'Right',
-                                Padding = UDim.new(0, Window.UIPadding / 2),
+                                HorizontalAlignment = 'Left',
+                                Padding = UDim.new(0, 15),
                             }),
                         }),
                         New('Frame', {
@@ -11952,6 +11978,10 @@ do
                 }),
             })
 
+            Window:CreateTopbarButton('SidebarToggle', 'layout-panel-right', function(
+            )
+                Window:ToggleRightPanel()
+            end, 1000, true, Color3.fromHex'#FFD700')
             Creator.AddSignal(Window.UIElements.Main.Main.Topbar.Left:GetPropertyChangedSignal'AbsoluteSize', function(
             )
                 local LeftWidth = 0
@@ -13839,27 +13869,30 @@ do
             task.wait(0.5)
 
             local Window = IntiHub:CreateWindow{
-                Title = 'IntiHub | Noble Deluxe',
-                Folder = 'intihub',
-                Icon = 'solar:folder-2-bold-duotone',
-                NewElements = true,
-                HideSearchBar = false,
+                Title = 'Noble Deluxe',
+                Author = 'by IntiHub Team',
+                Folder = 'intihub_noble',
+                Icon = 'rbxassetid://120997033468887',
+                Resizable = true,
+                MinSize = Vector2.new(650, 450),
+                MaxSize = Vector2.new(1000, 700),
+                Transparent = true,
+                Acrylic = true,
                 OpenButton = {
-                    Title = 'Open IntiHub UI',
+                    Title = 'INTIHUB',
                     Enabled = true,
                     Draggable = true,
-                    Scale = 0.5,
                 },
                 Topbar = {
-                    Height = 44,
-                    ButtonsType = 'Mac',
+                    Height = 52,
+                    ButtonsType = 'Default',
                 },
             }
 
             Loading:Update'Cargando Etiquetas...'
             task.wait(0.3)
             Window:Tag{
-                Title = 'v2.1.0',
+                Title = 'v2.1.2',
                 Icon = 'github',
                 Color = Color3.fromHex'#FFD700',
                 Border = true,
@@ -13870,81 +13903,44 @@ do
                 Title = 'Overview',
                 Icon = 'home',
             }
-            local ExampleGroup = OverviewTab:Section{
-                Title = "Group's Example",
-            }
 
-            ExampleGroup:Button{
-                Title = 'Button 1',
-                Callback = function()
-                    print'Button 1 Clicked'
-                end,
+            OverviewTab:Section{
+                Title = 'Bienvenido',
+            }:Paragraph{
+                Title = 'Noble Deluxe v2.1',
+                Content = 'Esta es la interfaz definitiva de IntiHub. Dise\u{f1}ada para ofrecer la mejor experiencia visual y funcional en cualquier executor.',
             }
-            ExampleGroup:Button{
-                Title = 'Button 2',
-                Callback = function()
-                    print'Button 2 Clicked'
-                end,
+            OverviewTab:Section{
+                Title = 'Informaci\u{f3}n del Sistema',
+            }:Paragraph{
+                Title = 'Estado: Operativo',
+                Content = 'Todos los m\u{f3}dulos cargados satisfactoriamente. El panel de estad\u{ed}sticas fue reintegrado al widget inferior.',
             }
-
-            local ElementsGroup = OverviewTab:Section{
-                Title = 'Elements',
-            }
-
-            ElementsGroup:Button{
-                Title = 'Button 1',
-                Callback = function()
-                    print'Button 1 Clicked'
-                end,
-            }
-            ElementsGroup:Toggle{
-                Title = 'Toggle 2',
-                Default = true,
-                Callback = function(v)
-                    print('Toggle 2:', v)
-                end,
-            }
-            ElementsGroup:Colorpicker{
-                Title = 'Colorpicker 3',
-                Default = Color3.fromHex'#00FF7F',
-                Callback = function(v)
-                    print('Colorpicker 3:', v)
-                end,
-            }
-
-            local Section1 = OverviewTab:Section{
-                Title = 'Section 1',
-                Description = 'Section exampleeee',
-            }
-
-            Section1:Button{
-                Title = 'Button 1',
-            }
-            Section1:Toggle{
-                Title = 'Toggle 2',
-            }
-
-            local Section2 = OverviewTab:Section{
-                Title = 'Section 2',
-            }
-
-            Section2:Button{
-                Title = 'Button 1',
-            }
-            Section2:Button{
-                Title = 'Button 2',
-            }
-            Loading:Update'Preparando Componentes...'
+            Loading:Update'Preparando M\u{f3}dulos...'
 
             local ToggleTab = Window:Tab{
                 Title = 'Toggle',
                 Icon = 'check-square',
             }
+            local ToggleSec = ToggleTab:Section{
+                Title = 'M\u{f3}dulos de Automatizaci\u{f3}n',
+            }
 
-            ToggleTab:Section{
-                Title = 'Toggles',
-            }:Toggle{
-                Title = 'Example Toggle',
+            ToggleSec:Toggle{
+                Title = 'Enable Auto-Farm',
+                Desc = 'Comienza la recolecci\u{f3}n autom\u{e1}tica de recursos.',
+                Default = true,
+                Callback = function(v)
+                    print('Auto-Farm:', v)
+                end,
+            }
+            ToggleSec:Toggle{
+                Title = 'Anti-AFK System',
+                Desc = 'Previene la desconexi\u{f3}n por inactividad.',
+                Default = false,
+                Callback = function(v)
+                    print('Anti-AFK:', v)
+                end,
             }
 
             local ButtonTab = Window:Tab{
@@ -13953,9 +13949,17 @@ do
             }
 
             ButtonTab:Section{
-                Title = 'Buttons',
+                Title = 'Acciones R\u{e1}pidas',
             }:Button{
-                Title = 'Example Button',
+                Title = 'Re-ejecutar Scripts',
+                Desc = 'Refresca y vuelve a cargar los scripts locales.',
+                Callback = function()
+                    IntiHub:Notify{
+                        Title = 'Sistema',
+                        Content = 'Scripts recargados.',
+                        Duration = 2,
+                    }
+                end,
             }
 
             local InputTab = Window:Tab{
@@ -13964,46 +13968,91 @@ do
             }
 
             InputTab:Section{
-                Title = 'Inputs',
+                Title = 'Configuraci\u{f3}n',
             }:Input{
-                Title = 'Example Input',
-                Placeholder = 'Type here...',
+                Title = 'Discord Webhook',
+                Placeholder = 'Enter URL here...',
+                Callback = function(v)
+                    print('Webhook set to:', v)
+                end,
             }
 
             local SliderTab = Window:Tab{
                 Title = 'Slider',
                 Icon = 'sliders',
             }
+            local PerfSec = SliderTab:Section{
+                Title = 'Rendimiento',
+            }
 
-            SliderTab:Section{
-                Title = 'Sliders',
-            }:Slider{
-                Title = 'Example Slider',
-                Step = 1,
-                Min = 0,
+            PerfSec:Slider{
+                Title = 'L\u{ed}mite de FPS',
+                Min = 30,
+                Max = 240,
+                Default = 60,
+                Callback = function(v)
+                    print('FPS:', v)
+                end,
+            }
+            PerfSec:Slider{
+                Title = 'WalkSpeed Modifier',
+                Min = 16,
                 Max = 100,
-                Default = 50,
+                Default = 16,
+                Callback = function(v)
+                    print('Speed:', v)
+                end,
             }
 
             local DropdownTab = Window:Tab{
                 Title = 'Dropdown',
                 Icon = 'list',
             }
+            local SelectorSec = DropdownTab:Section{
+                Title = 'Selectores',
+            }
 
-            DropdownTab:Section{
-                Title = 'Dropdowns',
-            }:Dropdown{
-                Title = 'Example Dropdown',
-                Multi = false,
+            SelectorSec:Dropdown{
+                Title = 'Seleccionar Servidor',
                 Options = {
-                    'Option 1',
-                    'Option 2',
-                    'Option 3',
+                    'Autom\u{e1}tico',
+                    'North America',
+                    'Europe',
+                    'South America',
+                    'Asia',
                 },
-                Default = 1,
+                Default = 'Autom\u{e1}tico',
+                Callback = function(v)
+                    print('Server:', v)
+                end,
+            }
+            SelectorSec:Dropdown{
+                Title = 'Scripts Disponibles',
+                Multi = true,
+                Options = {
+                    'Arsenal',
+                    'Doors',
+                    'BloxFruits',
+                    'Piggy',
+                    'Adopt Me',
+                    'Murder Mystery 2',
+                },
+                Default = {
+                    'Arsenal',
+                    'Doors',
+                },
+                Callback = function(v)
+                    print('Scripts selected:', table.concat(v, ', '))
+                end,
             }
             Loading:Update'Finalizando...'
             task.wait(0.4)
+            Window:SelectTab(1)
+            IntiHub:Notify{
+                Title = 'Sistema',
+                Content = 'Noble Deluxe listo para usar.',
+                Duration = 4,
+            }
 
             return Window
         end
