@@ -990,9 +990,6 @@ return function(Config)
 		}),
 	})
 
-	Window:CreateTopbarButton("SidebarToggle", "layout-panel-right", function()
-        Window:ToggleRightPanel()
-    end, 1000, true, Color3.fromHex("#FFD700"))
 
 	Creator.AddSignal(Window.UIElements.Main.Main.Topbar.Left:GetPropertyChangedSignal("AbsoluteSize"), function()
 		local LeftWidth = 0
@@ -1185,6 +1182,10 @@ return function(Config)
 	end
 
 	-- local Dragged = false
+
+	Window:CreateTopbarButton("SidebarToggle", "layout-panel-right", function()
+		Window:ToggleRightPanel()
+	end, 1000, true, Color3.fromHex("#FFD700"))
 
 	local WindowDragModule = Creator.Drag(
 		Window.UIElements.Main,
