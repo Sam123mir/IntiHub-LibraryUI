@@ -11360,36 +11360,6 @@ do
                 }),
             })
 
-            local function CreateMiniStat(Label, ValueName)
-                return New('Frame', {
-                    Size = UDim2.new(0.3, 0, 1, 0),
-                    BackgroundColor3 = Color3.new(1, 1, 1),
-                    BackgroundTransparency = 0.97,
-                }, {
-                    New('UICorner', {
-                        CornerRadius = UDim.new(0, 6),
-                    }),
-                    New('TextLabel', {
-                        Text = Label,
-                        TextSize = 9,
-                        TextColor3 = Color3.fromHex'#FFD700',
-                        Position = UDim2.new(0.5, 0, 0.3, 0),
-                        AnchorPoint = Vector2.new(0.5, 0.5),
-                        BackgroundTransparency = 1,
-                    }),
-                    New('TextLabel', {
-                        Name = ValueName,
-                        Text = '...',
-                        TextSize = 12,
-                        TextColor3 = Color3.new(1, 1, 1),
-                        Position = UDim2.new(0.5, 0, 0.7, 0),
-                        AnchorPoint = Vector2.new(0.5, 0.5),
-                        BackgroundTransparency = 1,
-                        FontFace = Font.new(Creator.Font, Enum.FontWeight.SemiBold),
-                    }),
-                })
-            end
-
             local RightPanelContent = New('Frame', {
                 Size = UDim2.new(1, 0, 1, 0),
                 BackgroundTransparency = 1,
@@ -11473,7 +11443,7 @@ do
                     LayoutOrder = 2,
                 }),
                 New('Frame', {
-                    Size = UDim2.new(1, 0, 0, 150),
+                    Size = UDim2.new(1, 0, 0, 80),
                     BackgroundTransparency = 1,
                     LayoutOrder = 3,
                 }, {
@@ -11499,9 +11469,9 @@ do
                             CornerRadius = UDim.new(0, 8),
                         }),
                         New('UIStroke', {
-                            Thickness = 1,
+                            Thickness = 1.5,
                             Color = Color3.fromHex'#FFD700',
-                            Transparency = 0.9,
+                            Transparency = 0.8,
                         }),
                         New('TextLabel', {
                             Name = 'GameName',
@@ -11514,19 +11484,6 @@ do
                             BackgroundTransparency = 1,
                             TextTruncate = 'AtEnd',
                         }),
-                    }),
-                    New('Frame', {
-                        Size = UDim2.new(1, 0, 0, 60),
-                        BackgroundTransparency = 1,
-                    }, {
-                        New('UIListLayout', {
-                            FillDirection = 'Horizontal',
-                            Padding = UDim.new(0, 8),
-                            HorizontalAlignment = 'Center',
-                        }),
-                        CreateMiniStat('FPS', 'FPSValue'),
-                        CreateMiniStat('PING', 'PingValue'),
-                        CreateMiniStat('RAM', 'RamValue'),
                     }),
                 }),
                 New('Frame', {
@@ -11591,7 +11548,8 @@ do
                     ZIndex = 3,
                 }, {
                     New('UIStroke', {
-                        Thickness = 1,
+                        Thickness = 2,
+                        ApplyStrokeMode = 'Border',
                         Color = Color3.fromHex'#FFD700',
                         Transparency = 0.8,
                     }),
@@ -11967,7 +11925,7 @@ do
                             New('UIListLayout', {
                                 FillDirection = 'Horizontal',
                                 VerticalAlignment = 'Center',
-                                HorizontalAlignment = 'Left',
+                                HorizontalAlignment = 'Right',
                                 Padding = UDim.new(0, Window.UIPadding / 2),
                             }),
                         }),
@@ -12859,66 +12817,90 @@ do
                 SearchBarTrigger.Size = UDim2.new(0, 150, 0, 30)
                 SearchBarTrigger.LayoutOrder = 5
 
-                local CurrentLang = 'EN'
                 local LangTrigger = CreateLabel('EN', 'globe', Window.UIElements.Main.Main.Topbar.Center, true)
 
                 LangTrigger.Size = UDim2.new(0, 50, 0, 30)
                 LangTrigger.LayoutOrder = 2
 
                 local LangDropdown = New('Frame', {
-                    Size = UDim2.new(0, 80, 0, 0),
+                    Size = UDim2.new(0, 100, 0, 0),
                     Position = UDim2.new(0.5, 0, 1, 8),
                     AnchorPoint = Vector2.new(0.5, 0),
-                    BackgroundColor3 = Color3.fromHex'#121212',
-                    BorderSizePixel = 0,
+                    BackgroundTransparency = 1,
                     ClipsDescendants = true,
                     Parent = LangTrigger,
                     ZIndex = 10000,
                 }, {
-                    New('UICorner', {
-                        CornerRadius = UDim.new(0, 8),
-                    }),
-                    New('UIStroke', {
-                        Thickness = 1.5,
-                        Color = Color3.fromHex'#FFD700',
-                        Transparency = 0.4,
+                    Creator.NewRoundFrame(8, 'Glass-1', {
+                        Size = UDim2.new(1, 0, 1, 0),
+                        ThemeTag = {
+                            ImageColor3 = 'PanelBackground',
+                        },
+                        ImageTransparency = 0.05,
+                    }, {
+                        New('UIStroke', {
+                            Thickness = 1.5,
+                            Color = Color3.fromHex'#FFD700',
+                            Transparency = 0.7,
+                        }),
                     }),
                     New('UIListLayout', {
                         Padding = UDim.new(0, 4),
+                        SortOrder = 'LayoutOrder',
+                    }),
+                    New('UIPadding', {
+                        PaddingTop = UDim.new(0, 6),
+                        PaddingBottom = UDim.new(0, 6),
+                        PaddingLeft = UDim.new(0, 6),
+                        PaddingRight = UDim.new(0, 6),
                     }),
                 })
 
                 local function CreateLangItem(lang)
                     local item = New('TextButton', {
-                        Size = UDim2.new(1, 0, 0, 25),
+                        Size = UDim2.new(1, 0, 0, 30),
                         BackgroundTransparency = 1,
                         Text = lang,
-                        TextSize = 12,
+                        TextSize = 13,
                         FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
                         TextColor3 = Color3.new(1, 1, 1),
+                        TextTransparency = 0.4,
                         Parent = LangDropdown,
+                    }, {
+                        New('UICorner', {
+                            CornerRadius = UDim.new(0, 6),
+                        }),
                     })
 
+                    Creator.AddSignal(item.MouseEnter, function()
+                        Tween(item, 0.2, {
+                            TextTransparency = 0,
+                            BackgroundTransparency = 0.95,
+                        }):Play()
+                    end)
+                    Creator.AddSignal(item.MouseLeave, function()
+                        Tween(item, 0.2, {
+                            TextTransparency = 0.4,
+                            BackgroundTransparency = 1,
+                        }):Play()
+                    end)
                     Creator.AddSignal(item.MouseButton1Click, function()
-                        CurrentLang = lang
                         LangTrigger.Text = lang
 
                         Tween(LangDropdown, 0.2, {
-                            Size = UDim2.new(0, 80, 0, 0),
+                            Size = UDim2.new(0, 100, 0, 0),
                         }):Play()
                     end)
-
-                    return item
                 end
 
                 CreateLangItem'EN'
                 CreateLangItem'ES'
                 CreateLangItem'PT'
                 Creator.AddSignal(LangTrigger.MouseButton1Click, function()
-                    local targetSize = LangDropdown.Size.Y.Offset == 0 and 95 or 0
+                    local targetSize = LangDropdown.Size.Y.Offset == 0 and 110 or 0
 
                     Tween(LangDropdown, 0.25, {
-                        Size = UDim2.new(0, 80, 0, targetSize),
+                        Size = UDim2.new(0, 100, 0, targetSize),
                     }, Enum.EasingStyle.Quint):Play()
                 end)
 
@@ -12959,60 +12941,30 @@ do
                 end
             end
 
-            local Stats = cloneref(game:GetService'Stats')
+            cloneref(game:GetService'Stats')
+
             local MarketplaceService = cloneref(game:GetService'MarketplaceService')
 
             task.spawn(function()
                 local GameNameLabel = RightPanelContent:FindFirstChild('GameName', true)
-                local FPSLabel = RightPanelContent:FindFirstChild('FPSValue', true)
-                local PingLabel = RightPanelContent:FindFirstChild('PingValue', true)
-                local RamLabel = RightPanelContent:FindFirstChild('RamValue', true)
 
-                pcall(function()
-                    local success, info = pcall(function()
-                        return MarketplaceService:GetProductInfo(game.PlaceId)
+                RightPanelContent:FindFirstChild('FPSValue', true)
+                RightPanelContent:FindFirstChild('PingValue', true)
+                RightPanelContent:FindFirstChild('RamValue', true)
+
+                while task.wait(5) do
+                    pcall(function()
+                        local success, info = pcall(function()
+                            return MarketplaceService:GetProductInfo(game.PlaceId)
+                        end)
+
+                        if success and info and info.Name then
+                            GameNameLabel.Text = info.Name
+                        else
+                            GameNameLabel.Text = game.Name or 'Unknown'
+                        end
                     end)
-
-                    if success and info and info.Name then
-                        GameNameLabel.Text = info.Name
-                    else
-                        GameNameLabel.Text = game.Name or 'Unknown'
-                    end
-                end)
-
-                local lastUpdate = tick()
-                local frameCount = 0
-
-                RunService.RenderStepped:Connect(function()
-                    frameCount = frameCount + 1
-
-                    local now = tick()
-
-                    if now - lastUpdate >= 1 then
-                        local fps = frameCount
-
-                        frameCount = 0
-                        lastUpdate = now
-
-                        if FPSLabel then
-                            FPSLabel.Text = tostring(fps) .. ' FPS'
-                        end
-                        if PingLabel then
-                            local ping = math.floor(Stats.Network.ServerStatsItem['Data Ping']:GetValue())
-
-                            PingLabel.Text = tostring(ping) .. ' ms'
-                        end
-                        if RamLabel then
-                            local ram = math.floor(Stats:GetTotalMemoryUsageMb())
-
-                            if ram > 1024 then
-                                RamLabel.Text = string.format('%.1f GB', ram / 1024)
-                            else
-                                RamLabel.Text = tostring(ram) .. ' MB'
-                            end
-                        end
-                    end
-                end)
+                end
             end)
 
             if Window.OpenButtonMain and Window.OpenButtonMain.Button then
@@ -13066,8 +13018,8 @@ do
         local RunService = cloneref(game:GetService'RunService')
 
         cloneref(game:GetService'Players')
-        cloneref(game:GetService'Stats')
 
+        local Stats = cloneref(game:GetService'Stats')
         local Creator = __DARKLUA_BUNDLE_MODULES.load'c'
         local New = Creator.New
         local _ = Creator.Tween
@@ -13108,6 +13060,70 @@ do
                     PaddingRight = UDim.new(0, 20),
                 }),
             })
+
+            local function CreateStat(Icon, Label, Value, LayoutOrder)
+                local Section = New('Frame', {
+                    Size = UDim2.new(0, 0, 1, 0),
+                    AutomaticSize = 'X',
+                    BackgroundTransparency = 1,
+                    LayoutOrder = LayoutOrder,
+                }, {
+                    New('UIListLayout', {
+                        FillDirection = 'Horizontal',
+                        Padding = UDim.new(0, 10),
+                        VerticalAlignment = 'Center',
+                    }),
+                    New('Frame', {
+                        Size = UDim2.new(0, 30, 0, 30),
+                        BackgroundColor3 = Color3.fromHex'#1A1A1A',
+                        ThemeTag = {
+                            BackgroundColor3 = 'Accent',
+                        },
+                    }, {
+                        New('UICorner', {
+                            CornerRadius = UDim.new(0, 6),
+                        }),
+                        New('ImageLabel', {
+                            Image = Creator.Icon(Icon) and Creator.Icon(Icon)[1] or '',
+                            ImageRectOffset = Creator.Icon(Icon) and Creator.Icon(Icon)[2].ImageRectPosition or Vector2.new(0, 0),
+                            ImageRectSize = Creator.Icon(Icon) and Creator.Icon(Icon)[2].ImageRectSize or Vector2.new(0, 0),
+                            Size = UDim2.new(0, 20, 0, 20),
+                            Position = UDim2.new(0.5, 0, 0.5, 0),
+                            AnchorPoint = Vector2.new(0.5, 0.5),
+                            BackgroundTransparency = 1,
+                            ImageColor3 = Color3.fromHex'#000000',
+                        }),
+                    }),
+                    New('Frame', {
+                        Size = UDim2.new(0, 0, 0, 0),
+                        AutomaticSize = 'XY',
+                        BackgroundTransparency = 1,
+                    }, {
+                        New('UIListLayout', {
+                            FillDirection = 'Vertical',
+                            Padding = UDim.new(0, 2),
+                        }),
+                        New('TextLabel', {
+                            Text = Label:upper(),
+                            TextSize = 11,
+                            FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+                            TextColor3 = Color3.fromHex'#FFC300',
+                            ThemeTag = {
+                                TextColor3 = 'Accent',
+                            },
+                            TextTransparency = 0.4,
+                            AutomaticSize = 'XY',
+                            BackgroundTransparency = 1,
+                        }),
+                        Value,
+                    }),
+                })
+
+                Section.Parent = UI
+
+                return Value
+            end
+
             local LogoIcon = Window.Icon or 'rbxassetid://0'
 
             if typeof(LogoIcon) == 'string' and string.find(LogoIcon, 'http') then
@@ -13167,6 +13183,79 @@ do
                 LayoutOrder = 2,
             })
 
+            local ProductName = 'Unknown Game'
+
+            pcall(function()
+                ProductName = game:GetService'MarketplaceService':GetProductInfo(game.PlaceId).Name
+            end)
+
+            local GameText = New('TextLabel', {
+                Text = ProductName,
+                TextSize = 14,
+                FontFace = Font.new(Creator.Font, Enum.FontWeight.SemiBold),
+                TextColor3 = Color3.new(1, 1, 1),
+                AutomaticSize = 'XY',
+                BackgroundTransparency = 1,
+            })
+
+            CreateStat('solar:gamepad-minimalistic-bold', 'GAME', GameText, 3)
+
+            local PingText = New('TextLabel', {
+                Text = '0 ms',
+                TextSize = 14,
+                FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+                TextColor3 = Color3.fromHex'#FFC300',
+                ThemeTag = {
+                    TextColor3 = 'Accent',
+                },
+                AutomaticSize = 'XY',
+                BackgroundTransparency = 1,
+            })
+
+            CreateStat('solar:transmission-bold', 'PING', PingText, 5)
+
+            local RamText = New('TextLabel', {
+                Text = '0 MB',
+                TextSize = 14,
+                FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+                TextColor3 = Color3.fromHex'#FFC300',
+                ThemeTag = {
+                    TextColor3 = 'Accent',
+                },
+                AutomaticSize = 'XY',
+                BackgroundTransparency = 1,
+            })
+
+            CreateStat('solar:cpu-bold', 'RAM', RamText, 6)
+
+            local FpsText = New('TextLabel', {
+                Text = '0 FPS',
+                TextSize = 14,
+                FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+                TextColor3 = Color3.fromHex'#FFC300',
+                ThemeTag = {
+                    TextColor3 = 'Accent',
+                },
+                AutomaticSize = 'XY',
+                BackgroundTransparency = 1,
+            })
+
+            CreateStat('solar:chart-2-bold', 'FPS', FpsText, 7)
+
+            local TimeText = New('TextLabel', {
+                Text = '00:00:00',
+                TextSize = 14,
+                FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+                TextColor3 = Color3.fromHex'#FFC300',
+                ThemeTag = {
+                    TextColor3 = 'Accent',
+                },
+                AutomaticSize = 'XY',
+                BackgroundTransparency = 1,
+            })
+
+            CreateStat('solar:clock-circle-bold', 'TIME', TimeText, 8)
+
             local lastUpdate = tick()
             local frameCount = 0
             local fps = 0
@@ -13179,6 +13268,20 @@ do
                     fps = frameCount
                     frameCount = 0
                     lastUpdate = now
+                    FpsText.Text = tostring(fps) .. ' FPS'
+                    TimeText.Text = os.date'%H:%M:%S'
+
+                    local ping = math.floor(Stats.Network.ServerStatsItem['Data Ping']:GetValue())
+
+                    PingText.Text = tostring(ping) .. ' ms'
+
+                    local ram = math.floor(Stats:GetTotalMemoryUsageMb())
+
+                    if ram > 1024 then
+                        RamText.Text = string.format('%.1f GB', ram / 1024)
+                    else
+                        RamText.Text = tostring(ram) .. ' MB'
+                    end
                 end
             end)
 
@@ -13761,32 +13864,143 @@ do
                 Color = Color3.fromHex'#FFD700',
                 Border = true,
             }
-            Loading:Update'Preparando Secciones...'
+            Loading:Update'Cargando Overview...'
 
-            local AboutTab = Window:Tab{
-                Title = 'About IntiHub',
-                Icon = 'solar:info-square-bold',
-                Border = true,
+            local OverviewTab = Window:Tab{
+                Title = 'Overview',
+                Icon = 'home',
             }
-            local AboutSection = AboutTab:Section{
-                Title = 'About IntiHub',
+            local ExampleGroup = OverviewTab:Section{
+                Title = "Group's Example",
             }
 
-            AboutSection:Image{
-                Image = 'rbxassetid://136702870075563',
-                AspectRatio = '16:9',
-                Radius = 9,
+            ExampleGroup:Button{
+                Title = 'Button 1',
+                Callback = function()
+                    print'Button 1 Clicked'
+                end,
             }
-            AboutSection:Section{
-                Title = 'INTIHUB | Noble Deluxe Edition',
-                TextSize = 24,
-                FontWeight = Enum.FontWeight.SemiBold,
+            ExampleGroup:Button{
+                Title = 'Button 2',
+                Callback = function()
+                    print'Button 2 Clicked'
+                end,
             }
-            AboutSection:Section{
-                Title = 'La librer\u{ed}a de UI m\u{e1}s avanzada para Roblox. Dise\u{f1}ada para ofrecer una experiencia ejecutiva y premium.',
-                TextSize = 18,
-                TextTransparency = 0.35,
-                FontWeight = Enum.FontWeight.Medium,
+
+            local ElementsGroup = OverviewTab:Section{
+                Title = 'Elements',
+            }
+
+            ElementsGroup:Button{
+                Title = 'Button 1',
+                Callback = function()
+                    print'Button 1 Clicked'
+                end,
+            }
+            ElementsGroup:Toggle{
+                Title = 'Toggle 2',
+                Default = true,
+                Callback = function(v)
+                    print('Toggle 2:', v)
+                end,
+            }
+            ElementsGroup:Colorpicker{
+                Title = 'Colorpicker 3',
+                Default = Color3.fromHex'#00FF7F',
+                Callback = function(v)
+                    print('Colorpicker 3:', v)
+                end,
+            }
+
+            local Section1 = OverviewTab:Section{
+                Title = 'Section 1',
+                Description = 'Section exampleeee',
+            }
+
+            Section1:Button{
+                Title = 'Button 1',
+            }
+            Section1:Toggle{
+                Title = 'Toggle 2',
+            }
+
+            local Section2 = OverviewTab:Section{
+                Title = 'Section 2',
+            }
+
+            Section2:Button{
+                Title = 'Button 1',
+            }
+            Section2:Button{
+                Title = 'Button 2',
+            }
+            Loading:Update'Preparando Componentes...'
+
+            local ToggleTab = Window:Tab{
+                Title = 'Toggle',
+                Icon = 'check-square',
+            }
+
+            ToggleTab:Section{
+                Title = 'Toggles',
+            }:Toggle{
+                Title = 'Example Toggle',
+            }
+
+            local ButtonTab = Window:Tab{
+                Title = 'Button',
+                Icon = 'mouse-pointer',
+            }
+
+            ButtonTab:Section{
+                Title = 'Buttons',
+            }:Button{
+                Title = 'Example Button',
+            }
+
+            local InputTab = Window:Tab{
+                Title = 'Input',
+                Icon = 'type',
+            }
+
+            InputTab:Section{
+                Title = 'Inputs',
+            }:Input{
+                Title = 'Example Input',
+                Placeholder = 'Type here...',
+            }
+
+            local SliderTab = Window:Tab{
+                Title = 'Slider',
+                Icon = 'sliders',
+            }
+
+            SliderTab:Section{
+                Title = 'Sliders',
+            }:Slider{
+                Title = 'Example Slider',
+                Step = 1,
+                Min = 0,
+                Max = 100,
+                Default = 50,
+            }
+
+            local DropdownTab = Window:Tab{
+                Title = 'Dropdown',
+                Icon = 'list',
+            }
+
+            DropdownTab:Section{
+                Title = 'Dropdowns',
+            }:Dropdown{
+                Title = 'Example Dropdown',
+                Multi = false,
+                Options = {
+                    'Option 1',
+                    'Option 2',
+                    'Option 3',
+                },
+                Default = 1,
             }
             Loading:Update'Finalizando...'
             task.wait(0.4)

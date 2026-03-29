@@ -434,9 +434,9 @@ return function(Config)
             LayoutOrder = 2,
         }),
 
-        -- 🟢 Game Statistics (Moved from widget)
+        -- 🟢 Game Statistics
         New("Frame", {
-            Size = UDim2.new(1, 0, 0, 150),
+            Size = UDim2.new(1, 0, 0, 80),
             BackgroundTransparency = 1,
             LayoutOrder = 3,
         }, {
@@ -458,7 +458,7 @@ return function(Config)
                 BackgroundTransparency = .95,
             }, {
                 New("UICorner", { CornerRadius = UDim.new(0, 8) }),
-                New("UIStroke", { Thickness = 1, Color = Color3.fromHex("#FFD700"), Transparency = .9 }),
+                New("UIStroke", { Thickness = 1.5, Color = Color3.fromHex("#FFD700"), Transparency = .8 }),
                 New("TextLabel", {
                     Name = "GameName",
                     Text = "Loading...",
@@ -470,17 +470,6 @@ return function(Config)
                     BackgroundTransparency = 1,
                     TextTruncate = "AtEnd",
                 })
-            }),
-
-            -- Live Stats Row
-            New("Frame", {
-                Size = UDim2.new(1, 0, 0, 60),
-                BackgroundTransparency = 1,
-            }, {
-                New("UIListLayout", { FillDirection = "Horizontal", Padding = UDim.new(0, 8), HorizontalAlignment = "Center" }),
-                CreateMiniStat("FPS", "FPSValue"),
-                CreateMiniStat("PING", "PingValue"),
-                CreateMiniStat("RAM", "RamValue"),
             })
         }),
 
@@ -539,7 +528,8 @@ return function(Config)
             ZIndex = 3,
         }, {
              New("UIStroke", {
-                Thickness = 1,
+                Thickness = 2,
+                ApplyStrokeMode = "Border",
                 Color = Color3.fromHex("#FFD700"),
                 Transparency = .8,
             })
@@ -945,7 +935,7 @@ return function(Config)
 					New("UIListLayout", {
 						FillDirection = "Horizontal",
 						VerticalAlignment = "Center",
-						HorizontalAlignment = "Left",
+						HorizontalAlignment = "Right", -- Pushed to the right
 						Padding = UDim.new(0, Window.UIPadding / 2),
 					}),
 				}),
@@ -2132,36 +2122,58 @@ return function(Config)
         LangTrigger.LayoutOrder = 2 -- After version
 
         local LangDropdown = New("Frame", {
-            Size = UDim2.new(0, 80, 0, 0), -- Wider dropdown
+            Size = UDim2.new(0, 100, 0, 0), -- Wider dropdown
             Position = UDim2.new(0.5, 0, 1, 8),
             AnchorPoint = Vector2.new(0.5, 0),
-            BackgroundColor3 = Color3.fromHex("#121212"),
-            BorderSizePixel = 0,
+            BackgroundTransparency = 1,
             ClipsDescendants = true,
             Parent = LangTrigger,
-            ZIndex = 10000, -- Much higher ZIndex
+            ZIndex = 10000,
         }, {
-            New("UICorner", { CornerRadius = UDim.new(0, 8) }),
-            New("UIStroke", { Thickness = 1.5, Color = Color3.fromHex("#FFD700"), Transparency = .4 }),
-            New("UIListLayout", { Padding = UDim.new(0, 4) }),
+            Creator.NewRoundFrame(8, "Glass-1", {
+                Size = UDim2.new(1, 0, 1, 0),
+                ThemeTag = { ImageColor3 = "PanelBackground" },
+                ImageTransparency = 0.05,
+            }, {
+                New("UIStroke", { Thickness = 1.5, Color = Color3.fromHex("#FFD700"), Transparency = 0.7 })
+            }),
+            New("UIListLayout", {
+                Padding = UDim.new(0, 4),
+                SortOrder = "LayoutOrder",
+            }),
+            New("UIPadding", {
+                PaddingTop = UDim.new(0, 6),
+                PaddingBottom = UDim.new(0, 6),
+                PaddingLeft = UDim.new(0, 6),
+                PaddingRight = UDim.new(0, 6),
+            }),
         })
 
         local function CreateLangItem(lang)
             local item = New("TextButton", {
-                Size = UDim2.new(1, 0, 0, 25),
+                Size = UDim2.new(1, 0, 0, 30),
                 BackgroundTransparency = 1,
                 Text = lang,
-                TextSize = 12,
+                TextSize = 13,
                 FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
                 TextColor3 = Color3.new(1, 1, 1),
+                TextTransparency = 0.4,
                 Parent = LangDropdown,
+            }, {
+                New("UICorner", { CornerRadius = UDim.new(0, 6) }),
             })
-            Creator.AddSignal(item.MouseButton1Click, function()
-                CurrentLang = lang
-                LangTrigger.Text = lang
-                Tween(LangDropdown, 0.2, { Size = UDim2.new(0, 80, 0, 0) }):Play()
+
+            Creator.AddSignal(item.MouseEnter, function()
+                Tween(item, 0.2, { TextTransparency = 0, BackgroundTransparency = 0.95 }):Play()
             end)
-            return item
+            Creator.AddSignal(item.MouseLeave, function()
+                Tween(item, 0.2, { TextTransparency = 0.4, BackgroundTransparency = 1 }):Play()
+            end)
+
+            Creator.AddSignal(item.MouseButton1Click, function()
+                LangTrigger.Text = lang
+                Tween(LangDropdown, 0.2, { Size = UDim2.new(0, 100, 0, 0) }):Play()
+            end)
         end
 
         CreateLangItem("EN")
@@ -2169,8 +2181,8 @@ return function(Config)
         CreateLangItem("PT")
 
         Creator.AddSignal(LangTrigger.MouseButton1Click, function()
-            local targetSize = LangDropdown.Size.Y.Offset == 0 and 95 or 0
-            Tween(LangDropdown, 0.25, { Size = UDim2.new(0, 80, 0, targetSize) }, Enum.EasingStyle.Quint):Play()
+            local targetSize = LangDropdown.Size.Y.Offset == 0 and 110 or 0
+            Tween(LangDropdown, 0.25, { Size = UDim2.new(0, 100, 0, targetSize) }, Enum.EasingStyle.Quint):Play()
         end)
 
         Window.UIElements.Main.Main.Topbar.Center.Visible = true
@@ -2221,44 +2233,16 @@ return function(Config)
         local PingLabel = RightPanelContent:FindFirstChild("PingValue", true)
         local RamLabel = RightPanelContent:FindFirstChild("RamValue", true)
 
-        -- Fetch Game Name
-        pcall(function()
-            local success, info = pcall(function() return MarketplaceService:GetProductInfo(game.PlaceId) end)
-            if success and info and info.Name then
-                GameNameLabel.Text = info.Name
-            else
-                GameNameLabel.Text = game.Name or "Unknown"
-            end
-        end)
-
-        local lastUpdate = tick()
-        local frameCount = 0
-        
-        RunService.RenderStepped:Connect(function()
-            frameCount = frameCount + 1
-            local now = tick()
-            if now - lastUpdate >= 1 then
-                local fps = frameCount
-                frameCount = 0
-                lastUpdate = now
-                
-                if FPSLabel then FPSLabel.Text = tostring(fps) .. " FPS" end
-                
-                if PingLabel then
-                    local ping = math.floor(Stats.Network.ServerStatsItem["Data Ping"]:GetValue())
-                    PingLabel.Text = tostring(ping) .. " ms"
+        while task.wait(5) do -- Only update Game Name every 5s
+            pcall(function()
+                local success, info = pcall(function() return MarketplaceService:GetProductInfo(game.PlaceId) end)
+                if success and info and info.Name then
+                    GameNameLabel.Text = info.Name
+                else
+                    GameNameLabel.Text = game.Name or "Unknown"
                 end
-                
-                if RamLabel then
-                    local ram = math.floor(Stats:GetTotalMemoryUsageMb())
-                    if ram > 1024 then
-                        RamLabel.Text = string.format("%.1f GB", ram / 1024)
-                    else
-                        RamLabel.Text = tostring(ram) .. " MB"
-                    end
-                end
-            end
-        end)
+            end)
+        end
     end)
 
 

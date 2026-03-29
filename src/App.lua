@@ -32,39 +32,90 @@ return function(IntiHub, Loading)
         Border = true,
     })
 
-    -- */  About Tab  /* --
-    Loading:Update("Preparando Secciones...")
-    local AboutTab = Window:Tab({
-        Title = "About IntiHub",
-        Icon = "solar:info-square-bold",
-        Border = true,
+    -- */  Overview Tab  /* --
+    Loading:Update("Cargando Overview...")
+    local OverviewTab = Window:Tab({
+        Title = "Overview",
+        Icon = "home",
     })
 
-    local AboutSection = AboutTab:Section({
-        Title = "About IntiHub",
+    local ExampleGroup = OverviewTab:Section({
+        Title = "Group's Example",
     })
 
-    AboutSection:Image({
-        Image = "rbxassetid://136702870075563", -- Placeholder for IntiHub Image
-        AspectRatio = "16:9",
-        Radius = 9,
+    ExampleGroup:Button({
+        Title = "Button 1",
+        Callback = function() print("Button 1 Clicked") end,
     })
 
-    AboutSection:Section({
-        Title = "INTIHUB | Noble Deluxe Edition",
-        TextSize = 24,
-        FontWeight = Enum.FontWeight.SemiBold,
+    ExampleGroup:Button({
+        Title = "Button 2",
+        Callback = function() print("Button 2 Clicked") end,
     })
 
-    AboutSection:Section({
-        Title = "La librería de UI más avanzada para Roblox. Diseñada para ofrecer una experiencia ejecutiva y premium.",
-        TextSize = 18,
-        TextTransparency = 0.35,
-        FontWeight = Enum.FontWeight.Medium,
+    local ElementsGroup = OverviewTab:Section({
+        Title = "Elements",
     })
 
-    -- ... [Rest of the recovered tabs can be added here or the user can add them] ...
-    -- For now I will include the main Overview Tab to ensure the UI works
+    ElementsGroup:Button({
+        Title = "Button 1",
+        Callback = function() print("Button 1 Clicked") end,
+    })
+
+    ElementsGroup:Toggle({
+        Title = "Toggle 2",
+        Default = true,
+        Callback = function(v) print("Toggle 2:", v) end,
+    })
+
+    ElementsGroup:Colorpicker({
+        Title = "Colorpicker 3",
+        Default = Color3.fromHex("#00FF7F"),
+        Callback = function(v) print("Colorpicker 3:", v) end,
+    })
+
+    local Section1 = OverviewTab:Section({
+        Title = "Section 1",
+        Description = "Section exampleeee",
+    })
+
+    Section1:Button({
+        Title = "Button 1",
+    })
+
+    Section1:Toggle({
+        Title = "Toggle 2",
+    })
+
+    local Section2 = OverviewTab:Section({
+        Title = "Section 2",
+    })
+
+    Section2:Button({
+        Title = "Button 1",
+    })
+
+    Section2:Button({
+        Title = "Button 2",
+    })
+
+    -- */  Testing Tabs  /* --
+    Loading:Update("Preparando Componentes...")
+    
+    local ToggleTab = Window:Tab({ Title = "Toggle", Icon = "check-square" })
+    ToggleTab:Section({ Title = "Toggles" }):Toggle({ Title = "Example Toggle" })
+
+    local ButtonTab = Window:Tab({ Title = "Button", Icon = "mouse-pointer" })
+    ButtonTab:Section({ Title = "Buttons" }):Button({ Title = "Example Button" })
+
+    local InputTab = Window:Tab({ Title = "Input", Icon = "type" })
+    InputTab:Section({ Title = "Inputs" }):Input({ Title = "Example Input", Placeholder = "Type here..." })
+
+    local SliderTab = Window:Tab({ Title = "Slider", Icon = "sliders" })
+    SliderTab:Section({ Title = "Sliders" }):Slider({ Title = "Example Slider", Step = 1, Min = 0, Max = 100, Default = 50 })
+
+    local DropdownTab = Window:Tab({ Title = "Dropdown", Icon = "list" })
+    DropdownTab:Section({ Title = "Dropdowns" }):Dropdown({ Title = "Example Dropdown", Multi = false, Options = {"Option 1", "Option 2", "Option 3"}, Default = 1 })
 
     Loading:Update("Finalizando...")
     task.wait(0.4)
