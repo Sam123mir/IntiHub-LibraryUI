@@ -139,6 +139,7 @@ return function(Config)
 				Enum.ThumbnailSize.Size420x420
 			)
 		end)
+        return success and result or "rbxassetid://0"
 	end
 	Window.User.Enabled = true -- 🟢 Force Executive User Panel for Noble Deluxe
     Window.SideBarWidth = Window.SideBarWidth or 200
@@ -401,12 +402,12 @@ return function(Config)
                     New("UICorner", { CornerRadius = UDim.new(1, 0) })
                 })
             }),
-            -- Names
             New("Frame", {
-                Size = UDim2.new(1, 0, 0, 35),
+                Name = "NamesContainer",
+                Size = UDim2.new(1, 0, 0, 45),
                 BackgroundTransparency = 1,
             }, {
-                New("UIListLayout", { HorizontalAlignment = "Center", Padding = UDim.new(0, 2) }),
+                New("UIListLayout", { HorizontalAlignment = "Center", Padding = UDim.new(0, 2), VerticalAlignment = "Center" }),
                 New("TextLabel", {
                     Text = Players.LocalPlayer.DisplayName,
                     TextSize = 14,
@@ -428,7 +429,7 @@ return function(Config)
 
         -- 🟢 Separator
         New("Frame", {
-            Size = UDim2.new(0.8, 0, 0, 1),
+            Size = UDim2.new(0.9, 0, 0, 1),
             BackgroundColor3 = Color3.fromHex("#FFD700"),
             BackgroundTransparency = 0.8,
             LayoutOrder = 2,
@@ -456,19 +457,20 @@ return function(Config)
                 Size = UDim2.new(1, 0, 0, 40),
                 BackgroundColor3 = Color3.new(1,1,1),
                 BackgroundTransparency = .95,
+                AutomaticSize = "Y", -- Allow expanding for long names
             }, {
                 New("UICorner", { CornerRadius = UDim.new(0, 8) }),
                 New("UIStroke", { Thickness = 1.5, Color = Color3.fromHex("#FFD700"), Transparency = .8 }),
+                New("UIPadding", { PaddingLeft = UDim.new(0, 10), PaddingRight = UDim.new(0, 10), PaddingTop = UDim.new(0, 5), PaddingBottom = UDim.new(0, 5) }),
                 New("TextLabel", {
                     Name = "GameName",
                     Text = "Loading...",
                     TextSize = 12,
                     TextColor3 = Color3.new(1,1,1),
-                    Size = UDim2.new(1, -20, 1, 0),
-                    Position = UDim2.new(0.5, 0, 0.5, 0),
-                    AnchorPoint = Vector2.new(0.5, 0.5),
+                    Size = UDim2.new(1, 0, 0, 0),
+                    AutomaticSize = "Y",
                     BackgroundTransparency = 1,
-                    TextTruncate = "AtEnd",
+                    TextWrapped = true,
                 })
             })
         }),
@@ -519,23 +521,46 @@ return function(Config)
         BackgroundTransparency = 1,
         Visible = true,
     }, {
-        Creator.NewRoundFrame(Window.UICorner - (Window.UIPadding/2), "Squircle", {
-            Size = UDim2.new(1, 0, 1, 0),
-            ThemeTag = {
-                ImageColor3 = "PanelBackground",
-                ImageTransparency = "PanelBackgroundTransparency",
-            },
-            ZIndex = 3,
+        New("CanvasGroup", { -- For clean fade/slide animations
+            Size = UDim2.new(1,0,1,0),
+            AutomaticSize = "Y",
+            BackgroundTransparency = 1,
+            Name = "Group"
         }, {
-             New("UIStroke", {
-                Thickness = 2,
-                ApplyStrokeMode = "Border",
-                Color = Color3.fromHex("#FFD700"),
-                Transparency = .8,
-            })
-        }),
-        RightPanelContent
+            Creator.NewRoundFrame(Window.UICorner - (Window.UIPadding/2), "Squircle", {
+                Size = UDim2.new(1, 0, 1, 0),
+                ThemeTag = {
+                    ImageColor3 = "PanelBackground",
+                    ImageTransparency = "PanelBackgroundTransparency",
+                },
+                ZIndex = 3,
+            }, {
+                New("UIStroke", {
+                    Thickness = 2,
+                    ApplyStrokeMode = "Border",
+                    Color = Color3.fromHex("#FFD700"),
+                    Transparency = .8,
+                })
+            }),
+            RightPanelContent
+        })
     })
+
+    function Window:ToggleRightPanel()
+        local Panel = Window.UIElements.RightPanel
+        local Visible = not Panel.Visible
+        
+        if Visible then
+            Panel.Visible = true
+            Tween(Panel, 0.4, { Position = UDim2.new(1, 15, 0, 0) }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+        else
+            local tween = Tween(Panel, 0.4, { Position = UDim2.new(1, 300, 0, 0) }, Enum.EasingStyle.Quint, Enum.EasingDirection.In)
+            tween.Completed:Connect(function()
+                if not Panel.Visible then Panel.Visible = false end
+            end)
+            tween:Play()
+        end
+    end
 
     -- Breadcrumbs / Content Header Removed
 
@@ -935,8 +960,8 @@ return function(Config)
 					New("UIListLayout", {
 						FillDirection = "Horizontal",
 						VerticalAlignment = "Center",
-						HorizontalAlignment = "Right", -- Pushed to the right
-						Padding = UDim.new(0, Window.UIPadding / 2),
+						HorizontalAlignment = "Left", -- Balanced left-center
+						Padding = UDim.new(0, 15),
 					}),
 				}),
 				New("Frame", { -- Topbar Right Side -- Window.UIElements.Main.Main.Topbar.Right
@@ -964,6 +989,10 @@ return function(Config)
 			}),
 		}),
 	})
+
+	Window:CreateTopbarButton("SidebarToggle", "layout-panel-right", function()
+        Window:ToggleRightPanel()
+    end, 1000, true, Color3.fromHex("#FFD700"))
 
 	Creator.AddSignal(Window.UIElements.Main.Main.Topbar.Left:GetPropertyChangedSignal("AbsoluteSize"), function()
 		local LeftWidth = 0

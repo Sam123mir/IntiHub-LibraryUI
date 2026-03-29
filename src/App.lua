@@ -5,28 +5,31 @@ return function(IntiHub, Loading)
 
     -- */  Window  /* --
     local Window = IntiHub:CreateWindow({
-        Title = "IntiHub | Noble Deluxe",
-        Folder = "intihub",
-        Icon = "solar:folder-2-bold-duotone",
-        NewElements = true,
-        HideSearchBar = false,
+        Title = "Noble Deluxe",
+        Author = "by IntiHub Team",
+        Folder = "intihub_noble",
+        Icon = "rbxassetid://120997033468887",
+        Resizable = true,
+        MinSize = Vector2.new(650, 450),
+        MaxSize = Vector2.new(1000, 700),
+        Transparent = true,
+        Acrylic = true,
         OpenButton = {
-            Title = "Open IntiHub UI",
+            Title = "INTIHUB",
             Enabled = true,
             Draggable = true,
-            Scale = 0.5,
         },
         Topbar = {
-            Height = 44,
-            ButtonsType = "Mac",
+            Height = 52,
+            ButtonsType = "Default",
         },
     })
 
     Loading:Update("Cargando Etiquetas...")
     task.wait(0.3)
-    -- */  Tags  /* --
+    -- */  Tags / Version  /* --
     Window:Tag({
-        Title = "v2.1.0",
+        Title = "v2.1.2",
         Icon = "github",
         Color = Color3.fromHex("#FFD700"),
         Border = true,
@@ -34,91 +37,93 @@ return function(IntiHub, Loading)
 
     -- */  Overview Tab  /* --
     Loading:Update("Cargando Overview...")
-    local OverviewTab = Window:Tab({
-        Title = "Overview",
-        Icon = "home",
-    })
-
-    local ExampleGroup = OverviewTab:Section({
-        Title = "Group's Example",
-    })
-
-    ExampleGroup:Button({
-        Title = "Button 1",
-        Callback = function() print("Button 1 Clicked") end,
-    })
-
-    ExampleGroup:Button({
-        Title = "Button 2",
-        Callback = function() print("Button 2 Clicked") end,
-    })
-
-    local ElementsGroup = OverviewTab:Section({
-        Title = "Elements",
-    })
-
-    ElementsGroup:Button({
-        Title = "Button 1",
-        Callback = function() print("Button 1 Clicked") end,
-    })
-
-    ElementsGroup:Toggle({
-        Title = "Toggle 2",
-        Default = true,
-        Callback = function(v) print("Toggle 2:", v) end,
-    })
-
-    ElementsGroup:Colorpicker({
-        Title = "Colorpicker 3",
-        Default = Color3.fromHex("#00FF7F"),
-        Callback = function(v) print("Colorpicker 3:", v) end,
-    })
-
-    local Section1 = OverviewTab:Section({
-        Title = "Section 1",
-        Description = "Section exampleeee",
-    })
-
-    Section1:Button({
-        Title = "Button 1",
-    })
-
-    Section1:Toggle({
-        Title = "Toggle 2",
-    })
-
-    local Section2 = OverviewTab:Section({
-        Title = "Section 2",
-    })
-
-    Section2:Button({
-        Title = "Button 1",
-    })
-
-    Section2:Button({
-        Title = "Button 2",
-    })
-
-    -- */  Testing Tabs  /* --
-    Loading:Update("Preparando Componentes...")
+    local OverviewTab = Window:Tab({ Title = "Overview", Icon = "home" })
     
+    OverviewTab:Section({ Title = "Bienvenido" }):Paragraph({ 
+        Title = "Noble Deluxe v2.1", 
+        Content = "Esta es la interfaz definitiva de IntiHub. Diseñada para ofrecer la mejor experiencia visual y funcional en cualquier executor." 
+    })
+
+    OverviewTab:Section({ Title = "Información del Sistema" }):Paragraph({ 
+        Title = "Estado: Operativo", 
+        Content = "Todos los módulos cargados satisfactoriamente. El panel de estadísticas fue reintegrado al widget inferior." 
+    })
+
+    -- */  Toggle Tab  /* --
+    Loading:Update("Preparando Módulos...")
     local ToggleTab = Window:Tab({ Title = "Toggle", Icon = "check-square" })
-    ToggleTab:Section({ Title = "Toggles" }):Toggle({ Title = "Example Toggle" })
+    local ToggleSec = ToggleTab:Section({ Title = "Módulos de Automatización" })
 
+    ToggleSec:Toggle({ 
+        Title = "Enable Auto-Farm", 
+        Desc = "Comienza la recolección automática de recursos.",
+        Default = true, 
+        Callback = function(v) print("Auto-Farm:", v) end 
+    })
+
+    ToggleSec:Toggle({ 
+        Title = "Anti-AFK System", 
+        Desc = "Previene la desconexión por inactividad.",
+        Default = false, 
+        Callback = function(v) print("Anti-AFK:", v) end 
+    })
+
+    -- */  Button Tab  /* --
     local ButtonTab = Window:Tab({ Title = "Button", Icon = "mouse-pointer" })
-    ButtonTab:Section({ Title = "Buttons" }):Button({ Title = "Example Button" })
+    ButtonTab:Section({ Title = "Acciones Rápidas" }):Button({
+        Title = "Re-ejecutar Scripts",
+        Desc = "Refresca y vuelve a cargar los scripts locales.",
+        Callback = function() IntiHub:Notify({ Title = "Sistema", Content = "Scripts recargados.", Duration = 2 }) end
+    })
 
+    -- */  Input Tab  /* --
     local InputTab = Window:Tab({ Title = "Input", Icon = "type" })
-    InputTab:Section({ Title = "Inputs" }):Input({ Title = "Example Input", Placeholder = "Type here..." })
+    InputTab:Section({ Title = "Configuración" }):Input({
+        Title = "Discord Webhook",
+        Placeholder = "Enter URL here...",
+        Callback = function(v) print("Webhook set to:", v) end
+    })
 
+    -- */  Slider Tab  /* --
     local SliderTab = Window:Tab({ Title = "Slider", Icon = "sliders" })
-    SliderTab:Section({ Title = "Sliders" }):Slider({ Title = "Example Slider", Step = 1, Min = 0, Max = 100, Default = 50 })
+    local PerfSec = SliderTab:Section({ Title = "Rendimiento" })
+    
+    PerfSec:Slider({ 
+        Title = "Límite de FPS", 
+        Min = 30, Max = 240, Default = 60, 
+        Callback = function(v) print("FPS:", v) end 
+    })
 
+    PerfSec:Slider({ 
+        Title = "WalkSpeed Modifier", 
+        Min = 16, Max = 100, Default = 16, 
+        Callback = function(v) print("Speed:", v) end 
+    })
+
+    -- */  Dropdown Tab  /* --
     local DropdownTab = Window:Tab({ Title = "Dropdown", Icon = "list" })
-    DropdownTab:Section({ Title = "Dropdowns" }):Dropdown({ Title = "Example Dropdown", Multi = false, Options = {"Option 1", "Option 2", "Option 3"}, Default = 1 })
+    local SelectorSec = DropdownTab:Section({ Title = "Selectores" })
+
+    SelectorSec:Dropdown({ 
+        Title = "Seleccionar Servidor", 
+        Options = {"Automático", "North America", "Europe", "South America", "Asia"}, 
+        Default = "Automático",
+        Callback = function(v) print("Server:", v) end 
+    })
+
+    SelectorSec:Dropdown({ 
+        Title = "Scripts Disponibles", 
+        Multi = true,
+        Options = {"Arsenal", "Doors", "BloxFruits", "Piggy", "Adopt Me", "Murder Mystery 2"}, 
+        Default = {"Arsenal", "Doors"},
+        Callback = function(v) print("Scripts selected:", table.concat(v, ", ")) end 
+    })
 
     Loading:Update("Finalizando...")
     task.wait(0.4)
+    
+    Window:SelectTab(1)
+    IntiHub:Notify({ Title = "Sistema", Content = "Noble Deluxe listo para usar.", Duration = 4 })
     
     return Window
 end

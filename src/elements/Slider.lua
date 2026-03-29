@@ -11,7 +11,7 @@ local Tween = Creator.Tween
 
 local Element = {}
 
-local IsSliderHolding = false
+-- local IsSliderHolding = false -- 🟢 Removed global state (was shared across all sliders)
 
 function Element:New(Config)
     local Slider = {
@@ -33,6 +33,8 @@ function Element:New(Config)
         TextBoxWidth = Config.Window.NewElements and 40 or 30,
         ThumbSize = 13,
         IconSize = 26,
+        
+        IsHolding = false, -- 🟢 Per-instance dragging state
     }
     if Slider.Icons == {} then
         Slider.Icons = {
@@ -226,11 +228,11 @@ function Element:New(Config)
     
     function Slider:Set(Value, input)
         if CanCallback then
-            if not Slider.IsFocusing and not IsSliderHolding and (not input or (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch)) then
+            if not Slider.IsFocusing and not Slider.IsHolding and (not input or (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch)) then
                 if input then
                     isTouch = (input.UserInputType == Enum.UserInputType.Touch)
                     ScrollingFrameParent.ScrollingEnabled = false
-                    IsSliderHolding = true
+                    Slider.IsHolding = true
                     
                     local inputPosition = isTouch and input.Position.X or UserInputService:GetMouseLocation().X
                     local delta = math.clamp((inputPosition - Slider.UIElements.SliderIcon.AbsolutePosition.X) / Slider.UIElements.SliderIcon.AbsoluteSize.X, 0, 1)
@@ -266,7 +268,7 @@ function Element:New(Config)
                         if (endInput.UserInputType == Enum.UserInputType.MouseButton1 or endInput.UserInputType == Enum.UserInputType.Touch) and input == endInput then
                             moveconnection:Disconnect()
                             releaseconnection:Disconnect()
-                            IsSliderHolding = false
+                            Slider.IsHolding = false
                             ScrollingFrameParent.ScrollingEnabled = true
                             
                             if Config.Window.NewElements then
@@ -331,7 +333,7 @@ function Element:New(Config)
     end)
     
     Creator.AddSignal(Slider.UIElements.SliderContainer.InputBegan, function(input)
-        if Slider.Locked or IsSliderHolding then
+        if Slider.Locked or Slider.IsHolding then
             return
         end
         
