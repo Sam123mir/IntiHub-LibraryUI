@@ -739,8 +739,18 @@ function Creator.GetAsset(Url, Folder, Type, Name)
 				or ""
 
 			if not RunService:IsStudio() and writefile then
-				makefolder("IntiHub_Data/" .. Folder .. "/assets")
-				writefile(FileName, body)
+				pcall(function()
+					if not isfolder("IntiHub_Data") then
+						makefolder("IntiHub_Data")
+					end
+					if not isfolder("IntiHub_Data/" .. Folder) then
+						makefolder("IntiHub_Data/" .. Folder)
+					end
+					if not isfolder("IntiHub_Data/" .. Folder .. "/assets") then
+						makefolder("IntiHub_Data/" .. Folder .. "/assets")
+					end
+					writefile(FileName, body)
+				end)
 				return getcustomasset(FileName)
 			end
 		end)

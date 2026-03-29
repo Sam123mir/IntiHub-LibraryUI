@@ -123,12 +123,14 @@ return function(Config)
 	end
 
 	if not RunService:IsStudio() and Window.Folder and writefile then
-		if not isfolder("IntiHub_Data/" .. Window.Folder) then
-			makefolder("IntiHub_Data/" .. Window.Folder)
-		end
-		if not isfolder("IntiHub_Data/" .. Window.Folder .. "/assets") then
-			makefolder("IntiHub_Data/" .. Window.Folder .. "/assets")
-		end
+		pcall(function()
+			if not isfolder("IntiHub_Data/" .. Window.Folder) then
+				makefolder("IntiHub_Data/" .. Window.Folder)
+			end
+			if not isfolder("IntiHub_Data/" .. Window.Folder .. "/assets") then
+				makefolder("IntiHub_Data/" .. Window.Folder .. "/assets")
+			end
+		end)
 	end
 
 	local function GetUserThumb(Anonymous)

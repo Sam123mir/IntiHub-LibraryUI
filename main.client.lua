@@ -1066,8 +1066,19 @@ do
                     }.Body or ''
 
                     if not RunService:IsStudio() and writefile then
-                        makefolder('IntiHub_Data/' .. Folder .. '/assets')
-                        writefile(FileName, body)
+                        pcall(function()
+                            if not isfolder'IntiHub_Data' then
+                                makefolder'IntiHub_Data'
+                            end
+                            if not isfolder('IntiHub_Data/' .. Folder) then
+                                makefolder('IntiHub_Data/' .. Folder)
+                            end
+                            if not isfolder('IntiHub_Data/' .. Folder .. '/assets') then
+                                makefolder('IntiHub_Data/' .. Folder .. '/assets')
+                            end
+
+                            writefile(FileName, body)
+                        end)
 
                         return getcustomasset(FileName)
                     end
@@ -4889,9 +4900,17 @@ do
             ConfigManager.Folder = Window.Folder
             ConfigManager.Path = 'IntiHub_Data/' .. tostring(ConfigManager.Folder) .. '/config/'
 
-            if not isfolder(ConfigManager.Path) then
-                makefolder(ConfigManager.Path)
-            end
+            pcall(function()
+                if not isfolder'IntiHub_Data' then
+                    makefolder'IntiHub_Data'
+                end
+                if not isfolder('IntiHub_Data/' .. tostring(ConfigManager.Folder)) then
+                    makefolder('IntiHub_Data/' .. tostring(ConfigManager.Folder))
+                end
+                if not isfolder(ConfigManager.Path) then
+                    makefolder(ConfigManager.Path)
+                end
+            end)
 
             local files = ConfigManager:AllConfigs()
 
@@ -4971,9 +4990,11 @@ do
 
                 local jsonData = HttpService:JSONEncode(saveData)
 
-                if writefile then
-                    writefile(ConfigModule.Path, jsonData)
-                end
+                pcall(function()
+                    if writefile then
+                        writefile(ConfigModule.Path, jsonData)
+                    end
+                end)
 
                 return saveData
             end
@@ -5135,19 +5156,20 @@ do
 
             local files = {}
 
-            if not isfolder(ConfigManager.Path) then
-                makefolder(ConfigManager.Path)
-
-                return files
-            end
-
-            for _, file in next, listfiles(ConfigManager.Path)do
-                local name = file:match'([^\\/]+)%.json$'
-
-                if name then
-                    table.insert(files, name)
+            pcall(function()
+                if not isfolder(ConfigManager.Path) then
+                    makefolder(ConfigManager.Path)
                 end
-            end
+            end)
+            pcall(function()
+                for _, file in next, listfiles(ConfigManager.Path)do
+                    local name = file:match'([^\\/]+)%.json$'
+
+                    if name then
+                        table.insert(files, name)
+                    end
+                end
+            end)
 
             return files
         end
@@ -11244,12 +11266,14 @@ do
                 }
             end
             if not RunService:IsStudio() and Window.Folder and writefile then
-                if not isfolder('IntiHub_Data/' .. Window.Folder) then
-                    makefolder('IntiHub_Data/' .. Window.Folder)
-                end
-                if not isfolder('IntiHub_Data/' .. Window.Folder .. '/assets') then
-                    makefolder('IntiHub_Data/' .. Window.Folder .. '/assets')
-                end
+                pcall(function()
+                    if not isfolder('IntiHub_Data/' .. Window.Folder) then
+                        makefolder('IntiHub_Data/' .. Window.Folder)
+                    end
+                    if not isfolder('IntiHub_Data/' .. Window.Folder .. '/assets') then
+                        makefolder('IntiHub_Data/' .. Window.Folder .. '/assets')
+                    end
+                end)
             end
 
             local function GetUserThumb(Anonymous)
