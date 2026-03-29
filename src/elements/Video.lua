@@ -35,7 +35,9 @@ function Element:New(Config)
             if not isfile(videoPath) then
                 local success, result = pcall(function()
                     local response = Creator.Request({Url = VideoModule.Video, Method="GET", Headers = { ["User-Agent"] = "Roblox/Exploit" }})
-                    writefile(videoPath, response.Body)
+                    pcall(function()
+                        writefile(videoPath, response.Body)
+                    end)
                 end)
                 if not success then
                     warn("[ Window.Background ] Failed to download video: " .. tostring(result))

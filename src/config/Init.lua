@@ -142,9 +142,11 @@ function ConfigManager:SetPath(customPath)
         ConfigManager.Path = customPath .. "/"
     end
     
-    if not isfolder(ConfigManager.Path) then
-        makefolder(ConfigManager.Path)
-    end
+    pcall(function()
+        if not isfolder(ConfigManager.Path) then
+            makefolder(ConfigManager.Path)
+        end
+    end)
     
     return true
 end

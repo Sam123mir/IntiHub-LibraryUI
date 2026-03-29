@@ -1076,7 +1076,8 @@ do
                             if not isfolder('IntiHub_Data/' .. Folder .. '/assets') then
                                 makefolder('IntiHub_Data/' .. Folder .. '/assets')
                             end
-
+                        end)
+                        pcall(function()
                             writefile(FileName, body)
                         end)
 
@@ -3469,7 +3470,16 @@ do
 
             local function handleSuccess(key)
                 KeyDialog:Close()()
-                writefile((Config.Folder or 'Temp') .. '/' .. Filename .. '.key', tostring(key))
+
+                local folder = Config.Folder or 'Temp'
+
+                pcall(function()
+                    if not isfolder(folder) then
+                        makefolder(folder)
+                    end
+
+                    writefile(folder .. '/' .. Filename .. '.key', tostring(key))
+                end)
                 task.wait(0.4)
                 func(true)
             end
@@ -4934,9 +4944,12 @@ do
             if not customPath:match'/$' then
                 ConfigManager.Path = customPath .. '/'
             end
-            if not isfolder(ConfigManager.Path) then
-                makefolder(ConfigManager.Path)
-            end
+
+            pcall(function()
+                if not isfolder(ConfigManager.Path) then
+                    makefolder(ConfigManager.Path)
+                end
+            end)
 
             return true
         end
@@ -11807,7 +11820,9 @@ do
                         local success, result = pcall(function()
                             local response = game.HttpGet and game:HttpGet(BGVideo)
 
-                            writefile(videoPath, response.Body)
+                            pcall(function()
+                                writefile(videoPath, response.Body)
+                            end)
                         end)
 
                         if not success then
@@ -11853,7 +11868,9 @@ do
                     local success, result = pcall(function()
                         local response = game.HttpGet and game:HttpGet(BGImageUrl)
 
-                        writefile(imagePath, response.Body)
+                        pcall(function()
+                            writefile(imagePath, response.Body)
+                        end)
                     end)
 
                     if not success then

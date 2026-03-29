@@ -690,7 +690,9 @@ return function(Config)
 					-- 	Headers = { ["User-Agent"] = "Roblox/Exploit" },
 					-- })
 					local response = game.HttpGet and game:HttpGet(BGVideo)
-					writefile(videoPath, response.Body)
+					pcall(function()
+						writefile(videoPath, response.Body)
+					end)
 				end)
 				if not success then
 					warn("[ IntiHub.Window.Background ] Failed to download video: " .. tostring(result))
@@ -734,7 +736,9 @@ return function(Config)
 				-- 	Headers = { ["User-Agent"] = "Roblox/Exploit" },
 				-- })
 				local response = game.HttpGet and game:HttpGet(BGImageUrl)
-				writefile(imagePath, response.Body)
+				pcall(function()
+					writefile(imagePath, response.Body)
+				end)
 			end)
 			if not success then
 				warn("[ Window.Background ] Failed to download image: " .. tostring(result))

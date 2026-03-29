@@ -426,7 +426,13 @@ function KeySystem.new(Config, Filename, func, keyValidator)
 
 	local function handleSuccess(key)
 		KeyDialog:Close()()
-		writefile((Config.Folder or "Temp") .. "/" .. Filename .. ".key", tostring(key))
+		local folder = Config.Folder or "Temp"
+		pcall(function()
+			if not isfolder(folder) then
+				makefolder(folder)
+			end
+			writefile(folder .. "/" .. Filename .. ".key", tostring(key))
+		end)
 		task.wait(0.4)
 		func(true)
 	end
