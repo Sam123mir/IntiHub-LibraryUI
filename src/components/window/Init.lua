@@ -551,6 +551,7 @@ return function(Config)
             Name = "Group"
         }, {
             Creator.NewRoundFrame(Window.UICorner - (Window.UIPadding/2), "Squircle", {
+                Name = "Squircle",
                 Size = UDim2.new(1, 0, 1, 0),
                 BackgroundColor3 = Color3.fromHex("#0A0A0A"),
                 ZIndex = 3,
@@ -577,14 +578,18 @@ return function(Config)
 
     -- Animate Glow Trail
     task.spawn(function()
-        local Gradient = Window.UIElements.RightPanel.Group.Squircle.UIStroke.GlowTrail
-        while true do
-            for i = 0, 360, 2 do
-                Gradient.Rotation = i
-                task.wait(0.02)
-                if not Window.UIElements.RightPanel then break end
+        while task.wait(0.02) do
+            if Window.Destroyed or not Window.UIElements.RightPanel then break end
+            local Group = Window.UIElements.RightPanel:FindFirstChild("Group")
+            local Squircle = Group and Group:FindFirstChild("Squircle")
+            local Stroke = Squircle and Squircle:FindFirstChildOfClass("UIStroke")
+            local Gradient = Stroke and Stroke:FindFirstChild("GlowTrail")
+            
+            if Gradient then
+                Gradient.Rotation = (Gradient.Rotation + 2) % 360
+            else
+                break -- Exit if elements are missing
             end
-            if not Window.UIElements.RightPanel then break end
         end
     end)
 

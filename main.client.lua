@@ -6824,6 +6824,7 @@ do
                     Size = UDim2.new(0, Slider.TextBoxWidth + 10, 0, 22),
                     BackgroundColor3 = Color3.fromHex'#0F0D00',
                     BackgroundTransparency = 0.5,
+                    Name = 'TextBoxContainer',
                     Visible = Slider.IsTextbox,
                     LayoutOrder = -1,
                 }, {
@@ -6921,7 +6922,7 @@ do
                                         Size = UDim2.new(delta, 0, 1, 0),
                                     }):Play()
 
-                                    Slider.UIElements.SliderContainer.TextBox.Text = FormatValue(Value)
+                                    Slider.UIElements.SliderContainer.TextBoxContainer.TextBox.Text = FormatValue(Value)
 
                                     if Tooltip then
                                         Tooltip.TitleFrame.Text = FormatValue(Value)
@@ -7012,16 +7013,16 @@ do
                 end
             end
 
-            Creator.AddSignal(Slider.UIElements.SliderContainer.TextBox.FocusLost, function(
+            Creator.AddSignal(Slider.UIElements.SliderContainer.TextBoxContainer.TextBox.FocusLost, function(
                 enterPressed
             )
                 if enterPressed then
-                    local newValue = tonumber(Slider.UIElements.SliderContainer.TextBox.Text)
+                    local newValue = tonumber(Slider.UIElements.SliderContainer.TextBoxContainer.TextBox.Text)
 
                     if newValue then
                         Slider:Set(newValue)
                     else
-                        Slider.UIElements.SliderContainer.TextBox.Text = FormatValue(LastValue)
+                        Slider.UIElements.SliderContainer.TextBoxContainer.TextBox.Text = FormatValue(LastValue)
 
                         if Tooltip then
                             Tooltip.TitleFrame.Text = FormatValue(LastValue)
@@ -11647,6 +11648,7 @@ do
                     Name = 'Group',
                 }, {
                     Creator.NewRoundFrame(Window.UICorner - (Window.UIPadding / 2), 'Squircle', {
+                        Name = 'Squircle',
                         Size = UDim2.new(1, 0, 1, 0),
                         BackgroundColor3 = Color3.fromHex'#0A0A0A',
                         ZIndex = 3,
@@ -11672,20 +11674,19 @@ do
             })
 
             task.spawn(function()
-                local Gradient = Window.UIElements.RightPanel.Group.Squircle.UIStroke.GlowTrail
-
-                while true do
-                    for i = 0, 360, 2 do
-                        Gradient.Rotation = i
-
-                        task.wait(0.02)
-
-                        if not Window.UIElements.RightPanel then
-                            break
-                        end
+                while task.wait(0.02) do
+                    if Window.Destroyed or not Window.UIElements.RightPanel then
+                        break
                     end
 
-                    if not Window.UIElements.RightPanel then
+                    local Group = Window.UIElements.RightPanel:FindFirstChild'Group'
+                    local Squircle = Group and Group:FindFirstChild'Squircle'
+                    local Stroke = Squircle and Squircle:FindFirstChildOfClass'UIStroke'
+                    local Gradient = Stroke and Stroke:FindFirstChild'GlowTrail'
+
+                    if Gradient then
+                        Gradient.Rotation = (Gradient.Rotation + 2) % 360
+                    else
                         break
                     end
                 end
