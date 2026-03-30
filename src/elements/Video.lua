@@ -45,13 +45,15 @@ function Element:New(Config)
                 end
             end
             
-            local success, customAsset = pcall(function()
+            local assetSuccess, customAsset = pcall(function()
                 return getcustomasset(videoPath)
             end)
-            if not success then
-                warn("[ Window.Background ] Failed to load custom asset: " .. tostring(customAsset))
+            if not assetSuccess then
+                warn("[ Video.Element ] Failed to load custom asset: " .. tostring(customAsset))
+                BGVideo = VideoModule.Video -- Fallback to URL
+            else
+                BGVideo = customAsset
             end
-            BGVideo = customAsset
         else
             BGVideo = VideoModule.Video
         end

@@ -428,10 +428,12 @@ function KeySystem.new(Config, Filename, func, keyValidator)
 		KeyDialog:Close()()
 		local folder = Config.Folder or "Temp"
 		pcall(function()
-			if not isfolder(folder) then
-				makefolder(folder)
-			end
-			writefile(folder .. "/" .. Filename .. ".key", tostring(key))
+			pcall(function()
+				if not isfolder(folder) then
+					makefolder(folder)
+				end
+				writefile(folder .. "/" .. Filename .. ".key", tostring(key))
+			end)
 		end)
 		task.wait(0.4)
 		func(true)

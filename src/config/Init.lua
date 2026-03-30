@@ -123,9 +123,12 @@ function ConfigManager:Init(WindowTable)
     local files = ConfigManager:AllConfigs()
     
     for _, f in next, files do
-        if isfile and readfile and isfile(f .. ".json") then
-            ConfigManager.Configs[f] = readfile(f .. ".json")
-        end
+        local configFilePath = ConfigManager.Path .. f .. ".json"
+        pcall(function()
+            if isfile and readfile and isfile(configFilePath) then
+                ConfigManager.Configs[f] = readfile(configFilePath)
+            end
+        end)
     end
     
     return ConfigManager

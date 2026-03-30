@@ -5,7 +5,7 @@
  _/ // / / / /_/ / __  / /_/ / /_/ /
 /___/_/ /_/\__/_/_/ /_/\__,_/_.___/ 
                                     
-    v1.7.0  |  2026-03-28  |  Roblox UI Library - Noble Deluxe v2.0
+    v1.7.0  |  2026-03-29  |  Roblox UI Library - Noble Deluxe v2.0
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -1056,7 +1056,15 @@ do
             local FileName = 'IntiHub_Data/' .. Folder .. '/assets/.' .. Type .. '-' .. Name .. '.png'
 
             if not RunService:IsStudio() and isfile and isfile(FileName) then
-                return getcustomasset(FileName)
+                local assetSuccess, assetResult = pcall(function()
+                    return getcustomasset(FileName)
+                end)
+
+                if assetSuccess then
+                    return assetResult
+                end
+
+                return FileName
             end
             if string.find(Url, 'http') then
                 local success, response = pcall(function()
@@ -1081,13 +1089,23 @@ do
                             writefile(FileName, body)
                         end)
 
-                        return getcustomasset(FileName)
+                        local assetSuccess, assetResult = pcall(function()
+                            return getcustomasset(FileName)
+                        end)
+
+                        if assetSuccess then
+                            return assetResult
+                        end
                     end
+
+                    return Url
                 end)
 
                 if success and response then
                     return response
                 end
+
+                return Url
             end
 
             return Url
@@ -1138,34 +1156,47 @@ do
                 IconLabel.Parent = ImageFrame
             elseif string.find(Img, 'http') then
                 local FileName = 'IntiHub_Data/' .. Folder .. '/assets/.' .. Type .. '-' .. Name .. '.png'
-                local success, response = pcall(function()
-                    task.spawn(function()
-                        local response = Creator.Request and Creator.Request{
+
+                if not RunService:IsStudio() and isfile and isfile(FileName) then
+                    local assetSuccess, assetResult = pcall(function()
+                        return getcustomasset(FileName)
+                    end)
+
+                    if assetSuccess then
+                        ImageFrame.ImageLabel.Image = assetResult
+
+                        return ImageFrame
+                    end
+                end
+
+                task.spawn(function()
+                    local success, body = pcall(function()
+                        return Creator.Request and Creator.Request{
                             Url = Img,
                             Method = 'GET',
-                        }.Body or {}
+                        }.Body
+                    end)
 
-                        if not RunService:IsStudio() and writefile then
-                            writefile(FileName, response)
-                        end
+                    if success and body and body ~= '' then
+                        pcall(function()
+                            if writefile then
+                                writefile(FileName, body)
+                            end
+                        end)
 
-                        local assetSuccess, asset = pcall(getcustomasset, FileName)
+                        local assetSuccess, assetResult = pcall(function()
+                            return getcustomasset(FileName)
+                        end)
 
                         if assetSuccess then
-                            ImageFrame.ImageLabel.Image = asset
+                            ImageFrame.ImageLabel.Image = assetResult
                         else
-                            warn(string.format("[ IntiHub.Creator ] Failed to load custom asset '%s': %s", FileName, tostring(asset)))
-                            ImageFrame:Destroy()
-
-                            return
+                            ImageFrame.ImageLabel.Image = Img
                         end
-                    end)
+                    else
+                        ImageFrame.ImageLabel.Image = Img
+                    end
                 end)
-
-                if not success then
-                    warn("[ IntiHub.Creator ]  '" .. identifyexecutor() or 'Studio' .. "' doesnt support the URL Images. Error: " .. response)
-                    ImageFrame:Destroy()
-                end
             elseif Img == '' then
                 ImageFrame.Visible = false
             else
@@ -3474,11 +3505,13 @@ do
                 local folder = Config.Folder or 'Temp'
 
                 pcall(function()
-                    if not isfolder(folder) then
-                        makefolder(folder)
-                    end
+                    pcall(function()
+                        if not isfolder(folder) then
+                            makefolder(folder)
+                        end
 
-                    writefile(folder .. '/' .. Filename .. '.key', tostring(key))
+                        writefile(folder .. '/' .. Filename .. '.key', tostring(key))
+                    end)
                 end)
                 task.wait(0.4)
                 func(true)
@@ -4925,9 +4958,13 @@ do
             local files = ConfigManager:AllConfigs()
 
             for _, f in next, files do
-                if isfile and readfile and isfile(f .. '.json') then
-                    ConfigManager.Configs[f] = readfile(f .. '.json')
-                end
+                local configFilePath = ConfigManager.Path .. f .. '.json'
+
+                pcall(function()
+                    if isfile and readfile and isfile(configFilePath) then
+                        ConfigManager.Configs[f] = readfile(configFilePath)
+                    end
+                end)
             end
 
             return ConfigManager
@@ -11881,7 +11918,15 @@ do
                 end
 
                 local success, customAsset = pcall(function()
-                    return getcustomasset(imagePath)
+                    local assetSuccess, assetResult = pcall(function()
+                        return getcustomasset(imagePath)
+                    end)
+
+                    if assetSuccess then
+                        return assetResult
+                    end
+
+                    return Window.Background
                 end)
 
                 if not success then
@@ -13791,11 +13836,18 @@ do
 
                 if Config.KeySystem.KeyValidator then
                     if Config.KeySystem.SaveKey and isfile(keyPath) then
-                        local savedKey = readfile(keyPath)
-                        local isValid = Config.KeySystem.KeyValidator(savedKey)
+                        local readSuccess, savedKey = pcall(function()
+                            return readfile(keyPath)
+                        end)
 
-                        if isValid then
-                            CanLoadWindow = true
+                        if readSuccess then
+                            local isValid = Config.KeySystem.KeyValidator(savedKey)
+
+                            if isValid then
+                                CanLoadWindow = true
+                            else
+                                loadKeysystem()
+                            end
                         else
                             loadKeysystem()
                         end
@@ -13804,11 +13856,18 @@ do
                     end
                 elseif not Config.KeySystem.API then
                     if Config.KeySystem.SaveKey and isfile(keyPath) then
-                        local savedKey = readfile(keyPath)
-                        local isKey = (type(Config.KeySystem.Key) == 'table') and table.find(Config.KeySystem.Key, savedKey) or tostring(Config.KeySystem.Key) == tostring(savedKey)
+                        local readSuccess, savedKey = pcall(function()
+                            return readfile(keyPath)
+                        end)
 
-                        if isKey then
-                            CanLoadWindow = true
+                        if readSuccess then
+                            local isKey = (type(Config.KeySystem.Key) == 'table') and table.find(Config.KeySystem.Key, savedKey) or tostring(Config.KeySystem.Key) == tostring(savedKey)
+
+                            if isKey then
+                                CanLoadWindow = true
+                            else
+                                loadKeysystem()
+                            end
                         else
                             loadKeysystem()
                         end
@@ -13817,33 +13876,40 @@ do
                     end
                 else
                     if isfile(keyPath) then
-                        local fileKey = readfile(keyPath)
-                        local isSuccess = false
+                        local readSuccess, fileKey = pcall(function()
+                            return readfile(keyPath)
+                        end)
 
-                        for _, i in next, Config.KeySystem.API do
-                            local serviceData = IntiHub.Services[i.Type]
+                        if readSuccess then
+                            local isSuccess = false
 
-                            if serviceData then
-                                local args = {}
+                            for _, i in next, Config.KeySystem.API do
+                                local serviceData = IntiHub.Services[i.Type]
 
-                                for _, argName in next, serviceData.Args do
-                                    table.insert(args, i[argName])
-                                end
+                                if serviceData then
+                                    local args = {}
 
-                                local service = serviceData.New(table.unpack(args))
-                                local success = service.Verify(fileKey)
+                                    for _, argName in next, serviceData.Args do
+                                        table.insert(args, i[argName])
+                                    end
 
-                                if success then
-                                    isSuccess = true
+                                    local service = serviceData.New(table.unpack(args))
+                                    local success = service.Verify(fileKey)
 
-                                    break
+                                    if success then
+                                        isSuccess = true
+
+                                        break
+                                    end
                                 end
                             end
-                        end
 
-                        CanLoadWindow = isSuccess
+                            CanLoadWindow = isSuccess
 
-                        if not isSuccess then
+                            if not isSuccess then
+                                loadKeysystem()
+                            end
+                        else
                             loadKeysystem()
                         end
                     else
@@ -13860,10 +13926,6 @@ do
 
             IntiHub.Transparent = Config.Transparent
             IntiHub.Window = Window
-            IntiHub.StatusBar = __DARKLUA_BUNDLE_MODULES.load'aa'.New{
-                IntiHub = IntiHub,
-                Window = Window,
-            }
             IntiHub.StatusBar = __DARKLUA_BUNDLE_MODULES.load'aa'.New{
                 IntiHub = IntiHub,
                 Window = Window,

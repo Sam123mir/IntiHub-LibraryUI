@@ -311,11 +311,18 @@ function IntiHub:CreateWindow(Config)
 
 		if Config.KeySystem.KeyValidator then
 			if Config.KeySystem.SaveKey and isfile(keyPath) then
-				local savedKey = readfile(keyPath)
-				local isValid = Config.KeySystem.KeyValidator(savedKey)
+				local readSuccess, savedKey = pcall(function()
+					return readfile(keyPath)
+				end)
 
-				if isValid then
-					CanLoadWindow = true
+				if readSuccess then
+					local isValid = Config.KeySystem.KeyValidator(savedKey)
+
+					if isValid then
+						CanLoadWindow = true
+					else
+						loadKeysystem()
+					end
 				else
 					loadKeysystem()
 				end
@@ -324,12 +331,19 @@ function IntiHub:CreateWindow(Config)
 			end
 		elseif not Config.KeySystem.API then
 			if Config.KeySystem.SaveKey and isfile(keyPath) then
-				local savedKey = readfile(keyPath)
-				local isKey = (type(Config.KeySystem.Key) == "table") and table.find(Config.KeySystem.Key, savedKey)
-					or tostring(Config.KeySystem.Key) == tostring(savedKey)
+				local readSuccess, savedKey = pcall(function()
+					return readfile(keyPath)
+				end)
 
-				if isKey then
-					CanLoadWindow = true
+				if readSuccess then
+					local isKey = (type(Config.KeySystem.Key) == "table") and table.find(Config.KeySystem.Key, savedKey)
+						or tostring(Config.KeySystem.Key) == tostring(savedKey)
+
+					if isKey then
+						CanLoadWindow = true
+					else
+						loadKeysystem()
+					end
 				else
 					loadKeysystem()
 				end
@@ -338,28 +352,35 @@ function IntiHub:CreateWindow(Config)
 			end
 		else
 			if isfile(keyPath) then
-				local fileKey = readfile(keyPath)
-				local isSuccess = false
+				local readSuccess, fileKey = pcall(function()
+					return readfile(keyPath)
+				end)
 
-				for _, i in next, Config.KeySystem.API do
-					local serviceData = IntiHub.Services[i.Type]
-					if serviceData then
-						local args = {}
-						for _, argName in next, serviceData.Args do
-							table.insert(args, i[argName])
-						end
+				if readSuccess then
+					local isSuccess = false
 
-						local service = serviceData.New(table.unpack(args))
-						local success = service.Verify(fileKey)
-						if success then
-							isSuccess = true
-							break
+					for _, i in next, Config.KeySystem.API do
+						local serviceData = IntiHub.Services[i.Type]
+						if serviceData then
+							local args = {}
+							for _, argName in next, serviceData.Args do
+								table.insert(args, i[argName])
+							end
+
+							local service = serviceData.New(table.unpack(args))
+							local success = service.Verify(fileKey)
+							if success then
+								isSuccess = true
+								break
+							end
 						end
 					end
-				end
 
-				CanLoadWindow = isSuccess
-				if not isSuccess then
+					CanLoadWindow = isSuccess
+					if not isSuccess then
+						loadKeysystem()
+					end
+				else
 					loadKeysystem()
 				end
 			else
@@ -382,11 +403,6 @@ function IntiHub:CreateWindow(Config)
 		Window = Window,
 	})
 
-	IntiHub.StatusBar = require("./components/ui/StatusBar").New({
-		IntiHub = IntiHub,
-		Window = Window,
-	})
-
 	Window:OnDestroy(function()
 		if IntiHub.StatusBar then
 			IntiHub.StatusBar:Destroy()
@@ -401,18 +417,6 @@ function IntiHub:CreateWindow(Config)
 	if Config.Acrylic then
 		Acrylic.init()
 	end
-
-	-- function Window:ToggleTransparency(Value)
-	--     IntiHub.Transparent = Value
-	--     IntiHub.Window.Transparent = Value
-
-	--     Window.UIElements.Main.Background.BackgroundTransparency = Value and IntiHub.TransparencyValue or 0
-	--     Window.UIElements.Main.Background.ImageLabel.ImageTransparency = Value and IntiHub.TransparencyValue or 0
-	--     Window.UIElements.Main.Gradient.UIGradient.Transparency = NumberSequence.new{
-	--         NumberSequenceKeypoint.new(0, 1),
-	--         NumberSequenceKeypoint.new(1, Value and 0.85 or 0.7),
-	--     }
-	-- end
 
 	return Window
 end

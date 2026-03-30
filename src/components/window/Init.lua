@@ -747,7 +747,13 @@ return function(Config)
 		end
 
 		local success, customAsset = pcall(function()
-			return getcustomasset(imagePath)
+			local assetSuccess, assetResult = pcall(function()
+				return getcustomasset(imagePath)
+			end)
+			if assetSuccess then
+				return assetResult
+			end
+			return Window.Background
 		end)
 		if not success then
 			warn("[ Window.Background ] Failed to load custom asset: " .. tostring(customAsset))

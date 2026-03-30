@@ -726,7 +726,13 @@ function Creator.GetAsset(Url, Folder, Type, Name)
 	local FileName = "IntiHub_Data/" .. Folder .. "/assets/." .. Type .. "-" .. Name .. ".png"
 
 	if not RunService:IsStudio() and isfile and isfile(FileName) then
-		return getcustomasset(FileName)
+		local assetSuccess, assetResult = pcall(function()
+			return getcustomasset(FileName)
+		end)
+		if assetSuccess then
+			return assetResult
+		end
+		return FileName
 	end
 
 	if string.find(Url, "http") then
@@ -753,12 +759,22 @@ function Creator.GetAsset(Url, Folder, Type, Name)
 				pcall(function()
 					writefile(FileName, body)
 				end)
-				return getcustomasset(FileName)
+
+				local assetSuccess, assetResult = pcall(function()
+					return getcustomasset(FileName)
+				end)
+
+				if assetSuccess then
+					return assetResult
+				end
 			end
+			return Url
 		end)
+
 		if success and response then
 			return response
 		end
+		return Url
 	end
 
 	return Url
@@ -799,45 +815,45 @@ function Creator.Image(Img, Name, Corner, Folder, Type, IsThemeTag, Themed, Them
 		IconLabel.Parent = ImageFrame
 	elseif string.find(Img, "http") then
 		local FileName = "IntiHub_Data/" .. Folder .. "/assets/." .. Type .. "-" .. Name .. ".png"
-		local success, response = pcall(function()
-			task.spawn(function()
-				local response = Creator.Request
-						and Creator.Request({
-							Url = Img,
-							Method = "GET",
-						}).Body
-					or {}
-
-				if not RunService:IsStudio() and writefile then
-					writefile(FileName, response)
-				end
-				--ImageFrame.ImageLabel.Image = getcustomasset(FileName)
-
-				local assetSuccess, asset = pcall(getcustomasset, FileName)
-				if assetSuccess then
-					ImageFrame.ImageLabel.Image = asset
-				else
-					warn(
-						string.format(
-							"[ IntiHub.Creator ] Failed to load custom asset '%s': %s",
-							FileName,
-							tostring(asset)
-						)
-					)
-					ImageFrame:Destroy()
-
-					return
-				end
+		
+		if not RunService:IsStudio() and isfile and isfile(FileName) then
+			local assetSuccess, assetResult = pcall(function()
+				return getcustomasset(FileName)
 			end)
-		end)
-		if not success then
-			warn(
-				"[ IntiHub.Creator ]  '" .. identifyexecutor()
-					or "Studio" .. "' doesnt support the URL Images. Error: " .. response
-			)
-
-			ImageFrame:Destroy()
+			if assetSuccess then
+				ImageFrame.ImageLabel.Image = assetResult
+				return ImageFrame
+			end
 		end
+
+		task.spawn(function()
+			local success, body = pcall(function()
+				return Creator.Request and Creator.Request({
+					Url = Img,
+					Method = "GET",
+				}).Body
+			end)
+
+			if success and body and body ~= "" then
+				pcall(function()
+					if writefile then
+						writefile(FileName, body)
+					end
+				end)
+				
+				local assetSuccess, assetResult = pcall(function()
+					return getcustomasset(FileName)
+				end)
+				
+				if assetSuccess then
+					ImageFrame.ImageLabel.Image = assetResult
+				else
+					ImageFrame.ImageLabel.Image = Img
+				end
+			else
+				ImageFrame.ImageLabel.Image = Img
+			end
+		end)
 	elseif Img == "" then
 		ImageFrame.Visible = false
 	else
