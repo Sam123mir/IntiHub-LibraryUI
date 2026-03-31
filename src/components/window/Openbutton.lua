@@ -54,6 +54,22 @@ function OpenButtonModule.New(Window)
                 AutomaticSize = "XY",
                 TextColor3 = Color3.fromHex("#FFFFFF"),
             }),
+            New("TextLabel", {
+                Text = " - v2.1.2",
+                TextSize = 12,
+                FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
+                BackgroundTransparency = 1,
+                AutomaticSize = "XY",
+                TextColor3 = Color3.fromHex("#FFFFFF"),
+                TextTransparency = 0.4,
+            }),
+        }),
+        New("TextButton", {
+            Size = UDim2.new(1, 0, 1, 0),
+            BackgroundTransparency = 1,
+            Text = "",
+            ZIndex = 10,
+            Name = "OpenTrigger",
         })
     })
 
@@ -62,6 +78,7 @@ function OpenButtonModule.New(Window)
         BackgroundTransparency = 1,
         Image = "rbxassetid://138450125867375", -- Move/Drag arrows icon
         ImageColor3 = Color3.fromHex("#FFD700"),
+        Active = true,
     })
 
     local Separator = New("Frame", {
@@ -122,13 +139,6 @@ function OpenButtonModule.New(Window)
         DragHandle,
         Separator,
         Branding,
-        New("TextButton", {
-            Size = UDim2.new(1, 0, 1, 0),
-            BackgroundTransparency = 1,
-            Text = "",
-            ZIndex = 10,
-            Name = "OpenTrigger",
-        })
     })
 
     -- Animate Glow Trail
@@ -146,11 +156,12 @@ function OpenButtonModule.New(Window)
         end
     end)
 
-    local DragModule = Creator.Drag(Container)
+    local DragModule = Creator.Drag(Container, {DragHandle})
 
-    Creator.AddSignal(Button.OpenTrigger.MouseButton1Click, function()
+    Creator.AddSignal(Branding.OpenTrigger.MouseButton1Click, function()
         Window:Open()
     end)
+
 
     function OpenButtonMain:Visible(v)
         Container.Visible = v

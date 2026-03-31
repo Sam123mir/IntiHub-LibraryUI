@@ -9,24 +9,58 @@ function Element:New(Config)
         Elements = {}
     }
     
+    local Header
+    if Config.Title then
+        Header = New("TextLabel", {
+            Text = Config.Title,
+            TextSize = 14,
+            FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+            TextColor3 = Color3.fromHex("#FFD700"),
+            TextXAlignment = "Left",
+            BackgroundTransparency = 1,
+            AutomaticSize = "Y",
+            Size = UDim2.new(1, 0, 0, 0),
+        }, {
+            New("UIPadding", {
+                PaddingLeft = UDim.new(0, 4),
+                PaddingBottom = UDim.new(0, 4),
+            })
+        })
+    end
+
     local GroupFrame = New("Frame", {
-        Size = UDim2.new(1,0,0,0),
+        Size = UDim2.new(1, 0, 0, 0),
         BackgroundTransparency = 1,
         AutomaticSize = "Y",
         Parent = Config.Parent,
     }, {
         New("UIListLayout", {
-            FillDirection = "Horizontal",
-            HorizontalAlignment = "Center",
-            --VerticalAlignment = "Center",
-            Padding = UDim.new(0, Config.Tab and Config.Tab.Gap or (Window.NewElements and 1 or 6))
+            FillDirection = "Vertical",
+            SortOrder = "LayoutOrder",
+            Padding = UDim.new(0, 6)
         }),
+        Header,
+        New("Frame", {
+            Name = "Container",
+            Size = UDim2.new(1, 0, 0, 0),
+            AutomaticSize = "Y",
+            BackgroundTransparency = 1,
+            LayoutOrder = 2,
+        }, {
+            New("UIListLayout", {
+                FillDirection = "Horizontal",
+                HorizontalAlignment = "Center",
+                Padding = UDim.new(0, Config.Tab and Config.Tab.Gap or (Config.Window.NewElements and 1 or 6))
+            }),
+        })
     })
+
+    local ContentContainer = GroupFrame.Container
     
     local ElementsModule = Config.ElementsModule
     ElementsModule.Load(
         GroupModule, 
-        GroupFrame, 
+        ContentContainer, 
         ElementsModule.Elements,
         Config.Window, 
         Config.IntiHub,

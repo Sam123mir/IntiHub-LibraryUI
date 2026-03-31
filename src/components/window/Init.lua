@@ -552,10 +552,13 @@ return function(Config)
             BackgroundTransparency = 1,
             Name = "Group"
         }, {
-            Creator.NewRoundFrame(Window.UICorner - (Window.UIPadding/2), "Squircle", {
+            Creator.NewRoundFrame(Window.UICorner - (Window.UIPadding / 2), "Squircle", {
                 Name = "Squircle",
                 Size = UDim2.new(1, 0, 1, 0),
-                BackgroundColor3 = Color3.fromHex("#0A0A0A"),
+                ThemeTag = {
+                    ImageColor3 = "Background",
+                    ImageTransparency = "BackgroundTransparency",
+                },
                 ZIndex = 3,
             }, {
                 New("UIStroke", {

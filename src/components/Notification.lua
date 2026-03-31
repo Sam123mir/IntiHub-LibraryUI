@@ -203,12 +203,14 @@ function NotificationModule.New(Config)
     
     
     local Main = Creator.NewRoundFrame(NotificationModule.UICorner, "Squircle", {
-        Size = UDim2.new(1,0,0,0),
-        Position = UDim2.new(2,0,1,0),
-        AnchorPoint = Vector2.new(0,1),
+        Size = UDim2.new(1, 0, 0, 0),
+        Position = UDim2.new(2, 0, 1, 0),
+        AnchorPoint = Vector2.new(0, 1),
         AutomaticSize = "Y",
-        BackgroundColor3 = Color3.fromHex("#0F0D00"),
-        BackgroundTransparency = 0.15,
+        ThemeTag = {
+            ImageColor3 = "Notification",
+            ImageTransparency = "NotificationTransparency",
+        },
     }, {
         New("UIStroke", {
             Thickness = 2,
@@ -216,19 +218,19 @@ function NotificationModule.New(Config)
             Transparency = 0.5,
         }),
         Creator.NewRoundFrame(NotificationModule.UICorner, "Glass-1", {
-            Size = UDim2.new(1,0,1,0),
+            Size = UDim2.new(1, 0, 1, 0),
             ThemeTag = {
                 ImageColor3 = "NotificationBorder",
                 ImageTransparency = "NotificationBorderTransparency",
             },
         }),
         New("Frame", {
-            Size = UDim2.new(1,0,1,0),
+            Size = UDim2.new(1, 0, 1, 0),
             BackgroundTransparency = 1,
             Name = "DurationFrame",
         }, {
             New("Frame", {
-                Size = UDim2.new(1,0,1,0), -- 0,0,1,0
+                Size = UDim2.new(1, 0, 1, 0), -- 0,0,1,0
                 BackgroundTransparency = 1,
                 ClipsDescendants = true,
             }, {
@@ -239,17 +241,17 @@ function NotificationModule.New(Config)
             Name = "Background",
             Image = Notification.Background,
             BackgroundTransparency = 1,
-            Size = UDim2.new(1,0,1,0),
+            Size = UDim2.new(1, 0, 1, 0),
             ScaleType = "Crop",
-            ImageTransparency = Notification.BackgroundImageTransparency
+            ImageTransparency = Notification.BackgroundImageTransparency or 1,
         }, {
             New("UICorner", {
-                CornerRadius = UDim.new(0,NotificationModule.UICorner),
+                CornerRadius = UDim.new(0, NotificationModule.UICorner),
             })
         }),
-        
         TextContainer,
-        Icon, CloseButton,
+        Icon,
+        CloseButton,
     })
 
     local MainContainer = New("Frame", {
