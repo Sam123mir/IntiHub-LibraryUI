@@ -247,7 +247,7 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 	end
 
 	function DropdownModule:Refresh(Values)
-		for _, Elementt in next, Dropdown.UIElements.Menu.Frame.ScrollingFrame:GetChildren() do
+		for _, Elementt in next, Dropdown.UIElements.Menu.ContentContainer.ScrollingFrame:GetChildren() do
 			if not Elementt:IsA("UIListLayout") then
 				Elementt:Destroy()
 			end
@@ -301,7 +301,7 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 						Size = UDim2.new(1, 0, 0, 36),
 						AutomaticSize = TabMain.Desc and "Y",
 						ImageTransparency = 1, -- .95
-						Parent = Dropdown.UIElements.Menu.Frame.ScrollingFrame,
+						Parent = Dropdown.UIElements.Menu.ContentContainer.ScrollingFrame,
 						ImageColor3 = Color3.new(1, 1, 1),
 						Active = not TabMain.Locked,
 					},
@@ -527,7 +527,7 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 				RecalculateCanvasSize()
 				RecalculateListSize()
 			else
-				require("../../elements/Divider"):New({ Parent = Dropdown.UIElements.Menu.Frame.ScrollingFrame })
+				require("../../elements/Divider"):New({ Parent = Dropdown.UIElements.Menu.ContentContainer.ScrollingFrame })
 			end
 		end
 

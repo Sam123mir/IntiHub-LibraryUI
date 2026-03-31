@@ -5,7 +5,7 @@
  _/ // / / / /_/ / __  / /_/ / /_/ /
 /___/_/ /_/\__/_/_/ /_/\__,_/_.___/ 
                                     
-    v1.7.0  |  2026-03-29  |  Roblox UI Library - Noble Deluxe v2.0
+    v1.7.0  |  2026-03-31  |  Roblox UI Library - Noble Deluxe v2.0
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -7643,7 +7643,7 @@ do
                 end
             end
             function DropdownModule:Refresh(Values)
-                for _, Elementt in next, Dropdown.UIElements.Menu.Frame.ScrollingFrame:GetChildren()do
+                for _, Elementt in next, Dropdown.UIElements.Menu.ContentContainer.ScrollingFrame:GetChildren()do
                     if not Elementt:IsA'UIListLayout' then
                         Elementt:Destroy()
                     end
@@ -7698,7 +7698,7 @@ do
                             Size = UDim2.new(1, 0, 0, 36),
                             AutomaticSize = TabMain.Desc and 'Y',
                             ImageTransparency = 1,
-                            Parent = Dropdown.UIElements.Menu.Frame.ScrollingFrame,
+                            Parent = Dropdown.UIElements.Menu.ContentContainer.ScrollingFrame,
                             ImageColor3 = Color3.new(1, 1, 1),
                             Active = not TabMain.Locked,
                         }, {
@@ -7929,7 +7929,7 @@ do
                         RecalculateListSize()
                     else
                         __DARKLUA_BUNDLE_MODULES.load'K':New{
-                            Parent = Dropdown.UIElements.Menu.Frame.ScrollingFrame,
+                            Parent = Dropdown.UIElements.Menu.ContentContainer.ScrollingFrame,
                         }
                     end
                 end
