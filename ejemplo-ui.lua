@@ -9,11 +9,16 @@ do
         return func()
     end)
 
-    if not success then
-        warn("[IntiHub Example Error]: " .. tostring(result))
+    if not success or not result then
+        warn("[IntiHub Example Error]: Initialization failed. " .. tostring(result or "Library returned nil."))
         return
     end
     IntiHub = result
+end
+
+-- Ensure IntiHub is loaded before proceeding
+if not IntiHub then
+    return warn("[IntiHub Example Error]: IntiHub library not found.")
 end
 
 -- */ Window Configuration /* --
