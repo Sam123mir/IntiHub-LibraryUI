@@ -54,7 +54,7 @@ return function(Config)
 		ElementsRadius = Config.ElementsRadius,
 		Radius = Config.Radius or 14,
 		Transparent = Config.Transparent or false,
-		HideSearchBar = Config.HideSearchBar ~= false,
+		HideSearchBar = Config.HideSearchBar or false, -- Default to shown if not specified, matching user request
 		ScrollBarEnabled = Config.ScrollBarEnabled or false,
 		SideBarWidth = Config.SideBarWidth or 200,
 		Acrylic = Config.Acrylic or false,
@@ -1063,24 +1063,12 @@ return function(Config)
 
 
 	Creator.AddSignal(Window.UIElements.Main.Main.Topbar.Left:GetPropertyChangedSignal("AbsoluteSize"), function()
-		local LeftWidth = 0
-		local RightWidth = Window.UIElements.Main.Main.Topbar.Right.UIListLayout.AbsoluteContentSize.X
-			/ Config.IntiHub.UIScale
-		-- if WindowTitle and WindowAuthor then
-		--     LeftWidth = math.max(WindowTitle.TextBounds.X / Config.IntiHub.UIScale, WindowAuthor.TextBounds.X / Config.IntiHub.UIScale)
-		-- else
-		--     LeftWidth = WindowTitle.TextBounds.X / Config.IntiHub.UIScale
-		-- end
-		LeftWidth = Window.UIElements.Main.Main.Topbar.Left.AbsoluteSize.X / Config.IntiHub.UIScale
-		-- Always calculation from Left
-		LeftWidth = Window.UIElements.Main.Main.Topbar.Left.AbsoluteSize.X / Config.IntiHub.UIScale
-		-- if WindowIcon then
-		--     LeftWidth = LeftWidth + (Window.IconSize / Config.IntiHub.UIScale) + (Window.UIPadding / Config.IntiHub.UIScale) + (4 / Config.IntiHub.UIScale)
-		-- end
-		Window.UIElements.Main.Main.Topbar.Center.Position =
-			UDim2.new(0, LeftWidth + (Window.UIPadding / Config.IntiHub.UIScale), 0.5, 0)
-		Window.UIElements.Main.Main.Topbar.Center.Size =
-			UDim2.new(1, -LeftWidth - RightWidth - ((Window.UIPadding * 2) / Config.IntiHub.UIScale), 1, 0)
+		local IntiScale = (Config.IntiHub and Config.IntiHub.UIScale) or 1
+		local LeftWidth = Window.UIElements.Main.Main.Topbar.Left.AbsoluteSize.X / IntiScale
+		local RightWidth = Window.UIElements.Main.Main.Topbar.Right.UIListLayout.AbsoluteContentSize.X / IntiScale
+
+		Window.UIElements.Main.Main.Topbar.Center.Position = UDim2.new(0, LeftWidth + (Window.UIPadding / IntiScale), 0.5, 0)
+		Window.UIElements.Main.Main.Topbar.Center.Size = UDim2.new(1, -LeftWidth - RightWidth - ((Window.UIPadding * 2) / IntiScale), 1, 0)
 	end)
 
     Window.UIElements.RightPanel.Parent = Window.UIElements.Main -- Parented to root Main for grouped movement
@@ -1254,7 +1242,7 @@ return function(Config)
 
 	-- local Dragged = false
 
-	Window:CreateTopbarButton("SidebarToggle", "layout-panel-right", function()
+	Window:CreateTopbarButton("SidebarToggle", "panel-right", function()
 		Window:ToggleRightPanel()
 	end, 1000, true, Color3.fromHex("#FFD700"))
 

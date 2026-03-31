@@ -18,9 +18,11 @@ end
 
 -- */ Window Configuration /* --
 local Window = IntiHub:CreateWindow({
-    Title = "IntiHub UI | Demonstration v2.1.2",
+    Title = "INTIHUB - Noble Deluxe",
+    SubTitle = "v2.1.2",
     Folder = "IntiHub_Demo",
     Icon = "lucide:layout-dashboard",
+    HideSearchBar = false,
     NewElements = true,
     OpenButton = {
         Enabled = true,

@@ -36,7 +36,19 @@ do
         local cloneref = (cloneref or clonereference or function(instance)
             return instance
         end)
-        local IconModule = cloneref(game:GetService'ReplicatedStorage':WaitForChild('GetIcons', 99999):InvokeServer())
+        local IconModule = {
+            Icons = {},
+            Spritesheets = {},
+            IconsType = 'lucide',
+        }
+
+        pcall(function()
+            local Remote = game:GetService'ReplicatedStorage':FindFirstChild'GetIcons'
+
+            if Remote and Remote:IsA'RemoteFunction' then
+                IconModule = cloneref(Remote:InvokeServer())
+            end
+        end)
 
         local function parseIconString(iconString)
             if type(iconString) == 'string' then
@@ -11242,7 +11254,7 @@ do
                 ElementsRadius = Config.ElementsRadius,
                 Radius = Config.Radius or 14,
                 Transparent = Config.Transparent or false,
-                HideSearchBar = Config.HideSearchBar ~= false,
+                HideSearchBar = Config.HideSearchBar or false,
                 ScrollBarEnabled = Config.ScrollBarEnabled or false,
                 SideBarWidth = Config.SideBarWidth or 200,
                 Acrylic = Config.Acrylic or false,
@@ -12197,13 +12209,12 @@ do
 
             Creator.AddSignal(Window.UIElements.Main.Main.Topbar.Left:GetPropertyChangedSignal'AbsoluteSize', function(
             )
-                local LeftWidth = 0
-                local RightWidth = Window.UIElements.Main.Main.Topbar.Right.UIListLayout.AbsoluteContentSize.X / Config.IntiHub.UIScale
+                local IntiScale = (Config.IntiHub and Config.IntiHub.UIScale) or 1
+                local LeftWidth = Window.UIElements.Main.Main.Topbar.Left.AbsoluteSize.X / IntiScale
+                local RightWidth = Window.UIElements.Main.Main.Topbar.Right.UIListLayout.AbsoluteContentSize.X / IntiScale
 
-                LeftWidth = Window.UIElements.Main.Main.Topbar.Left.AbsoluteSize.X / Config.IntiHub.UIScale
-                LeftWidth = Window.UIElements.Main.Main.Topbar.Left.AbsoluteSize.X / Config.IntiHub.UIScale
-                Window.UIElements.Main.Main.Topbar.Center.Position = UDim2.new(0, LeftWidth + (Window.UIPadding / Config.IntiHub.UIScale), 0.5, 0)
-                Window.UIElements.Main.Main.Topbar.Center.Size = UDim2.new(1, -LeftWidth - RightWidth - ((Window.UIPadding * 2) / Config.IntiHub.UIScale), 1, 0)
+                Window.UIElements.Main.Main.Topbar.Center.Position = UDim2.new(0, LeftWidth + (Window.UIPadding / IntiScale), 0.5, 0)
+                Window.UIElements.Main.Main.Topbar.Center.Size = UDim2.new(1, -LeftWidth - RightWidth - ((Window.UIPadding * 2) / IntiScale), 1, 0)
             end)
 
             Window.UIElements.RightPanel.Parent = Window.UIElements.Main
@@ -12305,8 +12316,7 @@ do
                 return Window:CreateTopbarButton(ButtonConfig.Name, ButtonConfig.Icon, ButtonConfig.Callback, ButtonConfig.LayoutOrder or 0, ButtonConfig.IconThemed, ButtonConfig.Color, ButtonConfig.IconSize)
             end
 
-            Window:CreateTopbarButton('SidebarToggle', 'layout-panel-right', function(
-            )
+            Window:CreateTopbarButton('SidebarToggle', 'panel-right', function()
                 Window:ToggleRightPanel()
             end, 1000, true, Color3.fromHex'#FFD700')
 

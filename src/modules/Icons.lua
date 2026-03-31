@@ -1,6 +1,17 @@
 local cloneref = (cloneref or clonereference or function(instance) return instance end)
 
-local IconModule = cloneref(game:GetService("ReplicatedStorage"):WaitForChild("GetIcons", 99999):InvokeServer())
+local IconModule = {
+    Icons = {},
+    Spritesheets = {},
+    IconsType = "lucide"
+}
+
+pcall(function()
+    local Remote = game:GetService("ReplicatedStorage"):FindFirstChild("GetIcons")
+    if Remote and Remote:IsA("RemoteFunction") then
+        IconModule = cloneref(Remote:InvokeServer())
+    end
+end)
 
 local function parseIconString(iconString)  
     if type(iconString) == "string" then  
