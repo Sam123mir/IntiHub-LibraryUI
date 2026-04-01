@@ -70,12 +70,18 @@ function Element:New(Config)
         if Slider.Icons.From then
             IconFrom = Creator.Image(Slider.Icons.From, "SliderFrom", 0, Config.Window.Folder, "Slider", true)
             IconFrom.Size = UDim2.new(0, Slider.IconSize, 0, Slider.IconSize)
-            IconFrom.ImageColor3 = Color3.fromHex("#FFD700")
+            local TargetIcon = IconFrom:FindFirstChildWhichIsA("ImageLabel", true)
+            if TargetIcon then
+                TargetIcon.ImageColor3 = Color3.fromHex("#FFD700")
+            end
         end
         if Slider.Icons.To then
             IconTo = Creator.Image(Slider.Icons.To, "SliderTo", 0, Config.Window.Folder, "Slider", true)
             IconTo.Size = UDim2.new(0, Slider.IconSize, 0, Slider.IconSize)
-            IconTo.ImageColor3 = Color3.fromHex("#FFD700")
+            local TargetIcon = IconTo:FindFirstChildWhichIsA("ImageLabel", true)
+            if TargetIcon then
+                TargetIcon.ImageColor3 = Color3.fromHex("#FFD700")
+            end
         end
     end
 

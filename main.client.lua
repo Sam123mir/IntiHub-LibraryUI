@@ -1385,7 +1385,12 @@ do
 
             Icon.Size = UDim2.new(0, 22, 0, 22)
             Icon.Position = UDim2.new(0, NotificationModule.UIPadding, 0, NotificationModule.UIPadding)
-            Icon.ImageColor3 = Color3.fromHex'#FFD700'
+
+            local TargetIcon = Icon:FindFirstChildWhichIsA('ImageLabel', true)
+
+            if TargetIcon then
+                TargetIcon.ImageColor3 = Color3.fromHex'#FFD700'
+            end
 
             local CloseButton
 
@@ -7463,12 +7468,22 @@ do
                 if Slider.Icons.From then
                     IconFrom = Creator.Image(Slider.Icons.From, 'SliderFrom', 0, Config.Window.Folder, 'Slider', true)
                     IconFrom.Size = UDim2.new(0, Slider.IconSize, 0, Slider.IconSize)
-                    IconFrom.ImageColor3 = Color3.fromHex'#FFD700'
+
+                    local TargetIcon = IconFrom:FindFirstChildWhichIsA('ImageLabel', true)
+
+                    if TargetIcon then
+                        TargetIcon.ImageColor3 = Color3.fromHex'#FFD700'
+                    end
                 end
                 if Slider.Icons.To then
                     IconTo = Creator.Image(Slider.Icons.To, 'SliderTo', 0, Config.Window.Folder, 'Slider', true)
                     IconTo.Size = UDim2.new(0, Slider.IconSize, 0, Slider.IconSize)
-                    IconTo.ImageColor3 = Color3.fromHex'#FFD700'
+
+                    local TargetIcon = IconTo:FindFirstChildWhichIsA('ImageLabel', true)
+
+                    if TargetIcon then
+                        TargetIcon.ImageColor3 = Color3.fromHex'#FFD700'
+                    end
                 end
             end
 
@@ -12308,10 +12323,15 @@ do
                 IconFrame.Size = Window.Topbar.ButtonsType == 'Default' and UDim2.new(0, IconSize or Window.TopBarButtonIconSize, 0, IconSize or Window.TopBarButtonIconSize) or UDim2.new(0, 0, 0, 0)
                 IconFrame.AnchorPoint = Vector2.new(0.5, 0.5)
                 IconFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
-                IconFrame.ImageLabel.ImageTransparency = Window.Topbar.ButtonsType == 'Default' and 0 or 1
 
-                if Window.Topbar.ButtonsType ~= 'Default' then
-                    IconFrame.ImageLabel.ImageColor3 = Creator.GetTextColorForHSB(Color)
+                local TargetIcon = IconFrame:FindFirstChildWhichIsA('ImageLabel', true)
+
+                if TargetIcon then
+                    TargetIcon.ImageTransparency = Window.Topbar.ButtonsType == 'Default' and 0 or 1
+
+                    if Window.Topbar.ButtonsType ~= 'Default' then
+                        TargetIcon.ImageColor3 = Creator.GetTextColorForHSB(Color)
+                    end
                 end
 
                 local Button = Creator.NewRoundFrame(Window.Topbar.ButtonsType == 'Default' and Window.UICorner - (Window.UIPadding / 2) or 999, 'Squircle', {
@@ -12396,11 +12416,6 @@ do
             Window:CreateTopbarButton('SidebarToggle', 'panel-right', function()
                 Window:ToggleRightPanel()
             end, 1000, true, Color3.fromHex'#FFD700')
-            Window:CreateTopbarButton('SearchToggle', 'search', function()
-                if Window.Search then
-                    Window.Search:Toggle()
-                end
-            end, 999, true, Color3.fromHex'#FFD700')
 
             local WindowDragModule = Creator.Drag(Window.UIElements.Main, {
                 Window.UIElements.Main.Main.Topbar,

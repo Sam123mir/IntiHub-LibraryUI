@@ -73,7 +73,10 @@ function NotificationModule.New(Config)
     )
     Icon.Size = UDim2.new(0, 22, 0, 22)
     Icon.Position = UDim2.new(0, NotificationModule.UIPadding, 0, NotificationModule.UIPadding)
-    Icon.ImageColor3 = Color3.fromHex("#FFD700") -- Executive Gold
+    local TargetIcon = Icon:FindFirstChildWhichIsA("ImageLabel", true)
+    if TargetIcon then
+        TargetIcon.ImageColor3 = Color3.fromHex("#FFD700") -- Executive Gold
+    end
 
     local CloseButton
     if Notification.CanClose then

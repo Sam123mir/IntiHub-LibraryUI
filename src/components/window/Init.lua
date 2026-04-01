@@ -1105,10 +1105,12 @@ return function(Config)
 			or UDim2.new(0, 0, 0, 0)
 		IconFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 		IconFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
-		IconFrame.ImageLabel.ImageTransparency = Window.Topbar.ButtonsType == "Default" and 0 or 1
-
-		if Window.Topbar.ButtonsType ~= "Default" then
-			IconFrame.ImageLabel.ImageColor3 = Creator.GetTextColorForHSB(Color)
+		local TargetIcon = IconFrame:FindFirstChildWhichIsA("ImageLabel", true)
+		if TargetIcon then
+			TargetIcon.ImageTransparency = Window.Topbar.ButtonsType == "Default" and 0 or 1
+			if Window.Topbar.ButtonsType ~= "Default" then
+				TargetIcon.ImageColor3 = Creator.GetTextColorForHSB(Color)
+			end
 		end
 
 		local Button = Creator.NewRoundFrame(
@@ -1261,12 +1263,7 @@ return function(Config)
 		Window:ToggleRightPanel()
 	end, 1000, true, Color3.fromHex("#FFD700"))
 
-    Window:CreateTopbarButton("SearchToggle", "search", function()
-        if Window.Search then
-            Window.Search:Toggle()
-        end
-    end, 999, true, Color3.fromHex("#FFD700"))
-
+    
 	local WindowDragModule = Creator.Drag(
 		Window.UIElements.Main,
 		{ Window.UIElements.Main.Main.Topbar, BottomDragFrame.Frame },

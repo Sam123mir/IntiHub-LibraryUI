@@ -42,6 +42,7 @@ do
     local OverviewSection = DashTab:Section({
         Title = "System Overview",
         Desc = "Monitor and control core modules",
+        Box = true,
         Opened = true,
     })
 
