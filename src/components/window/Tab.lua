@@ -258,7 +258,6 @@ function TabModule.New(Config, UIScale)
 		AnchorPoint = Vector2.new(0, 1),
 		Position = UDim2.new(0, 0, 1, 0),
 		AutomaticCanvasSize = "Y",
-		--Visible = false,
 		ScrollingDirection = "Y",
 	}, {
 		New("UIPadding", {
@@ -267,11 +266,31 @@ function TabModule.New(Config, UIScale)
 			PaddingRight = UDim.new(0, not Window.HidePanelBackground and 20 or 10),
 			PaddingBottom = UDim.new(0, not Window.HidePanelBackground and 20 or 10),
 		}),
-		New("UIListLayout", {
-			SortOrder = "LayoutOrder",
-			Padding = UDim.new(0, Tab.Gap),
-			HorizontalAlignment = "Center",
-		}),
+		New("Frame", {
+            Name = "LeftColumn",
+            Size = UDim2.new(0.5, -5, 0, 0),
+            AutomaticSize = "Y",
+            BackgroundTransparency = 1,
+        }, {
+            New("UIListLayout", {
+                SortOrder = "LayoutOrder",
+                Padding = UDim.new(0, Tab.Gap),
+                HorizontalAlignment = "Center",
+            }),
+        }),
+        New("Frame", {
+            Name = "RightColumn",
+            Size = UDim2.new(0.5, -5, 0, 0),
+            Position = UDim2.new(0.5, 5, 0, 0),
+            AutomaticSize = "Y",
+            BackgroundTransparency = 1,
+        }, {
+            New("UIListLayout", {
+                SortOrder = "LayoutOrder",
+                Padding = UDim.new(0, Tab.Gap),
+                HorizontalAlignment = "Center",
+            }),
+        }),
 	})
 
 	-- Tab.UIElements.ContainerFrame.UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()

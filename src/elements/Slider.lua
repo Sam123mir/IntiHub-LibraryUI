@@ -89,16 +89,16 @@ function Element:New(Config)
     if Slider.IsTextbox then
         ValueLabel = New("TextBox", {
             Text = FormatValue(Value),
-            TextSize = 12,
-            FontFace = Font.new(Creator.Font, Enum.FontWeight.SemiBold),
+            TextSize = 13,
+            FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
             TextColor3 = Color3.new(1, 1, 1),
-            BackgroundTransparency = 0.9,
+            BackgroundTransparency = 0.85,
             BackgroundColor3 = Color3.new(1, 1, 1),
-            Size = UDim2.new(0, Slider.TextBoxWidth, 0, 22),
+            Size = UDim2.new(0, Slider.TextBoxWidth, 0, 24),
             ThemeTag = { BorderColor3 = "Accent" },
         }, {
-            New("UICorner", { CornerRadius = UDim.new(0, 4) }),
-            New("UIStroke", { Thickness = 1, Color = Color3.fromHex("#FFD700"), Transparency = 0.8 }),
+            New("UICorner", { CornerRadius = UDim.new(0, 5) }),
+            New("UIStroke", { Thickness = 1.2, Color = Color3.fromHex("#FFD700"), Transparency = 0.4 }),
         })
     end
 
@@ -132,22 +132,22 @@ function Element:New(Config)
         Creator.NewRoundFrame(99, "Squircle", {
             Name = "SliderBack",
             Size = UDim2.new(1, (IconFrom and -30 or 0) + (IconTo and -30 or 0) + (Slider.IsTextbox and -Slider.TextBoxWidth - 10 or 0), 0, 4),
-            ImageTransparency = 0.9,
-            ThemeTag = { ImageColor3 = "Text" },
+            ImageTransparency = 0.8,
+            ImageColor3 = Color3.new(1, 1, 1), -- White line
         }, {
             Creator.NewRoundFrame(99, "Squircle", {
                 Name = "Fill",
                 Size = UDim2.new(delta, 0, 1, 0),
                 ThemeTag = { ImageColor3 = "Slider" },
             }, {
-                Creator.NewRoundFrame(99, "Squircle", {
+                Creator.NewRoundFrame(4, "Squircle", {
                     Name = "Thumb",
-                    Size = UDim2.new(0, Slider.ThumbSize, 0, Slider.ThumbSize),
+                    Size = UDim2.new(0, 10, 0, 18), -- Rectangular pill
                     Position = UDim2.new(1, 0, 0.5, 0),
                     AnchorPoint = Vector2.new(0.5, 0.5),
-                    ThemeTag = { ImageColor3 = "SliderThumb" },
+                    ThemeTag = { ImageColor3 = "Accent" }, -- Golden
                 }, {
-                    New("UIStroke", { Thickness = 1.5, Color = Color3.fromHex("#FFD700") }),
+                    New("UIStroke", { Thickness = 1.5, Color = Color3.fromHex("#FFD700"), Transparency = 0.2 }),
                 })
             })
         }),

@@ -181,7 +181,7 @@ function SearchBar.new(TabModule, Parent, OnClose)
 		AutomaticSize = "Y",
 		Parent = Parent,
 		BackgroundTransparency = 1,
-		Position = UDim2.new(0.5, 0, 0.5, 0),
+		Position = UDim2.new(0.5, 0, 0.45, 0),
 		AnchorPoint = Vector2.new(0.5, 0.5),
 		Visible = false, -- true
 		--GroupTransparency = 1, -- 0

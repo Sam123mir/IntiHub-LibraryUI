@@ -132,10 +132,21 @@ function Element:New(Config)
     end
 
 
+    local TargetParent = Config.Parent
+    if TargetParent and TargetParent:FindFirstChild("LeftColumn") and TargetParent:FindFirstChild("RightColumn") then
+        local Left = TargetParent.LeftColumn
+        local Right = TargetParent.RightColumn
+        if Left.UIListLayout.AbsoluteContentSize.Y <= Right.UIListLayout.AbsoluteContentSize.Y then
+            TargetParent = Left
+        else
+            TargetParent = Right
+        end
+    end
+
     local Main = Creator.NewRoundFrame(Config.Window.ElementConfig.UICorner, "Squircle", {
-        Size = UDim2.new(1,0,0,0),
+        Size = UDim2.new(1, 0, 0, 0),
         BackgroundTransparency = 1,
-        Parent = Config.Parent,
+        Parent = TargetParent,
         ClipsDescendants = true,
         AutomaticSize = "Y",
         ThemeTag = {
@@ -165,9 +176,10 @@ function Element:New(Config)
                     Rotation = 45,
                     Color = ColorSequence.new({
                         ColorSequenceKeypoint.new(0, Color3.fromHex("#FFD700")),
-                        ColorSequenceKeypoint.new(0.5, Color3.fromHex("#FFFACD")), -- LemonChiffon for glow
+                        ColorSequenceKeypoint.new(0.5, Color3.fromHex("#FFFACD")),
                         ColorSequenceKeypoint.new(1, Color3.fromHex("#FFD700")),
                     }),
+                    Name = "GlowTrail"
                 })
             })
         }),
@@ -320,27 +332,31 @@ function Element:New(Config)
         task.spawn(function()
             task.wait(0.02)
             if Section.Expandable then
-                -- New("UIPadding", {
-                    --     PaddingTop = UDim.new(0,4),
-                    --     PaddingLeft = UDim.new(0,Section.Padding),
-                    --     PaddingRight = UDim.new(0,Section.Padding),
-                    --     PaddingBottom = UDim.new(0,2),
+                Main.Size = UDim2.new(Main.Size.X.Scale, Main.Size.X.Offset, 0, Main.Top.AbsoluteSize.Y / Config.UIScale)
+                Main.AutomaticSize = "None"
+                Main.Top.Size = UDim2.new(1, 0, 0, (not DescFrame and Section.HeaderSize or 0))
+                Main.Top.AutomaticSize = (not Section.Expandable or DescFrame) and "Y" or "None"
+                Main.Content.Visible = true
 
-                    --     Parent = Main.Top,
-                    -- })
-                    Main.Size = UDim2.new(Main.Size.X.Scale,Main.Size.X.Offset,0,Main.Top.AbsoluteSize.Y/Config.UIScale)
-                    Main.AutomaticSize = "None"
-                    Main.Top.Size = UDim2.new(1,0,0,(not DescFrame and Section.HeaderSize or 0))
-                    Main.Top.AutomaticSize = (not Section.Expandable or DescFrame) and "Y" or "None"
-                    Main.Content.Visible = true
-                end
                 if Section.Opened then
                     Section:Open()
                 end
 
-            end)
+                task.spawn(function()
+                    while task.wait(0.03) do
+                        if not Main or not Main.Parent then break end
+                        local Outline = Main:FindFirstChild("Outline")
+                        local Stroke = Outline and Outline:FindFirstChildOfClass("UIStroke")
+                        local Gradient = Stroke and Stroke:FindFirstChild("GlowTrail")
+                        if Gradient then
+                            Gradient.Rotation = (Gradient.Rotation + 2) % 360
+                        end
+                    end
+                end)
+            end
+        end)
 
-            return Section.__type, Section
-        end
+        return Section.__type, Section
+    end
 
-        return Element
+    return Element

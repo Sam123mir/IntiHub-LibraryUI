@@ -13,6 +13,19 @@ pcall(function()
     end
 end)
 
+-- Fallback for Common Lucide Icons in Executor environment
+IconModule.AddIcons("lucide", {
+    ["crown"] = 120997033468887,
+    ["layout-grid"] = 11419713317,
+    ["settings"] = 11419719547,
+    ["zap"] = 11419717442,
+    ["check-circle"] = 11419711612,
+    ["component"] = 11419712165,
+    ["star"] = 11419714881,
+    ["minimize-2"] = 11419715732,
+    ["shield-check"] = 11419718420,
+})
+
 local function parseIconString(iconString)  
     if type(iconString) == "string" then  
         local splitIndex = iconString:find(":")  

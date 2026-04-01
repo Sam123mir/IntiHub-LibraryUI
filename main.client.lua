@@ -49,6 +49,17 @@ do
                 IconModule = cloneref(Remote:InvokeServer())
             end
         end)
+        IconModule.AddIcons('lucide', {
+            ['crown'] = 120997033468887,
+            ['layout-grid'] = 11419713317,
+            ['settings'] = 11419719547,
+            ['zap'] = 11419717442,
+            ['check-circle'] = 11419711612,
+            ['component'] = 11419712165,
+            ['star'] = 11419714881,
+            ['minimize-2'] = 11419715732,
+            ['shield-check'] = 11419718420,
+        })
 
         local function parseIconString(iconString)
             if type(iconString) == 'string' then
@@ -5126,7 +5137,7 @@ do
                 AutomaticSize = 'Y',
                 Parent = Parent,
                 BackgroundTransparency = 1,
-                Position = UDim2.new(0.5, 0, 0.5, 0),
+                Position = UDim2.new(0.5, 0, 0.45, 0),
                 AnchorPoint = Vector2.new(0.5, 0.5),
                 Visible = false,
                 ZIndex = 99999999,
@@ -7492,23 +7503,23 @@ do
             if Slider.IsTextbox then
                 ValueLabel = New('TextBox', {
                     Text = FormatValue(Value),
-                    TextSize = 12,
-                    FontFace = Font.new(Creator.Font, Enum.FontWeight.SemiBold),
+                    TextSize = 13,
+                    FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
                     TextColor3 = Color3.new(1, 1, 1),
-                    BackgroundTransparency = 0.9,
+                    BackgroundTransparency = 0.85,
                     BackgroundColor3 = Color3.new(1, 1, 1),
-                    Size = UDim2.new(0, Slider.TextBoxWidth, 0, 22),
+                    Size = UDim2.new(0, Slider.TextBoxWidth, 0, 24),
                     ThemeTag = {
                         BorderColor3 = 'Accent',
                     },
                 }, {
                     New('UICorner', {
-                        CornerRadius = UDim.new(0, 4),
+                        CornerRadius = UDim.new(0, 5),
                     }),
                     New('UIStroke', {
-                        Thickness = 1,
+                        Thickness = 1.2,
                         Color = Color3.fromHex'#FFD700',
-                        Transparency = 0.8,
+                        Transparency = 0.4,
                     }),
                 })
             end
@@ -7544,10 +7555,8 @@ do
                     Name = 'SliderBack',
                     Size = UDim2.new(1, (IconFrom and -30 or 0) + (IconTo and -30 or 0) + (Slider.IsTextbox and 
 -Slider.TextBoxWidth - 10 or 0), 0, 4),
-                    ImageTransparency = 0.9,
-                    ThemeTag = {
-                        ImageColor3 = 'Text',
-                    },
+                    ImageTransparency = 0.8,
+                    ImageColor3 = Color3.new(1, 1, 1),
                 }, {
                     Creator.NewRoundFrame(99, 'Squircle', {
                         Name = 'Fill',
@@ -7556,18 +7565,19 @@ do
                             ImageColor3 = 'Slider',
                         },
                     }, {
-                        Creator.NewRoundFrame(99, 'Squircle', {
+                        Creator.NewRoundFrame(4, 'Squircle', {
                             Name = 'Thumb',
-                            Size = UDim2.new(0, Slider.ThumbSize, 0, Slider.ThumbSize),
+                            Size = UDim2.new(0, 10, 0, 18),
                             Position = UDim2.new(1, 0, 0.5, 0),
                             AnchorPoint = Vector2.new(0.5, 0.5),
                             ThemeTag = {
-                                ImageColor3 = 'SliderThumb',
+                                ImageColor3 = 'Accent',
                             },
                         }, {
                             New('UIStroke', {
                                 Thickness = 1.5,
                                 Color = Color3.fromHex'#FFD700',
+                                Transparency = 0.2,
                             }),
                         }),
                     }),
@@ -9969,10 +9979,23 @@ do
                 TitleContainer.Size = UDim2.new(1, offset, 0, 0)
             end
 
+            local TargetParent = Config.Parent
+
+            if TargetParent and TargetParent:FindFirstChild'LeftColumn' and TargetParent:FindFirstChild'RightColumn' then
+                local Left = TargetParent.LeftColumn
+                local Right = TargetParent.RightColumn
+
+                if Left.UIListLayout.AbsoluteContentSize.Y <= Right.UIListLayout.AbsoluteContentSize.Y then
+                    TargetParent = Left
+                else
+                    TargetParent = Right
+                end
+            end
+
             local Main = Creator.NewRoundFrame(Config.Window.ElementConfig.UICorner, 'Squircle', {
                 Size = UDim2.new(1, 0, 0, 0),
                 BackgroundTransparency = 1,
-                Parent = Config.Parent,
+                Parent = TargetParent,
                 ClipsDescendants = true,
                 AutomaticSize = 'Y',
                 ThemeTag = {
@@ -10003,6 +10026,7 @@ do
                                 ColorSequenceKeypoint.new(0.5, Color3.fromHex'#FFFACD'),
                                 ColorSequenceKeypoint.new(1, Color3.fromHex'#FFD700'),
                             },
+                            Name = 'GlowTrail',
                         }),
                     }),
                 }),
@@ -10153,9 +10177,26 @@ do
                     Main.Top.Size = UDim2.new(1, 0, 0, (not DescFrame and Section.HeaderSize or 0))
                     Main.Top.AutomaticSize = (not Section.Expandable or DescFrame) and 'Y' or 'None'
                     Main.Content.Visible = true
-                end
-                if Section.Opened then
-                    Section:Open()
+
+                    if Section.Opened then
+                        Section:Open()
+                    end
+
+                    task.spawn(function()
+                        while task.wait(0.03) do
+                            if not Main or not Main.Parent then
+                                break
+                            end
+
+                            local Outline = Main:FindFirstChild'Outline'
+                            local Stroke = Outline and Outline:FindFirstChildOfClass'UIStroke'
+                            local Gradient = Stroke and Stroke:FindFirstChild'GlowTrail'
+
+                            if Gradient then
+                                Gradient.Rotation = (Gradient.Rotation + 2) % 360
+                            end
+                        end
+                    end)
                 end
             end)
 
@@ -10722,10 +10763,30 @@ do
                     PaddingRight = UDim.new(0, not Window.HidePanelBackground and 20 or 10),
                     PaddingBottom = UDim.new(0, not Window.HidePanelBackground and 20 or 10),
                 }),
-                New('UIListLayout', {
-                    SortOrder = 'LayoutOrder',
-                    Padding = UDim.new(0, Tab.Gap),
-                    HorizontalAlignment = 'Center',
+                New('Frame', {
+                    Name = 'LeftColumn',
+                    Size = UDim2.new(0.5, -5, 0, 0),
+                    AutomaticSize = 'Y',
+                    BackgroundTransparency = 1,
+                }, {
+                    New('UIListLayout', {
+                        SortOrder = 'LayoutOrder',
+                        Padding = UDim.new(0, Tab.Gap),
+                        HorizontalAlignment = 'Center',
+                    }),
+                }),
+                New('Frame', {
+                    Name = 'RightColumn',
+                    Size = UDim2.new(0.5, -5, 0, 0),
+                    Position = UDim2.new(0.5, 5, 0, 0),
+                    AutomaticSize = 'Y',
+                    BackgroundTransparency = 1,
+                }, {
+                    New('UIListLayout', {
+                        SortOrder = 'LayoutOrder',
+                        Padding = UDim.new(0, Tab.Gap),
+                        HorizontalAlignment = 'Center',
+                    }),
                 }),
             })
             Tab.UIElements.ContainerFrameCanvas = New('Frame', {
@@ -11864,6 +11925,11 @@ do
                 if isOpen then
                     Panel.Visible = true
 
+                    local Group = Panel:FindFirstChild'Group'
+
+                    if Group then
+                        Group.GroupTransparency = 0
+                    end
                     if Button then
                         Tween(Button:FindFirstChildWhichIsA('ImageLabel', true), 0.3, {Rotation = 180}):Play()
                     end
@@ -13182,94 +13248,6 @@ do
 
                 SearchBarTrigger.Size = UDim2.new(0, 150, 0, 30)
                 SearchBarTrigger.LayoutOrder = 5
-
-                local LangTrigger = CreateLabel('EN', 'globe', Window.UIElements.Main.Main.Topbar.Center, true)
-
-                LangTrigger.Size = UDim2.new(0, 50, 0, 30)
-                LangTrigger.LayoutOrder = 2
-
-                local LangDropdown = New('Frame', {
-                    Size = UDim2.new(0, 100, 0, 0),
-                    Position = UDim2.new(0.5, 0, 1, 8),
-                    AnchorPoint = Vector2.new(0.5, 0),
-                    BackgroundTransparency = 1,
-                    ClipsDescendants = true,
-                    Parent = LangTrigger,
-                    ZIndex = 10000,
-                }, {
-                    Creator.NewRoundFrame(8, 'Glass-1', {
-                        Size = UDim2.new(1, 0, 1, 0),
-                        ThemeTag = {
-                            ImageColor3 = 'PanelBackground',
-                        },
-                        ImageTransparency = 0.05,
-                    }, {
-                        New('UIStroke', {
-                            Thickness = 1.5,
-                            Color = Color3.fromHex'#FFD700',
-                            Transparency = 0.7,
-                        }),
-                    }),
-                    New('UIListLayout', {
-                        Padding = UDim.new(0, 4),
-                        SortOrder = 'LayoutOrder',
-                    }),
-                    New('UIPadding', {
-                        PaddingTop = UDim.new(0, 6),
-                        PaddingBottom = UDim.new(0, 6),
-                        PaddingLeft = UDim.new(0, 6),
-                        PaddingRight = UDim.new(0, 6),
-                    }),
-                })
-
-                local function CreateLangItem(lang)
-                    local item = New('TextButton', {
-                        Size = UDim2.new(1, 0, 0, 30),
-                        BackgroundTransparency = 1,
-                        Text = lang,
-                        TextSize = 13,
-                        FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
-                        TextColor3 = Color3.new(1, 1, 1),
-                        TextTransparency = 0.4,
-                        Parent = LangDropdown,
-                    }, {
-                        New('UICorner', {
-                            CornerRadius = UDim.new(0, 6),
-                        }),
-                    })
-
-                    Creator.AddSignal(item.MouseEnter, function()
-                        Tween(item, 0.2, {
-                            TextTransparency = 0,
-                            BackgroundTransparency = 0.95,
-                        }):Play()
-                    end)
-                    Creator.AddSignal(item.MouseLeave, function()
-                        Tween(item, 0.2, {
-                            TextTransparency = 0.4,
-                            BackgroundTransparency = 1,
-                        }):Play()
-                    end)
-                    Creator.AddSignal(item.MouseButton1Click, function()
-                        LangTrigger.Text = lang
-
-                        Tween(LangDropdown, 0.2, {
-                            Size = UDim2.new(0, 100, 0, 0),
-                        }):Play()
-                    end)
-                end
-
-                CreateLangItem'EN'
-                CreateLangItem'ES'
-                CreateLangItem'PT'
-                Creator.AddSignal(LangTrigger.MouseButton1Click, function()
-                    local targetSize = LangDropdown.Size.Y.Offset == 0 and 110 or 0
-
-                    Tween(LangDropdown, 0.25, {
-                        Size = UDim2.new(0, 100, 0, targetSize),
-                    }, Enum.EasingStyle.Quint):Play()
-                end)
-
                 Window.UIElements.Main.Main.Topbar.Center.Visible = true
 
                 Creator.AddSignal(SearchBarTrigger.MouseButton1Click, function()
@@ -13705,7 +13683,7 @@ do
             Parent = GUIParent,
             IgnoreGuiInset = true,
             ScreenInsets = 'None',
-            DisplayOrder = -99999,
+            DisplayOrder = 100,
         }, {
             New('Folder', {
                 Name = 'Window',
@@ -13724,11 +13702,13 @@ do
             Name = 'IntiHub/Notifications',
             Parent = GUIParent,
             IgnoreGuiInset = true,
+            DisplayOrder = 1001,
         })
         IntiHub.DropdownGui = New('ScreenGui', {
             Name = 'IntiHub/Dropdowns',
             Parent = GUIParent,
             IgnoreGuiInset = true,
+            DisplayOrder = 1000,
         })
         IntiHub.TooltipGui = New('ScreenGui', {
             Name = 'IntiHub/Tooltips',

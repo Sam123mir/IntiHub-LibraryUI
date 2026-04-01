@@ -67,7 +67,7 @@ IntiHub.ScreenGui = New("ScreenGui", {
 	Parent = GUIParent,
 	IgnoreGuiInset = true,
 	ScreenInsets = "None",
-	DisplayOrder = -99999,
+	DisplayOrder = 100,
 }, {
 
 	New("Folder", {
@@ -94,11 +94,13 @@ IntiHub.NotificationGui = New("ScreenGui", {
 	Name = "IntiHub/Notifications",
 	Parent = GUIParent,
 	IgnoreGuiInset = true,
+	DisplayOrder = 1001,
 })
 IntiHub.DropdownGui = New("ScreenGui", {
 	Name = "IntiHub/Dropdowns",
 	Parent = GUIParent,
 	IgnoreGuiInset = true,
+	DisplayOrder = 1000,
 })
 IntiHub.TooltipGui = New("ScreenGui", {
 	Name = "IntiHub/Tooltips",

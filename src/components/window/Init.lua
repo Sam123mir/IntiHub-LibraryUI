@@ -620,6 +620,9 @@ return function(Config)
         
         if isOpen then
             Panel.Visible = true
+            local Group = Panel:FindFirstChild("Group")
+            if Group then Group.GroupTransparency = 0 end
+            
             if Button then 
                 Tween(Button:FindFirstChildWhichIsA("ImageLabel", true), 0.3, { Rotation = 180 }):Play()
             end
@@ -630,7 +633,9 @@ return function(Config)
             end
             local tween = Tween(Panel, 0.4, { Position = UDim2.new(1, 15, 0, 0) }, Enum.EasingStyle.Quint, Enum.EasingDirection.In)
             tween.Completed:Connect(function()
-                if not Window.RightPanelOpen then Panel.Visible = false end
+                if not Window.RightPanelOpen then 
+                    Panel.Visible = false 
+                end
             end)
             tween:Play()
         end
@@ -2230,76 +2235,6 @@ return function(Config)
         SearchBarTrigger.Size = UDim2.new(0, 150, 0, 30)
         SearchBarTrigger.LayoutOrder = 5 -- After version and language
         
-        -- 🟢 Language Selection System
-        local CurrentLang = "EN"
-        local LangTrigger = CreateLabel("EN", "globe", Window.UIElements.Main.Main.Topbar.Center, true)
-        LangTrigger.Size = UDim2.new(0, 50, 0, 30)
-        LangTrigger.LayoutOrder = 2 -- After version
-
-        local LangDropdown = New("Frame", {
-            Size = UDim2.new(0, 100, 0, 0), -- Wider dropdown
-            Position = UDim2.new(0.5, 0, 1, 8),
-            AnchorPoint = Vector2.new(0.5, 0),
-            BackgroundTransparency = 1,
-            ClipsDescendants = true,
-            Parent = LangTrigger,
-            ZIndex = 10000,
-        }, {
-            Creator.NewRoundFrame(8, "Glass-1", {
-                Size = UDim2.new(1, 0, 1, 0),
-                ThemeTag = { ImageColor3 = "PanelBackground" },
-                ImageTransparency = 0.05,
-            }, {
-                New("UIStroke", { Thickness = 1.5, Color = Color3.fromHex("#FFD700"), Transparency = 0.7 })
-            }),
-            New("UIListLayout", {
-                Padding = UDim.new(0, 4),
-                SortOrder = "LayoutOrder",
-            }),
-            New("UIPadding", {
-                PaddingTop = UDim.new(0, 6),
-                PaddingBottom = UDim.new(0, 6),
-                PaddingLeft = UDim.new(0, 6),
-                PaddingRight = UDim.new(0, 6),
-            }),
-        })
-
-        local function CreateLangItem(lang)
-            local item = New("TextButton", {
-                Size = UDim2.new(1, 0, 0, 30),
-                BackgroundTransparency = 1,
-                Text = lang,
-                TextSize = 13,
-                FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
-                TextColor3 = Color3.new(1, 1, 1),
-                TextTransparency = 0.4,
-                Parent = LangDropdown,
-            }, {
-                New("UICorner", { CornerRadius = UDim.new(0, 6) }),
-            })
-
-            Creator.AddSignal(item.MouseEnter, function()
-                Tween(item, 0.2, { TextTransparency = 0, BackgroundTransparency = 0.95 }):Play()
-            end)
-            Creator.AddSignal(item.MouseLeave, function()
-                Tween(item, 0.2, { TextTransparency = 0.4, BackgroundTransparency = 1 }):Play()
-            end)
-
-            Creator.AddSignal(item.MouseButton1Click, function()
-                LangTrigger.Text = lang
-                Tween(LangDropdown, 0.2, { Size = UDim2.new(0, 100, 0, 0) }):Play()
-            end)
-        end
-
-        CreateLangItem("EN")
-        CreateLangItem("ES")
-        CreateLangItem("PT")
-
-        Creator.AddSignal(LangTrigger.MouseButton1Click, function()
-            local targetSize = LangDropdown.Size.Y.Offset == 0 and 110 or 0
-            Tween(LangDropdown, 0.25, { Size = UDim2.new(0, 100, 0, targetSize) }, Enum.EasingStyle.Quint):Play()
-        end)
-
         Window.UIElements.Main.Main.Topbar.Center.Visible = true
 
 		Creator.AddSignal(SearchBarTrigger.MouseButton1Click, function()
