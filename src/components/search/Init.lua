@@ -13,6 +13,13 @@ local Creator = require("../../modules/Creator")
 local New = Creator.New
 local Tween = Creator.Tween
 
+local Color3 = Color3
+local UDim = UDim
+local UDim2 = UDim2
+local Vector2 = Vector2
+local Font = Font
+local Enum = Enum
+
 function SearchBar.new(TabModule, Parent, OnClose)
 	local SearchBarModule = {
 		IconSize = 18,
@@ -530,6 +537,29 @@ function SearchBar.new(TabModule, Parent, OnClose)
 	end)
 
 	return SearchBarModule
+end
+
+function SearchBar.Init(Window)
+	local Self = {
+		Active = false,
+		Bar = nil,
+	}
+
+	function Self:Toggle()
+		if not Self.Active then
+			Self.Active = true
+			Self.Bar = SearchBar.new(Window, Window.UIElements.Main, function()
+				Self.Active = false
+				Self.Bar = nil
+			end)
+		else
+			if Self.Bar then
+				Self.Bar:Close(true)
+			end
+		end
+	end
+
+	return Self
 end
 
 return SearchBar

@@ -4969,6 +4969,11 @@ do
         local Creator = __DARKLUA_BUNDLE_MODULES.load'c'
         local New = Creator.New
         local Tween = Creator.Tween
+        local UDim = UDim
+        local UDim2 = UDim2
+        local Vector2 = Vector2
+        local Font = Font
+        local Enum = Enum
 
         function SearchBar.new(TabModule, Parent, OnClose)
             local SearchBarModule = {
@@ -5437,6 +5442,29 @@ do
             end)
 
             return SearchBarModule
+        end
+        function SearchBar.Init(Window)
+            local Self = {
+                Active = false,
+                Bar = nil,
+            }
+
+            function Self:Toggle()
+                if not Self.Active then
+                    Self.Active = true
+                    Self.Bar = SearchBar.new(Window, Window.UIElements.Main, function(
+                    )
+                        Self.Active = false
+                        Self.Bar = nil
+                    end)
+                else
+                    if Self.Bar then
+                        Self.Bar:Close(true)
+                    end
+                end
+            end
+
+            return Self
         end
 
         return SearchBar
@@ -7378,12 +7406,7 @@ do
         local Vector2 = Vector2
         local Font = Font
         local Enum = Enum
-        local Color3 = Color3
-        local UDim = UDim
-        local UDim2 = UDim2
-        local Vector2 = Vector2
-        local Font = Font
-        local Enum = Enum
+        local math = math
         local Element = {}
 
         function Element:New(Config)
@@ -11268,6 +11291,13 @@ do
         local Tag = __DARKLUA_BUNDLE_MODULES.load'x'
         local MinimizedBar = __DARKLUA_BUNDLE_MODULES.load'y'
         local Search = __DARKLUA_BUNDLE_MODULES.load'A'
+        local Color3 = Color3
+        local UDim = UDim
+        local UDim2 = UDim2
+        local Vector2 = Vector2
+        local Font = Font
+        local Enum = Enum
+        local math = math
         local ConfigManager = __DARKLUA_BUNDLE_MODULES.load'B'
 
         return function(Config)
@@ -12360,9 +12390,15 @@ do
                 return Window:CreateTopbarButton(ButtonConfig.Name, ButtonConfig.Icon, ButtonConfig.Callback, ButtonConfig.LayoutOrder or 0, ButtonConfig.IconThemed, ButtonConfig.Color, ButtonConfig.IconSize)
             end
 
-            Window:CreateTopbarButton('SidebarToggle', 'panel-right', function()
+            Window:CreateTopbarButton('SidebarToggle', 'layout-panel-right', function(
+            )
                 Window:ToggleRightPanel()
             end, 1000, true, Color3.fromHex'#FFD700')
+            Window:CreateTopbarButton('SearchToggle', 'search', function()
+                if Window.Search then
+                    Window.Search:Toggle()
+                end
+            end, 999, true, Color3.fromHex'#FFD700')
 
             local WindowDragModule = Creator.Drag(Window.UIElements.Main, {
                 Window.UIElements.Main.Main.Topbar,

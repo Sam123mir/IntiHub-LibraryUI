@@ -25,6 +25,14 @@ local Tag = require("../ui/Tag")
 local MinimizedBar = require("./MinimizedBar")
 local Search = require("../search/Init")
 
+local Color3 = Color3
+local UDim = UDim
+local UDim2 = UDim2
+local Vector2 = Vector2
+local Font = Font
+local Enum = Enum
+local math = math
+
 local ConfigManager = require("../../config/Init")
 
 local Notified = false
@@ -1245,9 +1253,15 @@ return function(Config)
 
 	-- local Dragged = false
 
-	Window:CreateTopbarButton("SidebarToggle", "panel-right", function()
+	Window:CreateTopbarButton("SidebarToggle", "layout-panel-right", function()
 		Window:ToggleRightPanel()
 	end, 1000, true, Color3.fromHex("#FFD700"))
+
+    Window:CreateTopbarButton("SearchToggle", "search", function()
+        if Window.Search then
+            Window.Search:Toggle()
+        end
+    end, 999, true, Color3.fromHex("#FFD700"))
 
 	local WindowDragModule = Creator.Drag(
 		Window.UIElements.Main,

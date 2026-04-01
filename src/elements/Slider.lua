@@ -13,13 +13,7 @@ local UDim2 = UDim2
 local Vector2 = Vector2
 local Font = Font
 local Enum = Enum
-
-local Color3 = Color3
-local UDim = UDim
-local UDim2 = UDim2
-local Vector2 = Vector2
-local Font = Font
-local Enum = Enum
+local math = math
 
 local Element = {}
 
