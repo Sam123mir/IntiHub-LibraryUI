@@ -1,22 +1,17 @@
 local cloneref = (cloneref or clonereference or function(instance) return instance end)
+local HttpService = cloneref(game:GetService("HttpService"))
+local RunService = cloneref(game:GetService("RunService"))
 
 local IconModule = {
     Icons = {},
     Spritesheets = {},
-    IconsType = "lucide"
+    IconsType = "lucide",
 }
 
-pcall(function()
-    local Remote = game:GetService("ReplicatedStorage"):FindFirstChild("GetIcons")
-    if Remote and Remote:IsA("RemoteFunction") then
-        IconModule = cloneref(Remote:InvokeServer())
-    end
-end)
-
--- Fallback for Common Lucide Icons in Executor environment
-IconModule.AddIcons("lucide", {
+-- Local database for essential icons (fallback)
+IconModule.LocalIcons = {
     ["crown"] = 120997033468887,
-    ["layout-grid"] = 11419713317,
+    ["layout-grid"] = 114197133177,
     ["settings"] = 11419719547,
     ["zap"] = 11419717442,
     ["check-circle"] = 11419711612,
@@ -25,8 +20,50 @@ IconModule.AddIcons("lucide", {
     ["minimize-2"] = 11419715732,
     ["shield-check"] = 11419718420,
     ["lock"] = 11419715367,
-    ["alert-circle"] = 11419710381, -- Generic error icon
-})
+    ["alert-circle"] = 11419710381,
+}
+
+local function Get(url)
+    local success, res = pcall(function()
+        return game:HttpGet(url)
+    end)
+    if success then return res end
+    
+    success, res = pcall(function()
+        return HttpService:GetAsync(url)
+    end)
+    return success and res or nil
+end
+
+-- Extraction System: Fetch from GitHub repository
+function IconModule.FetchIcons()
+    local url = "https://raw.githubusercontent.com/Footagesus/Icons/main/Main-v2.lua"
+    local code = Get(url)
+    if code then
+        local func, err = loadstring(code)
+        if func then
+            local remoteIcons = func()
+            if remoteIcons and remoteIcons.Icons then
+                for pack, data in next, remoteIcons.Icons do
+                    IconModule.Icons[pack] = data
+                end
+            end
+        end
+    end
+end
+
+-- Initialize local icons
+IconModule.Icons["lucide"] = { Icons = {}, Spritesheets = {} }
+for name, id in next, IconModule.LocalIcons do
+    IconModule.Icons["lucide"].Icons[name] = {
+        Image = "rbxassetid://" .. tostring(id),
+        ImageRectSize = Vector2.new(0,0),
+        ImageRectPosition = Vector2.new(0,0)
+    }
+end
+
+-- Try fetching external icons in background
+task.spawn(IconModule.FetchIcons)
 
 local function parseIconString(iconString)  
     if type(iconString) == "string" then  
@@ -34,7 +71,7 @@ local function parseIconString(iconString)
         if splitIndex then  
             local iconType = iconString:sub(1, splitIndex - 1)  
             local iconName = iconString:sub(splitIndex + 1)  
-            return iconType, iconName  
+            return iconType, iconName
         end  
     end  
     return nil, iconString  

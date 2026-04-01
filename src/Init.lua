@@ -94,13 +94,13 @@ IntiHub.NotificationGui = New("ScreenGui", {
 	Name = "IntiHub/Notifications",
 	Parent = GUIParent,
 	IgnoreGuiInset = true,
-	DisplayOrder = 1001,
+	DisplayOrder = 2001,
 })
 IntiHub.DropdownGui = New("ScreenGui", {
 	Name = "IntiHub/Dropdowns",
 	Parent = GUIParent,
 	IgnoreGuiInset = true,
-	DisplayOrder = 1000,
+	DisplayOrder = 2000,
 })
 IntiHub.TooltipGui = New("ScreenGui", {
 	Name = "IntiHub/Tooltips",

@@ -11,10 +11,16 @@ do
     end)
 
     if not success or not result then
-        warn("[IntiHub Demo Error]: Library loading failed. Trying local recovery...")
-        -- Fallback to local src/Init for development testing if HttpGet fails in studio
-        local ok, local_res = pcall(function() return require(game:GetService("ReplicatedStorage"):WaitForChild("IntiHub"):WaitForChild("Init")) end)
-        if ok then result = local_res else return end
+        warn("[IntiHub Demo Error]: Library loading failed. Error: " .. (result or "Unknown error"))
+        
+        -- Fallback only if in Studio or specifically configured
+        if game:GetService("RunService"):IsStudio() then
+            warn("[IntiHub] Attempting local recovery in Studio...")
+            local ok, local_res = pcall(function() return require(game:GetService("ReplicatedStorage"):WaitForChild("IntiHub"):WaitForChild("Init")) end)
+            if ok then result = local_res else warn("[IntiHub] Local recovery failed: " .. tostring(local_res)); return end
+        else
+            return
+        end
     end
     IntiHub = result
 end

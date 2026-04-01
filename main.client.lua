@@ -36,22 +36,19 @@ do
         local cloneref = (cloneref or clonereference or function(instance)
             return instance
         end)
+        local HttpService = cloneref(game:GetService'HttpService')
+
+        cloneref(game:GetService'RunService')
+
         local IconModule = {
             Icons = {},
             Spritesheets = {},
             IconsType = 'lucide',
         }
 
-        pcall(function()
-            local Remote = game:GetService'ReplicatedStorage':FindFirstChild'GetIcons'
-
-            if Remote and Remote:IsA'RemoteFunction' then
-                IconModule = cloneref(Remote:InvokeServer())
-            end
-        end)
-        IconModule.AddIcons('lucide', {
+        IconModule.LocalIcons = {
             ['crown'] = 120997033468887,
-            ['layout-grid'] = 11419713317,
+            ['layout-grid'] = 114197133177,
             ['settings'] = 11419719547,
             ['zap'] = 11419717442,
             ['check-circle'] = 11419711612,
@@ -61,7 +58,58 @@ do
             ['shield-check'] = 11419718420,
             ['lock'] = 11419715367,
             ['alert-circle'] = 11419710381,
-        })
+        }
+
+        local function Get(url)
+            local success, res = pcall(function()
+                return game:HttpGet(url)
+            end)
+
+            if success then
+                return res
+            end
+
+            success, res = pcall(function()
+                return HttpService:GetAsync(url)
+            end)
+
+            return success and res or nil
+        end
+
+        function IconModule.FetchIcons()
+            local url = 
+[[https://raw.githubusercontent.com/Footagesus/Icons/main/Main-v2.lua]]
+            local code = Get(url)
+
+            if code then
+                local func = loadstring(code)
+
+                if func then
+                    local remoteIcons = func()
+
+                    if remoteIcons and remoteIcons.Icons then
+                        for pack, data in next, remoteIcons.Icons do
+                            IconModule.Icons[pack] = data
+                        end
+                    end
+                end
+            end
+        end
+
+        IconModule.Icons['lucide'] = {
+            Icons = {},
+            Spritesheets = {},
+        }
+
+        for name, id in next, IconModule.LocalIcons do
+            IconModule.Icons['lucide'].Icons[name] = {
+                Image = 'rbxassetid://' .. tostring(id),
+                ImageRectSize = Vector2.new(0, 0),
+                ImageRectPosition = Vector2.new(0, 0),
+            }
+        end
+
+        task.spawn(IconModule.FetchIcons)
 
         local function parseIconString(iconString)
             if type(iconString) == 'string' then
@@ -13705,13 +13753,13 @@ do
             Name = 'IntiHub/Notifications',
             Parent = GUIParent,
             IgnoreGuiInset = true,
-            DisplayOrder = 1001,
+            DisplayOrder = 2001,
         })
         IntiHub.DropdownGui = New('ScreenGui', {
             Name = 'IntiHub/Dropdowns',
             Parent = GUIParent,
             IgnoreGuiInset = true,
-            DisplayOrder = 1000,
+            DisplayOrder = 2000,
         })
         IntiHub.TooltipGui = New('ScreenGui', {
             Name = 'IntiHub/Tooltips',
