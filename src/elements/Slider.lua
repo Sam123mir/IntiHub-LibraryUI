@@ -112,7 +112,7 @@ function Element:New(Config)
         Size = UDim2.new(0, Slider.Width, 0, 24),
         BackgroundTransparency = 1,
         LayoutOrder = 10,
-        Parent = Slider.SliderFrame.UIElements.Main.UIElements.Container.TitleFrame.TitleFrame, -- Nested in Element's title frame for right-alignment
+        Parent = Slider.SliderFrame.UIElements.Container.TitleFrame.TitleFrame, -- Nested in Element's title frame for right-alignment
         AnchorPoint = Vector2.new(1, 0.5),
         Position = UDim2.new(1, 0, 0.5, 0),
     }, {
