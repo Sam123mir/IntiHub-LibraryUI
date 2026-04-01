@@ -5,7 +5,7 @@
  _/ // / / / /_/ / __  / /_/ / /_/ /
 /___/_/ /_/\__/_/_/ /_/\__,_/_.___/ 
                                     
-    v1.7.0  |  2026-03-31  |  Roblox UI Library - Noble Deluxe v2.0
+    v1.7.0  |  2026-04-01  |  Roblox UI Library - Noble Deluxe v2.0
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -10560,6 +10560,12 @@ do
 
                         return content
                     end
+
+                    local aliasName = 'Create' .. name
+
+                    if not tbl[aliasName] then
+                        tbl[aliasName] = tbl[name]
+                    end
                 end
 
                 function tbl:UpdateAllElementShapes(bbb)
@@ -11023,6 +11029,8 @@ do
             local ElementsModule = __DARKLUA_BUNDLE_MODULES.load'Y'
 
             ElementsModule.Load(Tab, Tab.UIElements.ContainerFrame, ElementsModule.Elements, Window, IntiHub, nil, ElementsModule, UIScale)
+
+            Tab.CreateSection = Tab.Section
 
             function Tab:LockAll()
                 for _, element in next, Window.AllElements do
@@ -12973,6 +12981,9 @@ do
 
                 return TabModule.New(TabConfig, Config.IntiHub.UIScale)
             end
+
+            Window.CreateTab = Window.Tab
+
             function Window:SelectTab(Tab)
                 TabModule:SelectTab(Tab)
             end

@@ -4,11 +4,12 @@
 
 ## 🚀 Inicio Rápido
 
-Para empezar, carga la librería usando el script compilado:
+Para empezar, carga la librería usando el script compilado oficial:
 
 ```lua
 local function LoadIntiHub()
     local success, response = pcall(function()
+        -- URL de Producción Estable
         return game:HttpGet("https://raw.githubusercontent.com/Sam123mir/IntiHub-LibraryUI/main/dist/main.lua?v=" .. tick())
     end)
     
@@ -37,7 +38,18 @@ local Window = IntiHub:CreateWindow({
 
 ---
 
-## ✨ Novedades: Noble Black & Gold Edition
+## ✨ Compatibilidad con IA (API Aliases)
+
+Para facilitar la creación de scripts mediante Inteligencia Artificial, IntiHub ahora soporta alias universales. Puedes usar indistintamente los siguientes métodos:
+
+- **Ventanas:** `CreateWindow()`
+- **Pestañas:** `Tab()` o `CreateTab()`
+- **Secciones:** `Section()` o `CreateSection()`
+- **Elementos:** `Button()` o `CreateButton()`, `Toggle()` o `CreateToggle()`, etc.
+
+*Nota: La sintaxis corta (sin `Create`) es la recomendada para un código más limpio.*
+
+---
 
 ### 1. Animación de Borde Rotativo (Glow)
 La ventana principal ahora cuenta con **dos capas de animación dorada** que rotan en sentidos opuestos, creando un efecto de brillo dinámico y elegante.

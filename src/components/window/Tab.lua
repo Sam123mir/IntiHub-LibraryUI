@@ -497,6 +497,7 @@ function TabModule.New(Config, UIScale)
 		ElementsModule,
 		UIScale
 	)
+	Tab.CreateSection = Tab.Section
 
 	function Tab:LockAll()
 		--print("LockAll called, number of elements: " .. #self.Elements)

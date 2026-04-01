@@ -1803,6 +1803,7 @@ return function(Config)
 		TabConfig.Parent = Window.UIElements.SideBar.Frame
 		return TabModule.New(TabConfig, Config.IntiHub.UIScale)
 	end
+	Window.CreateTab = Window.Tab
 
 	function Window:SelectTab(Tab)
 		TabModule:SelectTab(Tab)

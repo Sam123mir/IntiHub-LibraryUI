@@ -116,6 +116,12 @@ return {
 				end
 				return content
 			end
+
+			-- AI Compatibility: Register "Create[Name]" alias
+			local aliasName = "Create" .. name
+			if not tbl[aliasName] then
+				tbl[aliasName] = tbl[name]
+			end
 		end
 		function tbl:UpdateAllElementShapes(bbb)
 			for i, element in next, bbb.Elements do
