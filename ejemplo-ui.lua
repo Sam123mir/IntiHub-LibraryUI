@@ -67,6 +67,7 @@ do
 
     local SettingSection = DashTab:Section({
         Title = "Interface Settings",
+        Box = true,
         Opened = true,
     })
 
@@ -91,7 +92,7 @@ do
         Icon = "component",
     })
 
-    local InputSection = CompTab:Section({ Title = "User Interaction", Opened = true })
+    local InputSection = CompTab:Section({ Title = "User Interaction", Box = true, Opened = true })
 
     InputSection:Input({
         Title = "Security Key",
