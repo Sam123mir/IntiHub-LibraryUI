@@ -59,6 +59,8 @@ do
             ['star'] = 11419714881,
             ['minimize-2'] = 11419715732,
             ['shield-check'] = 11419718420,
+            ['lock'] = 11419715367,
+            ['alert-circle'] = 11419710381,
         })
 
         local function parseIconString(iconString)
@@ -6416,8 +6418,49 @@ do
                 Desc.Visible = false
             end
 
+            local TextContainer = New('Frame', {
+                BackgroundTransparency = 1,
+                AutomaticSize = Element.Justify == 'Between' and 'Y' or 'XY',
+                Size = UDim2.new(Element.Justify == 'Between' and 1 or 0, Element.Justify == 'Between' and (ImageFrame and 
+-IconOffset - Element.UIPadding or -IconOffset) or 0, 1, 0),
+                Name = 'TextContainer',
+            }, {
+                New('UIPadding', {
+                    PaddingTop = UDim.new(0, (Config.Window.NewElements and Element.UIPadding / 2 or 0) + AddPaddingY),
+                    PaddingLeft = UDim.new(0, (Config.Window.NewElements and Element.UIPadding / 2 or 0) + AddPaddingX),
+                    PaddingRight = UDim.new(0, (Config.Window.NewElements and Element.UIPadding / 2 or 0) + AddPaddingX),
+                    PaddingBottom = UDim.new(0, (Config.Window.NewElements and Element.UIPadding / 2 or 0) + AddPaddingY),
+                }),
+                New('UIListLayout', {
+                    Padding = UDim.new(0, 6),
+                    FillDirection = 'Vertical',
+                    VerticalAlignment = 'Center',
+                    HorizontalAlignment = 'Left',
+                }),
+                Title,
+                Desc,
+            })
+            local MainTitleFrame = New('Frame', {
+                Size = UDim2.new(Element.Justify == 'Between' and 1 or 0, Element.Justify == 'Between' and 
+-(Config.TextOffset or 0) or 0, 0, 0),
+                AutomaticSize = Element.Justify == 'Between' and 'Y' or 'XY',
+                BackgroundTransparency = 1,
+                Name = 'MainTitleFrame',
+            }, {
+                New('UIListLayout', {
+                    Padding = UDim.new(0, Element.UIPadding),
+                    FillDirection = 'Horizontal',
+                    VerticalAlignment = Config.Window.NewElements and (Element.Justify == 'Between' and 'Top' or 'Center') or 'Center',
+                    HorizontalAlignment = Element.Justify ~= 'Between' and Element.Justify or 'Center',
+                }),
+                ImageFrame,
+                TextContainer,
+            })
+
             Element.UIElements.Title = Title
             Element.UIElements.Desc = Desc
+            Element.UIElements.MainTitleFrame = MainTitleFrame
+            Element.UIElements.ContentFrame = TextContainer
             Element.UIElements.Container = New('Frame', {
                 Size = UDim2.new(1, 0, 1, 0),
                 AutomaticSize = 'Y',
@@ -6430,43 +6473,7 @@ do
                     HorizontalAlignment = Element.Justify == 'Between' and 'Left' or 'Center',
                 }),
                 ThumbnailFrame,
-                New('Frame', {
-                    Size = UDim2.new(Element.Justify == 'Between' and 1 or 0, Element.Justify == 'Between' and 
--(Config.TextOffset or 0) or 0, 0, 0),
-                    AutomaticSize = Element.Justify == 'Between' and 'Y' or 'XY',
-                    BackgroundTransparency = 1,
-                    Name = 'TitleFrame',
-                }, {
-                    New('UIListLayout', {
-                        Padding = UDim.new(0, Element.UIPadding),
-                        FillDirection = 'Horizontal',
-                        VerticalAlignment = Config.Window.NewElements and (Element.Justify == 'Between' and 'Top' or 'Center') or 'Center',
-                        HorizontalAlignment = Element.Justify ~= 'Between' and Element.Justify or 'Center',
-                    }),
-                    ImageFrame,
-                    New('Frame', {
-                        BackgroundTransparency = 1,
-                        AutomaticSize = Element.Justify == 'Between' and 'Y' or 'XY',
-                        Size = UDim2.new(Element.Justify == 'Between' and 1 or 0, Element.Justify == 'Between' and (ImageFrame and 
--IconOffset - Element.UIPadding or -IconOffset) or 0, 1, 0),
-                        Name = 'TitleFrame',
-                    }, {
-                        New('UIPadding', {
-                            PaddingTop = UDim.new(0, (Config.Window.NewElements and Element.UIPadding / 2 or 0) + AddPaddingY),
-                            PaddingLeft = UDim.new(0, (Config.Window.NewElements and Element.UIPadding / 2 or 0) + AddPaddingX),
-                            PaddingRight = UDim.new(0, (Config.Window.NewElements and Element.UIPadding / 2 or 0) + AddPaddingX),
-                            PaddingBottom = UDim.new(0, (Config.Window.NewElements and Element.UIPadding / 2 or 0) + AddPaddingY),
-                        }),
-                        New('UIListLayout', {
-                            Padding = UDim.new(0, 6),
-                            FillDirection = 'Vertical',
-                            VerticalAlignment = 'Center',
-                            HorizontalAlignment = 'Left',
-                        }),
-                        Title,
-                        Desc,
-                    }),
-                }),
+                MainTitleFrame,
             })
 
             local LockedIcon = Creator.Image('lock', 'lock', 0, Config.Window.Folder, 'Lock', false)
@@ -6855,47 +6862,41 @@ do
     end
     function __DARKLUA_BUNDLE_MODULES.F()
         local Creator = __DARKLUA_BUNDLE_MODULES.load'c'
-        local New = Creator.New
+        local _ = Creator.New
         local Element = {}
-        local CreateButton = __DARKLUA_BUNDLE_MODULES.load'l'.New
 
-        function Element:New(ElementConfig)
-            ElementConfig.Hover = false
-            ElementConfig.TextOffset = 0
-            ElementConfig.ParentConfig = ElementConfig
-            ElementConfig.IsButtons = ElementConfig.Buttons and #ElementConfig.Buttons > 0 and true or false
-
-            local ParagraphModule = {
+        function Element:New(Config)
+            local Paragraph = {
                 __type = 'Paragraph',
-                Title = ElementConfig.Title or 'Paragraph',
-                Desc = ElementConfig.Desc or nil,
-                Locked = ElementConfig.Locked or false,
+                Title = Config.Title or 'Note',
+                Content = Config.Content or '',
+                UIElements = {},
             }
-            local Paragraph = __DARKLUA_BUNDLE_MODULES.load'E'(ElementConfig)
 
-            ParagraphModule.ParagraphFrame = Paragraph
+            Paragraph.Frame = __DARKLUA_BUNDLE_MODULES.load'E'{
+                Title = Paragraph.Title,
+                Desc = Paragraph.Content,
+                Parent = Config.Parent,
+                Window = Config.Window,
+                Hover = false,
+                Tab = Config.Tab,
+                Index = Config.Index,
+                ElementTable = Paragraph,
+                ParentConfig = Config,
+            }
 
-            if ElementConfig.Buttons and #ElementConfig.Buttons > 0 then
-                local ButtonsContainer = New('Frame', {
-                    Size = UDim2.new(1, 0, 0, 38),
-                    BackgroundTransparency = 1,
-                    AutomaticSize = 'Y',
-                    Parent = Paragraph.UIElements.Container,
-                }, {
-                    New('UIListLayout', {
-                        Padding = UDim.new(0, 10),
-                        FillDirection = 'Vertical',
-                    }),
-                })
+            function Paragraph:SetTitle(text)
+                Paragraph.Title = text
 
-                for _, Button in next, ElementConfig.Buttons do
-                    local ButtonFrame = CreateButton(Button.Title, Button.Icon, Button.Callback, 'White', ButtonsContainer, nil, nil, ElementConfig.Window.NewElements and 999 or 10)
+                Paragraph.Frame:SetTitle(text)
+            end
+            function Paragraph:SetContent(text)
+                Paragraph.Content = text
 
-                    ButtonFrame.Size = UDim2.new(1, 0, 0, 38)
-                end
+                Paragraph.Frame:SetDesc(text)
             end
 
-            return ParagraphModule.__type, ParagraphModule
+            return Paragraph.__type, Paragraph
         end
 
         return Element
@@ -7540,7 +7541,7 @@ do
                 Size = UDim2.new(0, Slider.Width, 0, 24),
                 BackgroundTransparency = 1,
                 LayoutOrder = 10,
-                Parent = Slider.SliderFrame.UIElements.Container.TitleFrame.TitleFrame,
+                Parent = Slider.SliderFrame.UIElements.MainTitleFrame,
                 AnchorPoint = Vector2.new(1, 0.5),
                 Position = UDim2.new(1, 0, 0.5, 0),
             }, {
@@ -11870,7 +11871,7 @@ do
                         Size = UDim2.new(1, 0, 1, 0),
                         ThemeTag = {
                             ImageColor3 = 'Background',
-                            ImageTransparency = 'BackgroundTransparency',
+                            ImageTransparency = 0.05,
                         },
                         ZIndex = 3,
                     }, {
@@ -11928,7 +11929,9 @@ do
                     local Group = Panel:FindFirstChild'Group'
 
                     if Group then
-                        Group.GroupTransparency = 0
+                        Group.GroupTransparency = 1
+
+                        Tween(Group, 0.3, {GroupTransparency = 0.05}):Play()
                     end
                     if Button then
                         Tween(Button:FindFirstChildWhichIsA('ImageLabel', true), 0.3, {Rotation = 180}):Play()

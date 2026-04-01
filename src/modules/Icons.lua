@@ -24,6 +24,8 @@ IconModule.AddIcons("lucide", {
     ["star"] = 11419714881,
     ["minimize-2"] = 11419715732,
     ["shield-check"] = 11419718420,
+    ["lock"] = 11419715367,
+    ["alert-circle"] = 11419710381, -- Generic error icon
 })
 
 local function parseIconString(iconString)  

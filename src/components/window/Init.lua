@@ -568,7 +568,7 @@ return function(Config)
                 Size = UDim2.new(1, 0, 1, 0),
                 ThemeTag = {
                     ImageColor3 = "Background",
-                    ImageTransparency = "BackgroundTransparency",
+                    ImageTransparency = 0.05,
                 },
                 ZIndex = 3,
             }, {
@@ -621,7 +621,10 @@ return function(Config)
         if isOpen then
             Panel.Visible = true
             local Group = Panel:FindFirstChild("Group")
-            if Group then Group.GroupTransparency = 0 end
+            if Group then 
+                Group.GroupTransparency = 1 -- Reset to invisible before tween
+                Tween(Group, 0.3, { GroupTransparency = 0.05 }):Play() 
+            end
             
             if Button then 
                 Tween(Button:FindFirstChildWhichIsA("ImageLabel", true), 0.3, { Rotation = 180 }):Play()

@@ -41,9 +41,14 @@ do
 
     local OverviewSection = DashTab:Section({
         Title = "System Overview",
-        Desc = "Monitor and control core modules",
+        Desc = "Core system status and control",
         Box = true,
         Opened = true,
+    })
+
+    OverviewSection:Paragraph({
+        Title = "Server Status",
+        Content = "The central processing unit is running at optimal temperature. All background workers are synchronized with the main relay."
     })
 
     OverviewSection:Button({
@@ -61,7 +66,7 @@ do
 
     OverviewSection:Toggle({
         Title = "Auto-Farm System",
-        Desc = "Efficient resource collection",
+        Desc = "Efficient resource collection for extended sessions",
         Callback = function(v) print("Auto-Farm:", v) end
     })
 
@@ -69,6 +74,11 @@ do
         Title = "Interface Settings",
         Box = true,
         Opened = true,
+    })
+
+    SettingSection:Paragraph({
+        Title = "Noble Configuration",
+        Content = "Adjust the transparency and visual style of the dashboard. Changes are applied in real-time."
     })
 
     SettingSection:Slider({
@@ -83,6 +93,12 @@ do
         Options = {"Noble Gold", "Royal Azure", "Emerald Executive"},
         Default = "Noble Gold",
     })
+
+    SettingSection:Keybind({
+        Title = "Master Toggle",
+        Default = Enum.KeyCode.RightControl,
+        Callback = function() print("Master toggle pressed") end
+    })
 end
 
 -- */ Visual Components Tab /* --
@@ -94,24 +110,46 @@ do
 
     local InputSection = CompTab:Section({ Title = "User Interaction", Box = true, Opened = true })
 
+    InputSection:Paragraph({
+        Title = "Input Methods",
+        Content = "Enter your credentials or safe-keys below to unlock advanced features."
+    })
+
     InputSection:Input({
         Title = "Security Key",
-        Desc = "Enter your authorization code",
+        Desc = "Enter your 16-digit authorization code",
         Callback = function(v) print("Key entered:", v) end
     })
 
     InputSection:Keybind({
-        Title = "Toggle UI Key",
+        Title = "Emergency Toggle",
         Default = Enum.KeyCode.Insert,
         Callback = function() print("UI Toggle Triggered") end
     })
 
-    local SliderSection = CompTab:Section({ Title = "Slider Range", Opened = true })
+    local SliderSection = CompTab:Section({ Title = "Precise Control", Box = true, Opened = true })
     
+    SliderSection:Paragraph({
+        Title = "Range Adjustment",
+        Content = "Fine-tune your system performance using the golden precision sliders."
+    })
+
     SliderSection:Slider({
-        Title = "Sensitivity",
-        Min = 1, Max = 10, Default = 5,
+        Title = "CPU Sensitivity",
+        Min = 1, Max = 100, Default = 45,
         Callback = function(v) print("Sensitivity:", v) end
+    })
+
+    SliderSection:Slider({
+        Title = "Memory Buffer",
+        Min = 10, Max = 500, Default = 250,
+        Callback = function(v) print("Buffer:", v) end
+    })
+    
+    SliderSection:Button({
+        Title = "Reset Values",
+        Icon = "rotate-ccw",
+        Callback = function() print("Reseting...") end
     })
 end
 
@@ -120,6 +158,11 @@ do
     local UtilTab = Window:Tab({
         Title = "Tools",
         Icon = "lucide:settings",
+    })
+
+    UtilTab:Paragraph({
+        Title = "Maintenance Tools",
+        Content = "Use these utilities to manage the interface state or perform safe shutdowns."
     })
 
     UtilTab:Button({
@@ -155,5 +198,6 @@ IntiHub:Notify({
     Title = "IntiHub Noble",
     Content = "Initialization complete. Welcome, Executive.",
     Icon = "lucide:shield-check",
+    Callback = function() end,
     Duration = 8
 })

@@ -222,8 +222,66 @@ return function(Config)
 		Desc.Visible = false
 	end
 
+	local TextContainer = New("Frame", {
+		BackgroundTransparency = 1,
+		AutomaticSize = Element.Justify == "Between" and "Y" or "XY",
+		Size = UDim2.new(
+			Element.Justify == "Between" and 1 or 0,
+			Element.Justify == "Between" and (ImageFrame and -IconOffset - Element.UIPadding or -IconOffset)
+				or 0,
+			1,
+			0
+		),
+		Name = "TextContainer",
+	}, {
+		New("UIPadding", {
+			PaddingTop = UDim.new(0, (Config.Window.NewElements and Element.UIPadding / 2 or 0) + AddPaddingY),
+			PaddingLeft = UDim.new(0, (Config.Window.NewElements and Element.UIPadding / 2 or 0) + AddPaddingX),
+			PaddingRight = UDim.new(
+				0,
+				(Config.Window.NewElements and Element.UIPadding / 2 or 0) + AddPaddingX
+			),
+			PaddingBottom = UDim.new(
+				0,
+				(Config.Window.NewElements and Element.UIPadding / 2 or 0) + AddPaddingY
+			),
+		}),
+		New("UIListLayout", {
+			Padding = UDim.new(0, 6),
+			FillDirection = "Vertical",
+			VerticalAlignment = "Center",
+			HorizontalAlignment = "Left",
+		}),
+		Title,
+		Desc,
+	})
+
+	local MainTitleFrame = New("Frame", {
+		Size = UDim2.new(
+			Element.Justify == "Between" and 1 or 0,
+			Element.Justify == "Between" and -(Config.TextOffset or 0) or 0,
+			0,
+			0
+		),
+		AutomaticSize = Element.Justify == "Between" and "Y" or "XY",
+		BackgroundTransparency = 1,
+		Name = "MainTitleFrame",
+	}, {
+		New("UIListLayout", {
+			Padding = UDim.new(0, Element.UIPadding),
+			FillDirection = "Horizontal",
+			VerticalAlignment = Config.Window.NewElements and (Element.Justify == "Between" and "Top" or "Center")
+				or "Center",
+			HorizontalAlignment = Element.Justify ~= "Between" and Element.Justify or "Center",
+		}),
+		ImageFrame,
+		TextContainer,
+	})
+
 	Element.UIElements.Title = Title
 	Element.UIElements.Desc = Desc
+	Element.UIElements.MainTitleFrame = MainTitleFrame
+	Element.UIElements.ContentFrame = TextContainer
 
 	Element.UIElements.Container = New("Frame", {
 		Size = UDim2.new(1, 0, 1, 0),
@@ -237,59 +295,7 @@ return function(Config)
 			HorizontalAlignment = Element.Justify == "Between" and "Left" or "Center",
 		}),
 		ThumbnailFrame,
-		New("Frame", {
-			Size = UDim2.new(
-				Element.Justify == "Between" and 1 or 0,
-				Element.Justify == "Between" and -(Config.TextOffset or 0) or 0,
-				0,
-				0
-			),
-			AutomaticSize = Element.Justify == "Between" and "Y" or "XY",
-			BackgroundTransparency = 1,
-			Name = "TitleFrame",
-		}, {
-			New("UIListLayout", {
-				Padding = UDim.new(0, Element.UIPadding),
-				FillDirection = "Horizontal",
-				VerticalAlignment = Config.Window.NewElements and (Element.Justify == "Between" and "Top" or "Center")
-					or "Center",
-				HorizontalAlignment = Element.Justify ~= "Between" and Element.Justify or "Center",
-			}),
-			ImageFrame,
-			New("Frame", {
-				BackgroundTransparency = 1,
-				AutomaticSize = Element.Justify == "Between" and "Y" or "XY",
-				Size = UDim2.new(
-					Element.Justify == "Between" and 1 or 0,
-					Element.Justify == "Between" and (ImageFrame and -IconOffset - Element.UIPadding or -IconOffset)
-						or 0,
-					1,
-					0
-				),
-				Name = "TitleFrame",
-			}, {
-				New("UIPadding", {
-					PaddingTop = UDim.new(0, (Config.Window.NewElements and Element.UIPadding / 2 or 0) + AddPaddingY),
-					PaddingLeft = UDim.new(0, (Config.Window.NewElements and Element.UIPadding / 2 or 0) + AddPaddingX),
-					PaddingRight = UDim.new(
-						0,
-						(Config.Window.NewElements and Element.UIPadding / 2 or 0) + AddPaddingX
-					),
-					PaddingBottom = UDim.new(
-						0,
-						(Config.Window.NewElements and Element.UIPadding / 2 or 0) + AddPaddingY
-					),
-				}),
-				New("UIListLayout", {
-					Padding = UDim.new(0, 6),
-					FillDirection = "Vertical",
-					VerticalAlignment = "Center",
-					HorizontalAlignment = "Left",
-				}),
-				Title,
-				Desc,
-			}),
-		}),
+		MainTitleFrame
 	})
 
 	-- print(Config.Tab.Elements)
