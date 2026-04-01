@@ -1322,10 +1322,10 @@ do
         local New = Creator.New
         local Tween = Creator.Tween
         local NotificationModule = {
-            Size = UDim2.new(0, 300, 1, -100 - 56),
-            SizeLower = UDim2.new(0, 300, 1, -56),
-            UICorner = 18,
-            UIPadding = 14,
+            Size = UDim2.new(0, 320, 1, -156),
+            SizeLower = UDim2.new(0, 320, 1, -56),
+            UICorner = 12,
+            UIPadding = 16,
             Holder = nil,
             NotificationIndex = 0,
             Notifications = {},
@@ -1336,24 +1336,29 @@ do
 
             function NotModule.SetLower(val)
                 NotModule.Lower = val
-                NotModule.Frame.Size = val and NotificationModule.SizeLower or NotificationModule.Size
+
+                if NotModule.Frame then
+                    NotModule.Frame.Size = val and NotificationModule.SizeLower or NotificationModule.Size
+                end
             end
 
             NotModule.Frame = New('Frame', {
-                Position = UDim2.new(1, -116 / 4, 0, 56),
+                Name = 'NotificationHolder',
+                Position = UDim2.new(1, -20, 0, 56),
                 AnchorPoint = Vector2.new(1, 0),
                 Size = NotificationModule.Size,
                 Parent = Parent,
                 BackgroundTransparency = 1,
             }, {
                 New('UIListLayout', {
-                    HorizontalAlignment = 'Center',
+                    HorizontalAlignment = 'Right',
                     SortOrder = 'LayoutOrder',
                     VerticalAlignment = 'Bottom',
-                    Padding = UDim.new(0, 8),
+                    Padding = UDim.new(0, 10),
                 }),
                 New('UIPadding', {
-                    PaddingBottom = UDim.new(0, 116 / 4),
+                    PaddingBottom = UDim.new(0, 20),
+                    PaddingRight = UDim.new(0, 0),
                 }),
             })
 
@@ -1363,27 +1368,24 @@ do
             local Notification = {
                 Title = Config.Title or 'Notification',
                 Content = Config.Content or nil,
-                Icon = Config.Icon or nil,
+                Icon = Config.Icon or 'bell',
                 IconThemed = Config.IconThemed,
                 Background = Config.Background,
                 BackgroundImageTransparency = Config.BackgroundImageTransparency,
                 Duration = Config.Duration or 5,
                 Buttons = Config.Buttons or {},
                 CanClose = Config.CanClose ~= false,
-                UIElements = {},
                 Closed = false,
             }
 
             NotificationModule.NotificationIndex = NotificationModule.NotificationIndex + 1
             NotificationModule.Notifications[NotificationModule.NotificationIndex] = Notification
 
-            local Icon
+            local Icon = Creator.Image(Notification.Icon, Notification.Title .. ':' .. (Notification.Icon or 'bell'), 0, Config.Window and Config.Window.Folder or 'IntiHub', 'Notification', Notification.IconThemed)
 
-            if Notification.Icon then
-                Icon = Creator.Image(Notification.Icon, Notification.Title .. ':' .. Notification.Icon, 0, Config.Window, 'Notification', Notification.IconThemed)
-                Icon.Size = UDim2.new(0, 26, 0, 26)
-                Icon.Position = UDim2.new(0, NotificationModule.UIPadding, 0, NotificationModule.UIPadding)
-            end
+            Icon.Size = UDim2.new(0, 22, 0, 22)
+            Icon.Position = UDim2.new(0, NotificationModule.UIPadding, 0, NotificationModule.UIPadding)
+            Icon.ImageColor3 = Color3.fromHex'#FFD700'
 
             local CloseButton
 
@@ -1393,16 +1395,14 @@ do
                     ImageRectSize = Creator.Icon'x'[2].ImageRectSize,
                     ImageRectOffset = Creator.Icon'x'[2].ImageRectPosition,
                     BackgroundTransparency = 1,
-                    Size = UDim2.new(0, 16, 0, 16),
+                    Size = UDim2.new(0, 14, 0, 14),
                     Position = UDim2.new(1, -NotificationModule.UIPadding, 0, NotificationModule.UIPadding),
                     AnchorPoint = Vector2.new(1, 0),
-                    ThemeTag = {
-                        ImageColor3 = 'Text',
-                    },
-                    ImageTransparency = 0.4,
+                    ImageColor3 = Color3.fromHex'#FFD700',
+                    ImageTransparency = 0.5,
                 }, {
                     New('TextButton', {
-                        Size = UDim2.new(1, 8, 1, 8),
+                        Size = UDim2.new(1, 10, 1, 10),
                         BackgroundTransparency = 1,
                         AnchorPoint = Vector2.new(0.5, 0.5),
                         Position = UDim2.new(0.5, 0, 0.5, 0),
@@ -1411,150 +1411,125 @@ do
                 })
             end
 
-            local Duration = Creator.NewRoundFrame(NotificationModule.UICorner, 'Squircle', {
-                Size = UDim2.new(0, 0, 1, 0),
-                ThemeTag = {
-                    ImageTransparency = 'NotificationDurationTransparency',
-                    ImageColor3 = 'NotificationDuration',
-                },
+            local DurationBar = New('Frame', {
+                Name = 'DurationBar',
+                Size = UDim2.new(1, 0, 0, 2),
+                Position = UDim2.new(0, 0, 1, 0),
+                AnchorPoint = Vector2.new(0, 1),
+                BackgroundColor3 = Color3.fromHex'#FFD700',
+                BorderSizePixel = 0,
+                ZIndex = 5,
             })
             local TextContainer = New('Frame', {
-                Size = UDim2.new(1, Notification.Icon and -28 - NotificationModule.UIPadding or 0, 1, 0),
-                Position = UDim2.new(1, 0, 0, 0),
-                AnchorPoint = Vector2.new(1, 0),
+                Size = UDim2.new(1, -22 - (NotificationModule.UIPadding * 2), 0, 0),
+                Position = UDim2.new(0, 22 + (NotificationModule.UIPadding * 1.5), 0, 0),
                 BackgroundTransparency = 1,
                 AutomaticSize = 'Y',
             }, {
                 New('UIPadding', {
                     PaddingTop = UDim.new(0, NotificationModule.UIPadding),
-                    PaddingLeft = UDim.new(0, NotificationModule.UIPadding),
-                    PaddingRight = UDim.new(0, NotificationModule.UIPadding),
                     PaddingBottom = UDim.new(0, NotificationModule.UIPadding),
-                }),
-                New('TextLabel', {
-                    AutomaticSize = 'Y',
-                    Size = UDim2.new(1, -30 - NotificationModule.UIPadding, 0, 0),
-                    TextWrapped = true,
-                    TextXAlignment = 'Left',
-                    RichText = true,
-                    BackgroundTransparency = 1,
-                    TextSize = 18,
-                    ThemeTag = {
-                        TextColor3 = 'NotificationTitle',
-                        TextTransparency = 'NotificationTitleTransparency',
-                    },
-                    Text = Notification.Title,
-                    FontFace = Font.new(Creator.Font, Enum.FontWeight.SemiBold),
+                    PaddingRight = UDim.new(0, NotificationModule.UIPadding),
                 }),
                 New('UIListLayout', {
-                    Padding = UDim.new(0, NotificationModule.UIPadding / 3),
+                    Padding = UDim.new(0, 4),
+                    SortOrder = 'LayoutOrder',
                 }),
-            })
-
-            if Notification.Content then
                 New('TextLabel', {
+                    Name = 'Title',
                     AutomaticSize = 'Y',
                     Size = UDim2.new(1, 0, 0, 0),
                     TextWrapped = true,
                     TextXAlignment = 'Left',
                     RichText = true,
                     BackgroundTransparency = 1,
-                    TextSize = 15,
-                    ThemeTag = {
-                        TextColor3 = 'NotificationContent',
-                        TextTransparency = 'NotificationContentTransparency',
-                    },
+                    TextSize = 14,
+                    TextColor3 = Color3.fromHex'#FFD700',
+                    Text = '<b>' .. Notification.Title .. '</b>',
+                    FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+                    LayoutOrder = 1,
+                }),
+                Notification.Content and New('TextLabel', {
+                    Name = 'Content',
+                    AutomaticSize = 'Y',
+                    Size = UDim2.new(1, 0, 0, 0),
+                    TextWrapped = true,
+                    TextXAlignment = 'Left',
+                    RichText = true,
+                    BackgroundTransparency = 1,
+                    TextSize = 13,
+                    TextColor3 = Color3.new(1, 1, 1),
+                    TextTransparency = 0.3,
                     Text = Notification.Content,
                     FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
-                    Parent = TextContainer,
-                })
-            end
-
-            local Main = Creator.NewRoundFrame(NotificationModule.UICorner, 'Squircle', {
+                    LayoutOrder = 2,
+                }) or nil,
+            })
+            local Main = New('Frame', {
+                Name = 'NotificationFrame',
                 Size = UDim2.new(1, 0, 0, 0),
-                Position = UDim2.new(2, 0, 1, 0),
-                AnchorPoint = Vector2.new(0, 1),
+                Position = UDim2.new(1.5, 0, 0, 0),
+                BackgroundTransparency = 0,
+                BackgroundColor3 = Color3.fromHex'#0F0F0F',
                 AutomaticSize = 'Y',
-                ThemeTag = {
-                    ImageColor3 = 'Notification',
-                    ImageTransparency = 'NotificationTransparency',
-                },
+                ClipsDescendants = true,
             }, {
+                New('UICorner', {
+                    CornerRadius = UDim.new(0, NotificationModule.UICorner),
+                }),
                 New('UIStroke', {
-                    Thickness = 2,
+                    Thickness = 1.5,
                     Color = Color3.fromHex'#FFD700',
-                    Transparency = 0.5,
+                    Transparency = 0.6,
                 }),
-                Creator.NewRoundFrame(NotificationModule.UICorner, 'Glass-1', {
-                    Size = UDim2.new(1, 0, 1, 0),
-                    ThemeTag = {
-                        ImageColor3 = 'NotificationBorder',
-                        ImageTransparency = 'NotificationBorderTransparency',
-                    },
-                }),
-                New('Frame', {
-                    Size = UDim2.new(1, 0, 1, 0),
-                    BackgroundTransparency = 1,
-                    Name = 'DurationFrame',
-                }, {
-                    New('Frame', {
-                        Size = UDim2.new(1, 0, 1, 0),
-                        BackgroundTransparency = 1,
-                        ClipsDescendants = true,
-                    }, {Duration}),
-                }),
-                New('ImageLabel', {
-                    Name = 'Background',
-                    Image = Notification.Background,
-                    BackgroundTransparency = 1,
-                    Size = UDim2.new(1, 0, 1, 0),
-                    ScaleType = 'Crop',
-                    ImageTransparency = Notification.BackgroundImageTransparency or 1,
-                }, {
-                    New('UICorner', {
-                        CornerRadius = UDim.new(0, NotificationModule.UICorner),
-                    }),
-                }),
+                DurationBar,
                 TextContainer,
                 Icon,
                 CloseButton,
             })
             local MainContainer = New('Frame', {
+                Name = 'Container',
                 BackgroundTransparency = 1,
                 Size = UDim2.new(1, 0, 0, 0),
                 Parent = Config.Holder,
+                ClipsDescendants = true,
             }, {Main})
 
             function Notification:Close()
                 if not Notification.Closed then
                     Notification.Closed = true
 
-                    Tween(MainContainer, 0.45, {
-                        Size = UDim2.new(1, 0, 0, -8),
-                    }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
-                    Tween(Main, 0.55, {
-                        Position = UDim2.new(2, 0, 1, 0),
-                    }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
-                    task.wait(0.45)
-                    MainContainer:Destroy()
+                    Tween(Main, 0.4, {
+                        Position = UDim2.new(1.5, 0, 0, 0),
+                    }, Enum.EasingStyle.Quint, Enum.EasingDirection.In):Play()
+                    task.wait(0.1)
+
+                    local T = Tween(MainContainer, 0.3, {
+                        Size = UDim2.new(1, 0, 0, 0),
+                    }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
+
+                    T.Completed:Connect(function()
+                        MainContainer:Destroy()
+                    end)
+                    T:Play()
                 end
             end
 
             task.spawn(function()
                 task.wait()
-                Tween(MainContainer, 0.45, {
-                    Size = UDim2.new(1, 0, 0, Main.AbsoluteSize.Y),
+                Tween(MainContainer, 0.5, {
+                    Size = UDim2.new(1, 0, 0, Main.AbsoluteSize.Y + 10),
                 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
-                Tween(Main, 0.45, {
-                    Position = UDim2.new(0, 0, 1, 0),
+                Tween(Main, 0.5, {
+                    Position = UDim2.new(0, 0, 0, 0),
                 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
 
                 if Notification.Duration then
-                    Duration.Size = UDim2.new(0, Main.DurationFrame.AbsoluteSize.X, 1, 0)
+                    DurationBar.Size = UDim2.new(1, 0, 0, 2)
 
-                    Tween(Main.DurationFrame.Frame, Notification.Duration, {
-                        Size = UDim2.new(0, 0, 1, 0),
-                    }, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut):Play()
+                    Tween(DurationBar, Notification.Duration, {
+                        Size = UDim2.new(0, 0, 0, 2),
+                    }, Enum.EasingStyle.Linear):Play()
                     task.wait(Notification.Duration)
                     Notification:Close()
                 end
@@ -4845,6 +4820,628 @@ do
         return Tag
     end
     function __DARKLUA_BUNDLE_MODULES.y()
+        local Creator = __DARKLUA_BUNDLE_MODULES.load'c'
+        local New = Creator.New
+        local Tween = Creator.Tween
+        local Color3 = Color3
+        local UDim = UDim
+        local UDim2 = UDim2
+        local Font = Font
+        local Enum = Enum
+        local MinimizedBar = {
+            Window = nil,
+            Bar = nil,
+            Version = '2.0.0',
+        }
+
+        function MinimizedBar.New(Window)
+            local Self = {
+                Window = Window,
+                Dragging = false,
+            }
+            local DragHandle = New('ImageLabel', {
+                Name = 'DragHandle',
+                Size = UDim2.new(0, 24, 0, 24),
+                BackgroundTransparency = 1,
+                Image = Creator.Icon'grip-vertical'[1],
+                ImageRectOffset = Creator.Icon'grip-vertical'[2].ImageRectPosition,
+                ImageRectSize = Creator.Icon'grip-vertical'[2].ImageRectSize,
+                ImageColor3 = Color3.fromHex'#FFD700',
+            })
+            local Title = New('TextLabel', {
+                Name = 'Title',
+                Text = 'INTIHUB - v' .. (Window.Version or '2.0.0'),
+                TextSize = 14,
+                FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+                TextColor3 = Color3.fromHex'#FFD700',
+                BackgroundTransparency = 1,
+                AutomaticSize = 'X',
+                Size = UDim2.new(0, 0, 1, 0),
+            })
+            local Separator = New('Frame', {
+                Name = 'Separator',
+                Size = UDim2.new(0, 1, 0, 18),
+                BackgroundColor3 = Color3.fromHex'#FFD700',
+                BackgroundTransparency = 0.6,
+            })
+            local BarFrame = New('Frame', {
+                Name = 'IntiHubMinimizedBar',
+                Size = UDim2.new(0, 0, 0, 36),
+                Position = UDim2.new(0.5, 0, 0.05, 0),
+                AnchorPoint = Vector2.new(0.5, 0),
+                BackgroundColor3 = Color3.fromHex'#0A0A0A',
+                Active = true,
+                Visible = false,
+                Parent = Window.Parent,
+                AutomaticSize = 'X',
+            }, {
+                New('UICorner', {
+                    CornerRadius = UDim.new(0, 8),
+                }),
+                New('UIStroke', {
+                    Thickness = 1.5,
+                    Color = Color3.fromHex'#FFD700',
+                    Transparency = 0.3,
+                }),
+                New('UIListLayout', {
+                    FillDirection = 'Horizontal',
+                    VerticalAlignment = 'Center',
+                    Padding = UDim.new(0, 12),
+                    HorizontalAlignment = 'Center',
+                }),
+                New('UIPadding', {
+                    PaddingLeft = UDim.new(0, 12),
+                    PaddingRight = UDim.new(0, 16),
+                }),
+                DragHandle,
+                Separator,
+                Title,
+            })
+
+            Self.Bar = BarFrame
+
+            Creator.Drag(BarFrame, {DragHandle}, function(dragging)
+                Self.Dragging = dragging
+
+                if not dragging then
+                end
+            end)
+
+            local ClickButton = New('TextButton', {
+                Size = UDim2.new(1, 0, 1, 0),
+                BackgroundTransparency = 1,
+                Text = '',
+                Parent = Title,
+                ZIndex = 10,
+            })
+
+            Creator.AddSignal(ClickButton.MouseButton1Click, function()
+                if not Self.Dragging then
+                    Window:Open()
+                end
+            end)
+
+            function Self:Visible(Value)
+                if Value then
+                    BarFrame.Visible = true
+
+                    Tween(BarFrame, 0.4, {BackgroundTransparency = 0}, Enum.EasingStyle.Quint):Play()
+                else
+                    local T = Tween(BarFrame, 0.3, {BackgroundTransparency = 1}, Enum.EasingStyle.Quint)
+
+                    T.Completed:Connect(function()
+                        BarFrame.Visible = false
+                    end)
+                    T:Play()
+                end
+            end
+
+            return Self
+        end
+
+        return MinimizedBar
+    end
+    function __DARKLUA_BUNDLE_MODULES.z()
+        return {
+            Tab = 'table-of-contents',
+            Paragraph = 'type',
+            Button = 'square-mouse-pointer',
+            Toggle = 'toggle-right',
+            Slider = 'sliders-horizontal',
+            Keybind = 'command',
+            Input = 'text-cursor-input',
+            Dropdown = 'chevrons-up-down',
+            Code = 'terminal',
+            Colorpicker = 'palette',
+        }
+    end
+    function __DARKLUA_BUNDLE_MODULES.A()
+        local cloneref = (cloneref or clonereference or function(instance)
+            return instance
+        end)
+
+        cloneref(game:GetService'UserInputService')
+
+        local SearchBar = {
+            Margin = 8,
+            Padding = 9,
+        }
+        local Creator = __DARKLUA_BUNDLE_MODULES.load'c'
+        local New = Creator.New
+        local Tween = Creator.Tween
+
+        function SearchBar.new(TabModule, Parent, OnClose)
+            local SearchBarModule = {
+                IconSize = 18,
+                Padding = 14,
+                Radius = 22,
+                Width = 400,
+                MaxHeight = 380,
+                Icons = __DARKLUA_BUNDLE_MODULES.load'z',
+            }
+            local TextBox = New('TextBox', {
+                Text = '',
+                PlaceholderText = 'Search...',
+                ThemeTag = {
+                    PlaceholderColor3 = 'Placeholder',
+                    TextColor3 = 'Text',
+                },
+                Size = UDim2.new(1, -((SearchBarModule.IconSize * 2) + (SearchBarModule.Padding * 2)), 0, 0),
+                AutomaticSize = 'Y',
+                ClipsDescendants = true,
+                ClearTextOnFocus = false,
+                BackgroundTransparency = 1,
+                TextXAlignment = 'Left',
+                FontFace = Font.new(Creator.Font, Enum.FontWeight.Regular),
+                TextSize = 18,
+            })
+            local CloseButton = New('ImageLabel', {
+                Image = Creator.Icon'x'[1],
+                ImageRectSize = Creator.Icon'x'[2].ImageRectSize,
+                ImageRectOffset = Creator.Icon'x'[2].ImageRectPosition,
+                BackgroundTransparency = 1,
+                ThemeTag = {
+                    ImageColor3 = 'Icon',
+                },
+                ImageTransparency = 0.1,
+                Size = UDim2.new(0, SearchBarModule.IconSize, 0, SearchBarModule.IconSize),
+            }, {
+                New('TextButton', {
+                    Size = UDim2.new(1, 8, 1, 8),
+                    BackgroundTransparency = 1,
+                    Active = true,
+                    ZIndex = 999999999,
+                    AnchorPoint = Vector2.new(0.5, 0.5),
+                    Position = UDim2.new(0.5, 0, 0.5, 0),
+                    Text = '',
+                }),
+            })
+            local ScrollingFrame = New('ScrollingFrame', {
+                Size = UDim2.new(1, 0, 0, 0),
+                AutomaticCanvasSize = 'Y',
+                ScrollingDirection = 'Y',
+                ElasticBehavior = 'Never',
+                ScrollBarThickness = 0,
+                CanvasSize = UDim2.new(0, 0, 0, 0),
+                BackgroundTransparency = 1,
+                Visible = false,
+            }, {
+                New('UIListLayout', {
+                    Padding = UDim.new(0, 0),
+                    FillDirection = 'Vertical',
+                }),
+                New('UIPadding', {
+                    PaddingTop = UDim.new(0, SearchBarModule.Padding),
+                    PaddingLeft = UDim.new(0, SearchBarModule.Padding),
+                    PaddingRight = UDim.new(0, SearchBarModule.Padding),
+                    PaddingBottom = UDim.new(0, SearchBarModule.Padding),
+                }),
+            })
+            local SearchFrame = Creator.NewRoundFrame(SearchBarModule.Radius, 'Squircle', {
+                Size = UDim2.new(1, 0, 1, 0),
+                ThemeTag = {
+                    ImageColor3 = 'WindowSearchBarBackground',
+                },
+                ImageTransparency = 0,
+            }, {
+                Creator.NewRoundFrame(SearchBarModule.Radius, 'Squircle', {
+                    Size = UDim2.new(1, 0, 1, 0),
+                    BackgroundTransparency = 1,
+                    Visible = false,
+                    ThemeTag = {
+                        ImageColor3 = 'White',
+                    },
+                    ImageTransparency = 1,
+                    Name = 'Frame',
+                }, {
+                    New('Frame', {
+                        Size = UDim2.new(1, 0, 0, 46),
+                        BackgroundTransparency = 1,
+                    }, {
+                        New('Frame', {
+                            Size = UDim2.new(1, 0, 1, 0),
+                            BackgroundTransparency = 1,
+                        }, {
+                            New('ImageLabel', {
+                                Image = Creator.Icon'search'[1],
+                                ImageRectSize = Creator.Icon'search'[2].ImageRectSize,
+                                ImageRectOffset = Creator.Icon'search'[2].ImageRectPosition,
+                                BackgroundTransparency = 1,
+                                ThemeTag = {
+                                    ImageColor3 = 'Icon',
+                                },
+                                ImageTransparency = 0.1,
+                                Size = UDim2.new(0, SearchBarModule.IconSize, 0, SearchBarModule.IconSize),
+                            }),
+                            TextBox,
+                            CloseButton,
+                            New('UIListLayout', {
+                                Padding = UDim.new(0, SearchBarModule.Padding),
+                                FillDirection = 'Horizontal',
+                                VerticalAlignment = 'Center',
+                            }),
+                            New('UIPadding', {
+                                PaddingLeft = UDim.new(0, SearchBarModule.Padding),
+                                PaddingRight = UDim.new(0, SearchBarModule.Padding),
+                            }),
+                        }),
+                    }),
+                    New('Frame', {
+                        BackgroundTransparency = 1,
+                        AutomaticSize = 'Y',
+                        Size = UDim2.new(1, 0, 0, 0),
+                        Name = 'Results',
+                    }, {
+                        New('Frame', {
+                            Size = UDim2.new(1, 0, 0, 1),
+                            ThemeTag = {
+                                BackgroundColor3 = 'Outline',
+                            },
+                            BackgroundTransparency = 0.9,
+                            Visible = false,
+                        }),
+                        ScrollingFrame,
+                        New('UISizeConstraint', {
+                            MaxSize = Vector2.new(SearchBarModule.Width, SearchBarModule.MaxHeight),
+                        }),
+                    }),
+                    New('UIListLayout', {
+                        Padding = UDim.new(0, 0),
+                        FillDirection = 'Vertical',
+                    }),
+                }),
+            })
+            local SearchFrameContainer = New('Frame', {
+                Size = UDim2.new(0, SearchBarModule.Width, 0, 0),
+                AutomaticSize = 'Y',
+                Parent = Parent,
+                BackgroundTransparency = 1,
+                Position = UDim2.new(0.5, 0, 0.5, 0),
+                AnchorPoint = Vector2.new(0.5, 0.5),
+                Visible = false,
+                ZIndex = 99999999,
+            }, {
+                New('UIScale', {Scale = 0.9}),
+                SearchFrame,
+                Creator.NewRoundFrame(SearchBarModule.Radius, 'Glass-0.7', {
+                    Size = UDim2.new(1, 0, 1, 0),
+                    BackgroundTransparency = 1,
+                    ThemeTag = {
+                        ImageColor3 = 'SearchBarBorder',
+                        ImageTransparency = 'SearchBarBorderTransparency',
+                    },
+                    Name = 'Outline',
+                }),
+            })
+
+            local function CreateSearchTab(
+                Title,
+                Desc,
+                Icon,
+                Parent,
+                IsParent,
+                Callback
+            )
+                local Tab = New('TextButton', {
+                    Size = UDim2.new(1, 0, 0, 0),
+                    AutomaticSize = 'Y',
+                    BackgroundTransparency = 1,
+                    Parent = Parent or nil,
+                }, {
+                    Creator.NewRoundFrame(SearchBarModule.Radius - 11, 'Squircle', {
+                        Size = UDim2.new(1, 0, 0, 0),
+                        Position = UDim2.new(0.5, 0, 0.5, 0),
+                        AnchorPoint = Vector2.new(0.5, 0.5),
+                        ThemeTag = {
+                            ImageColor3 = 'Text',
+                        },
+                        ImageTransparency = 1,
+                        Name = 'Main',
+                    }, {
+                        Creator.NewRoundFrame(SearchBarModule.Radius - 11, 'Glass-1', {
+                            Size = UDim2.new(1, 0, 1, 0),
+                            Position = UDim2.new(0.5, 0, 0.5, 0),
+                            AnchorPoint = Vector2.new(0.5, 0.5),
+                            ThemeTag = {
+                                ImageColor3 = 'White',
+                            },
+                            ImageTransparency = 1,
+                            Name = 'Outline',
+                        }, {
+                            New('UIPadding', {
+                                PaddingTop = UDim.new(0, SearchBarModule.Padding - 2),
+                                PaddingLeft = UDim.new(0, SearchBarModule.Padding),
+                                PaddingRight = UDim.new(0, SearchBarModule.Padding),
+                                PaddingBottom = UDim.new(0, SearchBarModule.Padding - 2),
+                            }),
+                            New('ImageLabel', {
+                                Image = Creator.Icon(Icon)[1],
+                                ImageRectSize = Creator.Icon(Icon)[2].ImageRectSize,
+                                ImageRectOffset = Creator.Icon(Icon)[2].ImageRectPosition,
+                                BackgroundTransparency = 1,
+                                ThemeTag = {
+                                    ImageColor3 = 'Icon',
+                                },
+                                ImageTransparency = 0.1,
+                                Size = UDim2.new(0, SearchBarModule.IconSize, 0, SearchBarModule.IconSize),
+                            }),
+                            New('Frame', {
+                                Size = UDim2.new(1, -SearchBarModule.IconSize - SearchBarModule.Padding, 0, 0),
+                                BackgroundTransparency = 1,
+                            }, {
+                                New('TextLabel', {
+                                    Text = Title,
+                                    ThemeTag = {
+                                        TextColor3 = 'Text',
+                                    },
+                                    TextSize = 17,
+                                    BackgroundTransparency = 1,
+                                    TextXAlignment = 'Left',
+                                    FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
+                                    Size = UDim2.new(1, 0, 0, 0),
+                                    TextTruncate = 'AtEnd',
+                                    AutomaticSize = 'Y',
+                                    Name = 'Title',
+                                }),
+                                New('TextLabel', {
+                                    Text = Desc or '',
+                                    Visible = Desc and true or false,
+                                    ThemeTag = {
+                                        TextColor3 = 'Text',
+                                    },
+                                    TextSize = 15,
+                                    TextTransparency = 0.3,
+                                    BackgroundTransparency = 1,
+                                    TextXAlignment = 'Left',
+                                    FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
+                                    Size = UDim2.new(1, 0, 0, 0),
+                                    TextTruncate = 'AtEnd',
+                                    AutomaticSize = 'Y',
+                                    Name = 'Desc',
+                                }) or nil,
+                                New('UIListLayout', {
+                                    Padding = UDim.new(0, 6),
+                                    FillDirection = 'Vertical',
+                                }),
+                            }),
+                            New('UIListLayout', {
+                                Padding = UDim.new(0, SearchBarModule.Padding),
+                                FillDirection = 'Horizontal',
+                            }),
+                        }),
+                    }, true),
+                    New('Frame', {
+                        Name = 'ParentContainer',
+                        Size = UDim2.new(1, -SearchBarModule.Padding, 0, 0),
+                        AutomaticSize = 'Y',
+                        BackgroundTransparency = 1,
+                        Visible = IsParent,
+                    }, {
+                        Creator.NewRoundFrame(99, 'Squircle', {
+                            Size = UDim2.new(0, 2, 1, 0),
+                            BackgroundTransparency = 1,
+                            ThemeTag = {
+                                ImageColor3 = 'Text',
+                            },
+                            ImageTransparency = 0.9,
+                        }),
+                        New('Frame', {
+                            Size = UDim2.new(1, -SearchBarModule.Padding - 2, 0, 0),
+                            Position = UDim2.new(0, SearchBarModule.Padding + 2, 0, 0),
+                            BackgroundTransparency = 1,
+                        }, {
+                            New('UIListLayout', {
+                                Padding = UDim.new(0, 0),
+                                FillDirection = 'Vertical',
+                            }),
+                        }),
+                    }),
+                    New('UIListLayout', {
+                        Padding = UDim.new(0, 0),
+                        FillDirection = 'Vertical',
+                        HorizontalAlignment = 'Right',
+                    }),
+                })
+
+                Tab.Main.Size = UDim2.new(1, 0, 0, Tab.Main.Outline.Frame.Desc.Visible and (((SearchBarModule.Padding - 2) * 2) + Tab.Main.Outline.Frame.Title.TextBounds.Y + 6 + Tab.Main.Outline.Frame.Desc.TextBounds.Y) or (((SearchBarModule.Padding - 2) * 2) + Tab.Main.Outline.Frame.Title.TextBounds.Y))
+
+                Creator.AddSignal(Tab.Main.MouseEnter, function()
+                    Tween(Tab.Main, 0.04, {ImageTransparency = 0.95}):Play()
+                    Tween(Tab.Main.Outline, 0.04, {ImageTransparency = 0.75}):Play()
+                end)
+                Creator.AddSignal(Tab.Main.InputEnded, function()
+                    Tween(Tab.Main, 0.08, {ImageTransparency = 1}):Play()
+                    Tween(Tab.Main.Outline, 0.08, {ImageTransparency = 1}):Play()
+                end)
+                Creator.AddSignal(Tab.Main.MouseButton1Click, function()
+                    if Callback then
+                        Callback()
+                    end
+                end)
+
+                return Tab
+            end
+            local function ContainsText(str, query)
+                if not query or query == '' then
+                    return false
+                end
+                if not str or str == '' then
+                    return false
+                end
+
+                local lowerStr = string.lower(str)
+                local lowerQuery = string.lower(query)
+
+                return string.find(lowerStr, lowerQuery, 1, true) ~= nil
+            end
+            local function Search(query)
+                if not query or query == '' then
+                    return {}
+                end
+
+                local results = {}
+
+                for tabindex, tab in next, TabModule.Tabs do
+                    local tabMatches = ContainsText(tab.Title or '', query)
+                    local elementResults = {}
+
+                    for elemindex, elem in next, tab.Elements do
+                        if elem.__type ~= 'Section' then
+                            local titleMatches = ContainsText(elem.Title or '', query)
+                            local descMatches = ContainsText(elem.Desc or '', query)
+
+                            if titleMatches or descMatches then
+                                elementResults[elemindex] = {
+                                    Title = elem.Title,
+                                    Desc = elem.Desc,
+                                    Original = elem,
+                                    __type = elem.__type,
+                                    Index = elemindex,
+                                }
+                            end
+                        end
+                    end
+
+                    if tabMatches or next(elementResults) ~= nil then
+                        results[tabindex] = {
+                            Tab = tab,
+                            Title = tab.Title,
+                            Icon = tab.Icon,
+                            Elements = elementResults,
+                        }
+                    end
+                end
+
+                return results
+            end
+
+            Creator.AddSignal(ScrollingFrame.UIListLayout:GetPropertyChangedSignal'AbsoluteContentSize', function(
+            )
+                Tween(ScrollingFrame, 0.06, {
+                    Size = UDim2.new(1, 0, 0, math.clamp(ScrollingFrame.UIListLayout.AbsoluteContentSize.Y + (SearchBarModule.Padding * 2), 0, SearchBarModule.MaxHeight)),
+                }, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut):Play()
+            end)
+
+            function SearchBarModule:Open()
+                task.spawn(function()
+                    SearchFrame.Frame.Visible = true
+                    SearchFrameContainer.Visible = true
+
+                    Tween(SearchFrameContainer.UIScale, 0.12, {Scale = 1}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+                end)
+            end
+            function SearchBarModule:Close(IsDestroy)
+                task.spawn(function()
+                    OnClose()
+
+                    SearchFrame.Frame.Visible = false
+
+                    Tween(SearchFrameContainer.UIScale, 0.12, {Scale = 1}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+                    task.wait(0.12)
+
+                    SearchFrameContainer.Visible = false
+
+                    if IsDestroy then
+                        SearchFrameContainer:Destroy()
+                    end
+                end)
+            end
+
+            Creator.AddSignal(CloseButton.TextButton.MouseButton1Click, function(
+            )
+                SearchBarModule:Close(true)
+            end)
+            SearchBarModule:Open()
+
+            function SearchBarModule:Search(query)
+                query = query or ''
+
+                local result = Search(query)
+
+                ScrollingFrame.Visible = true
+                SearchFrame.Frame.Results.Frame.Visible = true
+
+                for _, item in next, ScrollingFrame:GetChildren()do
+                    if item.ClassName ~= 'UIListLayout' and item.ClassName ~= 'UIPadding' then
+                        item:Destroy()
+                    end
+                end
+
+                if result and next(result) ~= nil then
+                    for tabindex, i in next, result do
+                        local TabIcon = SearchBarModule.Icons['Tab']
+                        local TabMainElement = CreateSearchTab(i.Title, nil, TabIcon, ScrollingFrame, true, function(
+                        )
+                            SearchBarModule:Close()
+                            TabModule:SelectTab(tabindex)
+                        end)
+
+                        if i.Elements and next(i.Elements) ~= nil then
+                            for elemindex, e in next, i.Elements do
+                                local ElementIcon = SearchBarModule.Icons[e.__type]
+
+                                CreateSearchTab(e.Title, e.Desc, ElementIcon, TabMainElement:FindFirstChild'ParentContainer' and TabMainElement.ParentContainer.Frame or nil, false, function(
+                                )
+                                    SearchBarModule:Close()
+                                    TabModule:SelectTab(tabindex)
+
+                                    if i.Tab.ScrollToTheElement then
+                                        i.Tab:ScrollToTheElement(e.Index)
+                                    end
+                                end)
+                            end
+                        end
+                    end
+                elseif query ~= '' then
+                    New('TextLabel', {
+                        Size = UDim2.new(1, 0, 0, 70),
+                        Text = 'No results found',
+                        TextSize = 16,
+                        ThemeTag = {
+                            TextColor3 = 'Text',
+                        },
+                        TextTransparency = 0.2,
+                        BackgroundTransparency = 1,
+                        FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
+                        Parent = ScrollingFrame,
+                        Name = 'NotFound',
+                    })
+                else
+                    ScrollingFrame.Visible = false
+                    SearchFrame.Frame.Results.Frame.Visible = false
+                end
+            end
+
+            Creator.AddSignal(TextBox:GetPropertyChangedSignal'Text', function()
+                SearchBarModule:Search(TextBox.Text)
+            end)
+
+            return SearchBarModule
+        end
+
+        return SearchBar
+    end
+    function __DARKLUA_BUNDLE_MODULES.B()
         local cloneref = (cloneref or clonereference or function(instance)
             return instance
         end)
@@ -5243,7 +5840,7 @@ do
 
         return ConfigManager
     end
-    function __DARKLUA_BUNDLE_MODULES.z()
+    function __DARKLUA_BUNDLE_MODULES.C()
         local OpenButtonModule = {}
         local Creator = __DARKLUA_BUNDLE_MODULES.load'c'
         local New = Creator.New
@@ -5433,7 +6030,7 @@ do
 
         return OpenButtonModule
     end
-    function __DARKLUA_BUNDLE_MODULES.A()
+    function __DARKLUA_BUNDLE_MODULES.D()
         local Tooltip = {}
         local Creator = __DARKLUA_BUNDLE_MODULES.load'c'
         local New = Creator.New
@@ -5573,7 +6170,7 @@ do
 
         return Tooltip
     end
-    function __DARKLUA_BUNDLE_MODULES.B()
+    function __DARKLUA_BUNDLE_MODULES.E()
         local Creator = __DARKLUA_BUNDLE_MODULES.load'c'
         local New = Creator.New
         local NewRoundFrame = Creator.NewRoundFrame
@@ -6212,7 +6809,7 @@ do
             return Element
         end
     end
-    function __DARKLUA_BUNDLE_MODULES.C()
+    function __DARKLUA_BUNDLE_MODULES.F()
         local Creator = __DARKLUA_BUNDLE_MODULES.load'c'
         local New = Creator.New
         local Element = {}
@@ -6230,7 +6827,7 @@ do
                 Desc = ElementConfig.Desc or nil,
                 Locked = ElementConfig.Locked or false,
             }
-            local Paragraph = __DARKLUA_BUNDLE_MODULES.load'B'(ElementConfig)
+            local Paragraph = __DARKLUA_BUNDLE_MODULES.load'E'(ElementConfig)
 
             ParagraphModule.ParagraphFrame = Paragraph
 
@@ -6259,7 +6856,7 @@ do
 
         return Element
     end
-    function __DARKLUA_BUNDLE_MODULES.D()
+    function __DARKLUA_BUNDLE_MODULES.G()
         local Creator = __DARKLUA_BUNDLE_MODULES.load'c'
         local _ = Creator.New
         local Element = {}
@@ -6281,7 +6878,7 @@ do
             }
             local CanCallback = true
 
-            Button.ButtonFrame = __DARKLUA_BUNDLE_MODULES.load'B'{
+            Button.ButtonFrame = __DARKLUA_BUNDLE_MODULES.load'E'{
                 Title = Button.Title,
                 Desc = Button.Desc,
                 Parent = Config.Parent,
@@ -6338,7 +6935,7 @@ do
 
         return Element
     end
-    function __DARKLUA_BUNDLE_MODULES.E()
+    function __DARKLUA_BUNDLE_MODULES.H()
         local Toggle = {}
         local Creator = __DARKLUA_BUNDLE_MODULES.load'c'
         local New = Creator.New
@@ -6594,7 +7191,7 @@ do
 
         return Toggle
     end
-    function __DARKLUA_BUNDLE_MODULES.F()
+    function __DARKLUA_BUNDLE_MODULES.I()
         local Checkbox = {}
         local Creator = __DARKLUA_BUNDLE_MODULES.load'c'
         local _ = Creator.New
@@ -6660,12 +7257,12 @@ do
 
         return Checkbox
     end
-    function __DARKLUA_BUNDLE_MODULES.G()
+    function __DARKLUA_BUNDLE_MODULES.J()
         local Creator = __DARKLUA_BUNDLE_MODULES.load'c'
         local _ = Creator.New
         local _ = Creator.Tween
-        local CreateToggle = __DARKLUA_BUNDLE_MODULES.load'E'.New
-        local CreateCheckbox = __DARKLUA_BUNDLE_MODULES.load'F'.New
+        local CreateToggle = __DARKLUA_BUNDLE_MODULES.load'H'.New
+        local CreateCheckbox = __DARKLUA_BUNDLE_MODULES.load'I'.New
         local Element = {}
 
         function Element:New(Config)
@@ -6683,7 +7280,7 @@ do
                 UIElements = {},
             }
 
-            Toggle.ToggleFrame = __DARKLUA_BUNDLE_MODULES.load'B'{
+            Toggle.ToggleFrame = __DARKLUA_BUNDLE_MODULES.load'E'{
                 Title = Toggle.Title,
                 Desc = Toggle.Desc,
                 Window = Config.Window,
@@ -6764,7 +7361,7 @@ do
 
         return Element
     end
-    function __DARKLUA_BUNDLE_MODULES.H()
+    function __DARKLUA_BUNDLE_MODULES.K()
         local cloneref = (cloneref or clonereference or function(instance)
             return instance
         end)
@@ -6775,16 +7372,32 @@ do
         local Creator = __DARKLUA_BUNDLE_MODULES.load'c'
         local New = Creator.New
         local Tween = Creator.Tween
+        local Color3 = Color3
+        local UDim = UDim
+        local UDim2 = UDim2
+        local Vector2 = Vector2
+        local Font = Font
+        local Enum = Enum
+        local Color3 = Color3
+        local UDim = UDim
+        local UDim2 = UDim2
+        local Vector2 = Vector2
+        local Font = Font
+        local Enum = Enum
         local Element = {}
 
         function Element:New(Config)
             local Slider = {
                 __type = 'Slider',
-                Title = Config.Title or nil,
+                Title = Config.Title or 'Slider',
                 Desc = Config.Desc or nil,
                 Locked = Config.Locked or nil,
                 LockedTitle = Config.LockedTitle,
-                Value = Config.Value or {},
+                Value = Config.Value or {
+                    Min = 0,
+                    Max = 100,
+                    Default = 50,
+                },
                 Icons = Config.Icons or nil,
                 IsTooltip = Config.IsTooltip or false,
                 IsTextbox = Config.IsTextbox,
@@ -6793,30 +7406,21 @@ do
                 UIElements = {},
                 IsFocusing = false,
                 Width = Config.Width or 130,
-                TextBoxWidth = Config.Window.NewElements and 40 or 30,
-                ThumbSize = 13,
-                IconSize = 26,
+                TextBoxWidth = 40,
+                ThumbSize = 14,
+                IconSize = 22,
                 IsHolding = false,
             }
 
-            if Slider.Icons == {} then
-                Slider.Icons = {
-                    From = 'sfsymbols:sunMinFill',
-                    To = 'sfsymbols:sunMaxFill',
-                }
-            end
-            if Slider.IsTextbox == nil and Slider.Title == nil then
-                Slider.IsTextbox = false
-            else
-                Slider.IsTextbox = Slider.IsTextbox ~= false
+            if Slider.IsTextbox == nil then
+                Slider.IsTextbox = true
             end
 
             local moveconnection
             local releaseconnection
             local Value = Slider.Value.Default or Slider.Value.Min or 0
             local LastValue = Value
-            local delta = (Value - (Slider.Value.Min or 0)) / ((Slider.Value.Max or 100) - (Slider.Value.Min or 0))
-            local CanCallback = true
+            local delta = math.clamp((Value - (Slider.Value.Min or 0)) / ((Slider.Value.Max or 100) - (Slider.Value.Min or 0)), 0, 1)
             local IsFloat = Slider.Step % 1 ~= 0
 
             local function FormatValue(val)
@@ -6827,155 +7431,118 @@ do
                 return math.floor(val + 0.5)
             end
             local function CalculateValue(rawValue)
-                if IsFloat then
-                    return math.floor(rawValue / Slider.Step + 0.5) * Slider.Step
-                else
-                    return math.floor(rawValue / Slider.Step + 0.5) * Slider.Step
-                end
+                return math.floor(rawValue / Slider.Step + 0.5) * Slider.Step
             end
 
             local IconFrom, IconTo
-            local TotalSliderWidth = 32
 
             if Slider.Icons then
                 if Slider.Icons.From then
-                    IconFrom = Creator.Image(Slider.Icons.From, Slider.Icons.From, 0, Config.Window.Folder, 'SliderIconFrom', true, true, 'SliderIconFrom')
+                    IconFrom = Creator.Image(Slider.Icons.From, 'SliderFrom', 0, Config.Window.Folder, 'Slider', true)
                     IconFrom.Size = UDim2.new(0, Slider.IconSize, 0, Slider.IconSize)
-                    TotalSliderWidth = TotalSliderWidth + Slider.IconSize - 2
+                    IconFrom.ImageColor3 = Color3.fromHex'#FFD700'
                 end
                 if Slider.Icons.To then
-                    IconTo = Creator.Image(Slider.Icons.To, Slider.Icons.To, 0, Config.Window.Folder, 'SliderIconTo', true, true, 'SliderIconTo')
+                    IconTo = Creator.Image(Slider.Icons.To, 'SliderTo', 0, Config.Window.Folder, 'Slider', true)
                     IconTo.Size = UDim2.new(0, Slider.IconSize, 0, Slider.IconSize)
-                    TotalSliderWidth = TotalSliderWidth + Slider.IconSize - 2
+                    IconTo.ImageColor3 = Color3.fromHex'#FFD700'
                 end
             end
 
-            local TitleLabel, ValueLabel
+            local ValueLabel
 
-            if Slider.Title then
-                TitleLabel = New('TextLabel', {
-                    Text = Slider.Title,
-                    TextSize = 13,
-                    FontFace = Font.new(Creator.Font, Enum.FontWeight.SemiBold),
-                    TextXAlignment = 'Left',
-                    BackgroundTransparency = 1,
-                    AutomaticSize = 'Y',
-                    Size = UDim2.new(1, 0, 0, 0),
-                    ThemeTag = {
-                        TextColor3 = 'Text',
-                    },
-                })
-                ValueLabel = New('TextLabel', {
+            if Slider.IsTextbox then
+                ValueLabel = New('TextBox', {
                     Text = FormatValue(Value),
-                    TextSize = 13,
+                    TextSize = 12,
                     FontFace = Font.new(Creator.Font, Enum.FontWeight.SemiBold),
-                    TextXAlignment = 'Right',
-                    BackgroundTransparency = 1,
-                    AutomaticSize = 'Y',
-                    Size = UDim2.new(1, 0, 0, 0),
+                    TextColor3 = Color3.new(1, 1, 1),
+                    BackgroundTransparency = 0.9,
+                    BackgroundColor3 = Color3.new(1, 1, 1),
+                    Size = UDim2.new(0, Slider.TextBoxWidth, 0, 22),
                     ThemeTag = {
-                        TextColor3 = 'Text',
+                        BorderColor3 = 'Accent',
                     },
-                    TextTransparency = 0.4,
+                }, {
+                    New('UICorner', {
+                        CornerRadius = UDim.new(0, 4),
+                    }),
+                    New('UIStroke', {
+                        Thickness = 1,
+                        Color = Color3.fromHex'#FFD700',
+                        Transparency = 0.8,
+                    }),
                 })
             end
 
-            Slider.SliderFrame = __DARKLUA_BUNDLE_MODULES.load'B'{
-                Title = nil,
+            Slider.SliderFrame = __DARKLUA_BUNDLE_MODULES.load'E'{
+                Title = Slider.Title,
                 Desc = Slider.Desc,
                 Parent = Config.Parent,
-                Hover = false,
+                Hover = true,
                 Tab = Config.Tab,
                 Index = Config.Index,
                 Window = Config.Window,
                 ElementTable = Slider,
                 ParentConfig = Config,
             }
-            Slider.UIElements.MainContainer = New('Frame', {
-                Size = UDim2.new(1, 0, 0, 0),
-                AutomaticSize = 'Y',
+
+            local SliderBarContainer = New('Frame', {
+                Size = UDim2.new(0, Slider.Width, 0, 24),
                 BackgroundTransparency = 1,
-                Parent = Slider.SliderFrame.UIElements.Main,
+                LayoutOrder = 10,
+                Parent = Slider.SliderFrame.UIElements.Main.UIElements.Container.TitleFrame.TitleFrame,
+                AnchorPoint = Vector2.new(1, 0.5),
+                Position = UDim2.new(1, 0, 0.5, 0),
             }, {
                 New('UIListLayout', {
+                    FillDirection = 'Horizontal',
+                    VerticalAlignment = 'Center',
                     Padding = UDim.new(0, 8),
-                    SortOrder = 'LayoutOrder',
+                    HorizontalAlignment = 'Right',
                 }),
-                New('UIPadding', {
-                    PaddingLeft = UDim.new(0, 14),
-                    PaddingRight = UDim.new(0, 14),
-                    PaddingTop = UDim.new(0, 12),
-                    PaddingBottom = UDim.new(0, 12),
-                }),
-                TitleLabel and New('Frame', {
-                    Size = UDim2.new(1, 0, 0, 0),
-                    AutomaticSize = 'Y',
-                    BackgroundTransparency = 1,
-                    LayoutOrder = 1,
-                }, {TitleLabel, ValueLabel}) or nil,
-                New('Frame', {
-                    Size = UDim2.new(1, 0, 0, 24),
-                    BackgroundTransparency = 1,
-                    LayoutOrder = 2,
-                    Name = 'SliderBarContainer',
+                IconFrom,
+                Creator.NewRoundFrame(99, 'Squircle', {
+                    Name = 'SliderBack',
+                    Size = UDim2.new(1, (IconFrom and -30 or 0) + (IconTo and -30 or 0) + (Slider.IsTextbox and 
+-Slider.TextBoxWidth - 10 or 0), 0, 4),
+                    ImageTransparency = 0.9,
+                    ThemeTag = {
+                        ImageColor3 = 'Text',
+                    },
                 }, {
-                    New('UIListLayout', {
-                        FillDirection = 'Horizontal',
-                        VerticalAlignment = 'Center',
-                        Padding = UDim.new(0, 10),
-                    }),
-                    IconFrom,
                     Creator.NewRoundFrame(99, 'Squircle', {
-                        Name = 'SliderBack',
-                        Size = UDim2.new(1, (IconFrom and -34 or 0) + (IconTo and 
--34 or 0), 0, 4),
-                        ImageTransparency = 0.95,
+                        Name = 'Fill',
+                        Size = UDim2.new(delta, 0, 1, 0),
                         ThemeTag = {
-                            ImageColor3 = 'Text',
+                            ImageColor3 = 'Slider',
                         },
                     }, {
                         Creator.NewRoundFrame(99, 'Squircle', {
-                            Name = 'Fill',
-                            Size = UDim2.new(delta, 0, 1, 0),
+                            Name = 'Thumb',
+                            Size = UDim2.new(0, Slider.ThumbSize, 0, Slider.ThumbSize),
+                            Position = UDim2.new(1, 0, 0.5, 0),
+                            AnchorPoint = Vector2.new(0.5, 0.5),
                             ThemeTag = {
-                                ImageColor3 = 'Slider',
+                                ImageColor3 = 'SliderThumb',
                             },
                         }, {
-                            Creator.NewRoundFrame(99, 'Squircle', {
-                                Name = 'Thumb',
-                                Size = UDim2.new(0, 16, 0, 16),
-                                Position = UDim2.new(1, 0, 0.5, 0),
-                                AnchorPoint = Vector2.new(0.5, 0.5),
-                                ThemeTag = {
-                                    ImageColor3 = 'SliderThumb',
-                                },
-                            }, {
-                                Creator.NewRoundFrame(99, 'Glass-1', {
-                                    Size = UDim2.new(1, 0, 1, 0),
-                                    ImageTransparency = 0.6,
-                                    Name = 'Highlight',
-                                }),
+                            New('UIStroke', {
+                                Thickness = 1.5,
+                                Color = Color3.fromHex'#FFD700',
                             }),
                         }),
                     }),
-                    IconTo,
                 }),
+                IconTo,
+                ValueLabel,
             })
-
-            local Tooltip
-
-            if Slider.IsTooltip then
-                Tooltip = __DARKLUA_BUNDLE_MODULES.load'A'.New(Value, Slider.UIElements.MainContainer.SliderBarContainer.SliderBack.Fill.Thumb, true, 'Secondary', 'Small', false)
-                Tooltip.Container.AnchorPoint = Vector2.new(0.5, 1)
-                Tooltip.Container.Position = UDim2.new(0.5, 0, 0, -8)
-            end
-
-            local SliderBack = Slider.UIElements.MainContainer.SliderBarContainer.SliderBack
+            local SliderBack = SliderBarContainer.SliderBack
 
             local function UpdateSlider(input)
                 local inputPosition = input.Position.X
-                local delta = math.clamp((inputPosition - SliderBack.AbsolutePosition.X) / SliderBack.AbsoluteSize.X, 0, 1)
-                local newValue = CalculateValue(Slider.Value.Min + delta * (Slider.Value.Max - Slider.Value.Min))
+                local rawDelta = math.clamp((inputPosition - SliderBack.AbsolutePosition.X) / SliderBack.AbsoluteSize.X, 0, 1)
+                local newValue = CalculateValue(Slider.Value.Min + rawDelta * (Slider.Value.Max - Slider.Value.Min))
 
                 newValue = math.clamp(newValue, Slider.Value.Min, Slider.Value.Max)
 
@@ -6983,48 +7550,44 @@ do
                     LastValue = newValue
                     Slider.Value.Default = newValue
 
+                    local visualDelta = (newValue - Slider.Value.Min) / (Slider.Value.Max - Slider.Value.Min)
+
                     Tween(SliderBack.Fill, 0.1, {
-                        Size = UDim2.new(delta, 0, 1, 0),
+                        Size = UDim2.new(visualDelta, 0, 1, 0),
                     }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
 
                     if ValueLabel then
-                        ValueLabel.Text = FormatValue(newValue)
-                    end
-                    if Tooltip then
-                        Tooltip.TitleFrame.Text = FormatValue(newValue)
+                        ValueLabel.Text = tostring(FormatValue(newValue))
                     end
 
                     Creator.SafeCallback(Slider.Callback, newValue)
                 end
             end
 
-            function Slider:Lock()
-                Slider.Locked = true
-                CanCallback = false
+            function Slider:Set(val)
+                val = math.clamp(CalculateValue(val), Slider.Value.Min, Slider.Value.Max)
 
-                return Slider.SliderFrame:Lock(Slider.LockedTitle)
-            end
-            function Slider:Unlock()
-                Slider.Locked = false
-                CanCallback = true
+                local visualDelta = (val - Slider.Value.Min) / (Slider.Value.Max - Slider.Value.Min)
 
-                return Slider.SliderFrame:Unlock()
-            end
+                LastValue = val
+                Slider.Value.Default = val
 
-            if Slider.Locked then
-                Slider:Lock()
+                Tween(SliderBack.Fill, 0.2, {
+                    Size = UDim2.new(visualDelta, 0, 1, 0),
+                }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+
+                if ValueLabel then
+                    ValueLabel.Text = tostring(FormatValue(val))
+                end
+
+                Creator.SafeCallback(Slider.Callback, val)
             end
 
             Creator.AddSignal(SliderBack.InputBegan, function(input)
                 if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and not Slider.Locked then
                     Slider.IsHolding = true
-                    Config.Tab.UIElements.ContainerFrame.ScrollingEnabled = false
 
                     UpdateSlider(input)
-
-                    if Tooltip then
-                        Tooltip:Open()
-                    end
 
                     moveconnection = UserInputService.InputChanged:Connect(function(
                         input
@@ -7038,7 +7601,6 @@ do
                     )
                         if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
                             Slider.IsHolding = false
-                            Config.Tab.UIElements.ContainerFrame.ScrollingEnabled = true
 
                             if moveconnection then
                                 moveconnection:Disconnect()
@@ -7046,41 +7608,21 @@ do
                             if releaseconnection then
                                 releaseconnection:Disconnect()
                             end
-                            if Tooltip then
-                                Tooltip:Close()
-                            end
                         end
                     end)
                 end
             end)
 
-            function Slider:Set(val)
-                val = math.clamp(CalculateValue(val), Slider.Value.Min, Slider.Value.Max)
+            if ValueLabel then
+                Creator.AddSignal(ValueLabel.FocusLost, function()
+                    local val = tonumber(ValueLabel.Text)
 
-                local delta = (val - Slider.Value.Min) / (Slider.Value.Max - Slider.Value.Min)
-
-                LastValue = val
-                Slider.Value.Default = val
-
-                Tween(SliderBack.Fill, 0.2, {
-                    Size = UDim2.new(delta, 0, 1, 0),
-                }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
-
-                if ValueLabel then
-                    ValueLabel.Text = FormatValue(val)
-                end
-
-                Creator.SafeCallback(Slider.Callback, val)
-            end
-            function Slider:SetMax(newMax)
-                Slider.Value.Max = newMax
-
-                Slider:Set(LastValue)
-            end
-            function Slider:SetMin(newMin)
-                Slider.Value.Min = newMin
-
-                Slider:Set(LastValue)
+                    if val then
+                        Slider:Set(val)
+                    else
+                        ValueLabel.Text = tostring(FormatValue(LastValue))
+                    end
+                end)
             end
 
             return Slider.__type, Slider
@@ -7088,7 +7630,7 @@ do
 
         return Element
     end
-    function __DARKLUA_BUNDLE_MODULES.I()
+    function __DARKLUA_BUNDLE_MODULES.L()
         local cloneref = (cloneref or clonereference or function(instance)
             return instance
         end)
@@ -7127,7 +7669,7 @@ do
             }
             local CanCallback = true
 
-            Keybind.KeybindFrame = __DARKLUA_BUNDLE_MODULES.load'B'{
+            Keybind.KeybindFrame = __DARKLUA_BUNDLE_MODULES.load'E'{
                 Title = Keybind.Title,
                 Desc = Keybind.Desc,
                 Parent = Config.Parent,
@@ -7241,7 +7783,7 @@ do
 
         return Element
     end
-    function __DARKLUA_BUNDLE_MODULES.J()
+    function __DARKLUA_BUNDLE_MODULES.M()
         local Creator = __DARKLUA_BUNDLE_MODULES.load'c'
         local New = Creator.New
         local _ = Creator.Tween
@@ -7270,7 +7812,7 @@ do
             }
             local CanCallback = true
 
-            Input.InputFrame = __DARKLUA_BUNDLE_MODULES.load'B'{
+            Input.InputFrame = __DARKLUA_BUNDLE_MODULES.load'E'{
                 Title = Input.Title,
                 Desc = Input.Desc,
                 Parent = Config.Parent,
@@ -7341,7 +7883,7 @@ do
 
         return Element
     end
-    function __DARKLUA_BUNDLE_MODULES.K()
+    function __DARKLUA_BUNDLE_MODULES.N()
         local Creator = __DARKLUA_BUNDLE_MODULES.load'c'
         local New = Creator.New
         local Element = {}
@@ -7371,7 +7913,7 @@ do
 
         return Element
     end
-    function __DARKLUA_BUNDLE_MODULES.L()
+    function __DARKLUA_BUNDLE_MODULES.O()
         local DropdownMenu = {}
         local cloneref = (cloneref or clonereference or function(instance)
             return instance
@@ -7887,7 +8429,7 @@ do
                         RecalculateCanvasSize()
                         RecalculateListSize()
                     else
-                        __DARKLUA_BUNDLE_MODULES.load'K':New{
+                        __DARKLUA_BUNDLE_MODULES.load'N':New{
                             Parent = Dropdown.UIElements.Menu.ContentContainer.ScrollingFrame,
                         }
                     end
@@ -7984,7 +8526,7 @@ do
 
         return DropdownMenu
     end
-    function __DARKLUA_BUNDLE_MODULES.M()
+    function __DARKLUA_BUNDLE_MODULES.P()
         local cloneref = (cloneref or clonereference or function(instance)
             return instance
         end)
@@ -7998,7 +8540,7 @@ do
         local _ = Creator.Tween
         local CreateLabel = __DARKLUA_BUNDLE_MODULES.load'v'.New
         local _ = __DARKLUA_BUNDLE_MODULES.load'm'.New
-        local CreateDropdown = __DARKLUA_BUNDLE_MODULES.load'L'.New
+        local CreateDropdown = __DARKLUA_BUNDLE_MODULES.load'O'.New
         local _ = workspace.CurrentCamera
         local Element = {
             UICorner = 10,
@@ -8039,7 +8581,7 @@ do
 
             local CanCallback = true
 
-            Dropdown.DropdownFrame = __DARKLUA_BUNDLE_MODULES.load'B'{
+            Dropdown.DropdownFrame = __DARKLUA_BUNDLE_MODULES.load'E'{
                 Title = Dropdown.Title,
                 Desc = Dropdown.Desc,
                 Parent = Config.Parent,
@@ -8103,7 +8645,7 @@ do
 
         return Element
     end
-    function __DARKLUA_BUNDLE_MODULES.N()
+    function __DARKLUA_BUNDLE_MODULES.Q()
         local highlighter = {}
         local keywords = {
             lua = {
@@ -8341,12 +8883,12 @@ do
 
         return highlighter
     end
-    function __DARKLUA_BUNDLE_MODULES.O()
+    function __DARKLUA_BUNDLE_MODULES.R()
         local Code = {}
         local Creator = __DARKLUA_BUNDLE_MODULES.load'c'
         local New = Creator.New
         local Tween = Creator.Tween
-        local Highlighter = __DARKLUA_BUNDLE_MODULES.load'N'
+        local Highlighter = __DARKLUA_BUNDLE_MODULES.load'Q'
 
         function Code.New(Code, Title, Parent, Callback, UIScale)
             local CodeModule = {
@@ -8527,10 +9069,10 @@ do
 
         return Code
     end
-    function __DARKLUA_BUNDLE_MODULES.P()
+    function __DARKLUA_BUNDLE_MODULES.S()
         local Creator = __DARKLUA_BUNDLE_MODULES.load'c'
         local _ = Creator.New
-        local CodeComponent = __DARKLUA_BUNDLE_MODULES.load'O'
+        local CodeComponent = __DARKLUA_BUNDLE_MODULES.load'R'
         local Element = {}
 
         function Element:New(Config)
@@ -8585,7 +9127,7 @@ do
 
         return Element
     end
-    function __DARKLUA_BUNDLE_MODULES.Q()
+    function __DARKLUA_BUNDLE_MODULES.T()
         local Creator = __DARKLUA_BUNDLE_MODULES.load'c'
         local New = Creator.New
         local _ = Creator.Tween
@@ -9198,7 +9740,7 @@ do
             }
             local CanCallback = true
 
-            Colorpicker.ColorpickerFrame = __DARKLUA_BUNDLE_MODULES.load'B'{
+            Colorpicker.ColorpickerFrame = __DARKLUA_BUNDLE_MODULES.load'E'{
                 Title = Colorpicker.Title,
                 Desc = Colorpicker.Desc,
                 Parent = Config.Parent,
@@ -9273,7 +9815,7 @@ do
 
         return Element
     end
-    function __DARKLUA_BUNDLE_MODULES.R()
+    function __DARKLUA_BUNDLE_MODULES.U()
         local Creator = __DARKLUA_BUNDLE_MODULES.load'c'
         local New = Creator.New
         local Tween = Creator.Tween
@@ -9584,7 +10126,7 @@ do
 
         return Element
     end
-    function __DARKLUA_BUNDLE_MODULES.S()
+    function __DARKLUA_BUNDLE_MODULES.V()
         local Creator = __DARKLUA_BUNDLE_MODULES.load'c'
         local New = Creator.New
         local Element = {}
@@ -9604,7 +10146,7 @@ do
 
         return Element
     end
-    function __DARKLUA_BUNDLE_MODULES.T()
+    function __DARKLUA_BUNDLE_MODULES.W()
         local Creator = __DARKLUA_BUNDLE_MODULES.load'c'
         local New = Creator.New
         local Element = {}
@@ -9659,7 +10201,7 @@ do
 
         return Element
     end
-    function __DARKLUA_BUNDLE_MODULES.U()
+    function __DARKLUA_BUNDLE_MODULES.X()
         local Creator = __DARKLUA_BUNDLE_MODULES.load'c'
         local New = Creator.New
         local Element = {}
@@ -9765,23 +10307,23 @@ do
 
         return Element
     end
-    function __DARKLUA_BUNDLE_MODULES.V()
+    function __DARKLUA_BUNDLE_MODULES.Y()
         return {
             Elements = {
-                Paragraph = __DARKLUA_BUNDLE_MODULES.load'C',
-                Button = __DARKLUA_BUNDLE_MODULES.load'D',
-                Toggle = __DARKLUA_BUNDLE_MODULES.load'G',
-                Slider = __DARKLUA_BUNDLE_MODULES.load'H',
-                Keybind = __DARKLUA_BUNDLE_MODULES.load'I',
-                Input = __DARKLUA_BUNDLE_MODULES.load'J',
-                Dropdown = __DARKLUA_BUNDLE_MODULES.load'M',
-                Code = __DARKLUA_BUNDLE_MODULES.load'P',
-                Colorpicker = __DARKLUA_BUNDLE_MODULES.load'Q',
-                Section = __DARKLUA_BUNDLE_MODULES.load'R',
-                Divider = __DARKLUA_BUNDLE_MODULES.load'K',
-                Space = __DARKLUA_BUNDLE_MODULES.load'S',
-                Image = __DARKLUA_BUNDLE_MODULES.load'T',
-                Group = __DARKLUA_BUNDLE_MODULES.load'U',
+                Paragraph = __DARKLUA_BUNDLE_MODULES.load'F',
+                Button = __DARKLUA_BUNDLE_MODULES.load'G',
+                Toggle = __DARKLUA_BUNDLE_MODULES.load'J',
+                Slider = __DARKLUA_BUNDLE_MODULES.load'K',
+                Keybind = __DARKLUA_BUNDLE_MODULES.load'L',
+                Input = __DARKLUA_BUNDLE_MODULES.load'M',
+                Dropdown = __DARKLUA_BUNDLE_MODULES.load'P',
+                Code = __DARKLUA_BUNDLE_MODULES.load'S',
+                Colorpicker = __DARKLUA_BUNDLE_MODULES.load'T',
+                Section = __DARKLUA_BUNDLE_MODULES.load'U',
+                Divider = __DARKLUA_BUNDLE_MODULES.load'N',
+                Space = __DARKLUA_BUNDLE_MODULES.load'V',
+                Image = __DARKLUA_BUNDLE_MODULES.load'W',
+                Group = __DARKLUA_BUNDLE_MODULES.load'X',
             },
             Load = function(
                 tbl,
@@ -9916,7 +10458,7 @@ do
             end,
         }
     end
-    function __DARKLUA_BUNDLE_MODULES.W()
+    function __DARKLUA_BUNDLE_MODULES.Z()
         local cloneref = (cloneref or clonereference or function(instance)
             return instance
         end)
@@ -9927,7 +10469,7 @@ do
         local Mouse = Players.LocalPlayer:GetMouse()
         local Creator = __DARKLUA_BUNDLE_MODULES.load'c'
         local New = Creator.New
-        local CreateToolTip = __DARKLUA_BUNDLE_MODULES.load'A'.New
+        local CreateToolTip = __DARKLUA_BUNDLE_MODULES.load'D'.New
         local CreateScrollSlider = __DARKLUA_BUNDLE_MODULES.load'w'.New
         local TabModule = {
             Tabs = {},
@@ -10330,7 +10872,7 @@ do
                 return Tab
             end
 
-            local ElementsModule = __DARKLUA_BUNDLE_MODULES.load'V'
+            local ElementsModule = __DARKLUA_BUNDLE_MODULES.load'Y'
 
             ElementsModule.Load(Tab, Tab.UIElements.ContainerFrame, ElementsModule.Elements, Window, IntiHub, nil, ElementsModule, UIScale)
 
@@ -10531,12 +11073,12 @@ do
 
         return TabModule
     end
-    function __DARKLUA_BUNDLE_MODULES.X()
+    function __DARKLUA_BUNDLE_MODULES._()
         local Section = {}
         local Creator = __DARKLUA_BUNDLE_MODULES.load'c'
         local New = Creator.New
         local Tween = Creator.Tween
-        local TabModule = __DARKLUA_BUNDLE_MODULES.load'W'
+        local TabModule = __DARKLUA_BUNDLE_MODULES.load'Z'
 
         function Section.New(SectionConfig, Parent, Folder, UIScale, Window)
             local SectionModule = {
@@ -10708,507 +11250,7 @@ do
 
         return Section
     end
-    function __DARKLUA_BUNDLE_MODULES.Y()
-        return {
-            Tab = 'table-of-contents',
-            Paragraph = 'type',
-            Button = 'square-mouse-pointer',
-            Toggle = 'toggle-right',
-            Slider = 'sliders-horizontal',
-            Keybind = 'command',
-            Input = 'text-cursor-input',
-            Dropdown = 'chevrons-up-down',
-            Code = 'terminal',
-            Colorpicker = 'palette',
-        }
-    end
-    function __DARKLUA_BUNDLE_MODULES.Z()
-        local cloneref = (cloneref or clonereference or function(instance)
-            return instance
-        end)
-
-        cloneref(game:GetService'UserInputService')
-
-        local SearchBar = {
-            Margin = 8,
-            Padding = 9,
-        }
-        local Creator = __DARKLUA_BUNDLE_MODULES.load'c'
-        local New = Creator.New
-        local Tween = Creator.Tween
-
-        function SearchBar.new(TabModule, Parent, OnClose)
-            local SearchBarModule = {
-                IconSize = 18,
-                Padding = 14,
-                Radius = 22,
-                Width = 400,
-                MaxHeight = 380,
-                Icons = __DARKLUA_BUNDLE_MODULES.load'Y',
-            }
-            local TextBox = New('TextBox', {
-                Text = '',
-                PlaceholderText = 'Search...',
-                ThemeTag = {
-                    PlaceholderColor3 = 'Placeholder',
-                    TextColor3 = 'Text',
-                },
-                Size = UDim2.new(1, -((SearchBarModule.IconSize * 2) + (SearchBarModule.Padding * 2)), 0, 0),
-                AutomaticSize = 'Y',
-                ClipsDescendants = true,
-                ClearTextOnFocus = false,
-                BackgroundTransparency = 1,
-                TextXAlignment = 'Left',
-                FontFace = Font.new(Creator.Font, Enum.FontWeight.Regular),
-                TextSize = 18,
-            })
-            local CloseButton = New('ImageLabel', {
-                Image = Creator.Icon'x'[1],
-                ImageRectSize = Creator.Icon'x'[2].ImageRectSize,
-                ImageRectOffset = Creator.Icon'x'[2].ImageRectPosition,
-                BackgroundTransparency = 1,
-                ThemeTag = {
-                    ImageColor3 = 'Icon',
-                },
-                ImageTransparency = 0.1,
-                Size = UDim2.new(0, SearchBarModule.IconSize, 0, SearchBarModule.IconSize),
-            }, {
-                New('TextButton', {
-                    Size = UDim2.new(1, 8, 1, 8),
-                    BackgroundTransparency = 1,
-                    Active = true,
-                    ZIndex = 999999999,
-                    AnchorPoint = Vector2.new(0.5, 0.5),
-                    Position = UDim2.new(0.5, 0, 0.5, 0),
-                    Text = '',
-                }),
-            })
-            local ScrollingFrame = New('ScrollingFrame', {
-                Size = UDim2.new(1, 0, 0, 0),
-                AutomaticCanvasSize = 'Y',
-                ScrollingDirection = 'Y',
-                ElasticBehavior = 'Never',
-                ScrollBarThickness = 0,
-                CanvasSize = UDim2.new(0, 0, 0, 0),
-                BackgroundTransparency = 1,
-                Visible = false,
-            }, {
-                New('UIListLayout', {
-                    Padding = UDim.new(0, 0),
-                    FillDirection = 'Vertical',
-                }),
-                New('UIPadding', {
-                    PaddingTop = UDim.new(0, SearchBarModule.Padding),
-                    PaddingLeft = UDim.new(0, SearchBarModule.Padding),
-                    PaddingRight = UDim.new(0, SearchBarModule.Padding),
-                    PaddingBottom = UDim.new(0, SearchBarModule.Padding),
-                }),
-            })
-            local SearchFrame = Creator.NewRoundFrame(SearchBarModule.Radius, 'Squircle', {
-                Size = UDim2.new(1, 0, 1, 0),
-                ThemeTag = {
-                    ImageColor3 = 'WindowSearchBarBackground',
-                },
-                ImageTransparency = 0,
-            }, {
-                Creator.NewRoundFrame(SearchBarModule.Radius, 'Squircle', {
-                    Size = UDim2.new(1, 0, 1, 0),
-                    BackgroundTransparency = 1,
-                    Visible = false,
-                    ThemeTag = {
-                        ImageColor3 = 'White',
-                    },
-                    ImageTransparency = 1,
-                    Name = 'Frame',
-                }, {
-                    New('Frame', {
-                        Size = UDim2.new(1, 0, 0, 46),
-                        BackgroundTransparency = 1,
-                    }, {
-                        New('Frame', {
-                            Size = UDim2.new(1, 0, 1, 0),
-                            BackgroundTransparency = 1,
-                        }, {
-                            New('ImageLabel', {
-                                Image = Creator.Icon'search'[1],
-                                ImageRectSize = Creator.Icon'search'[2].ImageRectSize,
-                                ImageRectOffset = Creator.Icon'search'[2].ImageRectPosition,
-                                BackgroundTransparency = 1,
-                                ThemeTag = {
-                                    ImageColor3 = 'Icon',
-                                },
-                                ImageTransparency = 0.1,
-                                Size = UDim2.new(0, SearchBarModule.IconSize, 0, SearchBarModule.IconSize),
-                            }),
-                            TextBox,
-                            CloseButton,
-                            New('UIListLayout', {
-                                Padding = UDim.new(0, SearchBarModule.Padding),
-                                FillDirection = 'Horizontal',
-                                VerticalAlignment = 'Center',
-                            }),
-                            New('UIPadding', {
-                                PaddingLeft = UDim.new(0, SearchBarModule.Padding),
-                                PaddingRight = UDim.new(0, SearchBarModule.Padding),
-                            }),
-                        }),
-                    }),
-                    New('Frame', {
-                        BackgroundTransparency = 1,
-                        AutomaticSize = 'Y',
-                        Size = UDim2.new(1, 0, 0, 0),
-                        Name = 'Results',
-                    }, {
-                        New('Frame', {
-                            Size = UDim2.new(1, 0, 0, 1),
-                            ThemeTag = {
-                                BackgroundColor3 = 'Outline',
-                            },
-                            BackgroundTransparency = 0.9,
-                            Visible = false,
-                        }),
-                        ScrollingFrame,
-                        New('UISizeConstraint', {
-                            MaxSize = Vector2.new(SearchBarModule.Width, SearchBarModule.MaxHeight),
-                        }),
-                    }),
-                    New('UIListLayout', {
-                        Padding = UDim.new(0, 0),
-                        FillDirection = 'Vertical',
-                    }),
-                }),
-            })
-            local SearchFrameContainer = New('Frame', {
-                Size = UDim2.new(0, SearchBarModule.Width, 0, 0),
-                AutomaticSize = 'Y',
-                Parent = Parent,
-                BackgroundTransparency = 1,
-                Position = UDim2.new(0.5, 0, 0.5, 0),
-                AnchorPoint = Vector2.new(0.5, 0.5),
-                Visible = false,
-                ZIndex = 99999999,
-            }, {
-                New('UIScale', {Scale = 0.9}),
-                SearchFrame,
-                Creator.NewRoundFrame(SearchBarModule.Radius, 'Glass-0.7', {
-                    Size = UDim2.new(1, 0, 1, 0),
-                    BackgroundTransparency = 1,
-                    ThemeTag = {
-                        ImageColor3 = 'SearchBarBorder',
-                        ImageTransparency = 'SearchBarBorderTransparency',
-                    },
-                    Name = 'Outline',
-                }),
-            })
-
-            local function CreateSearchTab(
-                Title,
-                Desc,
-                Icon,
-                Parent,
-                IsParent,
-                Callback
-            )
-                local Tab = New('TextButton', {
-                    Size = UDim2.new(1, 0, 0, 0),
-                    AutomaticSize = 'Y',
-                    BackgroundTransparency = 1,
-                    Parent = Parent or nil,
-                }, {
-                    Creator.NewRoundFrame(SearchBarModule.Radius - 11, 'Squircle', {
-                        Size = UDim2.new(1, 0, 0, 0),
-                        Position = UDim2.new(0.5, 0, 0.5, 0),
-                        AnchorPoint = Vector2.new(0.5, 0.5),
-                        ThemeTag = {
-                            ImageColor3 = 'Text',
-                        },
-                        ImageTransparency = 1,
-                        Name = 'Main',
-                    }, {
-                        Creator.NewRoundFrame(SearchBarModule.Radius - 11, 'Glass-1', {
-                            Size = UDim2.new(1, 0, 1, 0),
-                            Position = UDim2.new(0.5, 0, 0.5, 0),
-                            AnchorPoint = Vector2.new(0.5, 0.5),
-                            ThemeTag = {
-                                ImageColor3 = 'White',
-                            },
-                            ImageTransparency = 1,
-                            Name = 'Outline',
-                        }, {
-                            New('UIPadding', {
-                                PaddingTop = UDim.new(0, SearchBarModule.Padding - 2),
-                                PaddingLeft = UDim.new(0, SearchBarModule.Padding),
-                                PaddingRight = UDim.new(0, SearchBarModule.Padding),
-                                PaddingBottom = UDim.new(0, SearchBarModule.Padding - 2),
-                            }),
-                            New('ImageLabel', {
-                                Image = Creator.Icon(Icon)[1],
-                                ImageRectSize = Creator.Icon(Icon)[2].ImageRectSize,
-                                ImageRectOffset = Creator.Icon(Icon)[2].ImageRectPosition,
-                                BackgroundTransparency = 1,
-                                ThemeTag = {
-                                    ImageColor3 = 'Icon',
-                                },
-                                ImageTransparency = 0.1,
-                                Size = UDim2.new(0, SearchBarModule.IconSize, 0, SearchBarModule.IconSize),
-                            }),
-                            New('Frame', {
-                                Size = UDim2.new(1, -SearchBarModule.IconSize - SearchBarModule.Padding, 0, 0),
-                                BackgroundTransparency = 1,
-                            }, {
-                                New('TextLabel', {
-                                    Text = Title,
-                                    ThemeTag = {
-                                        TextColor3 = 'Text',
-                                    },
-                                    TextSize = 17,
-                                    BackgroundTransparency = 1,
-                                    TextXAlignment = 'Left',
-                                    FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
-                                    Size = UDim2.new(1, 0, 0, 0),
-                                    TextTruncate = 'AtEnd',
-                                    AutomaticSize = 'Y',
-                                    Name = 'Title',
-                                }),
-                                New('TextLabel', {
-                                    Text = Desc or '',
-                                    Visible = Desc and true or false,
-                                    ThemeTag = {
-                                        TextColor3 = 'Text',
-                                    },
-                                    TextSize = 15,
-                                    TextTransparency = 0.3,
-                                    BackgroundTransparency = 1,
-                                    TextXAlignment = 'Left',
-                                    FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
-                                    Size = UDim2.new(1, 0, 0, 0),
-                                    TextTruncate = 'AtEnd',
-                                    AutomaticSize = 'Y',
-                                    Name = 'Desc',
-                                }) or nil,
-                                New('UIListLayout', {
-                                    Padding = UDim.new(0, 6),
-                                    FillDirection = 'Vertical',
-                                }),
-                            }),
-                            New('UIListLayout', {
-                                Padding = UDim.new(0, SearchBarModule.Padding),
-                                FillDirection = 'Horizontal',
-                            }),
-                        }),
-                    }, true),
-                    New('Frame', {
-                        Name = 'ParentContainer',
-                        Size = UDim2.new(1, -SearchBarModule.Padding, 0, 0),
-                        AutomaticSize = 'Y',
-                        BackgroundTransparency = 1,
-                        Visible = IsParent,
-                    }, {
-                        Creator.NewRoundFrame(99, 'Squircle', {
-                            Size = UDim2.new(0, 2, 1, 0),
-                            BackgroundTransparency = 1,
-                            ThemeTag = {
-                                ImageColor3 = 'Text',
-                            },
-                            ImageTransparency = 0.9,
-                        }),
-                        New('Frame', {
-                            Size = UDim2.new(1, -SearchBarModule.Padding - 2, 0, 0),
-                            Position = UDim2.new(0, SearchBarModule.Padding + 2, 0, 0),
-                            BackgroundTransparency = 1,
-                        }, {
-                            New('UIListLayout', {
-                                Padding = UDim.new(0, 0),
-                                FillDirection = 'Vertical',
-                            }),
-                        }),
-                    }),
-                    New('UIListLayout', {
-                        Padding = UDim.new(0, 0),
-                        FillDirection = 'Vertical',
-                        HorizontalAlignment = 'Right',
-                    }),
-                })
-
-                Tab.Main.Size = UDim2.new(1, 0, 0, Tab.Main.Outline.Frame.Desc.Visible and (((SearchBarModule.Padding - 2) * 2) + Tab.Main.Outline.Frame.Title.TextBounds.Y + 6 + Tab.Main.Outline.Frame.Desc.TextBounds.Y) or (((SearchBarModule.Padding - 2) * 2) + Tab.Main.Outline.Frame.Title.TextBounds.Y))
-
-                Creator.AddSignal(Tab.Main.MouseEnter, function()
-                    Tween(Tab.Main, 0.04, {ImageTransparency = 0.95}):Play()
-                    Tween(Tab.Main.Outline, 0.04, {ImageTransparency = 0.75}):Play()
-                end)
-                Creator.AddSignal(Tab.Main.InputEnded, function()
-                    Tween(Tab.Main, 0.08, {ImageTransparency = 1}):Play()
-                    Tween(Tab.Main.Outline, 0.08, {ImageTransparency = 1}):Play()
-                end)
-                Creator.AddSignal(Tab.Main.MouseButton1Click, function()
-                    if Callback then
-                        Callback()
-                    end
-                end)
-
-                return Tab
-            end
-            local function ContainsText(str, query)
-                if not query or query == '' then
-                    return false
-                end
-                if not str or str == '' then
-                    return false
-                end
-
-                local lowerStr = string.lower(str)
-                local lowerQuery = string.lower(query)
-
-                return string.find(lowerStr, lowerQuery, 1, true) ~= nil
-            end
-            local function Search(query)
-                if not query or query == '' then
-                    return {}
-                end
-
-                local results = {}
-
-                for tabindex, tab in next, TabModule.Tabs do
-                    local tabMatches = ContainsText(tab.Title or '', query)
-                    local elementResults = {}
-
-                    for elemindex, elem in next, tab.Elements do
-                        if elem.__type ~= 'Section' then
-                            local titleMatches = ContainsText(elem.Title or '', query)
-                            local descMatches = ContainsText(elem.Desc or '', query)
-
-                            if titleMatches or descMatches then
-                                elementResults[elemindex] = {
-                                    Title = elem.Title,
-                                    Desc = elem.Desc,
-                                    Original = elem,
-                                    __type = elem.__type,
-                                    Index = elemindex,
-                                }
-                            end
-                        end
-                    end
-
-                    if tabMatches or next(elementResults) ~= nil then
-                        results[tabindex] = {
-                            Tab = tab,
-                            Title = tab.Title,
-                            Icon = tab.Icon,
-                            Elements = elementResults,
-                        }
-                    end
-                end
-
-                return results
-            end
-
-            Creator.AddSignal(ScrollingFrame.UIListLayout:GetPropertyChangedSignal'AbsoluteContentSize', function(
-            )
-                Tween(ScrollingFrame, 0.06, {
-                    Size = UDim2.new(1, 0, 0, math.clamp(ScrollingFrame.UIListLayout.AbsoluteContentSize.Y + (SearchBarModule.Padding * 2), 0, SearchBarModule.MaxHeight)),
-                }, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut):Play()
-            end)
-
-            function SearchBarModule:Open()
-                task.spawn(function()
-                    SearchFrame.Frame.Visible = true
-                    SearchFrameContainer.Visible = true
-
-                    Tween(SearchFrameContainer.UIScale, 0.12, {Scale = 1}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
-                end)
-            end
-            function SearchBarModule:Close(IsDestroy)
-                task.spawn(function()
-                    OnClose()
-
-                    SearchFrame.Frame.Visible = false
-
-                    Tween(SearchFrameContainer.UIScale, 0.12, {Scale = 1}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
-                    task.wait(0.12)
-
-                    SearchFrameContainer.Visible = false
-
-                    if IsDestroy then
-                        SearchFrameContainer:Destroy()
-                    end
-                end)
-            end
-
-            Creator.AddSignal(CloseButton.TextButton.MouseButton1Click, function(
-            )
-                SearchBarModule:Close(true)
-            end)
-            SearchBarModule:Open()
-
-            function SearchBarModule:Search(query)
-                query = query or ''
-
-                local result = Search(query)
-
-                ScrollingFrame.Visible = true
-                SearchFrame.Frame.Results.Frame.Visible = true
-
-                for _, item in next, ScrollingFrame:GetChildren()do
-                    if item.ClassName ~= 'UIListLayout' and item.ClassName ~= 'UIPadding' then
-                        item:Destroy()
-                    end
-                end
-
-                if result and next(result) ~= nil then
-                    for tabindex, i in next, result do
-                        local TabIcon = SearchBarModule.Icons['Tab']
-                        local TabMainElement = CreateSearchTab(i.Title, nil, TabIcon, ScrollingFrame, true, function(
-                        )
-                            SearchBarModule:Close()
-                            TabModule:SelectTab(tabindex)
-                        end)
-
-                        if i.Elements and next(i.Elements) ~= nil then
-                            for elemindex, e in next, i.Elements do
-                                local ElementIcon = SearchBarModule.Icons[e.__type]
-
-                                CreateSearchTab(e.Title, e.Desc, ElementIcon, TabMainElement:FindFirstChild'ParentContainer' and TabMainElement.ParentContainer.Frame or nil, false, function(
-                                )
-                                    SearchBarModule:Close()
-                                    TabModule:SelectTab(tabindex)
-
-                                    if i.Tab.ScrollToTheElement then
-                                        i.Tab:ScrollToTheElement(e.Index)
-                                    end
-                                end)
-                            end
-                        end
-                    end
-                elseif query ~= '' then
-                    New('TextLabel', {
-                        Size = UDim2.new(1, 0, 0, 70),
-                        Text = 'No results found',
-                        TextSize = 16,
-                        ThemeTag = {
-                            TextColor3 = 'Text',
-                        },
-                        TextTransparency = 0.2,
-                        BackgroundTransparency = 1,
-                        FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
-                        Parent = ScrollingFrame,
-                        Name = 'NotFound',
-                    })
-                else
-                    ScrollingFrame.Visible = false
-                    SearchFrame.Frame.Results.Frame.Visible = false
-                end
-            end
-
-            Creator.AddSignal(TextBox:GetPropertyChangedSignal'Text', function()
-                SearchBarModule:Search(TextBox.Text)
-            end)
-
-            return SearchBarModule
-        end
-
-        return SearchBar
-    end
-    function __DARKLUA_BUNDLE_MODULES._()
+    function __DARKLUA_BUNDLE_MODULES.aa()
         local cloneref = (cloneref or clonereference or function(instance)
             return instance
         end)
@@ -11224,7 +11266,9 @@ do
         local CreateButton = __DARKLUA_BUNDLE_MODULES.load'l'.New
         local CreateScrollSlider = __DARKLUA_BUNDLE_MODULES.load'w'.New
         local Tag = __DARKLUA_BUNDLE_MODULES.load'x'
-        local ConfigManager = __DARKLUA_BUNDLE_MODULES.load'y'
+        local MinimizedBar = __DARKLUA_BUNDLE_MODULES.load'y'
+        local Search = __DARKLUA_BUNDLE_MODULES.load'A'
+        local ConfigManager = __DARKLUA_BUNDLE_MODULES.load'B'
 
         return function(Config)
             local Window = {
@@ -12350,7 +12394,7 @@ do
                 }, {BackgroundGradient})
             end
 
-            Window.OpenButtonMain = __DARKLUA_BUNDLE_MODULES.load'z'.New(Window)
+            Window.OpenButtonMain = __DARKLUA_BUNDLE_MODULES.load'C'.New(Window)
 
             Window.OpenButtonMain:SetIcon(Window.Icon)
 
@@ -12442,6 +12486,11 @@ do
                 Window.OnDestroyCallback = func
             end
 
+            Window.MinimizedBar = MinimizedBar.New(Window)
+
+            if not Window.HideSearchBar then
+                Window.Search = Search.Init(Window)
+            end
             if Config.IntiHub.UseAcrylic then
                 Window.AcrylicPaint.AddParent(Window.UIElements.Main)
             end
@@ -12462,6 +12511,10 @@ do
             end
             function Window:Open()
                 Window.UIElements.Main.Visible = true
+
+                if Window.MinimizedBar then
+                    Window.MinimizedBar:Visible(false)
+                end
 
                 task.spawn(function()
                     if Window.OnOpenCallback then
@@ -12583,7 +12636,9 @@ do
                     Window.UIElements.Main.Visible = false
 
                     if Window.OpenButtonMain and not Window.Destroyed and Window.IsOpenButtonEnabled then
-                        Window.OpenButtonMain:Visible(true)
+                    end
+                    if Window.MinimizedBar then
+                        Window.MinimizedBar:Visible(true)
                     end
                 end)
 
@@ -12733,8 +12788,8 @@ do
                 Window:EditOpenButton(Window.OpenButton)
             end
 
-            local TabModuleMain = __DARKLUA_BUNDLE_MODULES.load'W'
-            local SectionModule = __DARKLUA_BUNDLE_MODULES.load'X'
+            local TabModuleMain = __DARKLUA_BUNDLE_MODULES.load'Z'
+            local SectionModule = __DARKLUA_BUNDLE_MODULES.load'_'
             local TabModule = TabModuleMain.Init(Window, Config.IntiHub, Config.IntiHub.TooltipGui)
 
             TabModule:OnChange(function(t)
@@ -13068,7 +13123,7 @@ do
             end)
 
             if not Window.HideSearchBar then
-                local SearchBar = __DARKLUA_BUNDLE_MODULES.load'Z'
+                local SearchBar = __DARKLUA_BUNDLE_MODULES.load'A'
                 local IsOpen = false
                 local SearchBarTrigger = CreateLabel('Search...', 'search', Window.UIElements.Main.Main.Topbar.Center, true)
 
@@ -13269,7 +13324,7 @@ do
             return Window
         end
     end
-    function __DARKLUA_BUNDLE_MODULES.aa()
+    function __DARKLUA_BUNDLE_MODULES.ab()
         local cloneref = (cloneref or clonereference or function(instance)
             return instance
         end)
@@ -13545,7 +13600,7 @@ do
 
         return StatusBar
     end
-    function __DARKLUA_BUNDLE_MODULES.ab()
+    function __DARKLUA_BUNDLE_MODULES.ac()
         local IntiHub = {
             Window = nil,
             Theme = nil,
@@ -13783,7 +13838,7 @@ do
         IntiHub:SetLanguage(Creator.Language)
 
         function IntiHub:CreateWindow(Config)
-            local CreateWindow = __DARKLUA_BUNDLE_MODULES.load'_'
+            local CreateWindow = __DARKLUA_BUNDLE_MODULES.load'aa'
 
             if not RunService:IsStudio() and writefile then
                 pcall(function()
@@ -13921,7 +13976,7 @@ do
 
             IntiHub.Transparent = Config.Transparent
             IntiHub.Window = Window
-            IntiHub.StatusBar = __DARKLUA_BUNDLE_MODULES.load'aa'.New{
+            IntiHub.StatusBar = __DARKLUA_BUNDLE_MODULES.load'ab'.New{
                 IntiHub = IntiHub,
                 Window = Window,
             }
@@ -13946,7 +14001,7 @@ do
 
         return IntiHub
     end
-    function __DARKLUA_BUNDLE_MODULES.ac()
+    function __DARKLUA_BUNDLE_MODULES.ad()
         local Loading = {}
 
         Loading.__index = Loading
@@ -14091,7 +14146,7 @@ do
 
         return Loading
     end
-    function __DARKLUA_BUNDLE_MODULES.ad()
+    function __DARKLUA_BUNDLE_MODULES.ae()
         return function(IntiHub, Loading)
             Loading:Update'Inicializando Interfaz...'
             task.wait(0.5)
@@ -14287,9 +14342,9 @@ do
     end
 end
 
-local IntiHub = __DARKLUA_BUNDLE_MODULES.load'ab'
-local Loading = __DARKLUA_BUNDLE_MODULES.load'ac'
-local App = __DARKLUA_BUNDLE_MODULES.load'ad'
+local IntiHub = __DARKLUA_BUNDLE_MODULES.load'ac'
+local Loading = __DARKLUA_BUNDLE_MODULES.load'ad'
+local App = __DARKLUA_BUNDLE_MODULES.load'ae'
 local loader = Loading.new{
     IntiHub = IntiHub,
     InitialMessage = 'Verificando Versi\u{f3}n Noble Deluxe...',

@@ -22,6 +22,9 @@ local CreateButton = require("../ui/Button").New
 local CreateScrollSlider = require("../ui/ScrollSlider").New
 local Tag = require("../ui/Tag")
 
+local MinimizedBar = require("./MinimizedBar")
+local Search = require("../search/Init")
+
 local ConfigManager = require("../../config/Init")
 
 local Notified = false
@@ -1424,6 +1427,12 @@ return function(Config)
 		Window.OnDestroyCallback = func
 	end
 
+    -- 🟢 Initialize Search & Minimized Bar
+    Window.MinimizedBar = MinimizedBar.New(Window)
+    if not Window.HideSearchBar then
+        Window.Search = Search.Init(Window)
+    end
+
 	if Config.IntiHub.UseAcrylic then
 		Window.AcrylicPaint.AddParent(Window.UIElements.Main)
 	end
@@ -1445,6 +1454,7 @@ return function(Config)
 
 	function Window:Open()
         Window.UIElements.Main.Visible = true
+        if Window.MinimizedBar then Window.MinimizedBar:Visible(false) end
 		task.spawn(function()
 			if Window.OnOpenCallback then
 				task.spawn(function()
@@ -1589,8 +1599,9 @@ return function(Config)
 			Window.UIElements.Main.Visible = false
 
 			if Window.OpenButtonMain and not Window.Destroyed and Window.IsOpenButtonEnabled then
-				Window.OpenButtonMain:Visible(true)
+				-- Window.OpenButtonMain:Visible(true) -- Replaced by MinimizedBar
 			end
+            if Window.MinimizedBar then Window.MinimizedBar:Visible(true) end
 		end)
 
 		function Close:Destroy()
