@@ -36,24 +36,23 @@ local Window = IntiHub:CreateWindow({
 do
     local DashTab = Window:Tab({
         Title = "Dashboard",
-        Icon = "lucide:layout-grid",
+        Icon = "layout-grid",
     })
 
     local OverviewSection = DashTab:Section({
         Title = "System Overview",
         Desc = "Monitor and control core modules",
-        Box = true,
         Opened = true,
     })
 
     OverviewSection:Button({
         Title = "Initialize All Modules",
-        Icon = "lucide:zap",
+        Icon = "zap",
         Callback = function()
             IntiHub:Notify({
                 Title = "System Core",
                 Content = "All modules have been synchronized.",
-                Icon = "lucide:check-circle",
+                Icon = "check-circle",
                 Duration = 5
             })
         end
@@ -67,7 +66,6 @@ do
 
     local SettingSection = DashTab:Section({
         Title = "Interface Settings",
-        Box = true,
         Opened = true,
     })
 
@@ -75,12 +73,12 @@ do
         Title = "UI Transparency",
         Value = { Min = 0, Max = 100, Default = 50 },
         IsTooltip = true,
-        Callback = function(v) Window:SetBackgroundTransparency(v/100) end
+        Callback = function(v) Window:ToggleTransparency(v/100) end
     })
 
     SettingSection:Dropdown({
         Title = "Accent Palette",
-        Values = {"Noble Gold", "Royal Azure", "Emerald Executive"},
+        Options = {"Noble Gold", "Royal Azure", "Emerald Executive"},
         Default = "Noble Gold",
     })
 end
@@ -89,10 +87,10 @@ end
 do
     local CompTab = Window:Tab({
         Title = "Noble Components",
-        Icon = "lucide:component",
+        Icon = "component",
     })
 
-    local InputSection = CompTab:Section({ Title = "User Interaction" })
+    local InputSection = CompTab:Section({ Title = "User Interaction", Opened = true })
 
     InputSection:Input({
         Title = "Security Key",
@@ -106,13 +104,12 @@ do
         Callback = function() print("UI Toggle Triggered") end
     })
 
-    local MediaSection = CompTab:Section({ Title = "Media & Assets" })
-
-    MediaSection:Image({
-        Title = "Banner Image",
-        Image = "https://repository-images.githubusercontent.com/880118829/22c020eb-d1b1-4b34-ac4d-e33fd88db38d",
-        AspectRatio = "16:9",
-        Radius = 8,
+    local SliderSection = CompTab:Section({ Title = "Slider Range", Opened = true })
+    
+    SliderSection:Slider({
+        Title = "Sensitivity",
+        Min = 1, Max = 10, Default = 5,
+        Callback = function(v) print("Sensitivity:", v) end
     })
 end
 

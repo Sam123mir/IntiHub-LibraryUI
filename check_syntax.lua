@@ -1,4 +1,4 @@
-local content = readfile("c:/Users/samir/OneDrive/Desktop/WindUI/dist/main.lua")
+local content = readfile("c:/Users/samir/OneDrive/Desktop/IntiUI/dist/main.lua")
 local exec, err = loadstring(content)
 if not exec then
     print("SYNTAX ERROR FOUND:")

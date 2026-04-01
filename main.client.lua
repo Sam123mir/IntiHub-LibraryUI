@@ -11839,34 +11839,34 @@ do
 
             function Window:ToggleRightPanel()
                 local Panel = Window.UIElements.RightPanel
-                local Button = Window.TopBarButtons['SidebarToggle']
-                local Visible = not Panel.Visible
+                local ButtonData = Window.TopBarButtons['SidebarToggle']
+                local Button = ButtonData and ButtonData.Object
 
-                if Visible then
+                Window.RightPanelOpen = not Window.RightPanelOpen
+
+                local isOpen = Window.RightPanelOpen
+
+                if isOpen then
                     Panel.Visible = true
 
                     if Button then
-                        Tween(Button.Icon, 0.3, {Rotation = 0}):Play()
-
-                        Button.Icon.Image = Creator.Icon'chevron-left'[1]
+                        Tween(Button:FindFirstChildWhichIsA('ImageLabel', true), 0.3, {Rotation = 180}):Play()
                     end
 
                     Tween(Panel, 0.5, {
-                        Position = UDim2.new(1, 15, 0, 0),
+                        Position = UDim2.new(1, -245, 0, 0),
                     }, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
                 else
                     if Button then
-                        Tween(Button.Icon, 0.3, {Rotation = 180}):Play()
-
-                        Button.Icon.Image = Creator.Icon'chevron-right'[1]
+                        Tween(Button:FindFirstChildWhichIsA('ImageLabel', true), 0.3, {Rotation = 0}):Play()
                     end
 
                     local tween = Tween(Panel, 0.4, {
-                        Position = UDim2.new(1, -210, 0, 0),
+                        Position = UDim2.new(1, 15, 0, 0),
                     }, Enum.EasingStyle.Quint, Enum.EasingDirection.In)
 
                     tween.Completed:Connect(function()
-                        if not Visible then
+                        if not Window.RightPanelOpen then
                             Panel.Visible = false
                         end
                     end)
@@ -12345,10 +12345,13 @@ do
                     LayoutOrder = LayoutOrder or 999,
                 }, {Button})
 
-                Window.TopBarButtons[100 - LayoutOrder] = {
+                local buttonData = {
                     Name = Name,
                     Object = Button,
                 }
+
+                Window.TopBarButtons[100 - LayoutOrder] = buttonData
+                Window.TopBarButtons[Name] = buttonData
 
                 Creator.AddSignal(Button.MouseButton1Click, function()
                     if Callback then
@@ -12390,8 +12393,7 @@ do
                 return Window:CreateTopbarButton(ButtonConfig.Name, ButtonConfig.Icon, ButtonConfig.Callback, ButtonConfig.LayoutOrder or 0, ButtonConfig.IconThemed, ButtonConfig.Color, ButtonConfig.IconSize)
             end
 
-            Window:CreateTopbarButton('SidebarToggle', 'layout-panel-right', function(
-            )
+            Window:CreateTopbarButton('SidebarToggle', 'panel-right', function()
                 Window:ToggleRightPanel()
             end, 1000, true, Color3.fromHex'#FFD700')
             Window:CreateTopbarButton('SearchToggle', 'search', function()
