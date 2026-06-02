@@ -106,14 +106,14 @@ function ConfigManager:Init(WindowTable)
     
     Window = WindowTable
     ConfigManager.Folder = Window.Folder
-    ConfigManager.Path = "IntiHub_Data/" .. tostring(ConfigManager.Folder) .. "/config/"
+    ConfigManager.Path = "DeluxeUI_Data/" .. tostring(ConfigManager.Folder) .. "/config/"
     
     pcall(function()
-        if not isfolder("IntiHub_Data") then
-            makefolder("IntiHub_Data")
+        if not isfolder("DeluxeUI_Data") then
+            makefolder("DeluxeUI_Data")
         end
-        if not isfolder("IntiHub_Data/" .. tostring(ConfigManager.Folder)) then
-            makefolder("IntiHub_Data/" .. tostring(ConfigManager.Folder))
+        if not isfolder("DeluxeUI_Data/" .. tostring(ConfigManager.Folder)) then
+            makefolder("DeluxeUI_Data/" .. tostring(ConfigManager.Folder))
         end
         if not isfolder(ConfigManager.Path) then
             makefolder(ConfigManager.Path)

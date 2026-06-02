@@ -2,7 +2,7 @@
 
 return [[
 {
-    "name": "IntiHub",
+    "name": "DeluxeUI",
     "version": "1.7.0",
     "main": "./dist/main.lua",
     "repository": "https://github.com/Sam123mir/IntiHub-LibraryUI",

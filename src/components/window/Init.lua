@@ -51,11 +51,12 @@ return function(Config)
 	local Window = {
 		Title = Config.Title or "UI Library",
 		Author = Config.Author,
-		Icon = Config.Icon or "https://raw.githubusercontent.com/Sam123mir/IntiHub-LibraryUI/main/docs/logo.png",
+		Icon = Config.Icon or "https://i.ibb.co/yBBtHJyX/logo-deluxe-UI.png",
 		IconSize = Config.IconSize or 22,
 		IconThemed = Config.IconThemed,
 		IconRadius = Config.IconRadius or 0,
-		Folder = Config.Folder or "IntiHub",
+		Folder = Config.Folder or "DeluxeUI",
+		Version = Config.Version or "1.0.0",
 		Resizable = Config.Resizable ~= false,
 		Background = Config.Background,
 		BackgroundImageTransparency = Config.BackgroundImageTransparency or 0,
@@ -146,11 +147,11 @@ return function(Config)
 
 	if not RunService:IsStudio() and Window.Folder and writefile then
 		pcall(function()
-			if not isfolder("IntiHub_Data/" .. Window.Folder) then
-				makefolder("IntiHub_Data/" .. Window.Folder)
+			if not isfolder("DeluxeUI_Data/" .. Window.Folder) then
+				makefolder("DeluxeUI_Data/" .. Window.Folder)
 			end
-			if not isfolder("IntiHub_Data/" .. Window.Folder .. "/assets") then
-				makefolder("IntiHub_Data/" .. Window.Folder .. "/assets")
+			if not isfolder("DeluxeUI_Data/" .. Window.Folder .. "/assets") then
+				makefolder("DeluxeUI_Data/" .. Window.Folder .. "/assets")
 			end
 		end)
 	end
@@ -1064,15 +1065,50 @@ return function(Config)
                             FillDirection = "Horizontal",
                             VerticalAlignment = "Center",
                         }),
-                        (function()
-                            local icon = Creator.Image("sun", "BrandingLogo", 0, Window.Folder, "Topbar", true, true, "Accent")
-                            icon.Size = UDim2.fromOffset(22, 22)
-                            icon.LayoutOrder = 1
-                            return icon
-                        end)(),
+                        New("Frame", { -- Logo & Version Vertical Stack
+                            AutomaticSize = "XY",
+                            BackgroundTransparency = 1,
+                            LayoutOrder = 1,
+                        }, {
+                            New("UIListLayout", {
+                                FillDirection = "Vertical",
+                                HorizontalAlignment = "Center",
+                                VerticalAlignment = "Center",
+                                Padding = UDim.new(0, 2),
+                            }),
+                            (function()
+                                local icon = Creator.Image(Window.Icon, "BrandingLogo", 0, Window.Folder, "Topbar", false, false)
+                                icon.Size = UDim2.fromOffset(22, 22)
+                                icon.LayoutOrder = 1
+                                return icon
+                            end)(),
+                            New("Frame", { -- Version Card
+                                Size = UDim2.new(0, 32, 0, 10),
+                                BackgroundColor3 = Color3.new(1, 1, 1),
+                                BackgroundTransparency = .92,
+                                LayoutOrder = 2,
+                            }, {
+                                New("UICorner", { CornerRadius = UDim.new(0, 2) }),
+                                New("UIStroke", {
+                                    Thickness = 1,
+                                    ThemeTag = { Color = "Accent" },
+                                    Transparency = .6,
+                                }),
+                                New("TextLabel", {
+                                    Text = "v" .. (Window.Version or "1.0"),
+                                    TextSize = 7,
+                                    FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+                                    ThemeTag = { TextColor3 = "Accent" },
+                                    Size = UDim2.new(1, 0, 1, 0),
+                                    BackgroundTransparency = 1,
+                                    TextXAlignment = "Center",
+                                    TextYAlignment = "Center",
+                                })
+                            })
+                        }),
                         -- Separator
                         New("Frame", {
-                            Size = UDim2.new(0, 1, 0, 20),
+                            Size = UDim2.new(0, 1, 0, 24),
                             BackgroundColor3 = Color3.new(1, 1, 1),
                             BackgroundTransparency = .8,
                             BorderSizePixel = 0,

@@ -1,10 +1,10 @@
 {
-    "name": "IntiHub",
+    "name": "DeluxeUI",
     "tree": {
         "$className": "DataModel",
 
         "ReplicatedStorage": {
-            "IntiHub": {
+            "DeluxeUI": {
                 "$path": "src/"
             },
             "build": {

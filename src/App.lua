@@ -1,13 +1,13 @@
 -- User Application Code (Recovered from main.client.lua)
-return function(IntiHub, Loading)
+return function(DeluxeUI, Loading)
     Loading:Update("Inicializando Interfaz...")
     task.wait(0.5)
 
     -- */  Window  /* --
-    local Window = IntiHub:CreateWindow({
+    local Window = DeluxeUI:CreateWindow({
         Title = "Noble Deluxe",
-        Author = "by IntiHub Team",
-        Folder = "intihub_noble",
+        Author = "by DeluxeUI Team",
+        Folder = "deluxeui_noble",
         Icon = "rbxassetid://120997033468887",
         Resizable = true,
         MinSize = Vector2.new(650, 450),
@@ -15,7 +15,7 @@ return function(IntiHub, Loading)
         Transparent = true,
         Acrylic = true,
         OpenButton = {
-            Title = "INTIHUB",
+            Title = "DELUXEUI",
             Enabled = true,
             Draggable = true,
         },
@@ -41,7 +41,7 @@ return function(IntiHub, Loading)
     
     OverviewTab:Section({ Title = "Bienvenido" }):Paragraph({ 
         Title = "Noble Deluxe v2.1", 
-        Content = "Esta es la interfaz definitiva de IntiHub. Diseñada para ofrecer la mejor experiencia visual y funcional en cualquier executor." 
+        Content = "Esta es la interfaz definitiva de DeluxeUI. Diseñada para ofrecer la mejor experiencia visual y funcional en cualquier executor." 
     })
 
     OverviewTab:Section({ Title = "Información del Sistema" }):Paragraph({ 
@@ -73,7 +73,7 @@ return function(IntiHub, Loading)
     ButtonTab:Section({ Title = "Acciones Rápidas" }):Button({
         Title = "Re-ejecutar Scripts",
         Desc = "Refresca y vuelve a cargar los scripts locales.",
-        Callback = function() IntiHub:Notify({ Title = "Sistema", Content = "Scripts recargados.", Duration = 2 }) end
+        Callback = function() DeluxeUI:Notify({ Title = "Sistema", Content = "Scripts recargados.", Duration = 2 }) end
     })
 
     -- */  Input Tab  /* --
@@ -123,7 +123,7 @@ return function(IntiHub, Loading)
     task.wait(0.4)
     
     Window:SelectTab(1)
-    IntiHub:Notify({ Title = "Sistema", Content = "Noble Deluxe listo para usar.", Duration = 4 })
+    DeluxeUI:Notify({ Title = "Sistema", Content = "Noble Deluxe listo para usar.", Duration = 4 })
     
     return Window
 end

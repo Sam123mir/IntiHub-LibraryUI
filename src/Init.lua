@@ -1,4 +1,4 @@
-local IntiHub = {
+local DeluxeUI = {
 	Window = nil,
 	Theme = nil,
 	Creator = require("./modules/Creator"),
@@ -23,11 +23,13 @@ local IntiHub = {
 	StatusBar = nil,
 }
 
+local IntiHub = DeluxeUI -- Backward compatibility alias
+
+DeluxeUI.cloneref = cloneref
+
 local cloneref = (cloneref or clonereference or function(instance)
 	return instance
 end)
-
-IntiHub.cloneref = cloneref
 
 local HttpService = cloneref(game:GetService("HttpService"))
 local Players = cloneref(game:GetService("Players"))
@@ -38,17 +40,14 @@ local LocalPlayer = Players.LocalPlayer or nil
 
 local Package = HttpService:JSONDecode(require("../build/package"))
 if Package then
-	IntiHub.Version = Package.version
+	DeluxeUI.Version = Package.version
 end
 
 local KeySystem = require("./components/KeySystem")
 
-local Creator = IntiHub.Creator
+local Creator = DeluxeUI.Creator
 
 local New = Creator.New
-
---local Tween = Creator.Tween
---local ServicesModule = IntiHub.Services
 
 local Acrylic = require("./utils/Acrylic/Init")
 
@@ -57,28 +56,21 @@ local ProtectGui = protectgui or (syn and syn.protect_gui) or function() end
 local GUIParent = gethui and gethui() or (CoreGui or LocalPlayer:WaitForChild("PlayerGui"))
 
 local UIScaleObj = New("UIScale", {
-	Scale = IntiHub.UIScale,
+	Scale = DeluxeUI.UIScale,
 })
 
-IntiHub.UIScaleObj = UIScaleObj
+DeluxeUI.UIScaleObj = UIScaleObj
 
-IntiHub.ScreenGui = New("ScreenGui", {
-	Name = "IntiHub",
+DeluxeUI.ScreenGui = New("ScreenGui", {
+	Name = "DeluxeUI",
 	Parent = GUIParent,
 	IgnoreGuiInset = true,
 	ScreenInsets = "None",
 	DisplayOrder = 100,
 }, {
-
 	New("Folder", {
 		Name = "Window",
 	}),
-	-- New("Folder", {
-	--     Name = "Notifications"
-	-- }),
-	-- New("Folder", {
-	--     Name = "Dropdowns"
-	-- }),
 	New("Folder", {
 		Name = "KeySystem",
 	}),
@@ -90,107 +82,106 @@ IntiHub.ScreenGui = New("ScreenGui", {
 	}),
 })
 
-IntiHub.NotificationGui = New("ScreenGui", {
-	Name = "IntiHub/Notifications",
+DeluxeUI.NotificationGui = New("ScreenGui", {
+	Name = "DeluxeUI/Notifications",
 	Parent = GUIParent,
 	IgnoreGuiInset = true,
 	DisplayOrder = 2001,
 })
-IntiHub.DropdownGui = New("Folder", {
+DeluxeUI.DropdownGui = New("Folder", {
 	Name = "Dropdowns",
-	Parent = IntiHub.ScreenGui,
+	Parent = DeluxeUI.ScreenGui,
 })
-IntiHub.TooltipGui = New("ScreenGui", {
-	Name = "IntiHub/Tooltips",
+DeluxeUI.TooltipGui = New("ScreenGui", {
+	Name = "DeluxeUI/Tooltips",
 	Parent = GUIParent,
 	IgnoreGuiInset = true,
 })
-ProtectGui(IntiHub.ScreenGui)
-ProtectGui(IntiHub.NotificationGui)
-ProtectGui(IntiHub.TooltipGui)
+ProtectGui(DeluxeUI.ScreenGui)
+ProtectGui(DeluxeUI.NotificationGui)
+ProtectGui(DeluxeUI.TooltipGui)
 
-Creator.Init(IntiHub)
+Creator.Init(DeluxeUI)
 
-function IntiHub:SetParent(parent)
-	if IntiHub.ScreenGui then
-		IntiHub.ScreenGui.Parent = parent
+function DeluxeUI:SetParent(parent)
+	if DeluxeUI.ScreenGui then
+		DeluxeUI.ScreenGui.Parent = parent
 	end
-	if IntiHub.NotificationGui then
-		IntiHub.NotificationGui.Parent = parent
+	if DeluxeUI.NotificationGui then
+		DeluxeUI.NotificationGui.Parent = parent
 	end
-	if IntiHub.TooltipGui then
-		IntiHub.TooltipGui.Parent = parent
+	if DeluxeUI.TooltipGui then
+		DeluxeUI.TooltipGui.Parent = parent
 	end
 end
-math.clamp(IntiHub.TransparencyValue, 0, 1)
+math.clamp(DeluxeUI.TransparencyValue, 0, 1)
 
-local Holder = IntiHub.NotificationModule.Init(IntiHub.NotificationGui)
+local Holder = DeluxeUI.NotificationModule.Init(DeluxeUI.NotificationGui)
 
-function IntiHub:Notify(Config)
+function DeluxeUI:Notify(Config)
 	Config.Holder = Holder.Frame
-	Config.Window = IntiHub.Window
-	--Config.IntiHub = IntiHub
-	return IntiHub.NotificationModule.New(Config)
+	Config.Window = DeluxeUI.Window
+	return DeluxeUI.NotificationModule.New(Config)
 end
 
-function IntiHub:SetNotificationLower(Val)
+function DeluxeUI:SetNotificationLower(Val)
 	Holder.SetLower(Val)
 end
 
-function IntiHub:SetFont(FontId)
+function DeluxeUI:SetFont(FontId)
 	Creator.UpdateFont(FontId)
 end
 
-function IntiHub:OnThemeChange(func)
-	IntiHub.OnThemeChangeFunction = func
+function DeluxeUI:OnThemeChange(func)
+	DeluxeUI.OnThemeChangeFunction = func
 end
 
-function IntiHub:AddTheme(LTheme)
-	IntiHub.Themes[LTheme.Name] = LTheme
+function DeluxeUI:AddTheme(LTheme)
+	DeluxeUI.Themes[LTheme.Name] = LTheme
 	return LTheme
 end
 
-function IntiHub:SetTheme(Value)
-	if IntiHub.Themes[Value] then
-		IntiHub.Theme = IntiHub.Themes[Value]
-		Creator.SetTheme(IntiHub.Themes[Value])
+function DeluxeUI:SetTheme(Value)
+	if DeluxeUI.Themes[Value] then
+		DeluxeUI.Theme = DeluxeUI.Themes[Value]
+		Creator.SetTheme(DeluxeUI.Themes[Value])
 
-		if IntiHub.OnThemeChangeFunction then
-			IntiHub.OnThemeChangeFunction(Value)
+		if DeluxeUI.OnThemeChangeFunction then
+			DeluxeUI.OnThemeChangeFunction(Value)
 		end
 
-		return IntiHub.Themes[Value]
+		return DeluxeUI.Themes[Value]
 	end
 	return nil
 end
 
-function IntiHub:GetThemes()
-	return IntiHub.Themes
+function DeluxeUI:GetThemes()
+	return DeluxeUI.Themes
 end
-function IntiHub:GetCurrentTheme()
-	return IntiHub.Theme.Name
+function DeluxeUI:GetCurrentTheme()
+	return DeluxeUI.Theme.Name
 end
-function IntiHub:GetTransparency()
-	return IntiHub.Transparent or false
+function DeluxeUI:GetTransparency()
+	return DeluxeUI.Transparent or false
 end
-function IntiHub:GetWindowSize()
-	return IntiHub.Window.UIElements.Main.Size
+function DeluxeUI:GetWindowSize()
+	return DeluxeUI.Window.UIElements.Main.Size
 end
-function IntiHub:Localization(LocalizationConfig)
-	return IntiHub.LocalizationModule:New(LocalizationConfig, Creator)
+function DeluxeUI:Localization(LocalizationConfig)
+	return DeluxeUI.LocalizationModule:New(LocalizationConfig, Creator)
 end
 
-function IntiHub:SetLanguage(Value)
+function DeluxeUI:SetLanguage(Value)
 	if Creator.Localization then
 		return Creator.SetLanguage(Value)
 	end
 	return false
 end
 
-function IntiHub:ToggleAcrylic(Value)
-	if IntiHub.Window and IntiHub.Window.AcrylicPaint and IntiHub.Window.AcrylicPaint.Model then
-		IntiHub.Window.Acrylic = Value
-		IntiHub.Window.AcrylicPaint.Model.Transparency = Value and 0.98 or 1
+function DeluxeUI:ToggleAcrylic(Value)
+	if DeluxeUI.Window and DeluxeUI.Window.AcrylicPaint and DeluxeUI.Window.AcrylicPaint.Model then
+		DeluxeUI.Window.Acrylic = Value
+		DeluxeUI.Window.AcrylicPaint.Model.Transparency = Value and 0.98 or 1
 		if Value and typeof(Acrylic) == "table" and Acrylic.Enable then
 			Acrylic.Enable()
 		elseif not Value and typeof(Acrylic) == "table" and Acrylic.Disable then
@@ -199,7 +190,7 @@ function IntiHub:ToggleAcrylic(Value)
 	end
 end
 
-function IntiHub:Gradient(stops, props)
+function DeluxeUI:Gradient(stops, props)
 	local colorSequence = {}
 	local transparencySequence = {}
 
@@ -246,46 +237,45 @@ function IntiHub:Gradient(stops, props)
 	return gradientData
 end
 
-function IntiHub:Popup(PopupConfig)
-	PopupConfig.IntiHub = IntiHub
+function DeluxeUI:Popup(PopupConfig)
+	PopupConfig.IntiHub = DeluxeUI
 	return require("./components/popup/Init").new(PopupConfig)
 end
 
-IntiHub.Themes = require("./themes/Init")(IntiHub)
+DeluxeUI.Themes = require("./themes/Init")(DeluxeUI)
 
-Creator.Themes = IntiHub.Themes
+Creator.Themes = DeluxeUI.Themes
 
-IntiHub:SetTheme("Dark")
-IntiHub:SetLanguage(Creator.Language)
+DeluxeUI:SetTheme("Oceanic")
+DeluxeUI:SetLanguage(Creator.Language)
 
-function IntiHub:CreateWindow(Config)
+function DeluxeUI:CreateWindow(Config)
 	local CreateWindow = require("./components/window/Init")
 
 	if not RunService:IsStudio() and writefile then
 		pcall(function()
-			if not isfolder("IntiHub_Data") then
-				makefolder("IntiHub_Data")
+			if not isfolder("DeluxeUI_Data") then
+				makefolder("DeluxeUI_Data")
 			end
-			local targetFolder = "IntiHub_Data/" .. (Config.Folder or Config.Title or "Default")
+			local targetFolder = "DeluxeUI_Data/" .. (Config.Folder or Config.Title or "Default")
 			if not isfolder(targetFolder) then
 				makefolder(targetFolder)
 			end
 		end)
 	end
 
-	Config.IntiHub = IntiHub
-	Config.Parent = IntiHub.ScreenGui.Window
+	Config.IntiHub = DeluxeUI
+	Config.Parent = DeluxeUI.ScreenGui.Window
 
-	if IntiHub.Window then
+	if DeluxeUI.Window then
 		warn("You cannot create more than one window")
 		return
 	end
 
 	local CanLoadWindow = true
 
-	local Theme = IntiHub.Themes[Config.Theme or "Dark"]
+	local Theme = DeluxeUI.Themes[Config.Theme or "Oceanic"]
 
-	--IntiHub.Theme = Theme
 	Creator.SetTheme(Theme)
 
 	local hwid = gethwid or function()
@@ -356,7 +346,7 @@ function IntiHub:CreateWindow(Config)
 					local isSuccess = false
 
 					for _, i in next, Config.KeySystem.API do
-						local serviceData = IntiHub.Services[i.Type]
+						local serviceData = DeluxeUI.Services[i.Type]
 						if serviceData then
 							local args = {}
 							for _, argName in next, serviceData.Args do
@@ -391,23 +381,23 @@ function IntiHub:CreateWindow(Config)
 
 	local Window = CreateWindow(Config)
 
-	IntiHub.Transparent = Config.Transparent
-	IntiHub.Window = Window
+	DeluxeUI.Transparent = Config.Transparent
+	DeluxeUI.Window = Window
 
-	IntiHub.StatusBar = require("./components/ui/StatusBar").New({
-		IntiHub = IntiHub,
+	DeluxeUI.StatusBar = require("./components/ui/StatusBar").New({
+		IntiHub = DeluxeUI,
 		Window = Window,
 	})
 
 	Window:OnDestroy(function()
-		if IntiHub.StatusBar then
-			IntiHub.StatusBar:Destroy()
-			IntiHub.StatusBar = nil
+		if DeluxeUI.StatusBar then
+			DeluxeUI.StatusBar:Destroy()
+			DeluxeUI.StatusBar = nil
 		end
 	end)
 
-	if IntiHub.StatusBar then
-		IntiHub.StatusBar:Visible(true)
+	if DeluxeUI.StatusBar then
+		DeluxeUI.StatusBar:Visible(true)
 	end
 
 	if Config.Acrylic then
@@ -417,4 +407,4 @@ function IntiHub:CreateWindow(Config)
 	return Window
 end
 
-return IntiHub
+return DeluxeUI

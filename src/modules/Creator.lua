@@ -730,7 +730,7 @@ function Creator.GetAsset(Url, Folder, Type, Name)
 	Name = Creator.SanitizeFilename(Name or "Asset")
 	Type = Type or "Image"
 
-	local FileName = "IntiHub_Data/" .. Folder .. "/assets/." .. Type .. "-" .. Name .. ".png"
+	local FileName = "DeluxeUI_Data/" .. Folder .. "/assets/." .. Type .. "-" .. Name .. ".png"
 
 	if not RunService:IsStudio() and isfile and isfile(FileName) then
 		local assetSuccess, assetResult = pcall(function()
@@ -753,14 +753,14 @@ function Creator.GetAsset(Url, Folder, Type, Name)
 
 			if not RunService:IsStudio() and writefile then
 				pcall(function()
-					if not isfolder("IntiHub_Data") then
-						makefolder("IntiHub_Data")
+					if not isfolder("DeluxeUI_Data") then
+						makefolder("DeluxeUI_Data")
 					end
-					if not isfolder("IntiHub_Data/" .. Folder) then
-						makefolder("IntiHub_Data/" .. Folder)
+					if not isfolder("DeluxeUI_Data/" .. Folder) then
+						makefolder("DeluxeUI_Data/" .. Folder)
 					end
-					if not isfolder("IntiHub_Data/" .. Folder .. "/assets") then
-						makefolder("IntiHub_Data/" .. Folder .. "/assets")
+					if not isfolder("DeluxeUI_Data/" .. Folder .. "/assets") then
+						makefolder("DeluxeUI_Data/" .. Folder .. "/assets")
 					end
 				end)
 				pcall(function()
@@ -821,7 +821,7 @@ function Creator.Image(Img, Name, Corner, Folder, Type, IsThemeTag, Themed, Them
 		}).IconFrame
 		IconLabel.Parent = ImageFrame
 	elseif string.find(Img, "http") then
-		local FileName = "IntiHub_Data/" .. Folder .. "/assets/." .. Type .. "-" .. Name .. ".png"
+		local FileName = "DeluxeUI_Data/" .. Folder .. "/assets/." .. Type .. "-" .. Name .. ".png"
 		
 		if not RunService:IsStudio() and isfile and isfile(FileName) then
 			local assetSuccess, assetResult = pcall(function()

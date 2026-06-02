@@ -1,11 +1,12 @@
 --[[
-    ___       __  _ __  __      __  
-   /  _/___  / /_(_) / / /_  __/ /_ 
-   / // __ \/ __/ / /_/ / / / / __ \
- _/ // / / / /_/ / __  / /_/ / /_/ /
-/___/_/ /_/\__/_/_/ /_/\__,_/_.___/ 
+   ___        _                 _   _ ___ 
+  / _ \  ___ | |_   _ _ __  ___| | | |_ _|
+ | | | |/ _ \| | | | | \_ \/ _ \ | | || | 
+ | |_| |  __/| | |_| | |_)  __/|_| |_|| | 
+  \___/ \___||_|\__,_| .__/ \___|\___/|___|
+                     |_|                  
                                     
-    v1.7.0  |  2026-06-02  |  Roblox UI Library - Noble Deluxe v2.0
+    v1.7.0  |  2026-06-02  |  Roblox UI Library - DeluxeUI v2.0
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -1163,7 +1164,7 @@ do
             Name = Creator.SanitizeFilename(Name or 'Asset')
             Type = Type or 'Image'
 
-            local FileName = 'IntiHub_Data/' .. Folder .. '/assets/.' .. Type .. '-' .. Name .. '.png'
+            local FileName = 'DeluxeUI_Data/' .. Folder .. '/assets/.' .. Type .. '-' .. Name .. '.png'
 
             if not RunService:IsStudio() and isfile and isfile(FileName) then
                 local assetSuccess, assetResult = pcall(function()
@@ -1185,14 +1186,14 @@ do
 
                     if not RunService:IsStudio() and writefile then
                         pcall(function()
-                            if not isfolder'IntiHub_Data' then
-                                makefolder'IntiHub_Data'
+                            if not isfolder'DeluxeUI_Data' then
+                                makefolder'DeluxeUI_Data'
                             end
-                            if not isfolder('IntiHub_Data/' .. Folder) then
-                                makefolder('IntiHub_Data/' .. Folder)
+                            if not isfolder('DeluxeUI_Data/' .. Folder) then
+                                makefolder('DeluxeUI_Data/' .. Folder)
                             end
-                            if not isfolder('IntiHub_Data/' .. Folder .. '/assets') then
-                                makefolder('IntiHub_Data/' .. Folder .. '/assets')
+                            if not isfolder('DeluxeUI_Data/' .. Folder .. '/assets') then
+                                makefolder('DeluxeUI_Data/' .. Folder .. '/assets')
                             end
                         end)
                         pcall(function()
@@ -1265,7 +1266,7 @@ do
 
                 IconLabel.Parent = ImageFrame
             elseif string.find(Img, 'http') then
-                local FileName = 'IntiHub_Data/' .. Folder .. '/assets/.' .. Type .. '-' .. Name .. '.png'
+                local FileName = 'DeluxeUI_Data/' .. Folder .. '/assets/.' .. Type .. '-' .. Name .. '.png'
 
                 if not RunService:IsStudio() and isfile and isfile(FileName) then
                     local assetSuccess, assetResult = pcall(function()
@@ -2773,38 +2774,7 @@ do
         }
     end
     function __DARKLUA_BUNDLE_MODULES.k()
-        return 
-[[{
-    "name": "IntiHub",
-    "version": "1.7.0",
-    "main": "./dist/main.lua",
-    "repository": "https://github.com/Sam123mir/IntiHub-LibraryUI",
-    "discord": "{{DISCORD_URL}}",
-    "author": "Sammir_Inti",
-    "description": "Roblox UI Library for scripts",
-    "license": "MIT",
-    "scripts": {
-        "dev": "bash build/build.sh dev $INPUT_FILE",
-        "build": "bash build/build.sh build $INPUT_FILE",
-        "live": "python -m http.server 8642",
-        "watch": "chokidar . -i 'node_modules' -i 'dist' -i 'build' -c 'npm run dev --'",
-        "live-build": "concurrently \"npm run live\" \"npm run watch --\"",
-        "example-live-build": "INPUT_FILE=main_example.lua npm run live-build",
-        "updater": "python3 updater/main.py"
-    },
-    "keywords": [
-        "ui-library",
-        "ui-design",
-        "script",
-        "script-hub",
-        "exploiting"
-    ],
-    "devDependencies": {
-        "chokidar-cli": "^3.0.0",
-        "concurrently": "^9.2.0"
-    }
-}
-]]
+        return '\r\n{\r\n    "name": "DeluxeUI",\r\n    "version": "1.7.0",\r\n    "main": "./dist/main.lua",\r\n    "repository": "https://github.com/Sam123mir/IntiHub-LibraryUI",\r\n    "discord": "{{DISCORD_URL}}",\r\n    "author": "Sammir_Inti",\r\n    "description": "Roblox UI Library for scripts",\r\n    "license": "MIT",\r\n    "scripts": {\r\n        "dev": "bash build/build.sh dev $INPUT_FILE",\r\n        "build": "bash build/build.sh build $INPUT_FILE",\r\n        "live": "python -m http.server 8642",\r\n        "watch": "chokidar . -i \'node_modules\' -i \'dist\' -i \'build\' -c \'npm run dev --\'",\r\n        "live-build": "concurrently \\"npm run live\\" \\"npm run watch --\\"",\r\n        "example-live-build": "INPUT_FILE=main_example.lua npm run live-build",\r\n        "updater": "python3 updater/main.py"\r\n    },\r\n    "keywords": [\r\n        "ui-library",\r\n        "ui-design",\r\n        "script",\r\n        "script-hub",\r\n        "exploiting"\r\n    ],\r\n    "devDependencies": {\r\n        "chokidar-cli": "^3.0.0",\r\n        "concurrently": "^9.2.0"\r\n    }\r\n}\r\n'
     end
     function __DARKLUA_BUNDLE_MODULES.l()
         local Button = {}
@@ -5765,14 +5735,14 @@ do
 
             Window = WindowTable
             ConfigManager.Folder = Window.Folder
-            ConfigManager.Path = 'IntiHub_Data/' .. tostring(ConfigManager.Folder) .. '/config/'
+            ConfigManager.Path = 'DeluxeUI_Data/' .. tostring(ConfigManager.Folder) .. '/config/'
 
             pcall(function()
-                if not isfolder'IntiHub_Data' then
-                    makefolder'IntiHub_Data'
+                if not isfolder'DeluxeUI_Data' then
+                    makefolder'DeluxeUI_Data'
                 end
-                if not isfolder('IntiHub_Data/' .. tostring(ConfigManager.Folder)) then
-                    makefolder('IntiHub_Data/' .. tostring(ConfigManager.Folder))
+                if not isfolder('DeluxeUI_Data/' .. tostring(ConfigManager.Folder)) then
+                    makefolder('DeluxeUI_Data/' .. tostring(ConfigManager.Folder))
                 end
                 if not isfolder(ConfigManager.Path) then
                     makefolder(ConfigManager.Path)
@@ -11550,12 +11520,12 @@ do
             local Window = {
                 Title = Config.Title or 'UI Library',
                 Author = Config.Author,
-                Icon = Config.Icon or 
-[[https://raw.githubusercontent.com/Sam123mir/IntiHub-LibraryUI/main/docs/logo.png]],
+                Icon = Config.Icon or 'https://i.ibb.co/yBBtHJyX/logo-deluxe-UI.png',
                 IconSize = Config.IconSize or 22,
                 IconThemed = Config.IconThemed,
                 IconRadius = Config.IconRadius or 0,
-                Folder = Config.Folder or 'IntiHub',
+                Folder = Config.Folder or 'DeluxeUI',
+                Version = Config.Version or '1.0.0',
                 Resizable = Config.Resizable ~= false,
                 Background = Config.Background,
                 BackgroundImageTransparency = Config.BackgroundImageTransparency or 0,
@@ -11632,11 +11602,11 @@ do
             end
             if not RunService:IsStudio() and Window.Folder and writefile then
                 pcall(function()
-                    if not isfolder('IntiHub_Data/' .. Window.Folder) then
-                        makefolder('IntiHub_Data/' .. Window.Folder)
+                    if not isfolder('DeluxeUI_Data/' .. Window.Folder) then
+                        makefolder('DeluxeUI_Data/' .. Window.Folder)
                     end
-                    if not isfolder('IntiHub_Data/' .. Window.Folder .. '/assets') then
-                        makefolder('IntiHub_Data/' .. Window.Folder .. '/assets')
+                    if not isfolder('DeluxeUI_Data/' .. Window.Folder .. '/assets') then
+                        makefolder('DeluxeUI_Data/' .. Window.Folder .. '/assets')
                     end
                 end)
             end
@@ -12549,16 +12519,57 @@ do
                                     FillDirection = 'Horizontal',
                                     VerticalAlignment = 'Center',
                                 }),
-                                (function()
-                                    local icon = Creator.Image('sun', 'BrandingLogo', 0, Window.Folder, 'Topbar', true, true, 'Accent')
-
-                                    icon.Size = UDim2.fromOffset(22, 22)
-                                    icon.LayoutOrder = 1
-
-                                    return icon
-                                end)(),
                                 New('Frame', {
-                                    Size = UDim2.new(0, 1, 0, 20),
+                                    AutomaticSize = 'XY',
+                                    BackgroundTransparency = 1,
+                                    LayoutOrder = 1,
+                                }, {
+                                    New('UIListLayout', {
+                                        FillDirection = 'Vertical',
+                                        HorizontalAlignment = 'Center',
+                                        VerticalAlignment = 'Center',
+                                        Padding = UDim.new(0, 2),
+                                    }),
+                                    (function()
+                                        local icon = Creator.Image(Window.Icon, 'BrandingLogo', 0, Window.Folder, 'Topbar', false, false)
+
+                                        icon.Size = UDim2.fromOffset(22, 22)
+                                        icon.LayoutOrder = 1
+
+                                        return icon
+                                    end)(),
+                                    New('Frame', {
+                                        Size = UDim2.new(0, 32, 0, 10),
+                                        BackgroundColor3 = Color3.new(1, 1, 1),
+                                        BackgroundTransparency = 0.92,
+                                        LayoutOrder = 2,
+                                    }, {
+                                        New('UICorner', {
+                                            CornerRadius = UDim.new(0, 2),
+                                        }),
+                                        New('UIStroke', {
+                                            Thickness = 1,
+                                            ThemeTag = {
+                                                Color = 'Accent',
+                                            },
+                                            Transparency = 0.6,
+                                        }),
+                                        New('TextLabel', {
+                                            Text = 'v' .. (Window.Version or '1.0'),
+                                            TextSize = 7,
+                                            FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+                                            ThemeTag = {
+                                                TextColor3 = 'Accent',
+                                            },
+                                            Size = UDim2.new(1, 0, 1, 0),
+                                            BackgroundTransparency = 1,
+                                            TextXAlignment = 'Center',
+                                            TextYAlignment = 'Center',
+                                        }),
+                                    }),
+                                }),
+                                New('Frame', {
+                                    Size = UDim2.new(0, 1, 0, 24),
                                     BackgroundColor3 = Color3.new(1, 1, 1),
                                     BackgroundTransparency = 0.8,
                                     BorderSizePixel = 0,
@@ -14242,7 +14253,7 @@ do
         return StatusBar
     end
     function __DARKLUA_BUNDLE_MODULES.ac()
-        local IntiHub = {
+        local DeluxeUI = {
             Window = nil,
             Theme = nil,
             Creator = __DARKLUA_BUNDLE_MODULES.load'c',
@@ -14260,12 +14271,12 @@ do
             UIScaleObj = nil,
             StatusBar = nil,
         }
+
+        DeluxeUI.cloneref = cloneref
+
         local cloneref = (cloneref or clonereference or function(instance)
             return instance
         end)
-
-        IntiHub.cloneref = cloneref
-
         local HttpService = cloneref(game:GetService'HttpService')
         local Players = cloneref(game:GetService'Players')
         local CoreGui = cloneref(game:GetService'CoreGui')
@@ -14274,22 +14285,22 @@ do
         local Package = HttpService:JSONDecode(__DARKLUA_BUNDLE_MODULES.load'k')
 
         if Package then
-            IntiHub.Version = Package.version
+            DeluxeUI.Version = Package.version
         end
 
         local KeySystem = __DARKLUA_BUNDLE_MODULES.load'o'
-        local Creator = IntiHub.Creator
+        local Creator = DeluxeUI.Creator
         local New = Creator.New
         local Acrylic = __DARKLUA_BUNDLE_MODULES.load's'
         local ProtectGui = protectgui or (syn and syn.protect_gui) or function() end
         local GUIParent = gethui and gethui() or (CoreGui or LocalPlayer:WaitForChild'PlayerGui')
         local UIScaleObj = New('UIScale', {
-            Scale = IntiHub.UIScale,
+            Scale = DeluxeUI.UIScale,
         })
 
-        IntiHub.UIScaleObj = UIScaleObj
-        IntiHub.ScreenGui = New('ScreenGui', {
-            Name = 'IntiHub',
+        DeluxeUI.UIScaleObj = UIScaleObj
+        DeluxeUI.ScreenGui = New('ScreenGui', {
+            Name = 'DeluxeUI',
             Parent = GUIParent,
             IgnoreGuiInset = true,
             ScreenInsets = 'None',
@@ -14308,104 +14319,104 @@ do
                 Name = 'ToolTips',
             }),
         })
-        IntiHub.NotificationGui = New('ScreenGui', {
-            Name = 'IntiHub/Notifications',
+        DeluxeUI.NotificationGui = New('ScreenGui', {
+            Name = 'DeluxeUI/Notifications',
             Parent = GUIParent,
             IgnoreGuiInset = true,
             DisplayOrder = 2001,
         })
-        IntiHub.DropdownGui = New('Folder', {
+        DeluxeUI.DropdownGui = New('Folder', {
             Name = 'Dropdowns',
-            Parent = IntiHub.ScreenGui,
+            Parent = DeluxeUI.ScreenGui,
         })
-        IntiHub.TooltipGui = New('ScreenGui', {
-            Name = 'IntiHub/Tooltips',
+        DeluxeUI.TooltipGui = New('ScreenGui', {
+            Name = 'DeluxeUI/Tooltips',
             Parent = GUIParent,
             IgnoreGuiInset = true,
         })
 
-        ProtectGui(IntiHub.ScreenGui)
-        ProtectGui(IntiHub.NotificationGui)
-        ProtectGui(IntiHub.TooltipGui)
-        Creator.Init(IntiHub)
+        ProtectGui(DeluxeUI.ScreenGui)
+        ProtectGui(DeluxeUI.NotificationGui)
+        ProtectGui(DeluxeUI.TooltipGui)
+        Creator.Init(DeluxeUI)
 
-        function IntiHub:SetParent(parent)
-            if IntiHub.ScreenGui then
-                IntiHub.ScreenGui.Parent = parent
+        function DeluxeUI:SetParent(parent)
+            if DeluxeUI.ScreenGui then
+                DeluxeUI.ScreenGui.Parent = parent
             end
-            if IntiHub.NotificationGui then
-                IntiHub.NotificationGui.Parent = parent
+            if DeluxeUI.NotificationGui then
+                DeluxeUI.NotificationGui.Parent = parent
             end
-            if IntiHub.TooltipGui then
-                IntiHub.TooltipGui.Parent = parent
+            if DeluxeUI.TooltipGui then
+                DeluxeUI.TooltipGui.Parent = parent
             end
         end
 
-        math.clamp(IntiHub.TransparencyValue, 0, 1)
+        math.clamp(DeluxeUI.TransparencyValue, 0, 1)
 
-        local Holder = IntiHub.NotificationModule.Init(IntiHub.NotificationGui)
+        local Holder = DeluxeUI.NotificationModule.Init(DeluxeUI.NotificationGui)
 
-        function IntiHub:Notify(Config)
+        function DeluxeUI:Notify(Config)
             Config.Holder = Holder.Frame
-            Config.Window = IntiHub.Window
+            Config.Window = DeluxeUI.Window
 
-            return IntiHub.NotificationModule.New(Config)
+            return DeluxeUI.NotificationModule.New(Config)
         end
-        function IntiHub:SetNotificationLower(Val)
+        function DeluxeUI:SetNotificationLower(Val)
             Holder.SetLower(Val)
         end
-        function IntiHub:SetFont(FontId)
+        function DeluxeUI:SetFont(FontId)
             Creator.UpdateFont(FontId)
         end
-        function IntiHub:OnThemeChange(func)
-            IntiHub.OnThemeChangeFunction = func
+        function DeluxeUI:OnThemeChange(func)
+            DeluxeUI.OnThemeChangeFunction = func
         end
-        function IntiHub:AddTheme(LTheme)
-            IntiHub.Themes[LTheme.Name] = LTheme
+        function DeluxeUI:AddTheme(LTheme)
+            DeluxeUI.Themes[LTheme.Name] = LTheme
 
             return LTheme
         end
-        function IntiHub:SetTheme(Value)
-            if IntiHub.Themes[Value] then
-                IntiHub.Theme = IntiHub.Themes[Value]
+        function DeluxeUI:SetTheme(Value)
+            if DeluxeUI.Themes[Value] then
+                DeluxeUI.Theme = DeluxeUI.Themes[Value]
 
-                Creator.SetTheme(IntiHub.Themes[Value])
+                Creator.SetTheme(DeluxeUI.Themes[Value])
 
-                if IntiHub.OnThemeChangeFunction then
-                    IntiHub.OnThemeChangeFunction(Value)
+                if DeluxeUI.OnThemeChangeFunction then
+                    DeluxeUI.OnThemeChangeFunction(Value)
                 end
 
-                return IntiHub.Themes[Value]
+                return DeluxeUI.Themes[Value]
             end
 
             return nil
         end
-        function IntiHub:GetThemes()
-            return IntiHub.Themes
+        function DeluxeUI:GetThemes()
+            return DeluxeUI.Themes
         end
-        function IntiHub:GetCurrentTheme()
-            return IntiHub.Theme.Name
+        function DeluxeUI:GetCurrentTheme()
+            return DeluxeUI.Theme.Name
         end
-        function IntiHub:GetTransparency()
-            return IntiHub.Transparent or false
+        function DeluxeUI:GetTransparency()
+            return DeluxeUI.Transparent or false
         end
-        function IntiHub:GetWindowSize()
-            return IntiHub.Window.UIElements.Main.Size
+        function DeluxeUI:GetWindowSize()
+            return DeluxeUI.Window.UIElements.Main.Size
         end
-        function IntiHub:Localization(LocalizationConfig)
-            return IntiHub.LocalizationModule:New(LocalizationConfig, Creator)
+        function DeluxeUI:Localization(LocalizationConfig)
+            return DeluxeUI.LocalizationModule:New(LocalizationConfig, Creator)
         end
-        function IntiHub:SetLanguage(Value)
+        function DeluxeUI:SetLanguage(Value)
             if Creator.Localization then
                 return Creator.SetLanguage(Value)
             end
 
             return false
         end
-        function IntiHub:ToggleAcrylic(Value)
-            if IntiHub.Window and IntiHub.Window.AcrylicPaint and IntiHub.Window.AcrylicPaint.Model then
-                IntiHub.Window.Acrylic = Value
-                IntiHub.Window.AcrylicPaint.Model.Transparency = Value and 0.98 or 1
+        function DeluxeUI:ToggleAcrylic(Value)
+            if DeluxeUI.Window and DeluxeUI.Window.AcrylicPaint and DeluxeUI.Window.AcrylicPaint.Model then
+                DeluxeUI.Window.Acrylic = Value
+                DeluxeUI.Window.AcrylicPaint.Model.Transparency = Value and 0.98 or 1
 
                 if Value and typeof(Acrylic) == 'table' and Acrylic.Enable then
                     Acrylic.Enable()
@@ -14414,7 +14425,7 @@ do
                 end
             end
         end
-        function IntiHub:Gradient(stops, props)
+        function DeluxeUI:Gradient(stops, props)
             local colorSequence = {}
             local transparencySequence = {}
 
@@ -14462,28 +14473,28 @@ do
 
             return gradientData
         end
-        function IntiHub:Popup(PopupConfig)
-            PopupConfig.IntiHub = IntiHub
+        function DeluxeUI:Popup(PopupConfig)
+            PopupConfig.IntiHub = DeluxeUI
 
             return __DARKLUA_BUNDLE_MODULES.load't'.new(PopupConfig)
         end
 
-        IntiHub.Themes = __DARKLUA_BUNDLE_MODULES.load'u'(IntiHub)
-        Creator.Themes = IntiHub.Themes
+        DeluxeUI.Themes = __DARKLUA_BUNDLE_MODULES.load'u'(DeluxeUI)
+        Creator.Themes = DeluxeUI.Themes
 
-        IntiHub:SetTheme'Dark'
-        IntiHub:SetLanguage(Creator.Language)
+        DeluxeUI:SetTheme'Oceanic'
+        DeluxeUI:SetLanguage(Creator.Language)
 
-        function IntiHub:CreateWindow(Config)
+        function DeluxeUI:CreateWindow(Config)
             local CreateWindow = __DARKLUA_BUNDLE_MODULES.load'aa'
 
             if not RunService:IsStudio() and writefile then
                 pcall(function()
-                    if not isfolder'IntiHub_Data' then
-                        makefolder'IntiHub_Data'
+                    if not isfolder'DeluxeUI_Data' then
+                        makefolder'DeluxeUI_Data'
                     end
 
-                    local targetFolder = 'IntiHub_Data/' .. (Config.Folder or Config.Title or 'Default')
+                    local targetFolder = 'DeluxeUI_Data/' .. (Config.Folder or Config.Title or 'Default')
 
                     if not isfolder(targetFolder) then
                         makefolder(targetFolder)
@@ -14491,17 +14502,17 @@ do
                 end)
             end
 
-            Config.IntiHub = IntiHub
-            Config.Parent = IntiHub.ScreenGui.Window
+            Config.IntiHub = DeluxeUI
+            Config.Parent = DeluxeUI.ScreenGui.Window
 
-            if IntiHub.Window then
+            if DeluxeUI.Window then
                 warn'You cannot create more than one window'
 
                 return
             end
 
             local CanLoadWindow = true
-            local Theme = IntiHub.Themes[Config.Theme or 'Dark']
+            local Theme = DeluxeUI.Themes[Config.Theme or 'Oceanic']
 
             Creator.SetTheme(Theme)
 
@@ -14571,7 +14582,7 @@ do
                             local isSuccess = false
 
                             for _, i in next, Config.KeySystem.API do
-                                local serviceData = IntiHub.Services[i.Type]
+                                local serviceData = DeluxeUI.Services[i.Type]
 
                                 if serviceData then
                                     local args = {}
@@ -14611,23 +14622,23 @@ do
 
             local Window = CreateWindow(Config)
 
-            IntiHub.Transparent = Config.Transparent
-            IntiHub.Window = Window
-            IntiHub.StatusBar = __DARKLUA_BUNDLE_MODULES.load'ab'.New{
-                IntiHub = IntiHub,
+            DeluxeUI.Transparent = Config.Transparent
+            DeluxeUI.Window = Window
+            DeluxeUI.StatusBar = __DARKLUA_BUNDLE_MODULES.load'ab'.New{
+                IntiHub = DeluxeUI,
                 Window = Window,
             }
 
             Window:OnDestroy(function()
-                if IntiHub.StatusBar then
-                    IntiHub.StatusBar:Destroy()
+                if DeluxeUI.StatusBar then
+                    DeluxeUI.StatusBar:Destroy()
 
-                    IntiHub.StatusBar = nil
+                    DeluxeUI.StatusBar = nil
                 end
             end)
 
-            if IntiHub.StatusBar then
-                IntiHub.StatusBar:Visible(true)
+            if DeluxeUI.StatusBar then
+                DeluxeUI.StatusBar:Visible(true)
             end
             if Config.Acrylic then
                 Acrylic.init()
@@ -14636,7 +14647,7 @@ do
             return Window
         end
 
-        return IntiHub
+        return DeluxeUI
     end
     function __DARKLUA_BUNDLE_MODULES.ad()
         local Loading = {}
@@ -14784,14 +14795,14 @@ do
         return Loading
     end
     function __DARKLUA_BUNDLE_MODULES.ae()
-        return function(IntiHub, Loading)
+        return function(DeluxeUI, Loading)
             Loading:Update'Inicializando Interfaz...'
             task.wait(0.5)
 
-            local Window = IntiHub:CreateWindow{
+            local Window = DeluxeUI:CreateWindow{
                 Title = 'Noble Deluxe',
-                Author = 'by IntiHub Team',
-                Folder = 'intihub_noble',
+                Author = 'by DeluxeUI Team',
+                Folder = 'deluxeui_noble',
                 Icon = 'rbxassetid://120997033468887',
                 Resizable = true,
                 MinSize = Vector2.new(650, 450),
@@ -14799,7 +14810,7 @@ do
                 Transparent = true,
                 Acrylic = true,
                 OpenButton = {
-                    Title = 'INTIHUB',
+                    Title = 'DELUXEUI',
                     Enabled = true,
                     Draggable = true,
                 },
@@ -14828,7 +14839,7 @@ do
                 Title = 'Bienvenido',
             }:Paragraph{
                 Title = 'Noble Deluxe v2.1',
-                Content = 'Esta es la interfaz definitiva de IntiHub. Dise\u{f1}ada para ofrecer la mejor experiencia visual y funcional en cualquier executor.',
+                Content = 'Esta es la interfaz definitiva de DeluxeUI. Dise\u{f1}ada para ofrecer la mejor experiencia visual y funcional en cualquier executor.',
             }
             OverviewTab:Section{
                 Title = 'Informaci\u{f3}n del Sistema',
@@ -14874,7 +14885,7 @@ do
                 Title = 'Re-ejecutar Scripts',
                 Desc = 'Refresca y vuelve a cargar los scripts locales.',
                 Callback = function()
-                    IntiHub:Notify{
+                    DeluxeUI:Notify{
                         Title = 'Sistema',
                         Content = 'Scripts recargados.',
                         Duration = 2,
@@ -14968,7 +14979,7 @@ do
             Loading:Update'Finalizando...'
             task.wait(0.4)
             Window:SelectTab(1)
-            IntiHub:Notify{
+            DeluxeUI:Notify{
                 Title = 'Sistema',
                 Content = 'Noble Deluxe listo para usar.',
                 Duration = 4,
@@ -14979,22 +14990,22 @@ do
     end
 end
 
-local IntiHub = __DARKLUA_BUNDLE_MODULES.load'ac'
+local DeluxeUI = __DARKLUA_BUNDLE_MODULES.load'ac'
 local Loading = __DARKLUA_BUNDLE_MODULES.load'ad'
 local App = __DARKLUA_BUNDLE_MODULES.load'ae'
 local loader = Loading.new{
-    IntiHub = IntiHub,
+    IntiHub = DeluxeUI,
     InitialMessage = 'Verificando Versi\u{f3}n Noble Deluxe...',
 }
 
 task.wait(1.2)
 loader:Update'Cargando Motor Gr\u{e1}fico (DarkLua)...'
 task.wait(0.6)
-loader:Update'Sincronizando con IntiHub API...'
+loader:Update'Sincronizando con DeluxeUI API...'
 task.wait(0.8)
 
 local success, result = pcall(function()
-    return App(IntiHub, loader)
+    return App(DeluxeUI, loader)
 end)
 
 if success then
@@ -15010,5 +15021,5 @@ if success then
     loader:Destroy()
 else
     loader:Update('Error en el arranque: ' .. tostring(result))
-    warn('[IntiHub Critical Error]: ' .. tostring(result))
+    warn('[DeluxeUI Critical Error]: ' .. tostring(result))
 end

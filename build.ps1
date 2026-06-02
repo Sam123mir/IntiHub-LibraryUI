@@ -1,7 +1,7 @@
 # build.ps1
-# Script to build IntiHub v1.7.0 Noble Deluxe
+# Script to build DeluxeUI v1.7.0 Noble Deluxe
 
-Write-Host "Iniciando build de IntiHub v1.7.0..." -ForegroundColor Cyan
+Write-Host "Iniciando build de DeluxeUI v1.7.0..." -ForegroundColor Cyan
 
 # 1. Procesar con DarkLua
 Write-Host "Ejecutando DarkLua (Bootstrap)..."
@@ -19,7 +19,7 @@ $bundle = Get-Content -Path "dist/temp.lua" -Raw
 # 3. Reemplazar placeholders en el header
 $version = "1.7.0"
 $date = Get-Date -Format "yyyy-MM-dd"
-$description = "Roblox UI Library - Noble Deluxe v2.0"
+$description = "Roblox UI Library - DeluxeUI v2.0"
 $repository = "https://github.com/Sam123mir/IntiHub-LibraryUI"
 $discord = "https://discord.gg/intihub"
 $license = "MIT"

@@ -1,11 +1,11 @@
--- IntiHub Noble Deluxe Bootstrap
-local IntiHub = require("./Init")
+-- DeluxeUI Noble Deluxe Bootstrap
+local DeluxeUI = require("./Init")
 local Loading = require("./components/ui/Loading")
 local App = require("./App")
 
 -- Start Premium Loading Experience
 local loader = Loading.new({
-    IntiHub = IntiHub,
+    IntiHub = DeluxeUI,
     InitialMessage = "Verificando Versión Noble Deluxe..."
 })
 
@@ -15,12 +15,12 @@ task.wait(1.2) -- Aesthetic pause
 loader:Update("Cargando Motor Gráfico (DarkLua)...")
 task.wait(0.6)
 
-loader:Update("Sincronizando con IntiHub API...")
+loader:Update("Sincronizando con DeluxeUI API...")
 task.wait(0.8)
 
 -- Initialize Application
 local success, result = pcall(function()
-    return App(IntiHub, loader)
+    return App(DeluxeUI, loader)
 end)
 
 if success then
@@ -35,6 +35,6 @@ if success then
     loader:Destroy()
 else
     loader:Update("Error en el arranque: " .. tostring(result))
-    warn("[IntiHub Critical Error]: " .. tostring(result))
+    warn("[DeluxeUI Critical Error]: " .. tostring(result))
     -- Don't destroy loader so user can see the error
 end

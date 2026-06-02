@@ -27,10 +27,10 @@ end
 
 -- */ Window Configuration /* --
 local Window = IntiHub:CreateWindow({
-    Title = "INTIHUB | Noble Deluxe Edition",
+    Title = "DELUXEUI | Noble Deluxe Edition",
     Author = "by Sammir_Inti",
     Version = "2.2.0",
-    Folder = "IntiHub_Noble",
+    Folder = "DeluxeUI_Noble",
     Icon = "lucide:crown",
     HideSearchBar = false, -- 🟢 Explicitly show the search bar
     NewElements = true,
