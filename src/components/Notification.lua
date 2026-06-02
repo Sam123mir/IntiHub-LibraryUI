@@ -2,6 +2,16 @@ local Creator = require("../modules/Creator")
 local New = Creator.New
 local Tween = Creator.Tween
 
+local function GetSolidColor(property)
+    local value = Creator.GetThemeProperty(property, Creator.Theme)
+    if typeof(value) == "Color3" then
+        return value
+    elseif typeof(value) == "table" and value.Color and typeof(value.Color) == "ColorSequence" then
+        return value.Color.Keypoints[1].Value
+    end
+    return Color3.fromHex("#00F2FE") -- Safe fallback
+end
+
 local NotificationModule = {
     Size = UDim2.new(0, 320, 1, -156),
     SizeLower = UDim2.new(0, 320, 1, -56),
@@ -75,7 +85,7 @@ function NotificationModule.New(Config)
     Icon.Position = UDim2.new(0, NotificationModule.UIPadding, 0, NotificationModule.UIPadding)
     local TargetIcon = Icon:FindFirstChildWhichIsA("ImageLabel", true)
     if TargetIcon then
-        TargetIcon.ImageColor3 = Color3.fromHex("#FFD700") -- Executive Gold
+        TargetIcon.ImageColor3 = GetSolidColor("Accent")
     end
 
     local CloseButton
@@ -88,7 +98,7 @@ function NotificationModule.New(Config)
             Size = UDim2.new(0, 14, 0, 14),
             Position = UDim2.new(1, -NotificationModule.UIPadding, 0, NotificationModule.UIPadding),
             AnchorPoint = Vector2.new(1, 0),
-            ImageColor3 = Color3.fromHex("#FFD700"),
+            ImageColor3 = GetSolidColor("Accent"),
             ImageTransparency = 0.5,
         }, {
             New("TextButton", {
@@ -106,7 +116,7 @@ function NotificationModule.New(Config)
         Size = UDim2.new(1, 0, 0, 2),
         Position = UDim2.new(0, 0, 1, 0),
         AnchorPoint = Vector2.new(0, 1),
-        BackgroundColor3 = Color3.fromHex("#FFD700"),
+        BackgroundColor3 = GetSolidColor("Accent"),
         BorderSizePixel = 0,
         ZIndex = 5,
     })
@@ -135,7 +145,7 @@ function NotificationModule.New(Config)
             RichText = true,
             BackgroundTransparency = 1,
             TextSize = 14,
-            TextColor3 = Color3.fromHex("#FFD700"),
+            TextColor3 = GetSolidColor("Accent"),
             Text = "<b>" .. Notification.Title .. "</b>",
             FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
             LayoutOrder = 1,
@@ -169,7 +179,9 @@ function NotificationModule.New(Config)
         New("UICorner", { CornerRadius = UDim.new(0, NotificationModule.UICorner) }),
         New("UIStroke", {
             Thickness = 1.5,
-            Color = Color3.fromHex("#FFD700"),
+            ThemeTag = {
+                Color = "Outline",
+            },
             Transparency = 0.6,
         }),
         DurationBar,

@@ -15,7 +15,9 @@ function Element:New(Config)
             Text = Config.Title,
             TextSize = 14,
             FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
-            TextColor3 = Color3.fromHex("#FFD700"),
+            ThemeTag = {
+                TextColor3 = "Accent",
+            },
             TextXAlignment = "Left",
             BackgroundTransparency = 1,
             AutomaticSize = "Y",

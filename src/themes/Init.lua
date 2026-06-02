@@ -4,30 +4,30 @@ return function(IntiHub)
 			Name = "Dark",
 
 			Accent = IntiHub:Gradient({
-				["0"] = { Color = Color3.fromHex("#FFE57F"), Transparency = 0 },
-				["50"] = { Color = Color3.fromHex("#D4AF37"), Transparency = 0 },
-				["100"] = { Color = Color3.fromHex("#AA7C11"), Transparency = 0 },
-			}, { Rotation = 45 }), -- Metallic Inti Gold Gradient
+				["0"] = { Color = Color3.fromHex("#00F2FE"), Transparency = 0 },
+				["50"] = { Color = Color3.fromHex("#0091FF"), Transparency = 0 },
+				["100"] = { Color = Color3.fromHex("#0055FF"), Transparency = 0 },
+			}, { Rotation = 45 }), -- Metallic Cyan-Blue Gradient
 			Dialog = Color3.fromHex("#050505"), -- Pure Obsidian Black
-			Outline = Color3.fromHex("#FFC300"), -- Stronger Gold Outline
+			Outline = Color3.fromHex("#00F2FE"), -- Electric Cyan Outline
 			Text = Color3.fromHex("#FFFFFF"),
 			Placeholder = Color3.fromHex("#7a7a7a"),
 			Background = Color3.fromHex("#000000"), -- Pure Black
 			BackgroundTransparency = 0.05, -- Elegant Transparency
 			Button = Color3.fromHex("#141414"), -- Dark Matte
-			Icon = Color3.fromHex("#FFC300"),
+			Icon = Color3.fromHex("#00F2FE"),
 			Toggle = IntiHub:Gradient({
-				["0"] = { Color = Color3.fromHex("#FFE57F"), Transparency = 0 },
-				["100"] = { Color = Color3.fromHex("#D4AF37"), Transparency = 0 },
+				["0"] = { Color = Color3.fromHex("#00F2FE"), Transparency = 0 },
+				["100"] = { Color = Color3.fromHex("#0091FF"), Transparency = 0 },
 			}, { Rotation = 45 }),
-			Slider = Color3.fromHex("#FFC300"),
-			Checkbox = Color3.fromHex("#FFC300"),
+			Slider = Color3.fromHex("#00F2FE"),
+			Checkbox = Color3.fromHex("#00F2FE"),
 
 			PanelBackground = Color3.fromHex("#0A0A0A"),
 			PanelBackgroundTransparency = 0.35,
 
-			SliderIcon = Color3.fromHex("#FFC300"),
-			Primary = Color3.fromHex("#FFC300"),
+			SliderIcon = Color3.fromHex("#00F2FE"),
+			Primary = Color3.fromHex("#00F2FE"),
 
 			LabelBackground = Color3.fromHex("#000000"),
 			LabelBackgroundTransparency = 0.8,

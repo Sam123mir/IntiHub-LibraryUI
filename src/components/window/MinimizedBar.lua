@@ -27,7 +27,9 @@ function MinimizedBar.New(Window)
         Image = Creator.Icon("grip-vertical")[1],
         ImageRectOffset = Creator.Icon("grip-vertical")[2].ImageRectPosition,
         ImageRectSize = Creator.Icon("grip-vertical")[2].ImageRectSize,
-        ImageColor3 = Color3.fromHex("#FFD700"),
+        ThemeTag = {
+            ImageColor3 = "Accent",
+        },
     })
 
     local Title = New("TextLabel", {
@@ -35,7 +37,9 @@ function MinimizedBar.New(Window)
         Text = "INTIHUB - v" .. (Window.Version or "2.0.0"),
         TextSize = 14,
         FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
-        TextColor3 = Color3.fromHex("#FFD700"),
+        ThemeTag = {
+            TextColor3 = "Accent",
+        },
         BackgroundTransparency = 1,
         AutomaticSize = "X",
         Size = UDim2.new(0, 0, 1, 0),
@@ -44,7 +48,9 @@ function MinimizedBar.New(Window)
     local Separator = New("Frame", {
         Name = "Separator",
         Size = UDim2.new(0, 1, 0, 18),
-        BackgroundColor3 = Color3.fromHex("#FFD700"),
+        ThemeTag = {
+            BackgroundColor3 = "Outline",
+        },
         BackgroundTransparency = 0.6,
     })
 
@@ -62,7 +68,9 @@ function MinimizedBar.New(Window)
         New("UICorner", { CornerRadius = UDim.new(0, 8) }),
         New("UIStroke", {
             Thickness = 1.5,
-            Color = Color3.fromHex("#FFD700"),
+            ThemeTag = {
+                Color = "Outline",
+            },
             Transparency = 0.3,
         }),
         New("UIListLayout", {

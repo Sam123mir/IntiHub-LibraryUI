@@ -31,7 +31,7 @@ return function(IntiHub, Loading)
     Window:Tag({
         Title = "v2.1.2",
         Icon = "github",
-        Color = Color3.fromHex("#FFD700"),
+        Color = Color3.fromHex("#00F2FE"),
         Border = true,
     })
 

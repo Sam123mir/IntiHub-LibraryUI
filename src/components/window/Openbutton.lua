@@ -44,7 +44,9 @@ function OpenButtonModule.New(Window)
                 FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
                 BackgroundTransparency = 1,
                 AutomaticSize = "XY",
-                TextColor3 = Color3.fromHex("#FFD700"),
+                ThemeTag = {
+                    TextColor3 = "Accent",
+                },
             }),
             New("TextLabel", {
                 Text = "HUB",
@@ -77,7 +79,9 @@ function OpenButtonModule.New(Window)
         Size = UDim2.new(0, 18, 0, 18),
         BackgroundTransparency = 1,
         Image = "rbxassetid://138450125867375", -- Move/Drag arrows icon
-        ImageColor3 = Color3.fromHex("#FFD700"),
+        ThemeTag = {
+            ImageColor3 = "Accent",
+        },
         Active = true,
     })
 
@@ -114,14 +118,9 @@ function OpenButtonModule.New(Window)
         New("UIStroke", {
             Thickness = 2,
             ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-            Color = Color3.fromHex("#FFD700"),
+            ThemeTag = { Color = "Outline" },
         }, {
             New("UIGradient", {
-                Color = ColorSequence.new({
-                    ColorSequenceKeypoint.new(0, Color3.fromHex("#FFD700")),
-                    ColorSequenceKeypoint.new(0.5, Color3.fromHex("#4D4300")),
-                    ColorSequenceKeypoint.new(1, Color3.fromHex("#FFD700")),
-                }),
                 Rotation = 0,
                 Name = "GlowTrail"
             })
@@ -141,13 +140,20 @@ function OpenButtonModule.New(Window)
         Branding,
     })
 
-    -- Animate Glow Trail
     task.spawn(function()
-        local Gradient = Button:FindFirstChild("UIStroke") and Button.UIStroke:FindFirstChild("GlowTrail")
+        local Stroke = Button:FindFirstChild("UIStroke")
+        local Gradient = Stroke and Stroke:FindFirstChild("GlowTrail")
         if Gradient then
             while true do
                 for i = 0, 360, 2 do
                     Gradient.Rotation = i
+                    local outlineColor = Creator.GetThemeProperty("Outline", Creator.Theme) or Color3.fromHex("#00F2FE")
+                    local darkColor = Color3.new(outlineColor.R * 0.3, outlineColor.G * 0.3, outlineColor.B * 0.3)
+                    Gradient.Color = ColorSequence.new({
+                        ColorSequenceKeypoint.new(0, outlineColor),
+                        ColorSequenceKeypoint.new(0.5, darkColor),
+                        ColorSequenceKeypoint.new(1, outlineColor),
+                    })
                     task.wait(0.02)
                     if not Button.Parent then break end
                 end

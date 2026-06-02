@@ -130,7 +130,9 @@ function TabModule.New(Config, UIScale)
                 Size = UDim2.new(0, 2, 0, 14),
                 Position = UDim2.new(0, -6, 0.5, 0),
                 AnchorPoint = Vector2.new(0, 0.5),
-                BackgroundColor3 = Color3.fromHex("#FFD700"),
+                ThemeTag = {
+                    BackgroundColor3 = "Accent",
+                },
                 BackgroundTransparency = 1,
                 Name = "Indicator",
             }, {
@@ -268,20 +270,7 @@ function TabModule.New(Config, UIScale)
 		}),
 		New("Frame", {
             Name = "LeftColumn",
-            Size = UDim2.new(0.5, -5, 0, 0),
-            AutomaticSize = "Y",
-            BackgroundTransparency = 1,
-        }, {
-            New("UIListLayout", {
-                SortOrder = "LayoutOrder",
-                Padding = UDim.new(0, Tab.Gap),
-                HorizontalAlignment = "Center",
-            }),
-        }),
-        New("Frame", {
-            Name = "RightColumn",
-            Size = UDim2.new(0.5, -5, 0, 0),
-            Position = UDim2.new(0.5, 5, 0, 0),
+            Size = UDim2.new(1, 0, 0, 0),
             AutomaticSize = "Y",
             BackgroundTransparency = 1,
         }, {
@@ -579,14 +568,8 @@ function TabModule.New(Config, UIScale)
 
 		local function checkEmpty()
 			local hasChildren = false
-			for _, child in ipairs(Tab.UIElements.ContainerFrame.LeftColumn:GetChildren()) do
-				if child:IsA("GuiObject") and not child:IsA("UIListLayout") then
-					hasChildren = true
-					break
-				end
-			end
-			if not hasChildren then
-				for _, child in ipairs(Tab.UIElements.ContainerFrame.RightColumn:GetChildren()) do
+			if Tab.UIElements.ContainerFrame:FindFirstChild("LeftColumn") then
+				for _, child in ipairs(Tab.UIElements.ContainerFrame.LeftColumn:GetChildren()) do
 					if child:IsA("GuiObject") and not child:IsA("UIListLayout") then
 						hasChildren = true
 						break
@@ -598,10 +581,10 @@ function TabModule.New(Config, UIScale)
 
 		checkEmpty()
 
-		Creator.AddSignal(Tab.UIElements.ContainerFrame.LeftColumn.ChildAdded, checkEmpty)
-		Creator.AddSignal(Tab.UIElements.ContainerFrame.LeftColumn.ChildRemoved, checkEmpty)
-		Creator.AddSignal(Tab.UIElements.ContainerFrame.RightColumn.ChildAdded, checkEmpty)
-		Creator.AddSignal(Tab.UIElements.ContainerFrame.RightColumn.ChildRemoved, checkEmpty)
+		if Tab.UIElements.ContainerFrame:FindFirstChild("LeftColumn") then
+			Creator.AddSignal(Tab.UIElements.ContainerFrame.LeftColumn.ChildAdded, checkEmpty)
+			Creator.AddSignal(Tab.UIElements.ContainerFrame.LeftColumn.ChildRemoved, checkEmpty)
+		end
 	end)
 
 	return Tab

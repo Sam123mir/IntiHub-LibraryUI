@@ -133,14 +133,8 @@ function Element:New(Config)
 
 
     local TargetParent = Config.Parent
-    if TargetParent and TargetParent:FindFirstChild("LeftColumn") and TargetParent:FindFirstChild("RightColumn") then
-        local Left = TargetParent.LeftColumn
-        local Right = TargetParent.RightColumn
-        if Left.UIListLayout.AbsoluteContentSize.Y <= Right.UIListLayout.AbsoluteContentSize.Y then
-            TargetParent = Left
-        else
-            TargetParent = Right
-        end
+    if TargetParent and TargetParent:FindFirstChild("LeftColumn") then
+        TargetParent = TargetParent.LeftColumn
     end
 
     local Main = Creator.NewRoundFrame(Config.Window.ElementConfig.UICorner, "Squircle", {
@@ -165,22 +159,14 @@ function Element:New(Config)
             Visible = Section.Box and Section.BoxBorder,
             Name = "Outline",
         }, {
-            -- 🟢 Noble GOLDEN BORDER
+            -- 🟢 Themed Border
             New("UIStroke", {
                 Thickness = 1.5,
-                Color = Color3.fromHex("#FFD700"),
+                ThemeTag = {
+                    Color = "Outline",
+                },
                 Transparency = 0.5,
                 ApplyStrokeMode = "Border",
-            }, {
-                New("UIGradient", {
-                    Rotation = 45,
-                    Color = ColorSequence.new({
-                        ColorSequenceKeypoint.new(0, Color3.fromHex("#FFD700")),
-                        ColorSequenceKeypoint.new(0.5, Color3.fromHex("#FFFACD")),
-                        ColorSequenceKeypoint.new(1, Color3.fromHex("#FFD700")),
-                    }),
-                    Name = "GlowTrail"
-                })
             })
         }),
         New("TextButton", {

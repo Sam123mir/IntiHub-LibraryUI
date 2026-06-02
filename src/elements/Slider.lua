@@ -72,20 +72,12 @@ function Element:New(Config)
     local IconFrom, IconTo
     if Slider.Icons then
         if Slider.Icons.From then
-            IconFrom = Creator.Image(Slider.Icons.From, "SliderFrom", 0, Config.Window.Folder, "Slider", true)
+            IconFrom = Creator.Image(Slider.Icons.From, "SliderFrom", 0, Config.Window.Folder, "Slider", true, true, "Accent")
             IconFrom.Size = UDim2.new(0, Slider.IconSize, 0, Slider.IconSize)
-            local TargetIcon = IconFrom:FindFirstChildWhichIsA("ImageLabel", true)
-            if TargetIcon then
-                TargetIcon.ImageColor3 = Color3.fromHex("#FFD700")
-            end
         end
         if Slider.Icons.To then
-            IconTo = Creator.Image(Slider.Icons.To, "SliderTo", 0, Config.Window.Folder, "Slider", true)
+            IconTo = Creator.Image(Slider.Icons.To, "SliderTo", 0, Config.Window.Folder, "Slider", true, true, "Accent")
             IconTo.Size = UDim2.new(0, Slider.IconSize, 0, Slider.IconSize)
-            local TargetIcon = IconTo:FindFirstChildWhichIsA("ImageLabel", true)
-            if TargetIcon then
-                TargetIcon.ImageColor3 = Color3.fromHex("#FFD700")
-            end
         end
     end
 
@@ -102,7 +94,7 @@ function Element:New(Config)
             ThemeTag = { BorderColor3 = "Accent" },
         }, {
             New("UICorner", { CornerRadius = UDim.new(0, 5) }),
-            New("UIStroke", { Thickness = 1.2, Color = Color3.fromHex("#FFD700"), Transparency = 0.4 }),
+            New("UIStroke", { Thickness = 1.2, ThemeTag = { Color = "Outline" }, Transparency = 0.4 }),
         })
     end
 
@@ -134,25 +126,36 @@ function Element:New(Config)
             HorizontalAlignment = "Right",
         }),
         IconFrom,
-        Creator.NewRoundFrame(99, "Squircle", {
+        New("Frame", {
             Name = "SliderBack",
-            Size = UDim2.new(1, (IconFrom and -30 or 0) + (IconTo and -30 or 0) + (Slider.IsTextbox and -Slider.TextBoxWidth - 10 or 0), 0, 2), -- Thin 2px line
-            ImageTransparency = 0.5,
-            ImageColor3 = Color3.fromRGB(60, 60, 60), -- Dark grey track
+            Size = UDim2.new(1, (IconFrom and -30 or 0) + (IconTo and -30 or 0) + (Slider.IsTextbox and -Slider.TextBoxWidth - 10 or 0), 0, 24), -- 24px height hit box
+            BackgroundTransparency = 1,
         }, {
+            -- Visual track background
             Creator.NewRoundFrame(99, "Squircle", {
-                Name = "Fill",
-                Size = UDim2.new(delta, 0, 1, 0),
-                ThemeTag = { ImageColor3 = "Slider" },
+                Name = "Track",
+                Size = UDim2.new(1, 0, 0, 4), -- 4px visual track
+                Position = UDim2.new(0, 0, 0.5, 0),
+                AnchorPoint = Vector2.new(0, 0.5),
+                ImageTransparency = 0.5,
+                ImageColor3 = Color3.fromRGB(60, 60, 60),
             }, {
-                Creator.NewRoundFrame(2, "Squircle", { -- 2px corner radius for thumb
-                    Name = "Thumb",
-                    Size = UDim2.new(0, 12, 0, 12), -- 12px gold square
-                    Position = UDim2.new(1, 0, 0.5, 0),
-                    AnchorPoint = Vector2.new(0.5, 0.5),
-                    ThemeTag = { ImageColor3 = "Accent" }, -- Golden
+                -- Visual track fill
+                Creator.NewRoundFrame(99, "Squircle", {
+                    Name = "Fill",
+                    Size = UDim2.new(delta, 0, 1, 0),
+                    ThemeTag = { ImageColor3 = "Slider" },
                 }, {
-                    New("UIStroke", { Thickness = 1, Color = Color3.fromHex("#FFD700"), Transparency = 0.3 }),
+                    -- Thumb
+                    Creator.NewRoundFrame(99, "Squircle", { -- 99 is circular thumb
+                        Name = "Thumb",
+                        Size = UDim2.new(0, 14, 0, 14), -- 14px size
+                        Position = UDim2.new(1, 0, 0.5, 0),
+                        AnchorPoint = Vector2.new(0.5, 0.5),
+                        ThemeTag = { ImageColor3 = "Accent" },
+                    }, {
+                        New("UIStroke", { Thickness = 1.5, ThemeTag = { Color = "Outline" }, Transparency = 0.2 }),
+                    })
                 })
             })
         }),
@@ -172,7 +175,7 @@ function Element:New(Config)
             LastValue = newValue
             Slider.Value.Default = newValue
             local visualDelta = (newValue - Slider.Value.Min) / (Slider.Value.Max - Slider.Value.Min)
-            Tween(SliderBack.Fill, 0.1, {Size = UDim2.new(visualDelta, 0, 1, 0)}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+            Tween(SliderBack.Track.Fill, 0.1, {Size = UDim2.new(visualDelta, 0, 1, 0)}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
             if ValueLabel then ValueLabel.Text = tostring(FormatValue(newValue)) end
             Creator.SafeCallback(Slider.Callback, newValue)
         end
@@ -183,7 +186,7 @@ function Element:New(Config)
         local visualDelta = (val - Slider.Value.Min) / (Slider.Value.Max - Slider.Value.Min)
         LastValue = val
         Slider.Value.Default = val
-        Tween(SliderBack.Fill, 0.2, {Size = UDim2.new(visualDelta, 0, 1, 0)}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+        Tween(SliderBack.Track.Fill, 0.2, {Size = UDim2.new(visualDelta, 0, 1, 0)}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
         if ValueLabel then ValueLabel.Text = tostring(FormatValue(val)) end
         Creator.SafeCallback(Slider.Callback, val)
     end

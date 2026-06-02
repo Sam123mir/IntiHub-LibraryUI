@@ -257,7 +257,9 @@ return function(Config)
 				Text = "MODULE CONTROL",
 				TextSize = 10,
 				FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
-				TextColor3 = Color3.fromHex("#FFD700"),
+				ThemeTag = {
+					TextColor3 = "Accent",
+				},
 				TextTransparency = 0.4,
 				BackgroundTransparency = 1,
 				LayoutOrder = -1,
@@ -301,7 +303,9 @@ return function(Config)
             Size = UDim2.new(0, 1, 1, -20),
             Position = UDim2.new(1, 0, 0.5, 0),
             AnchorPoint = Vector2.new(0, 0.5),
-            BackgroundColor3 = Color3.fromHex("#FFD700"),
+            ThemeTag = {
+                BackgroundColor3 = "Outline",
+            },
             BackgroundTransparency = .92,
             BorderSizePixel = 0,
         })
@@ -328,7 +332,9 @@ return function(Config)
 		}, {
             New("UIStroke", {
                 Thickness = 1,
-                Color = Color3.fromHex("#FFD700"),
+                ThemeTag = {
+                    Color = "Outline",
+                },
                 Transparency = .9,
             })
         }),
@@ -351,7 +357,9 @@ return function(Config)
             New("TextLabel", {
                 Text = Label,
                 TextSize = 9,
-                TextColor3 = Color3.fromHex("#FFD700"),
+                ThemeTag = {
+                    TextColor3 = "Accent",
+                },
                 Position = UDim2.new(0.5, 0, 0.3, 0),
                 AnchorPoint = Vector2.new(0.5, 0.5),
                 BackgroundTransparency = 1,
@@ -403,7 +411,7 @@ return function(Config)
                 BackgroundColor3 = Color3.fromHex("#1A1A1A"),
             }, {
                 New("UICorner", { CornerRadius = UDim.new(0, 15) }),
-                New("UIStroke", { Thickness = 2, Color = Color3.fromHex("#FFD700"), Transparency = .5 }),
+                New("UIStroke", { Thickness = 2, ThemeTag = { Color = "Accent" }, Transparency = .5 }),
                 New("ImageLabel", {
                     Name = "Avatar",
                     Size = UDim2.new(1, -10, 1, -10),
@@ -443,7 +451,9 @@ return function(Config)
         -- 🟢 Separator
         New("Frame", {
             Size = UDim2.new(0.9, 0, 0, 1),
-            BackgroundColor3 = Color3.fromHex("#FFD700"),
+            ThemeTag = {
+                BackgroundColor3 = "Outline",
+            },
             BackgroundTransparency = 0.8,
             LayoutOrder = 2,
         }),
@@ -459,7 +469,9 @@ return function(Config)
                 Text = "GAME INFORMATION",
                 TextSize = 10,
                 FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
-                TextColor3 = Color3.fromHex("#FFD700"),
+                ThemeTag = {
+                    TextColor3 = "Accent",
+                },
                 TextTransparency = .4,
                 BackgroundTransparency = 1,
                 Size = UDim2.new(1, 0, 0, 20),
@@ -473,7 +485,7 @@ return function(Config)
                 AutomaticSize = "Y", -- Allow expanding for long names
             }, {
                 New("UICorner", { CornerRadius = UDim.new(0, 8) }),
-                New("UIStroke", { Thickness = 1.5, Color = Color3.fromHex("#FFD700"), Transparency = .8 }),
+                New("UIStroke", { Thickness = 1.5, ThemeTag = { Color = "Outline" }, Transparency = .8 }),
                 New("UIPadding", { PaddingLeft = UDim.new(0, 10), PaddingRight = UDim.new(0, 10), PaddingTop = UDim.new(0, 5), PaddingBottom = UDim.new(0, 5) }),
                 New("TextLabel", {
                     Name = "GameName",
@@ -506,12 +518,14 @@ return function(Config)
          -- 🟢 Executor Status (Consolidated)
         New("Frame", {
             Size = UDim2.new(1, 0, 0, 50),
-            BackgroundColor3 = Color3.fromHex("#FFD700"),
+            ThemeTag = {
+                BackgroundColor3 = "Outline",
+            },
             BackgroundTransparency = .92,
             LayoutOrder = 4,
         }, {
             New("UICorner", { CornerRadius = UDim.new(0, 10) }),
-            New("UIStroke", { Thickness = 1.5, Color = Color3.fromHex("#FFD700"), Transparency = .6 }),
+            New("UIStroke", { Thickness = 1.5, ThemeTag = { Color = "Outline" }, Transparency = .6 }),
             New("ImageLabel", {
                 Size = UDim2.new(0, 22, 0, 22),
                 Position = UDim2.new(0, 12, 0.5, 0),
@@ -588,14 +602,9 @@ return function(Config)
                 New("UIStroke", {
                     Thickness = 2,
                     ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-                    Color = Color3.fromHex("#FFD700"),
+                    ThemeTag = { Color = "Outline" },
                 }, {
                     New("UIGradient", {
-                        Color = ColorSequence.new({
-                            ColorSequenceKeypoint.new(0, Color3.fromHex("#FFD700")),
-                            ColorSequenceKeypoint.new(0.5, Color3.fromHex("#4D4300")),
-                            ColorSequenceKeypoint.new(1, Color3.fromHex("#FFD700")),
-                        }),
                         Rotation = 0,
                         Name = "GlowTrail"
                     })
@@ -616,6 +625,13 @@ return function(Config)
             
             if Gradient then
                 Gradient.Rotation = (Gradient.Rotation + 2) % 360
+                local outlineColor = Creator.GetThemeProperty("Outline", Creator.Theme) or Color3.fromHex("#00F2FE")
+                local darkColor = Color3.new(outlineColor.R * 0.3, outlineColor.G * 0.3, outlineColor.B * 0.3)
+                Gradient.Color = ColorSequence.new({
+                    ColorSequenceKeypoint.new(0, outlineColor),
+                    ColorSequenceKeypoint.new(0.5, darkColor),
+                    ColorSequenceKeypoint.new(1, outlineColor),
+                })
             else
                 break -- Exit if elements are missing
             end
@@ -631,6 +647,11 @@ return function(Config)
         Window.RightPanelOpen = not Window.RightPanelOpen
         local isOpen = Window.RightPanelOpen
         
+        if Window.RightPanelTween then
+            Window.RightPanelTween:Cancel()
+            Window.RightPanelTween = nil
+        end
+        
         if isOpen then
             Panel.Visible = true
             local Group = Panel:FindFirstChild("Group")
@@ -642,14 +663,19 @@ return function(Config)
             if Button then 
                 Tween(Button:FindFirstChildWhichIsA("ImageLabel", true), 0.3, { Rotation = 180 }):Play()
             end
-            Tween(Panel, 0.5, { Position = UDim2.new(1, -245, 0, 0) }, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
+            local tween = Tween(Panel, 0.5, { Position = UDim2.new(1, -245, 0, 0) }, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
+            Window.RightPanelTween = tween
+            tween:Play()
         else
             if Button then 
                 Tween(Button:FindFirstChildWhichIsA("ImageLabel", true), 0.3, { Rotation = 0 }):Play()
             end
             local tween = Tween(Panel, 0.4, { Position = UDim2.new(1, 15, 0, 0) }, Enum.EasingStyle.Quint, Enum.EasingDirection.In)
-            tween.Completed:Connect(function()
-                if not Window.RightPanelOpen then 
+            Window.RightPanelTween = tween
+            local connection
+            connection = tween.Completed:Connect(function(playbackState)
+                connection:Disconnect()
+                if playbackState == Enum.PlaybackState.Completed and not Window.RightPanelOpen then 
                     Panel.Visible = false 
                 end
             end)
@@ -1276,7 +1302,7 @@ return function(Config)
 
 	Window:CreateTopbarButton("SidebarToggle", "panel-right", function()
 		Window:ToggleRightPanel()
-	end, 1000, true, Color3.fromHex("#FFD700"))
+	end, 1000, true, Color3.fromHex("#00F2FE"))
 
     
 	local WindowDragModule = Creator.Drag(

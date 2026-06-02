@@ -207,6 +207,11 @@ do
             local iconType, iconName = parseIconString(Icon)
             local targetType = iconType or Type or IconModule.IconsType
             local targetName = iconName
+
+            if targetName == 'sliders' then
+                targetName = 'sliders-horizontal'
+            end
+
             local iconSet = IconModule.Icons[targetType]
 
             if iconSet and iconSet.Icons and iconSet.Icons[targetName] then
@@ -1414,6 +1419,19 @@ do
         local Creator = __DARKLUA_BUNDLE_MODULES.load'c'
         local New = Creator.New
         local Tween = Creator.Tween
+
+        local function GetSolidColor(property)
+            local value = Creator.GetThemeProperty(property, Creator.Theme)
+
+            if typeof(value) == 'Color3' then
+                return value
+            elseif typeof(value) == 'table' and value.Color and typeof(value.Color) == 'ColorSequence' then
+                return value.Color.Keypoints[1].Value
+            end
+
+            return Color3.fromHex'#00F2FE'
+        end
+
         local NotificationModule = {
             Size = UDim2.new(0, 320, 1, -156),
             SizeLower = UDim2.new(0, 320, 1, -56),
@@ -1482,7 +1500,7 @@ do
             local TargetIcon = Icon:FindFirstChildWhichIsA('ImageLabel', true)
 
             if TargetIcon then
-                TargetIcon.ImageColor3 = Color3.fromHex'#FFD700'
+                TargetIcon.ImageColor3 = GetSolidColor'Accent'
             end
 
             local CloseButton
@@ -1496,7 +1514,7 @@ do
                     Size = UDim2.new(0, 14, 0, 14),
                     Position = UDim2.new(1, -NotificationModule.UIPadding, 0, NotificationModule.UIPadding),
                     AnchorPoint = Vector2.new(1, 0),
-                    ImageColor3 = Color3.fromHex'#FFD700',
+                    ImageColor3 = GetSolidColor'Accent',
                     ImageTransparency = 0.5,
                 }, {
                     New('TextButton', {
@@ -1514,7 +1532,7 @@ do
                 Size = UDim2.new(1, 0, 0, 2),
                 Position = UDim2.new(0, 0, 1, 0),
                 AnchorPoint = Vector2.new(0, 1),
-                BackgroundColor3 = Color3.fromHex'#FFD700',
+                BackgroundColor3 = GetSolidColor'Accent',
                 BorderSizePixel = 0,
                 ZIndex = 5,
             })
@@ -1542,7 +1560,7 @@ do
                     RichText = true,
                     BackgroundTransparency = 1,
                     TextSize = 14,
-                    TextColor3 = Color3.fromHex'#FFD700',
+                    TextColor3 = GetSolidColor'Accent',
                     Text = '<b>' .. Notification.Title .. '</b>',
                     FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
                     LayoutOrder = 1,
@@ -1577,7 +1595,9 @@ do
                 }),
                 New('UIStroke', {
                     Thickness = 1.5,
-                    Color = Color3.fromHex'#FFD700',
+                    ThemeTag = {
+                        Color = 'Outline',
+                    },
                     Transparency = 0.6,
                 }),
                 DurationBar,
@@ -4147,42 +4167,42 @@ do
                     Name = 'Dark',
                     Accent = IntiHub:Gradient({
                         ['0'] = {
-                            Color = Color3.fromHex'#FFE57F',
+                            Color = Color3.fromHex'#00F2FE',
                             Transparency = 0,
                         },
                         ['50'] = {
-                            Color = Color3.fromHex'#D4AF37',
+                            Color = Color3.fromHex'#0091FF',
                             Transparency = 0,
                         },
                         ['100'] = {
-                            Color = Color3.fromHex'#AA7C11',
+                            Color = Color3.fromHex'#0055FF',
                             Transparency = 0,
                         },
                     }, {Rotation = 45}),
                     Dialog = Color3.fromHex'#050505',
-                    Outline = Color3.fromHex'#FFC300',
+                    Outline = Color3.fromHex'#00F2FE',
                     Text = Color3.fromHex'#FFFFFF',
                     Placeholder = Color3.fromHex'#7a7a7a',
                     Background = Color3.fromHex'#000000',
                     BackgroundTransparency = 0.05,
                     Button = Color3.fromHex'#141414',
-                    Icon = Color3.fromHex'#FFC300',
+                    Icon = Color3.fromHex'#00F2FE',
                     Toggle = IntiHub:Gradient({
                         ['0'] = {
-                            Color = Color3.fromHex'#FFE57F',
+                            Color = Color3.fromHex'#00F2FE',
                             Transparency = 0,
                         },
                         ['100'] = {
-                            Color = Color3.fromHex'#D4AF37',
+                            Color = Color3.fromHex'#0091FF',
                             Transparency = 0,
                         },
                     }, {Rotation = 45}),
-                    Slider = Color3.fromHex'#FFC300',
-                    Checkbox = Color3.fromHex'#FFC300',
+                    Slider = Color3.fromHex'#00F2FE',
+                    Checkbox = Color3.fromHex'#00F2FE',
                     PanelBackground = Color3.fromHex'#0A0A0A',
                     PanelBackgroundTransparency = 0.35,
-                    SliderIcon = Color3.fromHex'#FFC300',
-                    Primary = Color3.fromHex'#FFC300',
+                    SliderIcon = Color3.fromHex'#00F2FE',
+                    Primary = Color3.fromHex'#00F2FE',
                     LabelBackground = Color3.fromHex'#000000',
                     LabelBackgroundTransparency = 0.8,
                 },
@@ -5005,14 +5025,18 @@ do
                 Image = Creator.Icon'grip-vertical'[1],
                 ImageRectOffset = Creator.Icon'grip-vertical'[2].ImageRectPosition,
                 ImageRectSize = Creator.Icon'grip-vertical'[2].ImageRectSize,
-                ImageColor3 = Color3.fromHex'#FFD700',
+                ThemeTag = {
+                    ImageColor3 = 'Accent',
+                },
             })
             local Title = New('TextLabel', {
                 Name = 'Title',
                 Text = 'INTIHUB - v' .. (Window.Version or '2.0.0'),
                 TextSize = 14,
                 FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
-                TextColor3 = Color3.fromHex'#FFD700',
+                ThemeTag = {
+                    TextColor3 = 'Accent',
+                },
                 BackgroundTransparency = 1,
                 AutomaticSize = 'X',
                 Size = UDim2.new(0, 0, 1, 0),
@@ -5020,7 +5044,9 @@ do
             local Separator = New('Frame', {
                 Name = 'Separator',
                 Size = UDim2.new(0, 1, 0, 18),
-                BackgroundColor3 = Color3.fromHex'#FFD700',
+                ThemeTag = {
+                    BackgroundColor3 = 'Outline',
+                },
                 BackgroundTransparency = 0.6,
             })
             local BarFrame = New('Frame', {
@@ -5039,7 +5065,9 @@ do
                 }),
                 New('UIStroke', {
                     Thickness = 1.5,
-                    Color = Color3.fromHex'#FFD700',
+                    ThemeTag = {
+                        Color = 'Outline',
+                    },
                     Transparency = 0.3,
                 }),
                 New('UIListLayout', {
@@ -6073,7 +6101,9 @@ do
                         FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
                         BackgroundTransparency = 1,
                         AutomaticSize = 'XY',
-                        TextColor3 = Color3.fromHex'#FFD700',
+                        ThemeTag = {
+                            TextColor3 = 'Accent',
+                        },
                     }),
                     New('TextLabel', {
                         Text = 'HUB',
@@ -6105,7 +6135,9 @@ do
                 Size = UDim2.new(0, 18, 0, 18),
                 BackgroundTransparency = 1,
                 Image = 'rbxassetid://138450125867375',
-                ImageColor3 = Color3.fromHex'#FFD700',
+                ThemeTag = {
+                    ImageColor3 = 'Accent',
+                },
                 Active = true,
             })
             local Separator = New('Frame', {
@@ -6144,14 +6176,11 @@ do
                 New('UIStroke', {
                     Thickness = 2,
                     ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-                    Color = Color3.fromHex'#FFD700',
+                    ThemeTag = {
+                        Color = 'Outline',
+                    },
                 }, {
                     New('UIGradient', {
-                        Color = ColorSequence.new{
-                            ColorSequenceKeypoint.new(0, Color3.fromHex'#FFD700'),
-                            ColorSequenceKeypoint.new(0.5, Color3.fromHex'#4D4300'),
-                            ColorSequenceKeypoint.new(1, Color3.fromHex'#FFD700'),
-                        },
                         Rotation = 0,
                         Name = 'GlowTrail',
                     }),
@@ -6172,12 +6201,22 @@ do
             })
 
             task.spawn(function()
-                local Gradient = Button:FindFirstChild'UIStroke' and Button.UIStroke:FindFirstChild'GlowTrail'
+                local Stroke = Button:FindFirstChild'UIStroke'
+                local Gradient = Stroke and Stroke:FindFirstChild'GlowTrail'
 
                 if Gradient then
                     while true do
                         for i = 0, 360, 2 do
                             Gradient.Rotation = i
+
+                            local outlineColor = Creator.GetThemeProperty('Outline', Creator.Theme) or Color3.fromHex'#00F2FE'
+                            local darkColor = Color3.new(outlineColor.R * 0.3, outlineColor.G * 0.3, outlineColor.B * 0.3)
+
+                            Gradient.Color = ColorSequence.new{
+                                ColorSequenceKeypoint.new(0, outlineColor),
+                                ColorSequenceKeypoint.new(0.5, darkColor),
+                                ColorSequenceKeypoint.new(1, outlineColor),
+                            }
 
                             task.wait(0.02)
 
@@ -7622,24 +7661,12 @@ do
 
             if Slider.Icons then
                 if Slider.Icons.From then
-                    IconFrom = Creator.Image(Slider.Icons.From, 'SliderFrom', 0, Config.Window.Folder, 'Slider', true)
+                    IconFrom = Creator.Image(Slider.Icons.From, 'SliderFrom', 0, Config.Window.Folder, 'Slider', true, true, 'Accent')
                     IconFrom.Size = UDim2.new(0, Slider.IconSize, 0, Slider.IconSize)
-
-                    local TargetIcon = IconFrom:FindFirstChildWhichIsA('ImageLabel', true)
-
-                    if TargetIcon then
-                        TargetIcon.ImageColor3 = Color3.fromHex'#FFD700'
-                    end
                 end
                 if Slider.Icons.To then
-                    IconTo = Creator.Image(Slider.Icons.To, 'SliderTo', 0, Config.Window.Folder, 'Slider', true)
+                    IconTo = Creator.Image(Slider.Icons.To, 'SliderTo', 0, Config.Window.Folder, 'Slider', true, true, 'Accent')
                     IconTo.Size = UDim2.new(0, Slider.IconSize, 0, Slider.IconSize)
-
-                    local TargetIcon = IconTo:FindFirstChildWhichIsA('ImageLabel', true)
-
-                    if TargetIcon then
-                        TargetIcon.ImageColor3 = Color3.fromHex'#FFD700'
-                    end
                 end
             end
 
@@ -7663,7 +7690,9 @@ do
                     }),
                     New('UIStroke', {
                         Thickness = 1.2,
-                        Color = Color3.fromHex'#FFD700',
+                        ThemeTag = {
+                            Color = 'Outline',
+                        },
                         Transparency = 0.4,
                     }),
                 })
@@ -7697,33 +7726,43 @@ do
                     HorizontalAlignment = 'Right',
                 }),
                 IconFrom,
-                Creator.NewRoundFrame(99, 'Squircle', {
+                New('Frame', {
                     Name = 'SliderBack',
                     Size = UDim2.new(1, (IconFrom and -30 or 0) + (IconTo and -30 or 0) + (Slider.IsTextbox and 
--Slider.TextBoxWidth - 10 or 0), 0, 2),
-                    ImageTransparency = 0.5,
-                    ImageColor3 = Color3.fromRGB(60, 60, 60),
+-Slider.TextBoxWidth - 10 or 0), 0, 24),
+                    BackgroundTransparency = 1,
                 }, {
                     Creator.NewRoundFrame(99, 'Squircle', {
-                        Name = 'Fill',
-                        Size = UDim2.new(delta, 0, 1, 0),
-                        ThemeTag = {
-                            ImageColor3 = 'Slider',
-                        },
+                        Name = 'Track',
+                        Size = UDim2.new(1, 0, 0, 4),
+                        Position = UDim2.new(0, 0, 0.5, 0),
+                        AnchorPoint = Vector2.new(0, 0.5),
+                        ImageTransparency = 0.5,
+                        ImageColor3 = Color3.fromRGB(60, 60, 60),
                     }, {
-                        Creator.NewRoundFrame(2, 'Squircle', {
-                            Name = 'Thumb',
-                            Size = UDim2.new(0, 12, 0, 12),
-                            Position = UDim2.new(1, 0, 0.5, 0),
-                            AnchorPoint = Vector2.new(0.5, 0.5),
+                        Creator.NewRoundFrame(99, 'Squircle', {
+                            Name = 'Fill',
+                            Size = UDim2.new(delta, 0, 1, 0),
                             ThemeTag = {
-                                ImageColor3 = 'Accent',
+                                ImageColor3 = 'Slider',
                             },
                         }, {
-                            New('UIStroke', {
-                                Thickness = 1,
-                                Color = Color3.fromHex'#FFD700',
-                                Transparency = 0.3,
+                            Creator.NewRoundFrame(99, 'Squircle', {
+                                Name = 'Thumb',
+                                Size = UDim2.new(0, 14, 0, 14),
+                                Position = UDim2.new(1, 0, 0.5, 0),
+                                AnchorPoint = Vector2.new(0.5, 0.5),
+                                ThemeTag = {
+                                    ImageColor3 = 'Accent',
+                                },
+                            }, {
+                                New('UIStroke', {
+                                    Thickness = 1.5,
+                                    ThemeTag = {
+                                        Color = 'Outline',
+                                    },
+                                    Transparency = 0.2,
+                                }),
                             }),
                         }),
                     }),
@@ -7746,7 +7785,7 @@ do
 
                     local visualDelta = (newValue - Slider.Value.Min) / (Slider.Value.Max - Slider.Value.Min)
 
-                    Tween(SliderBack.Fill, 0.1, {
+                    Tween(SliderBack.Track.Fill, 0.1, {
                         Size = UDim2.new(visualDelta, 0, 1, 0),
                     }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
 
@@ -7766,7 +7805,7 @@ do
                 LastValue = val
                 Slider.Value.Default = val
 
-                Tween(SliderBack.Fill, 0.2, {
+                Tween(SliderBack.Track.Fill, 0.2, {
                     Size = UDim2.new(visualDelta, 0, 1, 0),
                 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
 
@@ -8753,9 +8792,9 @@ do
                 Desc = Config.Desc or nil,
                 Locked = Config.Locked or false,
                 LockedTitle = Config.LockedTitle,
-                Values = Config.Values or {},
+                Values = Config.Values or Config.Options or {},
                 MenuWidth = Config.MenuWidth or 180,
-                Value = Config.Value,
+                Value = Config.Value or Config.Default,
                 AllowNone = Config.AllowNone,
                 SearchBarEnabled = Config.SearchBarEnabled or false,
                 Multi = Config.Multi,
@@ -10127,15 +10166,8 @@ do
 
             local TargetParent = Config.Parent
 
-            if TargetParent and TargetParent:FindFirstChild'LeftColumn' and TargetParent:FindFirstChild'RightColumn' then
-                local Left = TargetParent.LeftColumn
-                local Right = TargetParent.RightColumn
-
-                if Left.UIListLayout.AbsoluteContentSize.Y <= Right.UIListLayout.AbsoluteContentSize.Y then
-                    TargetParent = Left
-                else
-                    TargetParent = Right
-                end
+            if TargetParent and TargetParent:FindFirstChild'LeftColumn' then
+                TargetParent = TargetParent.LeftColumn
             end
 
             local Main = Creator.NewRoundFrame(Config.Window.ElementConfig.UICorner, 'Squircle', {
@@ -10161,19 +10193,11 @@ do
                 }, {
                     New('UIStroke', {
                         Thickness = 1.5,
-                        Color = Color3.fromHex'#FFD700',
+                        ThemeTag = {
+                            Color = 'Outline',
+                        },
                         Transparency = 0.5,
                         ApplyStrokeMode = 'Border',
-                    }, {
-                        New('UIGradient', {
-                            Rotation = 45,
-                            Color = ColorSequence.new{
-                                ColorSequenceKeypoint.new(0, Color3.fromHex'#FFD700'),
-                                ColorSequenceKeypoint.new(0.5, Color3.fromHex'#FFFACD'),
-                                ColorSequenceKeypoint.new(1, Color3.fromHex'#FFD700'),
-                            },
-                            Name = 'GlowTrail',
-                        }),
                     }),
                 }),
                 New('TextButton', {
@@ -10443,7 +10467,9 @@ do
                     Text = Config.Title,
                     TextSize = 14,
                     FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
-                    TextColor3 = Color3.fromHex'#FFD700',
+                    ThemeTag = {
+                        TextColor3 = 'Accent',
+                    },
                     TextXAlignment = 'Left',
                     BackgroundTransparency = 1,
                     AutomaticSize = 'Y',
@@ -10799,7 +10825,9 @@ do
                         Size = UDim2.new(0, 2, 0, 14),
                         Position = UDim2.new(0, -6, 0.5, 0),
                         AnchorPoint = Vector2.new(0, 0.5),
-                        BackgroundColor3 = Color3.fromHex'#FFD700',
+                        ThemeTag = {
+                            BackgroundColor3 = 'Accent',
+                        },
                         BackgroundTransparency = 1,
                         Name = 'Indicator',
                     }, {
@@ -10917,20 +10945,7 @@ do
                 }),
                 New('Frame', {
                     Name = 'LeftColumn',
-                    Size = UDim2.new(0.5, -5, 0, 0),
-                    AutomaticSize = 'Y',
-                    BackgroundTransparency = 1,
-                }, {
-                    New('UIListLayout', {
-                        SortOrder = 'LayoutOrder',
-                        Padding = UDim.new(0, Tab.Gap),
-                        HorizontalAlignment = 'Center',
-                    }),
-                }),
-                New('Frame', {
-                    Name = 'RightColumn',
-                    Size = UDim2.new(0.5, -5, 0, 0),
-                    Position = UDim2.new(0.5, 5, 0, 0),
+                    Size = UDim2.new(1, 0, 0, 0),
                     AutomaticSize = 'Y',
                     BackgroundTransparency = 1,
                 }, {
@@ -11189,16 +11204,8 @@ do
                 local function checkEmpty()
                     local hasChildren = false
 
-                    for _, child in ipairs(Tab.UIElements.ContainerFrame.LeftColumn:GetChildren())do
-                        if child:IsA'GuiObject' and not child:IsA'UIListLayout' then
-                            hasChildren = true
-
-                            break
-                        end
-                    end
-
-                    if not hasChildren then
-                        for _, child in ipairs(Tab.UIElements.ContainerFrame.RightColumn:GetChildren())do
+                    if Tab.UIElements.ContainerFrame:FindFirstChild'LeftColumn' then
+                        for _, child in ipairs(Tab.UIElements.ContainerFrame.LeftColumn:GetChildren())do
                             if child:IsA'GuiObject' and not child:IsA'UIListLayout' then
                                 hasChildren = true
 
@@ -11211,10 +11218,11 @@ do
                 end
 
                 checkEmpty()
-                Creator.AddSignal(Tab.UIElements.ContainerFrame.LeftColumn.ChildAdded, checkEmpty)
-                Creator.AddSignal(Tab.UIElements.ContainerFrame.LeftColumn.ChildRemoved, checkEmpty)
-                Creator.AddSignal(Tab.UIElements.ContainerFrame.RightColumn.ChildAdded, checkEmpty)
-                Creator.AddSignal(Tab.UIElements.ContainerFrame.RightColumn.ChildRemoved, checkEmpty)
+
+                if Tab.UIElements.ContainerFrame:FindFirstChild'LeftColumn' then
+                    Creator.AddSignal(Tab.UIElements.ContainerFrame.LeftColumn.ChildAdded, checkEmpty)
+                    Creator.AddSignal(Tab.UIElements.ContainerFrame.LeftColumn.ChildRemoved, checkEmpty)
+                end
             end)
 
             return Tab
@@ -11714,7 +11722,9 @@ do
                         Text = 'MODULE CONTROL',
                         TextSize = 10,
                         FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
-                        TextColor3 = Color3.fromHex'#FFD700',
+                        ThemeTag = {
+                            TextColor3 = 'Accent',
+                        },
                         TextTransparency = 0.4,
                         BackgroundTransparency = 1,
                         LayoutOrder = -1,
@@ -11749,7 +11759,9 @@ do
                     Size = UDim2.new(0, 1, 1, -20),
                     Position = UDim2.new(1, 0, 0.5, 0),
                     AnchorPoint = Vector2.new(0, 0.5),
-                    BackgroundColor3 = Color3.fromHex'#FFD700',
+                    ThemeTag = {
+                        BackgroundColor3 = 'Outline',
+                    },
                     BackgroundTransparency = 0.92,
                     BorderSizePixel = 0,
                 }),
@@ -11776,7 +11788,9 @@ do
                 }, {
                     New('UIStroke', {
                         Thickness = 1,
-                        Color = Color3.fromHex'#FFD700',
+                        ThemeTag = {
+                            Color = 'Outline',
+                        },
                         Transparency = 0.9,
                     }),
                 }),
@@ -11800,7 +11814,9 @@ do
                     New('TextLabel', {
                         Text = Label,
                         TextSize = 9,
-                        TextColor3 = Color3.fromHex'#FFD700',
+                        ThemeTag = {
+                            TextColor3 = 'Accent',
+                        },
                         Position = UDim2.new(0.5, 0, 0.3, 0),
                         AnchorPoint = Vector2.new(0.5, 0.5),
                         BackgroundTransparency = 1,
@@ -11852,7 +11868,9 @@ do
                         }),
                         New('UIStroke', {
                             Thickness = 2,
-                            Color = Color3.fromHex'#FFD700',
+                            ThemeTag = {
+                                Color = 'Accent',
+                            },
                             Transparency = 0.5,
                         }),
                         New('ImageLabel', {
@@ -11898,7 +11916,9 @@ do
                 }),
                 New('Frame', {
                     Size = UDim2.new(0.9, 0, 0, 1),
-                    BackgroundColor3 = Color3.fromHex'#FFD700',
+                    ThemeTag = {
+                        BackgroundColor3 = 'Outline',
+                    },
                     BackgroundTransparency = 0.8,
                     LayoutOrder = 2,
                 }),
@@ -11915,7 +11935,9 @@ do
                         Text = 'GAME INFORMATION',
                         TextSize = 10,
                         FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
-                        TextColor3 = Color3.fromHex'#FFD700',
+                        ThemeTag = {
+                            TextColor3 = 'Accent',
+                        },
                         TextTransparency = 0.4,
                         BackgroundTransparency = 1,
                         Size = UDim2.new(1, 0, 0, 20),
@@ -11931,7 +11953,9 @@ do
                         }),
                         New('UIStroke', {
                             Thickness = 1.5,
-                            Color = Color3.fromHex'#FFD700',
+                            ThemeTag = {
+                                Color = 'Outline',
+                            },
                             Transparency = 0.8,
                         }),
                         New('UIPadding', {
@@ -11967,7 +11991,9 @@ do
                 }),
                 New('Frame', {
                     Size = UDim2.new(1, 0, 0, 50),
-                    BackgroundColor3 = Color3.fromHex'#FFD700',
+                    ThemeTag = {
+                        BackgroundColor3 = 'Outline',
+                    },
                     BackgroundTransparency = 0.92,
                     LayoutOrder = 4,
                 }, {
@@ -11976,7 +12002,9 @@ do
                     }),
                     New('UIStroke', {
                         Thickness = 1.5,
-                        Color = Color3.fromHex'#FFD700',
+                        ThemeTag = {
+                            Color = 'Outline',
+                        },
                         Transparency = 0.6,
                     }),
                     New('ImageLabel', {
@@ -12066,14 +12094,11 @@ do
                         New('UIStroke', {
                             Thickness = 2,
                             ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-                            Color = Color3.fromHex'#FFD700',
+                            ThemeTag = {
+                                Color = 'Outline',
+                            },
                         }, {
                             New('UIGradient', {
-                                Color = ColorSequence.new{
-                                    ColorSequenceKeypoint.new(0, Color3.fromHex'#FFD700'),
-                                    ColorSequenceKeypoint.new(0.5, Color3.fromHex'#4D4300'),
-                                    ColorSequenceKeypoint.new(1, Color3.fromHex'#FFD700'),
-                                },
                                 Rotation = 0,
                                 Name = 'GlowTrail',
                             }),
@@ -12096,6 +12121,15 @@ do
 
                     if Gradient then
                         Gradient.Rotation = (Gradient.Rotation + 2) % 360
+
+                        local outlineColor = Creator.GetThemeProperty('Outline', Creator.Theme) or Color3.fromHex'#00F2FE'
+                        local darkColor = Color3.new(outlineColor.R * 0.3, outlineColor.G * 0.3, outlineColor.B * 0.3)
+
+                        Gradient.Color = ColorSequence.new{
+                            ColorSequenceKeypoint.new(0, outlineColor),
+                            ColorSequenceKeypoint.new(0.5, darkColor),
+                            ColorSequenceKeypoint.new(1, outlineColor),
+                        }
                     else
                         break
                     end
@@ -12111,6 +12145,11 @@ do
 
                 local isOpen = Window.RightPanelOpen
 
+                if Window.RightPanelTween then
+                    Window.RightPanelTween:Cancel()
+
+                    Window.RightPanelTween = nil
+                end
                 if isOpen then
                     Panel.Visible = true
 
@@ -12125,9 +12164,13 @@ do
                         Tween(Button:FindFirstChildWhichIsA('ImageLabel', true), 0.3, {Rotation = 180}):Play()
                     end
 
-                    Tween(Panel, 0.5, {
+                    local tween = Tween(Panel, 0.5, {
                         Position = UDim2.new(1, -245, 0, 0),
-                    }, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
+                    }, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
+
+                    Window.RightPanelTween = tween
+
+                    tween:Play()
                 else
                     if Button then
                         Tween(Button:FindFirstChildWhichIsA('ImageLabel', true), 0.3, {Rotation = 0}):Play()
@@ -12137,11 +12180,20 @@ do
                         Position = UDim2.new(1, 15, 0, 0),
                     }, Enum.EasingStyle.Quint, Enum.EasingDirection.In)
 
-                    tween.Completed:Connect(function()
-                        if not Window.RightPanelOpen then
+                    Window.RightPanelTween = tween
+
+                    local connection
+
+                    connection = tween.Completed:Connect(function(
+                        playbackState
+                    )
+                        connection:Disconnect()
+
+                        if playbackState == Enum.PlaybackState.Completed and not Window.RightPanelOpen then
                             Panel.Visible = false
                         end
                     end)
+
                     tween:Play()
                 end
             end
@@ -12669,7 +12721,7 @@ do
 
             Window:CreateTopbarButton('SidebarToggle', 'panel-right', function()
                 Window:ToggleRightPanel()
-            end, 1000, true, Color3.fromHex'#FFD700')
+            end, 1000, true, Color3.fromHex'#00F2FE')
 
             local WindowDragModule = Creator.Drag(Window.UIElements.Main, {
                 Window.UIElements.Main.Main.Topbar,
@@ -14440,7 +14492,7 @@ do
             Window:Tag{
                 Title = 'v2.1.2',
                 Icon = 'github',
-                Color = Color3.fromHex'#FFD700',
+                Color = Color3.fromHex'#00F2FE',
                 Border = true,
             }
             Loading:Update'Cargando Overview...'

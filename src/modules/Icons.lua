@@ -158,6 +158,10 @@ function IconModule.Icon(Icon, Type, DefaultFormat)
     
     local targetType = iconType or Type or IconModule.IconsType  
     local targetName = iconName  
+    
+    if targetName == "sliders" then
+        targetName = "sliders-horizontal"
+    end
       
     local iconSet = IconModule.Icons[targetType]  
       
