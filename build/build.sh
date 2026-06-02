@@ -1,8 +1,12 @@
 #!/bin/bash
 
-# Ensure aftman binaries are in PATH
-export PATH="/c/Users/samir/.aftman/bin:$PATH"
-ALIAS_AFTMAN="/c/Users/samir/.aftman/bin/aftman"
+# Ensure aftman is available on PATH, otherwise fallback to local user path
+if command -v aftman &> /dev/null; then
+    ALIAS_AFTMAN="aftman"
+else
+    export PATH="/c/Users/samir/.aftman/bin:$PATH"
+    ALIAS_AFTMAN="/c/Users/samir/.aftman/bin/aftman"
+fi
 
 MODE=${1:-"build"}
 
