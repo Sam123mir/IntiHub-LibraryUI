@@ -37,9 +37,9 @@ function Element:New(Config)
         UIElements = {},
         IsFocusing = false,
         
-        Width = Config.Width or 130,
+        Width = Config.Width or 180,
         TextBoxWidth = 40,
-        ThumbSize = 14,
+        ThumbSize = 12,
         IconSize = 22,
         
         IsHolding = false,
@@ -110,6 +110,7 @@ function Element:New(Config)
         Title = Slider.Title,
         Desc = Slider.Desc,
         Parent = Config.Parent,
+        TextOffset = Slider.Width + 10, -- Prevent text overlap
         Hover = true,
         Tab = Config.Tab,
         Index = Config.Index,
@@ -122,7 +123,7 @@ function Element:New(Config)
         Size = UDim2.new(0, Slider.Width, 0, 24),
         BackgroundTransparency = 1,
         LayoutOrder = 10,
-        Parent = Slider.SliderFrame.UIElements.MainTitleFrame,
+        Parent = Slider.SliderFrame.UIElements.Main, -- Parent to Main for absolute positioning
         AnchorPoint = Vector2.new(1, 0.5),
         Position = UDim2.new(1, 0, 0.5, 0),
     }, {
@@ -135,23 +136,23 @@ function Element:New(Config)
         IconFrom,
         Creator.NewRoundFrame(99, "Squircle", {
             Name = "SliderBack",
-            Size = UDim2.new(1, (IconFrom and -30 or 0) + (IconTo and -30 or 0) + (Slider.IsTextbox and -Slider.TextBoxWidth - 10 or 0), 0, 4),
-            ImageTransparency = 0.8,
-            ImageColor3 = Color3.new(1, 1, 1), -- White line
+            Size = UDim2.new(1, (IconFrom and -30 or 0) + (IconTo and -30 or 0) + (Slider.IsTextbox and -Slider.TextBoxWidth - 10 or 0), 0, 2), -- Thin 2px line
+            ImageTransparency = 0.5,
+            ImageColor3 = Color3.fromRGB(60, 60, 60), -- Dark grey track
         }, {
             Creator.NewRoundFrame(99, "Squircle", {
                 Name = "Fill",
                 Size = UDim2.new(delta, 0, 1, 0),
                 ThemeTag = { ImageColor3 = "Slider" },
             }, {
-                Creator.NewRoundFrame(4, "Squircle", {
+                Creator.NewRoundFrame(2, "Squircle", { -- 2px corner radius for thumb
                     Name = "Thumb",
-                    Size = UDim2.new(0, 10, 0, 18), -- Rectangular pill
+                    Size = UDim2.new(0, 12, 0, 12), -- 12px gold square
                     Position = UDim2.new(1, 0, 0.5, 0),
                     AnchorPoint = Vector2.new(0.5, 0.5),
                     ThemeTag = { ImageColor3 = "Accent" }, -- Golden
                 }, {
-                    New("UIStroke", { Thickness = 1.5, Color = Color3.fromHex("#FFD700"), Transparency = 0.2 }),
+                    New("UIStroke", { Thickness = 1, Color = Color3.fromHex("#FFD700"), Transparency = 0.3 }),
                 })
             })
         }),

@@ -50,14 +50,22 @@ do
             ['crown'] = 120997033468887,
             ['layout-grid'] = 114197133177,
             ['settings'] = 11419719547,
-            ['zap'] = 11419717442,
+            ['zap'] = 130551565616516,
             ['check-circle'] = 11419711612,
             ['component'] = 11419712165,
             ['star'] = 11419714881,
             ['minimize-2'] = 11419715732,
             ['shield-check'] = 11419718420,
-            ['lock'] = 11419715367,
-            ['alert-circle'] = 11419710381,
+            ['lock'] = 134724289526879,
+            ['alert-circle'] = 83898160590116,
+            ['home'] = 98755624629571,
+            ['check-square'] = 134682053539509,
+            ['mouse-pointer'] = 72322454962935,
+            ['type'] = 133543553793564,
+            ['sliders'] = 85538382643347,
+            ['list'] = 113179976918783,
+            ['sun'] = 110150589884127,
+            ['expand'] = 137492887754537,
         }
 
         local function Get(url)
@@ -6555,7 +6563,7 @@ do
                 BackgroundTransparency = 1,
                 AutomaticSize = Element.Justify == 'Between' and 'Y' or 'XY',
                 Size = UDim2.new(Element.Justify == 'Between' and 1 or 0, Element.Justify == 'Between' and (ImageFrame and 
--IconOffset - Element.UIPadding or -IconOffset) or 0, 1, 0),
+-IconOffset - Element.UIPadding or -IconOffset) or 0, 0, 0),
                 Name = 'TextContainer',
             }, {
                 New('UIPadding', {
@@ -6595,7 +6603,7 @@ do
             Element.UIElements.MainTitleFrame = MainTitleFrame
             Element.UIElements.ContentFrame = TextContainer
             Element.UIElements.Container = New('Frame', {
-                Size = UDim2.new(1, 0, 1, 0),
+                Size = UDim2.new(1, 0, 0, 0),
                 AutomaticSize = 'Y',
                 BackgroundTransparency = 1,
             }, {
@@ -7581,9 +7589,9 @@ do
                 Callback = Config.Callback or function() end,
                 UIElements = {},
                 IsFocusing = false,
-                Width = Config.Width or 130,
+                Width = Config.Width or 180,
                 TextBoxWidth = 40,
-                ThumbSize = 14,
+                ThumbSize = 12,
                 IconSize = 22,
                 IsHolding = false,
             }
@@ -7665,6 +7673,7 @@ do
                 Title = Slider.Title,
                 Desc = Slider.Desc,
                 Parent = Config.Parent,
+                TextOffset = Slider.Width + 10,
                 Hover = true,
                 Tab = Config.Tab,
                 Index = Config.Index,
@@ -7677,7 +7686,7 @@ do
                 Size = UDim2.new(0, Slider.Width, 0, 24),
                 BackgroundTransparency = 1,
                 LayoutOrder = 10,
-                Parent = Slider.SliderFrame.UIElements.MainTitleFrame,
+                Parent = Slider.SliderFrame.UIElements.Main,
                 AnchorPoint = Vector2.new(1, 0.5),
                 Position = UDim2.new(1, 0, 0.5, 0),
             }, {
@@ -7691,9 +7700,9 @@ do
                 Creator.NewRoundFrame(99, 'Squircle', {
                     Name = 'SliderBack',
                     Size = UDim2.new(1, (IconFrom and -30 or 0) + (IconTo and -30 or 0) + (Slider.IsTextbox and 
--Slider.TextBoxWidth - 10 or 0), 0, 4),
-                    ImageTransparency = 0.8,
-                    ImageColor3 = Color3.new(1, 1, 1),
+-Slider.TextBoxWidth - 10 or 0), 0, 2),
+                    ImageTransparency = 0.5,
+                    ImageColor3 = Color3.fromRGB(60, 60, 60),
                 }, {
                     Creator.NewRoundFrame(99, 'Squircle', {
                         Name = 'Fill',
@@ -7702,9 +7711,9 @@ do
                             ImageColor3 = 'Slider',
                         },
                     }, {
-                        Creator.NewRoundFrame(4, 'Squircle', {
+                        Creator.NewRoundFrame(2, 'Squircle', {
                             Name = 'Thumb',
-                            Size = UDim2.new(0, 10, 0, 18),
+                            Size = UDim2.new(0, 12, 0, 12),
                             Position = UDim2.new(1, 0, 0.5, 0),
                             AnchorPoint = Vector2.new(0.5, 0.5),
                             ThemeTag = {
@@ -7712,9 +7721,9 @@ do
                             },
                         }, {
                             New('UIStroke', {
-                                Thickness = 1.5,
+                                Thickness = 1,
                                 Color = Color3.fromHex'#FFD700',
-                                Transparency = 0.2,
+                                Transparency = 0.3,
                             }),
                         }),
                     }),
@@ -8171,13 +8180,13 @@ do
             Dropdown.UIElements.MenuCanvas = New('Frame', {
                 Size = UDim2.new(0, Dropdown.MenuWidth, 0, 300),
                 BackgroundTransparency = 1,
-                Position = UDim2.new(-10, 0, -10, 0),
-                Visible = false,
-                Active = false,
                 Parent = Config.IntiHub.DropdownGui,
                 AnchorPoint = Vector2.new(1, 0),
                 Name = 'DropdownCanvas',
-                ZIndex = 1000,
+                Position = UDim2.new(-10, 0, -10, 0),
+                Visible = false,
+                Active = false,
+                ZIndex = 20000000,
             }, {
                 Dropdown.UIElements.Menu,
                 New('UISizeConstraint', {
@@ -10940,34 +10949,6 @@ do
                 ZIndex = 5,
                 Position = UDim2.new(0, 0, 0, 5),
             }, {
-                New('Frame', {
-                    Size = UDim2.new(0, 300, 0, 100),
-                    Position = UDim2.new(0.5, 0, 0.5, 0),
-                    AnchorPoint = Vector2.new(0.5, 0.5),
-                    BackgroundTransparency = 1,
-                    ZIndex = 1,
-                }, {
-                    New('ImageLabel', {
-                        Size = UDim2.new(0, 48, 0, 48),
-                        Position = UDim2.new(0.5, 0, 0, 0),
-                        AnchorPoint = Vector2.new(0.5, 0),
-                        Image = 'rbxassetid://120997033468887',
-                        BackgroundTransparency = 1,
-                        ImageColor3 = Color3.fromHex'#FFD700',
-                        ImageTransparency = 0.94,
-                    }),
-                    New('TextLabel', {
-                        Text = 'INTI HUB',
-                        TextSize = 35,
-                        FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
-                        TextColor3 = Color3.fromHex'#FFD700',
-                        TextTransparency = 0.94,
-                        BackgroundTransparency = 1,
-                        Size = UDim2.new(1, 0, 0, 40),
-                        Position = UDim2.new(0, 0, 1, 0),
-                        AnchorPoint = Vector2.new(0, 1),
-                    }),
-                }),
                 Tab.UIElements.ContainerFrame,
                 New('Frame', {
                     Size = UDim2.new(1, 0, 0, ((Window.UIPadding * 2.4) + 12)),
@@ -11204,14 +11185,36 @@ do
                         FontFace = Font.new(Creator.Font, Enum.FontWeight.Regular),
                     }) or nil,
                 })
-                local CreationConn
 
-                CreationConn = Creator.AddSignal(Tab.UIElements.ContainerFrame.ChildAdded, function(
-                )
-                    Empty.Visible = false
+                local function checkEmpty()
+                    local hasChildren = false
 
-                    CreationConn:Disconnect()
-                end)
+                    for _, child in ipairs(Tab.UIElements.ContainerFrame.LeftColumn:GetChildren())do
+                        if child:IsA'GuiObject' and not child:IsA'UIListLayout' then
+                            hasChildren = true
+
+                            break
+                        end
+                    end
+
+                    if not hasChildren then
+                        for _, child in ipairs(Tab.UIElements.ContainerFrame.RightColumn:GetChildren())do
+                            if child:IsA'GuiObject' and not child:IsA'UIListLayout' then
+                                hasChildren = true
+
+                                break
+                            end
+                        end
+                    end
+
+                    Empty.Visible = not hasChildren
+                end
+
+                checkEmpty()
+                Creator.AddSignal(Tab.UIElements.ContainerFrame.LeftColumn.ChildAdded, checkEmpty)
+                Creator.AddSignal(Tab.UIElements.ContainerFrame.LeftColumn.ChildRemoved, checkEmpty)
+                Creator.AddSignal(Tab.UIElements.ContainerFrame.RightColumn.ChildAdded, checkEmpty)
+                Creator.AddSignal(Tab.UIElements.ContainerFrame.RightColumn.ChildRemoved, checkEmpty)
             end)
 
             return Tab
@@ -11785,6 +11788,36 @@ do
                 }),
             })
 
+            local function CreateMiniStat(Label, ValueName)
+                return New('Frame', {
+                    Size = UDim2.new(0.3, 0, 1, 0),
+                    BackgroundColor3 = Color3.new(1, 1, 1),
+                    BackgroundTransparency = 0.97,
+                }, {
+                    New('UICorner', {
+                        CornerRadius = UDim.new(0, 6),
+                    }),
+                    New('TextLabel', {
+                        Text = Label,
+                        TextSize = 9,
+                        TextColor3 = Color3.fromHex'#FFD700',
+                        Position = UDim2.new(0.5, 0, 0.3, 0),
+                        AnchorPoint = Vector2.new(0.5, 0.5),
+                        BackgroundTransparency = 1,
+                    }),
+                    New('TextLabel', {
+                        Name = ValueName,
+                        Text = '...',
+                        TextSize = 12,
+                        TextColor3 = Color3.new(1, 1, 1),
+                        Position = UDim2.new(0.5, 0, 0.7, 0),
+                        AnchorPoint = Vector2.new(0.5, 0.5),
+                        BackgroundTransparency = 1,
+                        FontFace = Font.new(Creator.Font, Enum.FontWeight.SemiBold),
+                    }),
+                })
+            end
+
             local RightPanelContent = New('Frame', {
                 Size = UDim2.new(1, 0, 1, 0),
                 BackgroundTransparency = 1,
@@ -11870,7 +11903,7 @@ do
                     LayoutOrder = 2,
                 }),
                 New('Frame', {
-                    Size = UDim2.new(1, 0, 0, 80),
+                    Size = UDim2.new(1, 0, 0, 125),
                     BackgroundTransparency = 1,
                     LayoutOrder = 3,
                 }, {
@@ -11917,6 +11950,19 @@ do
                             BackgroundTransparency = 1,
                             TextWrapped = true,
                         }),
+                    }),
+                    New('Frame', {
+                        Size = UDim2.new(1, 0, 0, 45),
+                        BackgroundTransparency = 1,
+                    }, {
+                        New('UIListLayout', {
+                            FillDirection = 'Horizontal',
+                            Padding = UDim.new(0, 6),
+                            HorizontalAlignment = 'Center',
+                        }),
+                        CreateMiniStat('FPS', 'FPSValue'),
+                        CreateMiniStat('PING', 'PingValue'),
+                        CreateMiniStat('RAM', 'RamValue'),
                     }),
                 }),
                 New('Frame', {
@@ -11997,8 +12043,7 @@ do
             })
 
             Window.UIElements.RightPanel = New('Frame', {
-                Size = UDim2.new(0, 230, 0, 0),
-                AutomaticSize = 'Y',
+                Size = UDim2.new(0, 230, 1, 0),
                 Position = UDim2.new(1, 15, 0, 0),
                 BackgroundTransparency = 1,
                 Visible = true,
@@ -12006,7 +12051,6 @@ do
             }, {
                 New('CanvasGroup', {
                     Size = UDim2.new(1, 0, 1, 0),
-                    AutomaticSize = 'Y',
                     BackgroundTransparency = 1,
                     Name = 'Group',
                 }, {
@@ -12427,17 +12471,14 @@ do
                                     FillDirection = 'Horizontal',
                                     VerticalAlignment = 'Center',
                                 }),
-                                New('TextLabel', {
-                                    Text = "<font color='#FFD700'><b>INTIHUB</b></font>",
-                                    TextSize = 16,
-                                    FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
-                                    TextColor3 = Color3.fromHex'#FFD700',
-                                    BackgroundTransparency = 1,
-                                    AutomaticSize = 'XY',
-                                    LayoutOrder = 1,
-                                    RichText = true,
-                                    Name = 'BrandingLogo',
-                                }),
+                                (function()
+                                    local icon = Creator.Image('sun', 'BrandingLogo', 0, Window.Folder, 'Topbar', true, true, 'Accent')
+
+                                    icon.Size = UDim2.fromOffset(22, 22)
+                                    icon.LayoutOrder = 1
+
+                                    return icon
+                                end)(),
                                 New('Frame', {
                                     Size = UDim2.new(0, 1, 0, 20),
                                     BackgroundColor3 = Color3.new(1, 1, 1),
@@ -13435,30 +13476,75 @@ do
                 end
             end
 
-            cloneref(game:GetService'Stats')
-
+            local Stats = cloneref(game:GetService'Stats')
             local MarketplaceService = cloneref(game:GetService'MarketplaceService')
 
             task.spawn(function()
                 local GameNameLabel = RightPanelContent:FindFirstChild('GameName', true)
+                local FPSLabel = RightPanelContent:FindFirstChild('FPSValue', true)
+                local PingLabel = RightPanelContent:FindFirstChild('PingValue', true)
+                local RamLabel = RightPanelContent:FindFirstChild('RamValue', true)
 
-                RightPanelContent:FindFirstChild('FPSValue', true)
-                RightPanelContent:FindFirstChild('PingValue', true)
-                RightPanelContent:FindFirstChild('RamValue', true)
+                task.spawn(function()
+                    while not Window.Destroyed do
+                        pcall(function()
+                            local success, info = pcall(function()
+                                return MarketplaceService:GetProductInfo(game.PlaceId)
+                            end)
 
-                while task.wait(5) do
-                    pcall(function()
-                        local success, info = pcall(function()
-                            return MarketplaceService:GetProductInfo(game.PlaceId)
+                            if success and info and info.Name then
+                                GameNameLabel.Text = info.Name
+                            else
+                                GameNameLabel.Text = game.Name or 'Unknown'
+                            end
+                        end)
+                        task.wait(10)
+                    end
+                end)
+
+                local lastUpdate = os.clock()
+                local frames = 0
+                local connection
+
+                connection = RunService.RenderStepped:Connect(function()
+                    if Window.Destroyed or not RightPanelContent.Parent then
+                        if connection then
+                            connection:Disconnect()
+                        end
+
+                        return
+                    end
+
+                    frames = frames + 1
+
+                    local now = os.clock()
+
+                    if now - lastUpdate >= 1 then
+                        pcall(function()
+                            if FPSLabel then
+                                FPSLabel.Text = tostring(frames)
+                            end
+                            if PingLabel then
+                                local pingValue = 0
+                                local pingItem = Stats.Network:FindFirstChild'ServerStatsItem' and Stats.Network.ServerStatsItem:FindFirstChild'Data Ping'
+
+                                if pingItem then
+                                    pingValue = math.round(pingItem:GetValue())
+                                end
+
+                                PingLabel.Text = tostring(pingValue) .. ' ms'
+                            end
+                            if RamLabel then
+                                local ramValue = math.round(Stats:GetTotalMemoryUsageMb())
+
+                                RamLabel.Text = tostring(ramValue) .. ' MB'
+                            end
                         end)
 
-                        if success and info and info.Name then
-                            GameNameLabel.Text = info.Name
-                        else
-                            GameNameLabel.Text = game.Name or 'Unknown'
-                        end
-                    end)
-                end
+                        frames = 0
+                        lastUpdate = now
+                    end
+                end)
             end)
 
             if Window.OpenButtonMain and Window.OpenButtonMain.Button then
@@ -13854,11 +13940,9 @@ do
             IgnoreGuiInset = true,
             DisplayOrder = 2001,
         })
-        IntiHub.DropdownGui = New('ScreenGui', {
-            Name = 'IntiHub/Dropdowns',
-            Parent = GUIParent,
-            IgnoreGuiInset = true,
-            DisplayOrder = 2000,
+        IntiHub.DropdownGui = New('Folder', {
+            Name = 'Dropdowns',
+            Parent = IntiHub.ScreenGui,
         })
         IntiHub.TooltipGui = New('ScreenGui', {
             Name = 'IntiHub/Tooltips',
@@ -13868,7 +13952,6 @@ do
 
         ProtectGui(IntiHub.ScreenGui)
         ProtectGui(IntiHub.NotificationGui)
-        ProtectGui(IntiHub.DropdownGui)
         ProtectGui(IntiHub.TooltipGui)
         Creator.Init(IntiHub)
 
@@ -13878,9 +13961,6 @@ do
             end
             if IntiHub.NotificationGui then
                 IntiHub.NotificationGui.Parent = parent
-            end
-            if IntiHub.DropdownGui then
-                IntiHub.DropdownGui.Parent = parent
             end
             if IntiHub.TooltipGui then
                 IntiHub.TooltipGui.Parent = parent

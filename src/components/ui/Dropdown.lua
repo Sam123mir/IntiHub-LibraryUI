@@ -77,14 +77,13 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 	Dropdown.UIElements.MenuCanvas = New("Frame", {
 		Size = UDim2.new(0, Dropdown.MenuWidth, 0, 300),
 		BackgroundTransparency = 1,
-		Position = UDim2.new(-10, 0, -10, 0),
-		Visible = false,
-		Active = false,
-		--GroupTransparency = 1, -- 0
 		Parent = Config.IntiHub.DropdownGui,
 		AnchorPoint = Vector2.new(1, 0),
 		Name = "DropdownCanvas",
-		ZIndex = 1000, -- Ensure it's on top
+		Position = UDim2.new(-10, 0, -10, 0),
+		Visible = false,
+		Active = false,
+		ZIndex = 20000000, -- Ensure it's on top
 	}, {
 		Dropdown.UIElements.Menu,
 		New("UISizeConstraint", {

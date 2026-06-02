@@ -229,7 +229,7 @@ return function(Config)
 			Element.Justify == "Between" and 1 or 0,
 			Element.Justify == "Between" and (ImageFrame and -IconOffset - Element.UIPadding or -IconOffset)
 				or 0,
-			1,
+			0,
 			0
 		),
 		Name = "TextContainer",
@@ -284,7 +284,7 @@ return function(Config)
 	Element.UIElements.ContentFrame = TextContainer
 
 	Element.UIElements.Container = New("Frame", {
-		Size = UDim2.new(1, 0, 1, 0),
+		Size = UDim2.new(1, 0, 0, 0),
 		AutomaticSize = "Y",
 		BackgroundTransparency = 1,
 	}, {

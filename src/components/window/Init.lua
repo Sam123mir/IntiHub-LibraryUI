@@ -450,7 +450,7 @@ return function(Config)
 
         -- 🟢 Game Statistics
         New("Frame", {
-            Size = UDim2.new(1, 0, 0, 80),
+            Size = UDim2.new(1, 0, 0, 125),
             BackgroundTransparency = 1,
             LayoutOrder = 3,
         }, {
@@ -485,6 +485,21 @@ return function(Config)
                     BackgroundTransparency = 1,
                     TextWrapped = true,
                 })
+            }),
+
+            -- Statistics Grid
+            New("Frame", {
+                Size = UDim2.new(1, 0, 0, 45),
+                BackgroundTransparency = 1,
+            }, {
+                New("UIListLayout", {
+                    FillDirection = "Horizontal",
+                    Padding = UDim.new(0, 6),
+                    HorizontalAlignment = "Center",
+                }),
+                CreateMiniStat("FPS", "FPSValue"),
+                CreateMiniStat("PING", "PingValue"),
+                CreateMiniStat("RAM", "RamValue"),
             })
         }),
 
@@ -550,8 +565,7 @@ return function(Config)
     })
 
     Window.UIElements.RightPanel = New("Frame", {
-        Size = UDim2.new(0, 230, 0, 0),
-        AutomaticSize = "Y",
+        Size = UDim2.new(0, 230, 1, 0),
         Position = UDim2.new(1, 15, 0, 0),
         BackgroundTransparency = 1,
         Visible = true,
@@ -559,7 +573,6 @@ return function(Config)
     }, {
         New("CanvasGroup", {
             Size = UDim2.new(1, 0, 1, 0),
-            AutomaticSize = "Y",
             BackgroundTransparency = 1,
             Name = "Group"
         }, {
@@ -995,18 +1008,12 @@ return function(Config)
                             FillDirection = "Horizontal",
                             VerticalAlignment = "Center",
                         }),
-                        -- Logo
-                        New("TextLabel", {
-                            Text = "<font color='#FFD700'><b>INTIHUB</b></font>",
-                            TextSize = 16,
-                            FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
-                            TextColor3 = Color3.fromHex("#FFD700"),
-                            BackgroundTransparency = 1,
-                            AutomaticSize = "XY",
-                            LayoutOrder = 1,
-                            RichText = true,
-                            Name = "BrandingLogo",
-                        }),
+                        (function()
+                            local icon = Creator.Image("sun", "BrandingLogo", 0, Window.Folder, "Topbar", true, true, "Accent")
+                            icon.Size = UDim2.fromOffset(22, 22)
+                            icon.LayoutOrder = 1
+                            return icon
+                        end)(),
                         -- Separator
                         New("Frame", {
                             Size = UDim2.new(0, 1, 0, 20),
@@ -2287,16 +2294,55 @@ return function(Config)
         local PingLabel = RightPanelContent:FindFirstChild("PingValue", true)
         local RamLabel = RightPanelContent:FindFirstChild("RamValue", true)
 
-        while task.wait(5) do -- Only update Game Name every 5s
-            pcall(function()
-                local success, info = pcall(function() return MarketplaceService:GetProductInfo(game.PlaceId) end)
-                if success and info and info.Name then
-                    GameNameLabel.Text = info.Name
-                else
-                    GameNameLabel.Text = game.Name or "Unknown"
-                end
-            end)
-        end
+        -- Game Name Update Loop (runs once, then every 10s)
+        task.spawn(function()
+            while not Window.Destroyed do
+                pcall(function()
+                    local success, info = pcall(function() return MarketplaceService:GetProductInfo(game.PlaceId) end)
+                    if success and info and info.Name then
+                        GameNameLabel.Text = info.Name
+                    else
+                        GameNameLabel.Text = game.Name or "Unknown"
+                    end
+                end)
+                task.wait(10)
+            end
+        end)
+
+        -- Fast Stats Update Loop (runs every 1s)
+        local lastUpdate = os.clock()
+        local frames = 0
+        local connection
+        connection = RunService.RenderStepped:Connect(function()
+            if Window.Destroyed or not RightPanelContent.Parent then
+                if connection then connection:Disconnect() end
+                return
+            end
+            frames = frames + 1
+            local now = os.clock()
+            if now - lastUpdate >= 1 then
+                pcall(function()
+                    if FPSLabel then
+                        FPSLabel.Text = tostring(frames)
+                    end
+                    if PingLabel then
+                        local pingValue = 0
+                        local pingItem = Stats.Network:FindFirstChild("ServerStatsItem") 
+                            and Stats.Network.ServerStatsItem:FindFirstChild("Data Ping")
+                        if pingItem then
+                            pingValue = math.round(pingItem:GetValue())
+                        end
+                        PingLabel.Text = tostring(pingValue) .. " ms"
+                    end
+                    if RamLabel then
+                        local ramValue = math.round(Stats:GetTotalMemoryUsageMb())
+                        RamLabel.Text = tostring(ramValue) .. " MB"
+                    end
+                end)
+                frames = 0
+                lastUpdate = now
+            end
+        end)
     end)
 
 

@@ -96,11 +96,9 @@ IntiHub.NotificationGui = New("ScreenGui", {
 	IgnoreGuiInset = true,
 	DisplayOrder = 2001,
 })
-IntiHub.DropdownGui = New("ScreenGui", {
-	Name = "IntiHub/Dropdowns",
-	Parent = GUIParent,
-	IgnoreGuiInset = true,
-	DisplayOrder = 2000,
+IntiHub.DropdownGui = New("Folder", {
+	Name = "Dropdowns",
+	Parent = IntiHub.ScreenGui,
 })
 IntiHub.TooltipGui = New("ScreenGui", {
 	Name = "IntiHub/Tooltips",
@@ -109,7 +107,6 @@ IntiHub.TooltipGui = New("ScreenGui", {
 })
 ProtectGui(IntiHub.ScreenGui)
 ProtectGui(IntiHub.NotificationGui)
-ProtectGui(IntiHub.DropdownGui)
 ProtectGui(IntiHub.TooltipGui)
 
 Creator.Init(IntiHub)
@@ -120,9 +117,6 @@ function IntiHub:SetParent(parent)
 	end
 	if IntiHub.NotificationGui then
 		IntiHub.NotificationGui.Parent = parent
-	end
-	if IntiHub.DropdownGui then
-		IntiHub.DropdownGui.Parent = parent
 	end
 	if IntiHub.TooltipGui then
 		IntiHub.TooltipGui.Parent = parent

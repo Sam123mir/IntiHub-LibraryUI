@@ -305,35 +305,6 @@ function TabModule.New(Config, UIScale)
 		ZIndex = 5,
         Position = UDim2.new(0, 0, 0, 5),
 	}, {
-        -- 🟢 Background Watermark (INTIHUB)
-        New("Frame", {
-            Size = UDim2.new(0, 300, 0, 100),
-            Position = UDim2.new(0.5, 0, 0.5, 0),
-            AnchorPoint = Vector2.new(0.5, 0.5),
-            BackgroundTransparency = 1,
-            ZIndex = 1,
-        }, {
-            New("ImageLabel", {
-                Size = UDim2.new(0, 48, 0, 48),
-                Position = UDim2.new(0.5, 0, 0, 0),
-                AnchorPoint = Vector2.new(0.5, 0),
-                Image = "rbxassetid://120997033468887", -- Logo ID
-                BackgroundTransparency = 1,
-                ImageColor3 = Color3.fromHex("#FFD700"),
-                ImageTransparency = 0.94,
-            }),
-            New("TextLabel", {
-                Text = "INTI HUB",
-                TextSize = 35,
-                FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
-                TextColor3 = Color3.fromHex("#FFD700"),
-                TextTransparency = 0.94,
-                BackgroundTransparency = 1,
-                Size = UDim2.new(1, 0, 0, 40),
-                Position = UDim2.new(0, 0, 1, 0),
-                AnchorPoint = Vector2.new(0, 1),
-            })
-        }),
 		Tab.UIElements.ContainerFrame,
 		New("Frame", {
 			Size = UDim2.new(1, 0, 0, ((Window.UIPadding * 2.4) + 12)),
@@ -606,11 +577,31 @@ function TabModule.New(Config, UIScale)
 		--     Empty.TextLabel.Size = UDim2.new(0,Empty.TextLabel.TextBounds.X,0,Empty.TextLabel.TextBounds.Y)
 		-- end)
 
-		local CreationConn
-		CreationConn = Creator.AddSignal(Tab.UIElements.ContainerFrame.ChildAdded, function()
-			Empty.Visible = false
-			CreationConn:Disconnect()
-		end)
+		local function checkEmpty()
+			local hasChildren = false
+			for _, child in ipairs(Tab.UIElements.ContainerFrame.LeftColumn:GetChildren()) do
+				if child:IsA("GuiObject") and not child:IsA("UIListLayout") then
+					hasChildren = true
+					break
+				end
+			end
+			if not hasChildren then
+				for _, child in ipairs(Tab.UIElements.ContainerFrame.RightColumn:GetChildren()) do
+					if child:IsA("GuiObject") and not child:IsA("UIListLayout") then
+						hasChildren = true
+						break
+					end
+				end
+			end
+			Empty.Visible = not hasChildren
+		end
+
+		checkEmpty()
+
+		Creator.AddSignal(Tab.UIElements.ContainerFrame.LeftColumn.ChildAdded, checkEmpty)
+		Creator.AddSignal(Tab.UIElements.ContainerFrame.LeftColumn.ChildRemoved, checkEmpty)
+		Creator.AddSignal(Tab.UIElements.ContainerFrame.RightColumn.ChildAdded, checkEmpty)
+		Creator.AddSignal(Tab.UIElements.ContainerFrame.RightColumn.ChildRemoved, checkEmpty)
 	end)
 
 	return Tab
