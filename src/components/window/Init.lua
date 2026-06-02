@@ -2366,7 +2366,8 @@ return function(Config)
         ["Synapse Z"] = { sunc = "98%", unc = "99%", ver = "1.0.2.6", logo = "synapsez" },
         ["Opiumware"] = { sunc = "100%", unc = "99%", ver = "v2.3.8", logo = "opiumware" },
         ["Isaeva"]    = { sunc = "100%", unc = "99%", ver = "1.3.1", logo = "isaeva" },
-        ["Cosmic"]    = { sunc = "100%", unc = "99%", ver = "v0.723.2.0.2-live", logo = "cosmic" }
+        ["Cosmic"]    = { sunc = "100%", unc = "99%", ver = "v0.723.2.0.2-live", logo = "cosmic" },
+        ["Vega X"]    = { sunc = "98%", unc = "98%", ver = "2.720.1167", logo = "vegax" }
     }
     local LOGO_BASE_URL = "https://raw.githubusercontent.com/Sam123mir/IntiHub-LibraryUI/main/docs/logos/"
     
@@ -2501,6 +2502,7 @@ return function(Config)
                 pcall(function()
                     local logoUrl = matchedData.logoUrl
                     if logoUrl and logoUrl ~= "" then
+                        logoUrl = logoUrl:gsub("cdn.weao.gg", "weao.xyz")
                         local cleanName = string.lower(matchedName or "unknown"):gsub("%s+", ""):gsub("%.+", ""):gsub("/+", "")
                         local logoAsset = Creator.GetAsset(logoUrl, Window.Folder, "image", "exec_" .. cleanName)
                         if logoAsset and logoAsset ~= "" then
