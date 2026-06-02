@@ -206,6 +206,12 @@ function IconModule.Image(IconConfig)
 
 
     local IconLabel = IconModule.Icon2(Icon.Icon, Icon.Type)  
+    if not IconLabel then
+        IconLabel = IconModule.Icon("lucide:alert-circle") or {
+            "rbxassetid://11419710381",
+            { ImageRectSize = Vector2.new(0, 0), ImageRectPosition = Vector2.new(0, 0) }
+        }
+    end
     local isrbxassetid = typeof(IconLabel) == "string" and string.find(IconLabel, 'rbxassetid://')
     
     if IconModule.New then  

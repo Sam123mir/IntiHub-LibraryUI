@@ -16,9 +16,16 @@ local Icons
 if RunService:IsStudio() or not writefile then
 	Icons = require("./Icons")
 else
-	Icons = loadstring(
-		game.HttpGetAsync and game:HttpGetAsync(IconsURL) or HttpService:GetAsync(IconsURL) --studio
-	)()
+	local success, result = pcall(function()
+		local code = game.HttpGetAsync and game:HttpGetAsync(IconsURL) or HttpService:GetAsync(IconsURL)
+		return loadstring(code)()
+	end)
+	if success and result then
+		Icons = result
+	else
+		warn("[IntiHub] Failed to fetch remote icons, using local fallback. Error: " .. tostring(result))
+		Icons = require("./Icons")
+	end
 end
 
 Icons.SetIconsType("lucide")

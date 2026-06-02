@@ -5,7 +5,7 @@
  _/ // / / / /_/ / __  / /_/ / /_/ /
 /___/_/ /_/\__/_/_/ /_/\__,_/_.___/ 
                                     
-    v1.7.0  |  2026-04-01  |  Roblox UI Library - Noble Deluxe v2.0
+    v1.7.0  |  2026-06-01  |  Roblox UI Library - Noble Deluxe v2.0
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -253,6 +253,17 @@ do
             end
 
             local IconLabel = IconModule.Icon2(Icon.Icon, Icon.Type)
+
+            if not IconLabel then
+                IconLabel = IconModule.Icon'lucide:alert-circle' or {
+                    'rbxassetid://11419710381',
+                    {
+                        ImageRectSize = Vector2.new(0, 0),
+                        ImageRectPosition = Vector2.new(0, 0),
+                    },
+                }
+            end
+
             local isrbxassetid = typeof(IconLabel) == 'string' and string.find(IconLabel, 'rbxassetid://')
 
             if IconModule.New then
@@ -434,7 +445,20 @@ do
         if RunService:IsStudio() or not writefile then
             Icons = __DARKLUA_BUNDLE_MODULES.load'a'
         else
-            Icons = loadstring(game.HttpGetAsync and game:HttpGetAsync(IconsURL) or HttpService:GetAsync(IconsURL))()
+            local success, result = pcall(function()
+                local code = game.HttpGetAsync and game:HttpGetAsync(IconsURL) or HttpService:GetAsync(IconsURL)
+
+                return loadstring(code)()
+            end)
+
+            if success and result then
+                Icons = result
+            else
+                warn(
+[[[IntiHub] Failed to fetch remote icons, using local fallback. Error: ]] .. tostring(result))
+
+                Icons = __DARKLUA_BUNDLE_MODULES.load'a'
+            end
         end
 
         Icons.SetIconsType'lucide'
@@ -4113,20 +4137,42 @@ do
             return {
                 Dark = {
                     Name = 'Dark',
-                    Accent = Color3.fromHex'#FFC300',
-                    Dialog = Color3.fromHex'#0A0A0A',
+                    Accent = IntiHub:Gradient({
+                        ['0'] = {
+                            Color = Color3.fromHex'#FFE57F',
+                            Transparency = 0,
+                        },
+                        ['50'] = {
+                            Color = Color3.fromHex'#D4AF37',
+                            Transparency = 0,
+                        },
+                        ['100'] = {
+                            Color = Color3.fromHex'#AA7C11',
+                            Transparency = 0,
+                        },
+                    }, {Rotation = 45}),
+                    Dialog = Color3.fromHex'#050505',
                     Outline = Color3.fromHex'#FFC300',
                     Text = Color3.fromHex'#FFFFFF',
                     Placeholder = Color3.fromHex'#7a7a7a',
                     Background = Color3.fromHex'#000000',
-                    BackgroundTransparency = 0.1,
-                    Button = Color3.fromHex'#1A1A1A',
+                    BackgroundTransparency = 0.05,
+                    Button = Color3.fromHex'#141414',
                     Icon = Color3.fromHex'#FFC300',
-                    Toggle = Color3.fromHex'#FFC300',
+                    Toggle = IntiHub:Gradient({
+                        ['0'] = {
+                            Color = Color3.fromHex'#FFE57F',
+                            Transparency = 0,
+                        },
+                        ['100'] = {
+                            Color = Color3.fromHex'#D4AF37',
+                            Transparency = 0,
+                        },
+                    }, {Rotation = 45}),
                     Slider = Color3.fromHex'#FFC300',
                     Checkbox = Color3.fromHex'#FFC300',
                     PanelBackground = Color3.fromHex'#0A0A0A',
-                    PanelBackgroundTransparency = 0.5,
+                    PanelBackgroundTransparency = 0.35,
                     SliderIcon = Color3.fromHex'#FFC300',
                     Primary = Color3.fromHex'#FFC300',
                     LabelBackground = Color3.fromHex'#000000',
@@ -4439,6 +4485,45 @@ do
                         },
                     }, {Rotation = 45}),
                     Icon = Color3.fromHex'#ffffff',
+                },
+                Oceanic = {
+                    Name = 'Oceanic',
+                    Accent = IntiHub:Gradient({
+                        ['0'] = {
+                            Color = Color3.fromHex'#00F2FE',
+                            Transparency = 0,
+                        },
+                        ['100'] = {
+                            Color = Color3.fromHex'#4FACFE',
+                            Transparency = 0,
+                        },
+                    }, {Rotation = 45}),
+                    Dialog = Color3.fromHex'#0A1128',
+                    Outline = Color3.fromHex'#00F2FE',
+                    Text = Color3.fromHex'#E6F8FF',
+                    Placeholder = Color3.fromHex'#6B8EA7',
+                    Background = Color3.fromHex'#020514',
+                    BackgroundTransparency = 0.1,
+                    Button = Color3.fromHex'#0B1E36',
+                    Icon = Color3.fromHex'#00F2FE',
+                    Toggle = IntiHub:Gradient({
+                        ['0'] = {
+                            Color = Color3.fromHex'#00F2FE',
+                            Transparency = 0,
+                        },
+                        ['100'] = {
+                            Color = Color3.fromHex'#4FACFE',
+                            Transparency = 0,
+                        },
+                    }, {Rotation = 45}),
+                    Slider = Color3.fromHex'#00F2FE',
+                    Checkbox = Color3.fromHex'#00F2FE',
+                    PanelBackground = Color3.fromHex'#0A1128',
+                    PanelBackgroundTransparency = 0.4,
+                    SliderIcon = Color3.fromHex'#00F2FE',
+                    Primary = Color3.fromHex'#00F2FE',
+                    LabelBackground = Color3.fromHex'#020514',
+                    LabelBackgroundTransparency = 0.7,
                 },
             }
         end
@@ -7438,7 +7523,7 @@ do
                 Creator.AddSignal(Toggle.ToggleFrame.UIElements.Main.InputBegan, function(
                     input
                 )
-                    if not Config.Window.IsToggleDragging and input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                    if not Config.Window.IsToggleDragging and (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
                         ToggleFunc:Animate(input, Toggle)
                     end
                 end)
@@ -7475,16 +7560,19 @@ do
         local Element = {}
 
         function Element:New(Config)
+            local valMin = Config.Min or (typeof(Config.Value) == 'table' and Config.Value.Min) or 0
+            local valMax = Config.Max or (typeof(Config.Value) == 'table' and Config.Value.Max) or 100
+            local valDefault = Config.Default or (typeof(Config.Value) == 'table' and Config.Value.Default) or (typeof(Config.Value) == 'number' and Config.Value) or 50
             local Slider = {
                 __type = 'Slider',
                 Title = Config.Title or 'Slider',
                 Desc = Config.Desc or nil,
                 Locked = Config.Locked or nil,
                 LockedTitle = Config.LockedTitle,
-                Value = Config.Value or {
-                    Min = 0,
-                    Max = 100,
-                    Default = 50,
+                Value = {
+                    Min = valMin,
+                    Max = valMax,
+                    Default = valDefault,
                 },
                 Icons = Config.Icons or nil,
                 IsTooltip = Config.IsTooltip or false,
@@ -10545,7 +10633,7 @@ do
                             end
                         end
 
-                        Window.AllElements[config.Index] = content
+                        Window.AllElements[config.GlobalIndex] = content
                         tbl.Elements[config.Index] = content
 
                         if Tab then
@@ -12069,7 +12157,7 @@ do
                             local response = game.HttpGet and game:HttpGet(BGVideo)
 
                             pcall(function()
-                                writefile(videoPath, response.Body)
+                                writefile(videoPath, response)
                             end)
                         end)
 
@@ -12117,7 +12205,7 @@ do
                         local response = game.HttpGet and game:HttpGet(BGImageUrl)
 
                         pcall(function()
-                            writefile(imagePath, response.Body)
+                            writefile(imagePath, response)
                         end)
                     end)
 

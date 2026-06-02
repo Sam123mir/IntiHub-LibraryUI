@@ -3,21 +3,28 @@ return function(IntiHub)
 		Dark = {
 			Name = "Dark",
 
-			Accent = Color3.fromHex("#FFC300"), -- Inti Gold
-			Dialog = Color3.fromHex("#0A0A0A"),
+			Accent = IntiHub:Gradient({
+				["0"] = { Color = Color3.fromHex("#FFE57F"), Transparency = 0 },
+				["50"] = { Color = Color3.fromHex("#D4AF37"), Transparency = 0 },
+				["100"] = { Color = Color3.fromHex("#AA7C11"), Transparency = 0 },
+			}, { Rotation = 45 }), -- Metallic Inti Gold Gradient
+			Dialog = Color3.fromHex("#050505"), -- Pure Obsidian Black
 			Outline = Color3.fromHex("#FFC300"), -- Stronger Gold Outline
 			Text = Color3.fromHex("#FFFFFF"),
 			Placeholder = Color3.fromHex("#7a7a7a"),
 			Background = Color3.fromHex("#000000"), -- Pure Black
-			BackgroundTransparency = 0.1, -- Elegant Transparency
-			Button = Color3.fromHex("#1A1A1A"),
+			BackgroundTransparency = 0.05, -- Elegant Transparency
+			Button = Color3.fromHex("#141414"), -- Dark Matte
 			Icon = Color3.fromHex("#FFC300"),
-			Toggle = Color3.fromHex("#FFC300"),
+			Toggle = IntiHub:Gradient({
+				["0"] = { Color = Color3.fromHex("#FFE57F"), Transparency = 0 },
+				["100"] = { Color = Color3.fromHex("#D4AF37"), Transparency = 0 },
+			}, { Rotation = 45 }),
 			Slider = Color3.fromHex("#FFC300"),
 			Checkbox = Color3.fromHex("#FFC300"),
 
 			PanelBackground = Color3.fromHex("#0A0A0A"),
-			PanelBackgroundTransparency = 0.5,
+			PanelBackgroundTransparency = 0.35,
 
 			SliderIcon = Color3.fromHex("#FFC300"),
 			Primary = Color3.fromHex("#FFC300"),
@@ -320,6 +327,38 @@ return function(IntiHub)
 			}, { Rotation = 45 }),
 
 			Icon = Color3.fromHex("#ffffff"),
+		},
+
+		Oceanic = {
+			Name = "Oceanic",
+
+			Accent = IntiHub:Gradient({
+				["0"] = { Color = Color3.fromHex("#00F2FE"), Transparency = 0 },
+				["100"] = { Color = Color3.fromHex("#4FACFE"), Transparency = 0 },
+			}, { Rotation = 45 }), -- Cyan-blue gradient
+			Dialog = Color3.fromHex("#0A1128"), -- Deep ocean midnight blue
+			Outline = Color3.fromHex("#00F2FE"), -- Bright Cyan Outline
+			Text = Color3.fromHex("#E6F8FF"), -- Cool white-blue text
+			Placeholder = Color3.fromHex("#6B8EA7"),
+			Background = Color3.fromHex("#020514"), -- Pure Deep Navy Void
+			BackgroundTransparency = 0.1,
+			Button = Color3.fromHex("#0B1E36"), -- Dark Marine
+			Icon = Color3.fromHex("#00F2FE"), -- Cyan Icon
+			Toggle = IntiHub:Gradient({
+				["0"] = { Color = Color3.fromHex("#00F2FE"), Transparency = 0 },
+				["100"] = { Color = Color3.fromHex("#4FACFE"), Transparency = 0 },
+			}, { Rotation = 45 }),
+			Slider = Color3.fromHex("#00F2FE"),
+			Checkbox = Color3.fromHex("#00F2FE"),
+
+			PanelBackground = Color3.fromHex("#0A1128"),
+			PanelBackgroundTransparency = 0.4,
+
+			SliderIcon = Color3.fromHex("#00F2FE"),
+			Primary = Color3.fromHex("#00F2FE"),
+
+			LabelBackground = Color3.fromHex("#020514"),
+			LabelBackgroundTransparency = 0.7,
 		},
 	}
 end

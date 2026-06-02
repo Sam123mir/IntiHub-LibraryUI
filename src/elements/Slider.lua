@@ -18,13 +18,17 @@ local math = math
 local Element = {}
 
 function Element:New(Config)
+    local valMin = Config.Min or (typeof(Config.Value) == "table" and Config.Value.Min) or 0
+    local valMax = Config.Max or (typeof(Config.Value) == "table" and Config.Value.Max) or 100
+    local valDefault = Config.Default or (typeof(Config.Value) == "table" and Config.Value.Default) or (typeof(Config.Value) == "number" and Config.Value) or 50
+
     local Slider = {
         __type = "Slider",
         Title = Config.Title or "Slider",
         Desc = Config.Desc or nil,
         Locked = Config.Locked or nil,
         LockedTitle = Config.LockedTitle,
-        Value = Config.Value or {Min = 0, Max = 100, Default = 50},
+        Value = {Min = valMin, Max = valMax, Default = valDefault},
         Icons = Config.Icons or nil,
         IsTooltip = Config.IsTooltip or false,
         IsTextbox = Config.IsTextbox,

@@ -101,7 +101,7 @@ return {
 					end
 				end
 
-				Window.AllElements[config.Index] = content
+				Window.AllElements[config.GlobalIndex] = content
 				tbl.Elements[config.Index] = content
 				if Tab then
 					Tab.Elements[config.Index] = content

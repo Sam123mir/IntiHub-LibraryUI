@@ -86,11 +86,11 @@ end
 -- */  Window  /* --
 local Window = IntiHub:CreateWindow({
 	Title = "IntiHub | IntiHub Example",
-	--Author = "by Sammir_Inti",
+	Author = "by Sammir_Inti",
 	Folder = "intihub",
 	Icon = "solar:folder-2-bold-duotone",
-	--Theme = "Mellowsi",
-	--IconSize = 22*2,
+	Theme = "Mellowsi",
+	IconSize = 22*2,
 	NewElements = true,
 	--Size = UDim2.fromOffset(700,700),
 
