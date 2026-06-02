@@ -11988,13 +11988,13 @@ do
                             Padding = UDim.new(0, 6),
                             HorizontalAlignment = 'Center',
                         }),
-                        CreateMiniStat('FPS', 'FPSValue'),
-                        CreateMiniStat('PING', 'PingValue'),
-                        CreateMiniStat('RAM', 'RamValue'),
+                        CreateMiniStat('ONLINE', 'FriendsOnlineValue'),
+                        CreateMiniStat('PLAYING', 'FriendsPlayingValue'),
+                        CreateMiniStat('SAME', 'FriendsSameValue'),
                     }),
                 }),
                 New('Frame', {
-                    Size = UDim2.new(1, 0, 0, 50),
+                    Size = UDim2.new(1, 0, 0, 110),
                     ThemeTag = {
                         BackgroundColor3 = 'Outline',
                     },
@@ -12011,65 +12011,80 @@ do
                         },
                         Transparency = 0.6,
                     }),
-                    New('ImageLabel', {
-                        Size = UDim2.new(0, 22, 0, 22),
-                        Position = UDim2.new(0, 12, 0.5, 0),
-                        AnchorPoint = Vector2.new(0, 0.5),
-                        Image = Creator.Icon'zap'[1],
-                        ImageRectOffset = Creator.Icon'zap'[2].ImageRectPosition,
-                        ImageRectSize = Creator.Icon'zap'[2].ImageRectSize,
+                    New('UIPadding', {
+                        PaddingLeft = UDim.new(0, 12),
+                        PaddingRight = UDim.new(0, 12),
+                        PaddingTop = UDim.new(0, 10),
+                        PaddingBottom = UDim.new(0, 10),
+                    }),
+                    New('UIListLayout', {
+                        Padding = UDim.new(0, 8),
+                        SortOrder = 'LayoutOrder',
+                    }),
+                    New('TextLabel', {
+                        Name = 'ExecTitle',
+                        Text = 'DATA EXECUTOR',
+                        TextSize = 10,
+                        FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
                         ThemeTag = {
-                            ImageColor3 = 'Accent',
+                            TextColor3 = 'Accent',
                         },
+                        TextTransparency = 0.3,
+                        BackgroundTransparency = 1,
+                        Size = UDim2.new(1, 0, 0, 14),
+                        TextXAlignment = 'Left',
+                        LayoutOrder = 1,
                     }),
                     New('Frame', {
-                        Size = UDim2.new(1, -20, 0, 45),
+                        Name = 'ExecRow',
+                        Size = UDim2.new(1, 0, 0, 30),
                         BackgroundTransparency = 1,
-                        Position = UDim2.new(0, 10, 0, 2),
+                        LayoutOrder = 2,
                     }, {
                         New('UIListLayout', {
                             FillDirection = 'Horizontal',
-                            Padding = UDim.new(0, 10),
+                            Padding = UDim.new(0, 8),
                             VerticalAlignment = 'Center',
                         }),
                         New('ImageLabel', {
-                            Name = 'Avatar',
-                            Size = UDim2.new(0, 32, 0, 32),
+                            Name = 'ExecLogo',
+                            Size = UDim2.new(0, 30, 0, 30),
                             BackgroundTransparency = 1,
-                            Image = 'rbxthumb://type=AvatarHeadShot&id=' .. (Players.LocalPlayer and Players.LocalPlayer.UserId or 0) .. '&w=150&h=150',
+                            Image = Creator.Icon'zap'[1],
+                            ImageRectOffset = Creator.Icon'zap'[2].ImageRectPosition,
+                            ImageRectSize = Creator.Icon'zap'[2].ImageRectSize,
+                            ThemeTag = {
+                                ImageColor3 = 'Accent',
+                            },
                         }, {
                             New('UICorner', {
-                                CornerRadius = UDim.new(1, 0),
+                                CornerRadius = UDim.new(0, 6),
                             }),
                         }),
-                        New('Frame', {
-                            Size = UDim2.new(1, -42, 1, 0),
+                        New('TextLabel', {
+                            Name = 'ExecName',
+                            Text = 'Executor: Detecting...',
+                            TextSize = 13,
+                            TextColor3 = Color3.new(1, 1, 1),
+                            FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
+                            AutomaticSize = 'XY',
                             BackgroundTransparency = 1,
-                        }, {
-                            New('UIListLayout', {
-                                VerticalAlignment = 'Center',
-                                Padding = UDim.new(0, 2),
-                            }),
-                            New('TextLabel', {
-                                Text = '@' .. (Players.LocalPlayer and Players.LocalPlayer.Name or 'Guest'),
-                                TextSize = 11,
-                                TextColor3 = Color3.fromHex'#00F2FE',
-                                ThemeTag = {
-                                    TextColor3 = 'Accent',
-                                },
-                                TextTransparency = 0.5,
-                                AutomaticSize = 'XY',
-                                BackgroundTransparency = 1,
-                            }),
-                            New('TextLabel', {
-                                Text = (typeof(identifyexecutor) == 'function' and identifyexecutor() or 'Xeno'),
-                                TextSize = 13,
-                                TextColor3 = Color3.new(1, 1, 1),
-                                FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
-                                AutomaticSize = 'XY',
-                                BackgroundTransparency = 1,
-                            }),
                         }),
+                    }),
+                    New('Frame', {
+                        Name = 'ExecSpecs',
+                        Size = UDim2.new(1, 0, 0, 30),
+                        BackgroundTransparency = 1,
+                        LayoutOrder = 3,
+                    }, {
+                        New('UIListLayout', {
+                            FillDirection = 'Horizontal',
+                            Padding = UDim.new(0, 6),
+                            HorizontalAlignment = 'Center',
+                        }),
+                        CreateMiniStat('sUNC', 'ExecSUNC'),
+                        CreateMiniStat('UNC', 'ExecUNC'),
+                        CreateMiniStat('VER', 'ExecVersion'),
                     }),
                 }),
             })
@@ -12086,7 +12101,7 @@ do
                     BackgroundTransparency = 1,
                     Name = 'Group',
                 }, {
-                    Creator.NewRoundFrame(Window.UICorner - (Window.UIPadding / 2), 'Squircle', {
+                    Creator.NewRoundFrame(Window.UICorner, 'Squircle', {
                         Name = 'Squircle',
                         Size = UDim2.new(1, 0, 1, 0),
                         ThemeTag = {
@@ -13532,14 +13547,58 @@ do
                 end
             end
 
-            local Stats = cloneref(game:GetService'Stats')
             local MarketplaceService = cloneref(game:GetService'MarketplaceService')
+            local ExecutorDB = {
+                ['Madium'] = {
+                    sunc = '85%',
+                    unc = '90%',
+                    ver = 'v3.2',
+                    logo = 'madium',
+                },
+                ['Xeno'] = {
+                    sunc = '92%',
+                    unc = '95%',
+                    ver = 'v1.5',
+                    logo = 'xeno',
+                },
+                ['Velocity'] = {
+                    sunc = '78%',
+                    unc = '82%',
+                    ver = 'v2.1',
+                    logo = 'velocity',
+                },
+                ['Delta'] = {
+                    sunc = '88%',
+                    unc = '91%',
+                    ver = 'v4.0',
+                    logo = 'delta',
+                },
+                ['Solara'] = {
+                    sunc = '80%',
+                    unc = '85%',
+                    ver = 'v1.0',
+                    logo = 'solara',
+                },
+                ['Wave'] = {
+                    sunc = '75%',
+                    unc = '80%',
+                    ver = 'v2.3',
+                    logo = 'wave',
+                },
+            }
+            local LOGO_BASE_URL = 
+[[https://raw.githubusercontent.com/Sam123mir/IntiHub-LibraryUI/main/docs/logos/]]
 
             task.spawn(function()
                 local GameNameLabel = RightPanelContent:FindFirstChild('GameName', true)
-                local FPSLabel = RightPanelContent:FindFirstChild('FPSValue', true)
-                local PingLabel = RightPanelContent:FindFirstChild('PingValue', true)
-                local RamLabel = RightPanelContent:FindFirstChild('RamValue', true)
+                local FriendsOnlineLabel = RightPanelContent:FindFirstChild('FriendsOnlineValue', true)
+                local FriendsPlayingLabel = RightPanelContent:FindFirstChild('FriendsPlayingValue', true)
+                local FriendsSameLabel = RightPanelContent:FindFirstChild('FriendsSameValue', true)
+                local ExecNameLabel = RightPanelContent:FindFirstChild('ExecName', true)
+                local ExecLogoImg = RightPanelContent:FindFirstChild('ExecLogo', true)
+                local ExecSUNCLabel = RightPanelContent:FindFirstChild('ExecSUNC', true)
+                local ExecUNCLabel = RightPanelContent:FindFirstChild('ExecUNC', true)
+                local ExecVersionLabel = RightPanelContent:FindFirstChild('ExecVersion', true)
 
                 task.spawn(function()
                     while not Window.Destroyed do
@@ -13557,48 +13616,95 @@ do
                         task.wait(10)
                     end
                 end)
-
-                local lastUpdate = os.clock()
-                local frames = 0
-                local connection
-
-                connection = RunService.RenderStepped:Connect(function()
-                    if Window.Destroyed or not RightPanelContent.Parent then
-                        if connection then
-                            connection:Disconnect()
-                        end
-
-                        return
-                    end
-
-                    frames = frames + 1
-
-                    local now = os.clock()
-
-                    if now - lastUpdate >= 1 then
+                task.spawn(function()
+                    while not Window.Destroyed do
                         pcall(function()
-                            if FPSLabel then
-                                FPSLabel.Text = tostring(frames)
-                            end
-                            if PingLabel then
-                                local pingValue = 0
-                                local pingItem = Stats.Network:FindFirstChild'ServerStatsItem' and Stats.Network.ServerStatsItem:FindFirstChild'Data Ping'
+                            local friends = Players.LocalPlayer:GetFriendsOnline(200)
+                            local online, playing, sameGame = 0, 0, 0
 
-                                if pingItem then
-                                    pingValue = math.round(pingItem:GetValue())
+                            for _, f in ipairs(friends)do
+                                if f.IsOnline or (f.PresenceType and f.PresenceType >= 1) then
+                                    online = online + 1
                                 end
+                                if f.PresenceType and f.PresenceType == 2 then
+                                    playing = playing + 1
 
-                                PingLabel.Text = tostring(pingValue) .. ' ms'
+                                    if f.PlaceId and f.PlaceId == game.PlaceId then
+                                        sameGame = sameGame + 1
+                                    end
+                                end
                             end
-                            if RamLabel then
-                                local ramValue = math.round(Stats:GetTotalMemoryUsageMb())
 
-                                RamLabel.Text = tostring(ramValue) .. ' MB'
+                            if FriendsOnlineLabel then
+                                FriendsOnlineLabel.Text = tostring(online)
+                            end
+                            if FriendsPlayingLabel then
+                                FriendsPlayingLabel.Text = tostring(playing)
+                            end
+                            if FriendsSameLabel then
+                                FriendsSameLabel.Text = tostring(sameGame)
                             end
                         end)
+                        task.wait(5)
+                    end
+                end)
+                task.spawn(function()
+                    local execName = 'Unknown'
 
-                        frames = 0
-                        lastUpdate = now
+                    pcall(function()
+                        if typeof(identifyexecutor) == 'function' then
+                            local name = identifyexecutor()
+
+                            execName = name or 'Unknown'
+                        end
+                    end)
+
+                    local matched
+
+                    for dbName, dbData in pairs(ExecutorDB)do
+                        if string.find(string.lower(execName), string.lower(dbName)) then
+                            matched = dbData
+                            execName = dbName
+
+                            break
+                        end
+                    end
+
+                    if ExecNameLabel then
+                        ExecNameLabel.Text = 'Executor: ' .. execName
+                    end
+                    if matched and ExecLogoImg then
+                        pcall(function()
+                            local logoUrl = LOGO_BASE_URL .. matched.logo .. '.png'
+                            local logoAsset = Creator.GetAsset(logoUrl, Window.Folder, 'image', 'exec_' .. matched.logo)
+
+                            if logoAsset and logoAsset ~= '' then
+                                ExecLogoImg.Image = logoAsset
+                                ExecLogoImg.ImageRectOffset = Vector2.new(0, 0)
+                                ExecLogoImg.ImageRectSize = Vector2.new(0, 0)
+                            end
+                        end)
+                    end
+                    if matched then
+                        if ExecSUNCLabel then
+                            ExecSUNCLabel.Text = matched.sunc
+                        end
+                        if ExecUNCLabel then
+                            ExecUNCLabel.Text = matched.unc
+                        end
+                        if ExecVersionLabel then
+                            ExecVersionLabel.Text = matched.ver
+                        end
+                    else
+                        if ExecSUNCLabel then
+                            ExecSUNCLabel.Text = 'N/A'
+                        end
+                        if ExecUNCLabel then
+                            ExecUNCLabel.Text = 'N/A'
+                        end
+                        if ExecVersionLabel then
+                            ExecVersionLabel.Text = 'N/A'
+                        end
                     end
                 end)
             end)
