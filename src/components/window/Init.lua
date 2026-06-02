@@ -63,7 +63,7 @@ return function(Config)
 		ShadowTransparency = Config.ShadowTransparency or 0.6,
 		User = Config.User or {},
 		Footer = Config.Footer or {},
-		Topbar = Config.Topbar or { Height = 52, ButtonsType = "Default" }, -- Default or Mac
+		Topbar = Config.Topbar or { Height = 60, ButtonsType = "Default" }, -- Default or Mac
 
 		Size = Config.Size,
 
@@ -142,7 +142,7 @@ return function(Config)
 	)
 
 	if Window.Topbar == {} then
-		Window.Topbar = { Height = 52, ButtonsType = "Default" }
+		Window.Topbar = { Height = 60, ButtonsType = "Default" }
 	end
 
 	if not RunService:IsStudio() and Window.Folder and writefile then
@@ -265,19 +265,6 @@ return function(Config)
 				--PaddingRight = UDim.new(0,4+(Window.UIPadding/2)),
 				PaddingBottom = UDim.new(0, Window.UIPadding / 2),
 			}),
-			New("TextLabel", { -- Sidebar Title
-				Text = "MODULE CONTROL",
-				TextSize = 10,
-				FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
-				ThemeTag = {
-					TextColor3 = "Accent",
-				},
-				TextTransparency = 0.4,
-				BackgroundTransparency = 1,
-				LayoutOrder = -1,
-				Size = UDim2.new(1, 0, 0, 20),
-				TextXAlignment = "Left",
-			}),
 			New("UIListLayout", {
 				SortOrder = "LayoutOrder",
 				Padding = UDim.new(0, Window.Gap),
@@ -292,14 +279,16 @@ return function(Config)
 		--TabHighlight
 	})
 
+	local SubHeaderHeight = 35
+
 	Window.UIElements.SideBarContainer = New("Frame", {
 		Size = UDim2.new(
 			0,
 			Window.SideBarWidth,
 			1,
-			-Window.Topbar.Height
+			-(Window.Topbar.Height + SubHeaderHeight)
 		),
-		Position = UDim2.new(0, 0, 0, Window.Topbar.Height),
+		Position = UDim2.new(0, 0, 0, Window.Topbar.Height + SubHeaderHeight),
 		BackgroundTransparency = 1,
 		Visible = true,
 	}, {
@@ -311,16 +300,16 @@ return function(Config)
 			AnchorPoint = Vector2.new(0, 1),
 		}),
 		Window.UIElements.SideBar,
-        New("Frame", { -- Sidebar Glow/Separator
-            Size = UDim2.new(0, 1, 1, -20),
-            Position = UDim2.new(1, 0, 0.5, 0),
-            AnchorPoint = Vector2.new(0, 0.5),
-            ThemeTag = {
-                BackgroundColor3 = "Outline",
-            },
-            BackgroundTransparency = .92,
-            BorderSizePixel = 0,
-        })
+		New("Frame", { -- Sidebar Glow/Separator
+			Size = UDim2.new(0, 1, 1, -20),
+			Position = UDim2.new(1, 0, 0.5, 0),
+			AnchorPoint = Vector2.new(0, 0.5),
+			ThemeTag = {
+				BackgroundColor3 = "Outline",
+			},
+			BackgroundTransparency = .92,
+			BorderSizePixel = 0,
+		})
 	})
 
 	if Window.ScrollBarEnabled then
@@ -328,8 +317,8 @@ return function(Config)
 	end
 
 	Window.UIElements.MainBar = New("Frame", {
-		Size = UDim2.new(1, -Window.SideBarWidth, 1, -Window.Topbar.Height),
-		Position = UDim2.new(0, Window.SideBarWidth, 0, Window.Topbar.Height),
+		Size = UDim2.new(1, -Window.SideBarWidth, 1, -(Window.Topbar.Height + SubHeaderHeight)),
+		Position = UDim2.new(0, Window.SideBarWidth, 0, Window.Topbar.Height + SubHeaderHeight),
 		BackgroundTransparency = 1,
 	}, {
 		Creator.NewRoundFrame(Window.UICorner - (Window.UIPadding / 2), "Squircle", {
@@ -935,6 +924,22 @@ return function(Config)
 		},
 	})
 
+	local ActiveTabTitleTextLabel = New("TextLabel", {
+		Name = "ActiveTabTitle",
+		Text = "Dashboard",
+		TextSize = 14,
+		FontFace = Font.new(Creator.Font, Enum.FontWeight.SemiBold),
+		ThemeTag = {
+			TextColor3 = "Text",
+		},
+		BackgroundTransparency = 1,
+		Size = UDim2.new(1, -Window.SideBarWidth - (Window.UIPadding * 2), 1, 0),
+		Position = UDim2.new(0, Window.SideBarWidth + Window.UIPadding, 0, 0),
+		TextXAlignment = "Left",
+		TextYAlignment = "Center",
+	})
+	Window.UIElements.ActiveTabTitle = ActiveTabTitleTextLabel
+
 	Window.UIElements.Main = New("Frame", {
 		Size = Window.Size,
 		Position = Window.Position,
@@ -1027,6 +1032,50 @@ return function(Config)
 			Window.UIElements.MainBar,
             Window.UIElements.RightPanel,
 
+			New("Frame", { -- SubHeader
+				Name = "SubHeader",
+				Size = UDim2.new(1, 0, 0, SubHeaderHeight),
+				Position = UDim2.new(0, 0, 0, Window.Topbar.Height),
+				BackgroundTransparency = 1,
+				ZIndex = 98,
+			}, {
+				New("TextLabel", {
+					Name = "ModulesLabel",
+					Text = "Modules",
+					TextSize = 14,
+					FontFace = Font.new(Creator.Font, Enum.FontWeight.SemiBold),
+					ThemeTag = {
+						TextColor3 = "Text",
+					},
+					BackgroundTransparency = 1,
+					Size = UDim2.new(0, Window.SideBarWidth, 1, 0),
+					Position = UDim2.new(0, Window.UIPadding, 0, 0),
+					TextXAlignment = "Left",
+					TextYAlignment = "Center",
+				}),
+				ActiveTabTitleTextLabel,
+				New("Frame", {
+					Name = "Separator",
+					Size = UDim2.new(1, 0, 0, 1),
+					Position = UDim2.new(0, 0, 1, -1),
+					BackgroundTransparency = 0.92,
+					ThemeTag = {
+						BackgroundColor3 = "Outline",
+					},
+					BorderSizePixel = 0,
+				}),
+				New("Frame", {
+					Name = "VerticalSeparator",
+					Size = UDim2.new(0, 1, 1, 0),
+					Position = UDim2.new(0, Window.SideBarWidth, 0, 0),
+					BackgroundTransparency = 0.92,
+					ThemeTag = {
+						BackgroundColor3 = "Outline",
+					},
+					BorderSizePixel = 0,
+				}),
+			}),
+
 			-- UserIcon removed from Main.Main
 
 			Outline2,
@@ -1077,7 +1126,7 @@ return function(Config)
                                 Padding = UDim.new(0, 2),
                             }),
                             (function()
-                                local icon = Creator.Image(Window.Icon, "BrandingLogo", 0, Window.Folder, "Topbar", false, false)
+                                local icon = Creator.Image("https://i.ibb.co/yBBtHJyX/logo-deluxe-UI.png", "BrandingLogo", 0, Window.Folder, "Topbar", false, false)
                                 icon.Size = UDim2.fromOffset(22, 22)
                                 icon.LayoutOrder = 1
                                 return icon
@@ -1495,7 +1544,7 @@ return function(Config)
 		Tween(
 			Window.UIElements.Main,
 			0.45,
-			{ Size = isFullscreen and CurrentSize or UDim2.new(1, -20, 1, -20 - 52) },
+			{ Size = isFullscreen and CurrentSize or UDim2.new(1, -20, 1, -20 - Window.Topbar.Height) },
 			Enum.EasingStyle.Quint,
 			Enum.EasingDirection.Out
 		):Play()
@@ -1503,7 +1552,7 @@ return function(Config)
 		Tween(
 			Window.UIElements.Main,
 			0.45,
-			{ Position = isFullscreen and CurrentPos or UDim2.new(0.5, 0, 0.5, 52 / 2) },
+			{ Position = isFullscreen and CurrentPos or UDim2.new(0.5, 0, 0.5, Window.Topbar.Height / 2) },
 			Enum.EasingStyle.Quint,
 			Enum.EasingDirection.Out
 		):Play()

@@ -346,6 +346,10 @@ function TabModule.New(Config, UIScale)
 	TabModule.Containers[TabIndex] = Tab.UIElements.ContainerFrameCanvas
 	TabModule.Tabs[TabIndex] = Tab
 
+	if TabIndex == 1 and Window and Window.UIElements and Window.UIElements.ActiveTabTitle then
+		Window.UIElements.ActiveTabTitle.Text = Tab.Title
+	end
+
 	Tab.ContainerFrame = Tab.UIElements.ContainerFrameCanvas
 
 	Creator.AddSignal(Tab.UIElements.Main.MouseButton1Click, function()
@@ -667,6 +671,11 @@ function TabModule:SelectTab(TabIndex)
                 if header:FindFirstChild("TextLabel") then
                     header.TextLabel.Text = string.upper(TabModule.Tabs[TabIndex].Title) .. " MODULE"
                 end
+            end
+
+            -- Update SubHeader active tab title if it exists
+            if Window and Window.UIElements and Window.UIElements.ActiveTabTitle then
+                Window.UIElements.ActiveTabTitle.Text = TabModule.Tabs[TabIndex].Title
             end
 
 			local TweenService = game:GetService("TweenService")
