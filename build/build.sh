@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# Ensure aftman is available on PATH, otherwise fallback to local user path
-if command -v aftman &> /dev/null; then
-    ALIAS_AFTMAN="aftman"
+# Ensure darklua is available on PATH, otherwise fallback to local aftman
+if command -v darklua &> /dev/null; then
+    ALIAS_DARKLUA="darklua"
 else
     export PATH="/c/Users/samir/.aftman/bin:$PATH"
-    ALIAS_AFTMAN="/c/Users/samir/.aftman/bin/aftman"
+    ALIAS_DARKLUA="/c/Users/samir/.aftman/bin/aftman run darklua"
 fi
 
 MODE=${1:-"build"}
@@ -42,20 +42,22 @@ PKG=$(node -e "const p=require('./package.json');console.log(JSON.stringify({v:p
 VER=$(echo $PKG | node -pe "JSON.parse(require('fs').readFileSync(0,'utf-8')).v")
 DATE=$(date '+%Y-%m-%d')
 
-HEADER=$(cat build/header.lua | node -e "
-const pkg=JSON.parse('$PKG');
-let h=require('fs').readFileSync(0,'utf-8');
-h=h.replace(/{{VERSION}}/g,'$VER')
-   .replace(/{{BUILD_DATE}}/g,'$DATE')
-   .replace(/{{DESCRIPTION}}/g,pkg.d)
-   .replace(/{{REPOSITORY}}/g,pkg.r)
-   .replace(/{{DISCORD}}/g,pkg.s)
-   .replace(/{{LICENSE}}/g,pkg.l);
+HEADER=$(cat build/header.lua | PKG_ENV="$PKG" VER_ENV="$VER" DATE_ENV="$DATE" node -e "
+const pkg = JSON.parse(process.env.PKG_ENV);
+const ver = process.env.VER_ENV;
+const date = process.env.DATE_ENV;
+let h = require('fs').readFileSync(0,'utf-8');
+h = h.replace(/{{VERSION}}/g, ver)
+   .replace(/{{BUILD_DATE}}/g, date)
+   .replace(/{{DESCRIPTION}}/g, pkg.d)
+   .replace(/{{REPOSITORY}}/g, pkg.r)
+   .replace(/{{DISCORD}}/g, pkg.s)
+   .replace(/{{LICENSE}}/g, pkg.l);
 console.log(h);
 ")
 
 START=$(date +%s%N)
-DARKLUA_OUT=$($ALIAS_AFTMAN run darklua process "$INPUT" dist/temp.lua --config "$CONFIG" 2>&1)
+DARKLUA_OUT=$($ALIAS_DARKLUA process "$INPUT" dist/temp.lua --config "$CONFIG" 2>&1)
 DARKLUA_EXIT=$?
 
 if [ $DARKLUA_EXIT -ne 0 ]; then
