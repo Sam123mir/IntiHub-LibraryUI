@@ -37,6 +37,16 @@ local ConfigManager = require("../../config/Init")
 
 local Notified = false
 
+local function GetSolidColor(property, default)
+	local value = Creator.GetThemeProperty(property, Creator.Theme)
+	if typeof(value) == "Color3" then
+		return value
+	elseif typeof(value) == "table" and value.Color and typeof(value.Color) == "ColorSequence" then
+		return value.Color.Keypoints[1].Value
+	end
+	return default or Color3.fromHex("#00F2FE")
+end
+
 return function(Config)
 	local Window = {
 		Title = Config.Title or "UI Library",
@@ -648,7 +658,7 @@ return function(Config)
             
             if Gradient then
                 Gradient.Rotation = (Gradient.Rotation + 2) % 360
-                local outlineColor = Creator.GetThemeProperty("Outline", Creator.Theme) or Color3.fromHex("#00F2FE")
+                local outlineColor = GetSolidColor("Outline", Color3.fromHex("#00F2FE"))
                 local darkColor = Color3.new(outlineColor.R * 0.3, outlineColor.G * 0.3, outlineColor.B * 0.3)
                 Gradient.Color = ColorSequence.new({
                     ColorSequenceKeypoint.new(0, outlineColor),
@@ -2336,14 +2346,27 @@ return function(Config)
     
     local MarketplaceService = cloneref(game:GetService("MarketplaceService"))
     
-    -- Executor metadata database
+    -- Executor metadata database fallback
     local ExecutorDB = {
-        ["Madium"] = { sunc = "85%", unc = "90%", ver = "v3.2", logo = "madium" },
-        ["Xeno"]   = { sunc = "92%", unc = "95%", ver = "v1.5", logo = "xeno" },
-        ["Velocity"] = { sunc = "78%", unc = "82%", ver = "v2.1", logo = "velocity" },
-        ["Delta"]  = { sunc = "88%", unc = "91%", ver = "v4.0", logo = "delta" },
-        ["Solara"] = { sunc = "80%", unc = "85%", ver = "v1.0", logo = "solara" },
-        ["Wave"]   = { sunc = "75%", unc = "80%", ver = "v2.3", logo = "wave" },
+        ["Madium"] = { sunc = "100%", unc = "98%", ver = "1.5.2", logo = "madium" },
+        ["Xeno"]   = { sunc = "40%", unc = "84%", ver = "1.3.50", logo = "xeno" },
+        ["Velocity"] = { sunc = "94%", unc = "99%", ver = "1.0.0", logo = "velocity" },
+        ["Delta"]  = { sunc = "100%", unc = "99%", ver = "2.721.1108", logo = "delta" },
+        ["Solara"] = { sunc = "39%", unc = "67%", ver = "3.252", logo = "solara" },
+        ["Wave"]   = { sunc = "100%", unc = "99%", ver = "NEW-1.3.1", logo = "wave" },
+        ["Potassium"] = { sunc = "100%", unc = "99%", ver = "2.2.1", logo = "potassium" },
+        ["SirHurt"]   = { sunc = "94%", unc = "99%", ver = "V5.439", logo = "sirhurt" },
+        ["Cryptic"]   = { sunc = "97%", unc = "98%", ver = "Version-2.710.707", logo = "cryptic" },
+        ["Seliware"]  = { sunc = "100%", unc = "99%", ver = "2.4.9", logo = "seliware" },
+        ["Volt"]      = { sunc = "98%", unc = "99%", ver = "1.2.21.2", logo = "volt" },
+        ["Codex"]     = { sunc = "96%", unc = "98%", ver = "2.720.1167", logo = "codex" },
+        ["Swift"]     = { sunc = "100%", unc = "99%", ver = "v1.6.3", logo = "swift" },
+        ["Volcano"]   = { sunc = "96%", unc = "99%", ver = "v3.2.5.1", logo = "volcano" },
+        ["Bunni.fun"] = { sunc = "100%", unc = "99%", ver = "2.5.9 R1", logo = "bunnifun" },
+        ["Synapse Z"] = { sunc = "98%", unc = "99%", ver = "1.0.2.6", logo = "synapsez" },
+        ["Opiumware"] = { sunc = "100%", unc = "99%", ver = "v2.3.8", logo = "opiumware" },
+        ["Isaeva"]    = { sunc = "100%", unc = "99%", ver = "1.3.1", logo = "isaeva" },
+        ["Cosmic"]    = { sunc = "100%", unc = "99%", ver = "v0.723.2.0.2-live", logo = "cosmic" }
     }
     local LOGO_BASE_URL = "https://raw.githubusercontent.com/Sam123mir/IntiHub-LibraryUI/main/docs/logos/"
     
@@ -2398,7 +2421,7 @@ return function(Config)
             end
         end)
 
-        -- Executor Detection (runs once at startup)
+        -- Executor Detection & API status fetching (runs once at startup)
         task.spawn(function()
             local execName = "Unknown"
             pcall(function()
@@ -2408,38 +2431,92 @@ return function(Config)
                 end
             end)
 
-            -- Match executor from database (case-insensitive partial match)
-            local matched = nil
-            for dbName, dbData in pairs(ExecutorDB) do
-                if string.find(string.lower(execName), string.lower(dbName)) then
-                    matched = dbData
-                    execName = dbName
-                    break
+            -- Try to fetch live data from WEAO API
+            local liveData = nil
+            pcall(function()
+                if Creator.Request then
+                    local response = Creator.Request({
+                        Url = "https://weao.xyz/api/status/exploits",
+                        Method = "GET",
+                        Headers = {
+                            ["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+                        }
+                    })
+                    if response and response.StatusCode == 200 and response.Body then
+                        local HttpService = game:GetService("HttpService")
+                        local parsed = HttpService:JSONDecode(response.Body)
+                        if typeof(parsed) == "table" then
+                            liveData = parsed
+                        end
+                    end
+                end
+            end)
+
+            -- Match executor
+            local matchedData = nil
+            local matchedName = nil
+            local cleanExecName = string.lower(execName)
+
+            if liveData then
+                for _, item in ipairs(liveData) do
+                    local title = item.title
+                    if title then
+                        local cleanTitle = string.lower(title)
+                        if string.find(cleanExecName, cleanTitle) or string.find(cleanTitle, cleanExecName) then
+                            matchedData = {
+                                sunc = item.suncPercentage and (tostring(item.suncPercentage) .. "%") or "N/A",
+                                unc = item.uncPercentage and (tostring(item.uncPercentage) .. "%") or "N/A",
+                                ver = item.version or "N/A",
+                                logoUrl = item.slug and item.slug.logo or ""
+                            }
+                            matchedName = title
+                            break
+                        end
+                    end
+                end
+            end
+
+            -- If API request failed or didn't match, use the local fallback database
+            if not matchedData then
+                for dbName, dbData in pairs(ExecutorDB) do
+                    if string.find(cleanExecName, string.lower(dbName)) or string.find(string.lower(dbName), cleanExecName) then
+                        matchedData = {
+                            sunc = dbData.sunc,
+                            unc = dbData.unc,
+                            ver = dbData.ver,
+                            logoUrl = LOGO_BASE_URL .. dbData.logo .. ".png"
+                        }
+                        matchedName = dbName
+                        break
+                    end
                 end
             end
 
             if ExecNameLabel then
-                ExecNameLabel.Text = "Executor: " .. execName
+                ExecNameLabel.Text = "Executor: " .. (matchedName or execName)
             end
 
             -- Load logo
-            if matched and ExecLogoImg then
+            if matchedData and ExecLogoImg then
                 pcall(function()
-                    local logoUrl = LOGO_BASE_URL .. matched.logo .. ".png"
-                    local logoAsset = Creator.GetAsset(logoUrl, Window.Folder, "image", "exec_" .. matched.logo)
-                    if logoAsset and logoAsset ~= "" then
-                        ExecLogoImg.Image = logoAsset
-                        ExecLogoImg.ImageRectOffset = Vector2.new(0, 0)
-                        ExecLogoImg.ImageRectSize = Vector2.new(0, 0)
+                    local logoUrl = matchedData.logoUrl
+                    if logoUrl and logoUrl ~= "" then
+                        local cleanName = string.lower(matchedName or "unknown"):gsub("%s+", ""):gsub("%.+", ""):gsub("/+", "")
+                        local logoAsset = Creator.GetAsset(logoUrl, Window.Folder, "image", "exec_" .. cleanName)
+                        if logoAsset and logoAsset ~= "" then
+                            ExecLogoImg.Image = logoAsset
+                            ExecLogoImg.ImageRectOffset = Vector2.new(0, 0)
+                            ExecLogoImg.ImageRectSize = Vector2.new(0, 0)
+                        end
                     end
                 end)
             end
 
             -- Fill specs
-            if matched then
-                if ExecSUNCLabel then ExecSUNCLabel.Text = matched.sunc end
-                if ExecUNCLabel then ExecUNCLabel.Text = matched.unc end
-                if ExecVersionLabel then ExecVersionLabel.Text = matched.ver end
+            if matchedData then
+                if ExecSUNCLabel then ExecSUNCLabel.Text = matchedData.sunc end
+                if ExecUNCLabel then ExecUNCLabel.Text = matchedData.unc end
+                if ExecVersionLabel then ExecVersionLabel.Text = matchedData.ver end
             else
                 if ExecSUNCLabel then ExecSUNCLabel.Text = "N/A" end
                 if ExecUNCLabel then ExecUNCLabel.Text = "N/A" end
@@ -2479,7 +2556,7 @@ return function(Config)
 		local gradient2 = overlay and overlay:FindFirstChild("AnimatedGradient2", true)
 		
 		local function updateBorderGradients()
-			local accentColor = Creator.GetThemeProperty("Accent", Creator.Theme) or Color3.fromHex("#00F2FE")
+			local accentColor = GetSolidColor("Accent", Color3.fromHex("#00F2FE"))
 			if gradient1 then
 				gradient1.Color = ColorSequence.new({
 					ColorSequenceKeypoint.new(0.0, accentColor),
