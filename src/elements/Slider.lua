@@ -147,9 +147,9 @@ function Element:New(Config)
                     ThemeTag = { ImageColor3 = "Slider" },
                 }, {
                     -- Thumb
-                    Creator.NewRoundFrame(99, "Squircle", { -- 99 is circular thumb
+                    Creator.NewRoundFrame(99, "Squircle", { -- 99 is capsule thumb
                         Name = "Thumb",
-                        Size = UDim2.new(0, 14, 0, 14), -- 14px size
+                        Size = UDim2.new(0, 16, 0, 10), -- 16px wide, 10px tall
                         Position = UDim2.new(1, 0, 0.5, 0),
                         AnchorPoint = Vector2.new(0.5, 0.5),
                         ThemeTag = { ImageColor3 = "Accent" },
@@ -205,8 +205,8 @@ function Element:New(Config)
             releaseconnection = UserInputService.InputEnded:Connect(function(input)
                 if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
                     Slider.IsHolding = false
-                    if moveconnection then moveconnection:Disconnect() end
-                    if releaseconnection then releaseconnection:Disconnect() end
+                    if moveconnection then moveconnection:Disconnect(); moveconnection = nil end
+                    if releaseconnection then releaseconnection:Disconnect(); releaseconnection = nil end
                 end
             end)
         end

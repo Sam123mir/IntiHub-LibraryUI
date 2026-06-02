@@ -110,6 +110,7 @@ return function(Config)
 		PendingFlags = {},
 
 		IsToggleDragging = false,
+		RightPanelOpen = false,
 	}
 
 	Window.UICorner = Window.Radius
@@ -381,6 +382,7 @@ return function(Config)
     local RightPanelContent = New("Frame", {
         Size = UDim2.new(1, 0, 1, 0),
         BackgroundTransparency = 1,
+        ZIndex = 5,
     }, {
         New("UIListLayout", {
             Padding = UDim.new(0, 20),
@@ -559,7 +561,7 @@ return function(Config)
                     New("TextLabel", {
                         Text = "@" .. (Players.LocalPlayer and Players.LocalPlayer.Name or "Guest"),
                         TextSize = 11,
-                        TextColor3 = Color3.fromHex("#FFC300"),
+                        TextColor3 = Color3.fromHex("#00F2FE"),
                         ThemeTag = { TextColor3 = "Accent" },
                         TextTransparency = 0.5,
                         AutomaticSize = "XY",
@@ -580,9 +582,9 @@ return function(Config)
 
     Window.UIElements.RightPanel = New("Frame", {
         Size = UDim2.new(0, 230, 1, 0),
-        Position = UDim2.new(1, 15, 0, 0),
+        Position = UDim2.new(1, -245, 0, 0),
         BackgroundTransparency = 1,
-        Visible = true,
+        Visible = false,
         ZIndex = 0, -- Slide behind main window
     }, {
         New("CanvasGroup", {
@@ -663,14 +665,14 @@ return function(Config)
             if Button then 
                 Tween(Button:FindFirstChildWhichIsA("ImageLabel", true), 0.3, { Rotation = 180 }):Play()
             end
-            local tween = Tween(Panel, 0.5, { Position = UDim2.new(1, -245, 0, 0) }, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
+            local tween = Tween(Panel, 0.5, { Position = UDim2.new(1, 15, 0, 0) }, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
             Window.RightPanelTween = tween
             tween:Play()
         else
             if Button then 
                 Tween(Button:FindFirstChildWhichIsA("ImageLabel", true), 0.3, { Rotation = 0 }):Play()
             end
-            local tween = Tween(Panel, 0.4, { Position = UDim2.new(1, 15, 0, 0) }, Enum.EasingStyle.Quint, Enum.EasingDirection.In)
+            local tween = Tween(Panel, 0.4, { Position = UDim2.new(1, -245, 0, 0) }, Enum.EasingStyle.Quint, Enum.EasingDirection.In)
             Window.RightPanelTween = tween
             local connection
             connection = tween.Completed:Connect(function(playbackState)
@@ -2401,11 +2403,33 @@ return function(Config)
 		local overlay = Window.UIElements.Main:FindFirstChild("AnimationOverlay", true)
 		local gradient2 = overlay and overlay:FindFirstChild("AnimatedGradient2", true)
 		
+		local function updateBorderGradients()
+			local accentColor = Creator.GetThemeProperty("Accent", Creator.Theme) or Color3.fromHex("#00F2FE")
+			if gradient1 then
+				gradient1.Color = ColorSequence.new({
+					ColorSequenceKeypoint.new(0.0, accentColor),
+					ColorSequenceKeypoint.new(0.5, Color3.new(0, 0, 0)),
+					ColorSequenceKeypoint.new(1.0, accentColor),
+				})
+			end
+			if gradient2 then
+				gradient2.Color = ColorSequence.new({
+					ColorSequenceKeypoint.new(0.0, Color3.new(0, 0, 0)),
+					ColorSequenceKeypoint.new(0.5, accentColor),
+					ColorSequenceKeypoint.new(1.0, Color3.new(0, 0, 0)),
+				})
+			end
+		end
+
+		local themeConn = Creator:OnThemeChange(updateBorderGradients)
+		updateBorderGradients()
+
 		local rot = 0
 		local conn
 		conn = RunService.RenderStepped:Connect(function(dt)
 			if Window.Destroyed or not Window.UIElements.Main then 
 				if conn then conn:Disconnect() end
+				if themeConn then themeConn:Disconnect() end
 				return 
 			end
 			rot = rot + (dt * 60)

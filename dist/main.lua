@@ -5,7 +5,7 @@
  _/ // / / / /_/ / __  / /_/ / /_/ /
 /___/_/ /_/\__/_/_/ /_/\__,_/_.___/ 
                                     
-    v1.7.0  |  2026-06-01  |  Roblox UI Library - Noble Deluxe v2.0
+    v1.7.0  |  2026-06-02  |  Roblox UI Library - Noble Deluxe v2.0
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -2850,20 +2850,12 @@ do
             }, {
                 Creator.NewRoundFrame(Radius, 'Squircle', {
                     ThemeTag = {
-                        ImageColor3 = Variant ~= 'White' and 'Button' or nil,
+                        ImageColor3 = Variant == 'Primary' and 'Accent' or (Variant ~= 'White' and 'Button' or nil),
                     },
                     ImageColor3 = Variant == 'White' and Color3.new(1, 1, 1) or nil,
                     Size = UDim2.new(1, 0, 1, 0),
                     Name = 'Squircle',
                     ImageTransparency = Variant == 'Primary' and 0 or Variant == 'White' and 0 or 1,
-                }, {
-                    Variant == 'Primary' and New('UIGradient', {
-                        Rotation = 45,
-                        Color = ColorSequence.new{
-                            ColorSequenceKeypoint.new(0, Color3.fromHex'#FFC300'),
-                            ColorSequenceKeypoint.new(1, Color3.fromHex'#FF8C00'),
-                        },
-                    }) or nil,
                 }),
                 Creator.NewRoundFrame(Radius, 'Squircle', {
                     ImageColor3 = Color3.new(1, 1, 1),
@@ -5055,6 +5047,10 @@ do
                 Position = UDim2.new(0.5, 0, 0.05, 0),
                 AnchorPoint = Vector2.new(0.5, 0),
                 BackgroundColor3 = Color3.fromHex'#0A0A0A',
+                ThemeTag = {
+                    BackgroundColor3 = 'PanelBackground',
+                    BackgroundTransparency = 'PanelBackgroundTransparency',
+                },
                 Active = true,
                 Visible = false,
                 Parent = Window.Parent,
@@ -5112,7 +5108,9 @@ do
                 if Value then
                     BarFrame.Visible = true
 
-                    Tween(BarFrame, 0.4, {BackgroundTransparency = 0}, Enum.EasingStyle.Quint):Play()
+                    local targetTransparency = Creator.GetThemeProperty('PanelBackgroundTransparency', Creator.Theme) or 0
+
+                    Tween(BarFrame, 0.4, {BackgroundTransparency = targetTransparency}, Enum.EasingStyle.Quint):Play()
                 else
                     local T = Tween(BarFrame, 0.3, {BackgroundTransparency = 1}, Enum.EasingStyle.Quint)
 
@@ -7749,7 +7747,7 @@ do
                         }, {
                             Creator.NewRoundFrame(99, 'Squircle', {
                                 Name = 'Thumb',
-                                Size = UDim2.new(0, 14, 0, 14),
+                                Size = UDim2.new(0, 16, 0, 10),
                                 Position = UDim2.new(1, 0, 0.5, 0),
                                 AnchorPoint = Vector2.new(0.5, 0.5),
                                 ThemeTag = {
@@ -7837,9 +7835,13 @@ do
 
                             if moveconnection then
                                 moveconnection:Disconnect()
+
+                                moveconnection = nil
                             end
                             if releaseconnection then
                                 releaseconnection:Disconnect()
+
+                                releaseconnection = nil
                             end
                         end
                     end)
@@ -10297,11 +10299,11 @@ do
                     Section.Opened = true
 
                     if IsNotAnim then
-                        Main.Size = UDim2.new(Main.Size.X.Scale, Main.Size.X.Offset, 0, (Main.Top.AbsoluteSize.Y) / Config.UIScale + (Main.Content.AbsoluteSize.Y / Config.UIScale))
+                        Main.Size = UDim2.new(1, 0, 0, (Main.Top.AbsoluteSize.Y) / Config.UIScale + (Main.Content.AbsoluteSize.Y / Config.UIScale))
                         ChevronIconFrame.ImageLabel.Rotation = 180
                     else
                         Tween(Main, 0.33, {
-                            Size = UDim2.new(Main.Size.X.Scale, Main.Size.X.Offset, 0, (Main.Top.AbsoluteSize.Y) / Config.UIScale + (Main.Content.AbsoluteSize.Y / Config.UIScale)),
+                            Size = UDim2.new(1, 0, 0, (Main.Top.AbsoluteSize.Y) / Config.UIScale + (Main.Content.AbsoluteSize.Y / Config.UIScale)),
                         }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
                         Tween(ChevronIconFrame.ImageLabel, 0.2, {Rotation = 180}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
                     end
@@ -10312,11 +10314,11 @@ do
                     Section.Opened = false
 
                     if IsNotAnim then
-                        Main.Size = UDim2.new(Main.Size.X.Scale, Main.Size.X.Offset, 0, (Main.Top.AbsoluteSize.Y / Config.UIScale))
+                        Main.Size = UDim2.new(1, 0, 0, (Main.Top.AbsoluteSize.Y / Config.UIScale))
                         ChevronIconFrame.ImageLabel.Rotation = 0
                     else
                         Tween(Main, 0.26, {
-                            Size = UDim2.new(Main.Size.X.Scale, Main.Size.X.Offset, 0, (Main.Top.AbsoluteSize.Y / Config.UIScale)),
+                            Size = UDim2.new(1, 0, 0, (Main.Top.AbsoluteSize.Y / Config.UIScale)),
                         }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
                         Tween(ChevronIconFrame.ImageLabel, 0.2, {Rotation = 0}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
                     end
@@ -10342,7 +10344,7 @@ do
                 task.wait(0.02)
 
                 if Section.Expandable then
-                    Main.Size = UDim2.new(Main.Size.X.Scale, Main.Size.X.Offset, 0, Main.Top.AbsoluteSize.Y / Config.UIScale)
+                    Main.Size = UDim2.new(1, 0, 0, Main.Top.AbsoluteSize.Y / Config.UIScale)
                     Main.AutomaticSize = 'None'
                     Main.Top.Size = UDim2.new(1, 0, 0, (not DescFrame and Section.HeaderSize or 0))
                     Main.Top.AutomaticSize = (not Section.Expandable or DescFrame) and 'Y' or 'None'
@@ -11596,6 +11598,7 @@ do
                 ElementConfig = {},
                 PendingFlags = {},
                 IsToggleDragging = false,
+                RightPanelOpen = false,
             }
 
             Window.UICorner = Window.Radius
@@ -11837,6 +11840,7 @@ do
             local RightPanelContent = New('Frame', {
                 Size = UDim2.new(1, 0, 1, 0),
                 BackgroundTransparency = 1,
+                ZIndex = 5,
             }, {
                 New('UIListLayout', {
                     Padding = UDim.new(0, 20),
@@ -12049,7 +12053,7 @@ do
                             New('TextLabel', {
                                 Text = '@' .. (Players.LocalPlayer and Players.LocalPlayer.Name or 'Guest'),
                                 TextSize = 11,
-                                TextColor3 = Color3.fromHex'#FFC300',
+                                TextColor3 = Color3.fromHex'#00F2FE',
                                 ThemeTag = {
                                     TextColor3 = 'Accent',
                                 },
@@ -12072,9 +12076,9 @@ do
 
             Window.UIElements.RightPanel = New('Frame', {
                 Size = UDim2.new(0, 230, 1, 0),
-                Position = UDim2.new(1, 15, 0, 0),
+                Position = UDim2.new(1, -245, 0, 0),
                 BackgroundTransparency = 1,
-                Visible = true,
+                Visible = false,
                 ZIndex = 0,
             }, {
                 New('CanvasGroup', {
@@ -12165,7 +12169,7 @@ do
                     end
 
                     local tween = Tween(Panel, 0.5, {
-                        Position = UDim2.new(1, -245, 0, 0),
+                        Position = UDim2.new(1, 15, 0, 0),
                     }, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
 
                     Window.RightPanelTween = tween
@@ -12177,7 +12181,7 @@ do
                     end
 
                     local tween = Tween(Panel, 0.4, {
-                        Position = UDim2.new(1, 15, 0, 0),
+                        Position = UDim2.new(1, -245, 0, 0),
                     }, Enum.EasingStyle.Quint, Enum.EasingDirection.In)
 
                     Window.RightPanelTween = tween
@@ -13617,6 +13621,30 @@ do
                 local gradient1 = Window.UIElements.Main:FindFirstChild('AnimatedGradient1', true)
                 local overlay = Window.UIElements.Main:FindFirstChild('AnimationOverlay', true)
                 local gradient2 = overlay and overlay:FindFirstChild('AnimatedGradient2', true)
+
+                local function updateBorderGradients()
+                    local accentColor = Creator.GetThemeProperty('Accent', Creator.Theme) or Color3.fromHex'#00F2FE'
+
+                    if gradient1 then
+                        gradient1.Color = ColorSequence.new{
+                            ColorSequenceKeypoint.new(0, accentColor),
+                            ColorSequenceKeypoint.new(0.5, Color3.new(0, 0, 0)),
+                            ColorSequenceKeypoint.new(1, accentColor),
+                        }
+                    end
+                    if gradient2 then
+                        gradient2.Color = ColorSequence.new{
+                            ColorSequenceKeypoint.new(0, Color3.new(0, 0, 0)),
+                            ColorSequenceKeypoint.new(0.5, accentColor),
+                            ColorSequenceKeypoint.new(1, Color3.new(0, 0, 0)),
+                        }
+                    end
+                end
+
+                local themeConn = Creator:OnThemeChange(updateBorderGradients)
+
+                updateBorderGradients()
+
                 local rot = 0
                 local conn
 
@@ -13624,6 +13652,9 @@ do
                     if Window.Destroyed or not Window.UIElements.Main then
                         if conn then
                             conn:Disconnect()
+                        end
+                        if themeConn then
+                            themeConn:Disconnect()
                         end
 
                         return
@@ -13739,7 +13770,7 @@ do
                             Text = Label:upper(),
                             TextSize = 11,
                             FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
-                            TextColor3 = Color3.fromHex'#FFC300',
+                            TextColor3 = Color3.fromHex'#00F2FE',
                             ThemeTag = {
                                 TextColor3 = 'Accent',
                             },
@@ -13775,7 +13806,7 @@ do
                 }),
                 New('Frame', {
                     Size = UDim2.new(0, 30, 0, 30),
-                    BackgroundColor3 = Color3.fromHex'#FFC300',
+                    BackgroundColor3 = Color3.fromHex'#00F2FE',
                     ThemeTag = {
                         BackgroundColor3 = 'Accent',
                     },
@@ -13796,7 +13827,7 @@ do
                     Text = 'INTIHUB',
                     TextSize = 16,
                     FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
-                    TextColor3 = Color3.fromHex'#FFC300',
+                    TextColor3 = Color3.fromHex'#00F2FE',
                     ThemeTag = {
                         TextColor3 = 'Accent',
                     },
@@ -13819,7 +13850,7 @@ do
                 Text = '0 ms',
                 TextSize = 14,
                 FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
-                TextColor3 = Color3.fromHex'#FFC300',
+                TextColor3 = Color3.fromHex'#00F2FE',
                 ThemeTag = {
                     TextColor3 = 'Accent',
                 },
@@ -13833,7 +13864,7 @@ do
                 Text = '0 MB',
                 TextSize = 14,
                 FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
-                TextColor3 = Color3.fromHex'#FFC300',
+                TextColor3 = Color3.fromHex'#00F2FE',
                 ThemeTag = {
                     TextColor3 = 'Accent',
                 },
@@ -13847,7 +13878,7 @@ do
                 Text = '0 FPS',
                 TextSize = 14,
                 FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
-                TextColor3 = Color3.fromHex'#FFC300',
+                TextColor3 = Color3.fromHex'#00F2FE',
                 ThemeTag = {
                     TextColor3 = 'Accent',
                 },
@@ -13861,7 +13892,7 @@ do
                 Text = '00:00:00',
                 TextSize = 14,
                 FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
-                TextColor3 = Color3.fromHex'#FFC300',
+                TextColor3 = Color3.fromHex'#00F2FE',
                 ThemeTag = {
                     TextColor3 = 'Accent',
                 },

@@ -273,11 +273,11 @@ function Element:New(Config)
             if Section.Expandable then
                 Section.Opened = true
                 if IsNotAnim then
-                    Main.Size = UDim2.new(Main.Size.X.Scale,Main.Size.X.Offset,0, (Main.Top.AbsoluteSize.Y)/Config.UIScale + (Main.Content.AbsoluteSize.Y/Config.UIScale))
+                    Main.Size = UDim2.new(1,0,0, (Main.Top.AbsoluteSize.Y)/Config.UIScale + (Main.Content.AbsoluteSize.Y/Config.UIScale))
                     ChevronIconFrame.ImageLabel.Rotation = 180
                 else
                     Tween(Main, 0.33, {
-                        Size = UDim2.new(Main.Size.X.Scale,Main.Size.X.Offset,0, (Main.Top.AbsoluteSize.Y)/Config.UIScale + (Main.Content.AbsoluteSize.Y/Config.UIScale))
+                        Size = UDim2.new(1,0,0, (Main.Top.AbsoluteSize.Y)/Config.UIScale + (Main.Content.AbsoluteSize.Y/Config.UIScale))
                     }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
     
                     Tween(ChevronIconFrame.ImageLabel, 0.2, {Rotation = 180}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
@@ -288,11 +288,11 @@ function Element:New(Config)
             if Section.Expandable then
                 Section.Opened = false
                 if IsNotAnim then
-                    Main.Size = UDim2.new(Main.Size.X.Scale,Main.Size.X.Offset,0, (Main.Top.AbsoluteSize.Y/Config.UIScale))
+                    Main.Size = UDim2.new(1,0,0, (Main.Top.AbsoluteSize.Y/Config.UIScale))
                     ChevronIconFrame.ImageLabel.Rotation = 0
                 else
                     Tween(Main, 0.26, {
-                        Size = UDim2.new(Main.Size.X.Scale,Main.Size.X.Offset,0, (Main.Top.AbsoluteSize.Y/Config.UIScale))
+                        Size = UDim2.new(1,0,0, (Main.Top.AbsoluteSize.Y/Config.UIScale))
                     }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
                     Tween(ChevronIconFrame.ImageLabel, 0.2, {Rotation = 0}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
                 end
@@ -318,7 +318,7 @@ function Element:New(Config)
         task.spawn(function()
             task.wait(0.02)
             if Section.Expandable then
-                Main.Size = UDim2.new(Main.Size.X.Scale, Main.Size.X.Offset, 0, Main.Top.AbsoluteSize.Y / Config.UIScale)
+                Main.Size = UDim2.new(1, 0, 0, Main.Top.AbsoluteSize.Y / Config.UIScale)
                 Main.AutomaticSize = "None"
                 Main.Top.Size = UDim2.new(1, 0, 0, (not DescFrame and Section.HeaderSize or 0))
                 Main.Top.AutomaticSize = (not Section.Expandable or DescFrame) and "Y" or "None"

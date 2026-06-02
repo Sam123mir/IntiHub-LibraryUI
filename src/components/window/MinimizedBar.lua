@@ -60,6 +60,10 @@ function MinimizedBar.New(Window)
         Position = UDim2.new(0.5, 0, 0.05, 0), -- Top-center default
         AnchorPoint = Vector2.new(0.5, 0),
         BackgroundColor3 = Color3.fromHex("#0A0A0A"),
+        ThemeTag = {
+            BackgroundColor3 = "PanelBackground",
+            BackgroundTransparency = "PanelBackgroundTransparency",
+        },
         Active = true,
         Visible = false,
         Parent = Window.Parent,
@@ -116,7 +120,8 @@ function MinimizedBar.New(Window)
     function Self:Visible(Value)
         if Value then
             BarFrame.Visible = true
-            Tween(BarFrame, 0.4, { BackgroundTransparency = 0 }, Enum.EasingStyle.Quint):Play()
+            local targetTransparency = Creator.GetThemeProperty("PanelBackgroundTransparency", Creator.Theme) or 0
+            Tween(BarFrame, 0.4, { BackgroundTransparency = targetTransparency }, Enum.EasingStyle.Quint):Play()
         else
             local T = Tween(BarFrame, 0.3, { BackgroundTransparency = 1 }, Enum.EasingStyle.Quint)
             T.Completed:Connect(function() BarFrame.Visible = false end)
