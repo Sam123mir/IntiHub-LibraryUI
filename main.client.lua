@@ -12126,46 +12126,41 @@ do
                             Thickness = 2,
                             ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
                             ThemeTag = {
-                                Color = 'Outline',
+                                Color = 'Accent',
                             },
                         }, {
                             New('UIGradient', {
                                 Rotation = 0,
-                                Name = 'GlowTrail',
+                                Name = 'RightGradient1',
+                            }),
+                        }),
+                    }),
+                    New('Frame', {
+                        Name = 'RightAnimationOverlay',
+                        Size = UDim2.new(1, 0, 1, 0),
+                        BackgroundTransparency = 1,
+                        ZIndex = 4,
+                    }, {
+                        New('UICorner', {
+                            CornerRadius = UDim.new(0, Window.UICorner),
+                        }),
+                        New('UIStroke', {
+                            Thickness = 3,
+                            ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+                            Transparency = 0.5,
+                            ThemeTag = {
+                                Color = 'Accent',
+                            },
+                        }, {
+                            New('UIGradient', {
+                                Name = 'RightGradient2',
+                                Rotation = 0,
                             }),
                         }),
                     }),
                     RightPanelContent,
                 }),
             })
-
-            task.spawn(function()
-                while task.wait(0.02) do
-                    if Window.Destroyed or not Window.UIElements.RightPanel then
-                        break
-                    end
-
-                    local Group = Window.UIElements.RightPanel:FindFirstChild'Group'
-                    local Squircle = Group and Group:FindFirstChild'Squircle'
-                    local Stroke = Squircle and Squircle:FindFirstChildOfClass'UIStroke'
-                    local Gradient = Stroke and Stroke:FindFirstChild'GlowTrail'
-
-                    if Gradient then
-                        Gradient.Rotation = (Gradient.Rotation + 2) % 360
-
-                        local outlineColor = GetSolidColor('Outline', Color3.fromHex'#00F2FE')
-                        local darkColor = Color3.new(outlineColor.R * 0.3, outlineColor.G * 0.3, outlineColor.B * 0.3)
-
-                        Gradient.Color = ColorSequence.new{
-                            ColorSequenceKeypoint.new(0, outlineColor),
-                            ColorSequenceKeypoint.new(0.5, darkColor),
-                            ColorSequenceKeypoint.new(1, outlineColor),
-                        }
-                    else
-                        break
-                    end
-                end
-            end)
 
             function Window:ToggleRightPanel()
                 local Panel = Window.UIElements.RightPanel
@@ -13791,11 +13786,23 @@ do
                                 local cleanTitle = string.lower(title)
 
                                 if string.find(cleanExecName, cleanTitle) or string.find(cleanTitle, cleanExecName) then
+                                    local logoUrl = item.slug and item.slug.logo or ''
+
+                                    if logoUrl == '' then
+                                        for dbName, dbData in pairs(ExecutorDB)do
+                                            if string.find(cleanTitle, string.lower(dbName)) or string.find(string.lower(dbName), cleanTitle) then
+                                                logoUrl = LOGO_BASE_URL .. dbData.logo .. '.png'
+
+                                                break
+                                            end
+                                        end
+                                    end
+
                                     matchedData = {
                                         sunc = item.suncPercentage and (tostring(item.suncPercentage) .. '%') or 'N/A',
                                         unc = item.uncPercentage and (tostring(item.uncPercentage) .. '%') or 'N/A',
                                         ver = item.version or 'N/A',
-                                        logoUrl = item.slug and item.slug.logo or '',
+                                        logoUrl = logoUrl,
                                     }
                                     matchedName = title
 
@@ -13882,6 +13889,9 @@ do
                 local gradient1 = Window.UIElements.Main:FindFirstChild('AnimatedGradient1', true)
                 local overlay = Window.UIElements.Main:FindFirstChild('AnimationOverlay', true)
                 local gradient2 = overlay and overlay:FindFirstChild('AnimatedGradient2', true)
+                local rightGradient1 = Window.UIElements.RightPanel:FindFirstChild('RightGradient1', true)
+                local rightOverlay = Window.UIElements.RightPanel:FindFirstChild('RightAnimationOverlay', true)
+                local rightGradient2 = rightOverlay and rightOverlay:FindFirstChild('RightGradient2', true)
 
                 local function updateBorderGradients()
                     local accentColor = GetSolidColor('Accent', Color3.fromHex'#00F2FE')
@@ -13895,6 +13905,20 @@ do
                     end
                     if gradient2 then
                         gradient2.Color = ColorSequence.new{
+                            ColorSequenceKeypoint.new(0, Color3.new(0, 0, 0)),
+                            ColorSequenceKeypoint.new(0.5, accentColor),
+                            ColorSequenceKeypoint.new(1, Color3.new(0, 0, 0)),
+                        }
+                    end
+                    if rightGradient1 then
+                        rightGradient1.Color = ColorSequence.new{
+                            ColorSequenceKeypoint.new(0, accentColor),
+                            ColorSequenceKeypoint.new(0.5, Color3.new(0, 0, 0)),
+                            ColorSequenceKeypoint.new(1, accentColor),
+                        }
+                    end
+                    if rightGradient2 then
+                        rightGradient2.Color = ColorSequence.new{
                             ColorSequenceKeypoint.new(0, Color3.new(0, 0, 0)),
                             ColorSequenceKeypoint.new(0.5, accentColor),
                             ColorSequenceKeypoint.new(1, Color3.new(0, 0, 0)),
@@ -13928,6 +13952,12 @@ do
                     end
                     if gradient2 then
                         gradient2.Rotation = (360 - rot) % 360
+                    end
+                    if rightGradient1 then
+                        rightGradient1.Rotation = rot % 360
+                    end
+                    if rightGradient2 then
+                        rightGradient2.Rotation = (360 - rot) % 360
                     end
                 end)
             end)
