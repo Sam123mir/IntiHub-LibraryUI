@@ -51,7 +51,7 @@ return function(Config)
 	local Window = {
 		Title = Config.Title or "UI Library",
 		Author = Config.Author,
-		Icon = Config.Icon or "https://i.ibb.co/yBBtHJyX/logo-deluxe-UI.png",
+		Icon = Config.Icon or "https://i.ibb.co/6Q7Zp4K/Chat-GPT-Image-2-jun-2026-07-32-02-p-m.png",
 		IconSize = Config.IconSize or 22,
 		IconThemed = Config.IconThemed,
 		IconRadius = Config.IconRadius or 0,
@@ -236,14 +236,9 @@ return function(Config)
 	-- })
 
 	Window.UIElements.SideBar = New("ScrollingFrame", {
-		Size = UDim2.new(
-			1,
-			Window.ScrollBarEnabled and -3 - (Window.UIPadding / 2) or 0,
-			1,
-			-6 -- Reclaimed search bar space
-		),
-		Position = UDim2.new(0, 0, 1, 0),
-		AnchorPoint = Vector2.new(0, 1),
+		Size = UDim2.new(1, -12, 1, -12),
+		Position = UDim2.new(0.5, 0, 0.5, 0),
+		AnchorPoint = Vector2.new(0.5, 0.5),
 		BackgroundTransparency = 1,
 		ScrollBarThickness = 0,
 		ElasticBehavior = "Never",
@@ -292,28 +287,36 @@ return function(Config)
 		BackgroundTransparency = 1,
 		Visible = true,
 	}, {
-		New("Frame", {
-			Name = "Content",
-			BackgroundTransparency = 1,
-			Size = UDim2.new(1, 0, 1, 0),
-			Position = UDim2.new(0, 0, 1, 0),
-			AnchorPoint = Vector2.new(0, 1),
-		}),
-		Window.UIElements.SideBar,
-		New("Frame", { -- Sidebar Glow/Separator
-			Size = UDim2.new(0, 1, 1, -20),
-			Position = UDim2.new(1, 0, 0.5, 0),
-			AnchorPoint = Vector2.new(0, 0.5),
+		Creator.NewRoundFrame(Window.UICorner - (Window.UIPadding / 2), "Squircle", {
+			Size = UDim2.new(1, -10, 1, -10),
+			Position = UDim2.new(0, 10, 0, 5),
 			ThemeTag = {
-				BackgroundColor3 = "Outline",
+				ImageColor3 = "PanelBackground",
+				ImageTransparency = "PanelBackgroundTransparency",
 			},
-			BackgroundTransparency = .92,
-			BorderSizePixel = 0,
-		})
+			ZIndex = 3,
+			Name = "Background",
+		}, {
+			New("UIStroke", {
+				Thickness = 1,
+				ThemeTag = {
+					Color = "Outline",
+				},
+				Transparency = .9,
+			}),
+			New("Frame", {
+				Name = "Content",
+				BackgroundTransparency = 1,
+				Size = UDim2.new(1, 0, 1, 0),
+				Position = UDim2.new(0, 0, 1, 0),
+				AnchorPoint = Vector2.new(0, 1),
+			}),
+			Window.UIElements.SideBar,
+		}),
 	})
 
 	if Window.ScrollBarEnabled then
-		CreateScrollSlider(Window.UIElements.SideBar, Window.UIElements.SideBarContainer.Content, Window, 3)
+		CreateScrollSlider(Window.UIElements.SideBar, Window.UIElements.SideBarContainer.Background.Content, Window, 3)
 	end
 
 	Window.UIElements.MainBar = New("Frame", {
@@ -322,7 +325,8 @@ return function(Config)
 		BackgroundTransparency = 1,
 	}, {
 		Creator.NewRoundFrame(Window.UICorner - (Window.UIPadding / 2), "Squircle", {
-			Size = UDim2.new(1, 0, 1, 0),
+			Size = UDim2.new(1, -10, 1, -10),
+			Position = UDim2.new(0, 0, 0, 5),
 			ThemeTag = {
 				ImageColor3 = "PanelBackground",
 				ImageTransparency = "PanelBackgroundTransparency",
@@ -369,7 +373,9 @@ return function(Config)
                 Name = ValueName,
                 Text = "...",
                 TextSize = 12,
-                TextColor3 = Color3.new(1,1,1),
+                ThemeTag = {
+                    TextColor3 = "Text",
+                },
                 Position = UDim2.new(0.5, 0, 0.7, 0),
                 AnchorPoint = Vector2.new(0.5, 0.5),
                 BackgroundTransparency = 1,
@@ -435,14 +441,18 @@ return function(Config)
                     Text = Players.LocalPlayer.DisplayName,
                     TextSize = 14,
                     FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
-                    TextColor3 = Color3.new(1, 1, 1),
+                    ThemeTag = {
+                        TextColor3 = "Text",
+                    },
                     BackgroundTransparency = 1,
                     AutomaticSize = "XY",
                 }),
                 New("TextLabel", {
                     Text = "@" .. Players.LocalPlayer.Name,
                     TextSize = 12,
-                    TextColor3 = Color3.new(1, 1, 1),
+                    ThemeTag = {
+                        TextColor3 = "Text",
+                    },
                     TextTransparency = .5,
                     BackgroundTransparency = 1,
                     AutomaticSize = "XY",
@@ -493,7 +503,9 @@ return function(Config)
                     Name = "GameName",
                     Text = "Loading...",
                     TextSize = 12,
-                    TextColor3 = Color3.new(1,1,1),
+                    ThemeTag = {
+                        TextColor3 = "Text",
+                    },
                     Size = UDim2.new(1, 0, 0, 0),
                     AutomaticSize = "Y",
                     BackgroundTransparency = 1,
@@ -576,7 +588,9 @@ return function(Config)
                     Name = "ExecName",
                     Text = "Executor: Detecting...",
                     TextSize = 13,
-                    TextColor3 = Color3.new(1, 1, 1),
+                    ThemeTag = {
+                        TextColor3 = "Text",
+                    },
                     FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
                     AutomaticSize = "XY",
                     BackgroundTransparency = 1,
@@ -608,7 +622,7 @@ return function(Config)
         Visible = false,
         ZIndex = 0, -- Slide behind main window
     }, {
-        New("CanvasGroup", {
+        New("Frame", {
             Size = UDim2.new(1, 0, 1, 0),
             BackgroundTransparency = 1,
             Name = "Group"
@@ -1126,8 +1140,8 @@ return function(Config)
                                 Padding = UDim.new(0, 2),
                             }),
                             (function()
-                                local icon = Creator.Image("https://i.ibb.co/yBBtHJyX/logo-deluxe-UI.png", "BrandingLogo", 0, Window.Folder, "Topbar", false, false)
-                                icon.Size = UDim2.fromOffset(22, 22)
+                                local icon = Creator.Image("https://i.ibb.co/6Q7Zp4K/Chat-GPT-Image-2-jun-2026-07-32-02-p-m.png", "BrandingLogo", 0, Window.Folder, "Topbar", false, false)
+                                icon.Size = UDim2.fromOffset(28, 28)
                                 icon.LayoutOrder = 1
                                 return icon
                             end)(),

@@ -28,17 +28,17 @@ function MinimizedBar.New(Window)
         ImageRectOffset = Creator.Icon("grip-vertical")[2].ImageRectPosition,
         ImageRectSize = Creator.Icon("grip-vertical")[2].ImageRectSize,
         ThemeTag = {
-            ImageColor3 = "Accent",
+            ImageColor3 = "Icon",
         },
     })
 
     local Title = New("TextLabel", {
         Name = "Title",
-        Text = "INTIHUB - v" .. (Window.Version or "2.0.0"),
+        Text = "DELUXEUI - v" .. (Window.Version or "2.0.0"),
         TextSize = 14,
         FontFace = Font.new(Creator.Font, Enum.FontWeight.Bold),
         ThemeTag = {
-            TextColor3 = "Accent",
+            TextColor3 = "Text",
         },
         BackgroundTransparency = 1,
         AutomaticSize = "X",
@@ -49,7 +49,7 @@ function MinimizedBar.New(Window)
         Name = "Separator",
         Size = UDim2.new(0, 1, 0, 18),
         ThemeTag = {
-            BackgroundColor3 = "Outline",
+            BackgroundColor3 = "Icon",
         },
         BackgroundTransparency = 0.6,
     })

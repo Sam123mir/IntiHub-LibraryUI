@@ -287,7 +287,7 @@ function TabModule.New(Config, UIScale)
 	-- end)
 
 	Tab.UIElements.ContainerFrameCanvas = New("Frame", {
-		Size = UDim2.new(1, 0, 1, -5), -- Adjusted for minimal header
+		Size = UDim2.new(1, -10, 1, -10),
 		BackgroundTransparency = 1,
 		Visible = false,
 		Parent = Window.UIElements.MainBar,
