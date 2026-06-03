@@ -51,7 +51,7 @@ return function(Config)
 	local Window = {
 		Title = Config.Title or "UI Library",
 		Author = Config.Author,
-		Icon = Config.Icon or "https://i.ibb.co/6Q7Zp4K/Chat-GPT-Image-2-jun-2026-07-32-02-p-m.png",
+		Icon = Config.Icon or "https://i.ibb.co/r9RtLZB/Chat-GPT-Image-2-jun-2026-07-32-02-p-m.png",
 		IconSize = Config.IconSize or 22,
 		IconThemed = Config.IconThemed,
 		IconRadius = Config.IconRadius or 0,
@@ -61,6 +61,9 @@ return function(Config)
 		Background = Config.Background,
 		BackgroundImageTransparency = Config.BackgroundImageTransparency or 0,
 		ShadowTransparency = Config.ShadowTransparency or 0.6,
+		Folders = {},
+		StandaloneTabs = {},
+		SidebarSeparator = nil,
 		User = Config.User or {},
 		Footer = Config.Footer or {},
 		Topbar = Config.Topbar or { Height = 60, ButtonsType = "Default" }, -- Default or Mac
@@ -273,6 +276,26 @@ return function(Config)
 		}),
 		--TabHighlight
 	})
+
+	local SidebarSeparator = New("Frame", {
+		Name = "Separator",
+		Size = UDim2.new(1, -12, 0, 15),
+		BackgroundTransparency = 1,
+		LayoutOrder = 1000,
+		Visible = false,
+		Parent = Window.UIElements.SideBar.Frame,
+	}, {
+		New("Frame", {
+			Size = UDim2.new(0, 40, 0, 2),
+			Position = UDim2.new(0.5, 0, 0.5, 0),
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			ThemeTag = {
+				BackgroundColor3 = "Outline",
+			},
+			BackgroundTransparency = 0.5,
+		})
+	})
+	Window.SidebarSeparator = SidebarSeparator
 
 	local SubHeaderHeight = 35
 
@@ -1136,7 +1159,7 @@ return function(Config)
                                 Padding = UDim.new(0, 2),
                             }),
                             (function()
-                                local icon = Creator.Image("https://i.ibb.co/6Q7Zp4K/Chat-GPT-Image-2-jun-2026-07-32-02-p-m.png", "BrandingLogo", 0, Window.Folder, "Topbar", false, false)
+                                local icon = Creator.Image("https://i.ibb.co/r9RtLZB/Chat-GPT-Image-2-jun-2026-07-32-02-p-m.png", "BrandingLogo", 0, Window.Folder, "Topbar", false, false)
                                 icon.Size = UDim2.fromOffset(28, 28)
                                 icon.LayoutOrder = 1
                                 return icon
@@ -1957,11 +1980,32 @@ return function(Config)
 
 	Window.TabModule = TabModule
 
+	local FolderModule = require("./Folder")
+
+	function Window:UpdateSidebarSeparator()
+		if Window.SidebarSeparator then
+			local hasStandalone = #Window.StandaloneTabs > 0
+			local hasFolders = #Window.Folders > 0
+			Window.SidebarSeparator.Visible = hasStandalone and hasFolders
+		end
+	end
+
 	function Window:Tab(TabConfig)
 		TabConfig.Parent = Window.UIElements.SideBar.Frame
-		return TabModule.New(TabConfig, Config.IntiHub.UIScale)
+		local tab = TabModule.New(TabConfig, Config.IntiHub.UIScale)
+		table.insert(Window.StandaloneTabs, tab)
+		if tab.UIElements and tab.UIElements.Main then
+			tab.UIElements.Main.LayoutOrder = #Window.StandaloneTabs
+		end
+		Window:UpdateSidebarSeparator()
+		return tab
 	end
 	Window.CreateTab = Window.Tab
+
+	function Window:CreateFolder(FolderConfig)
+		return FolderModule.New(FolderConfig, Window, TabModule, Config.IntiHub.UIScale)
+	end
+	Window.FolderGroup = Window.CreateFolder
 
 	function Window:SelectTab(Tab)
 		TabModule:SelectTab(Tab)
@@ -1990,13 +2034,21 @@ return function(Config)
 
 			if TabModule then
 				for _, Container in next, TabModule.Containers do
-					Container.ScrollingFrame.UIPadding.PaddingTop = UDim.new(0, Window.HidePanelBackground and 20 or 10)
-					Container.ScrollingFrame.UIPadding.PaddingLeft =
-						UDim.new(0, Window.HidePanelBackground and 20 or 10)
-					Container.ScrollingFrame.UIPadding.PaddingRight =
-						UDim.new(0, Window.HidePanelBackground and 20 or 10)
-					Container.ScrollingFrame.UIPadding.PaddingBottom =
-						UDim.new(0, Window.HidePanelBackground and 20 or 10)
+					local padding = not Window.HidePanelBackground and 20 or 10
+					local ScrollingFrame = Container:FindFirstChildOfClass("ScrollingFrame")
+					if ScrollingFrame then
+						local UIPadding = ScrollingFrame:FindFirstChildOfClass("UIPadding")
+						if UIPadding then
+							UIPadding.PaddingTop = UDim.new(0, padding)
+							UIPadding.PaddingLeft = UDim.new(0, padding)
+							UIPadding.PaddingRight = UDim.new(0, padding)
+							UIPadding.PaddingBottom = UDim.new(0, padding)
+						end
+						local LeftColumn = ScrollingFrame:FindFirstChild("LeftColumn")
+						if LeftColumn then
+							LeftColumn.Size = UDim2.new(1, -padding * 2, 0, 0)
+						end
+					end
 				end
 			end
 		end

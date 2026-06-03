@@ -68,8 +68,11 @@ return function(DeluxeUI, Loading)
         Callback = function(v) print("Anti-AFK:", v) end 
     })
 
+    -- Folder Grouping
+    local ControlesFolder = Window:CreateFolder({ Title = "Controles", Icon = "folder" })
+
     -- */  Button Tab  /* --
-    local ButtonTab = Window:Tab({ Title = "Button", Icon = "mouse-pointer" })
+    local ButtonTab = ControlesFolder:Tab({ Title = "Button", Icon = "mouse-pointer" })
     ButtonTab:Section({ Title = "Acciones Rápidas" }):Button({
         Title = "Re-ejecutar Scripts",
         Desc = "Refresca y vuelve a cargar los scripts locales.",
@@ -77,7 +80,7 @@ return function(DeluxeUI, Loading)
     })
 
     -- */  Input Tab  /* --
-    local InputTab = Window:Tab({ Title = "Input", Icon = "type" })
+    local InputTab = ControlesFolder:Tab({ Title = "Input", Icon = "type" })
     InputTab:Section({ Title = "Configuración" }):Input({
         Title = "Discord Webhook",
         Placeholder = "Enter URL here...",
@@ -85,7 +88,7 @@ return function(DeluxeUI, Loading)
     })
 
     -- */  Slider Tab  /* --
-    local SliderTab = Window:Tab({ Title = "Slider", Icon = "sliders" })
+    local SliderTab = ControlesFolder:Tab({ Title = "Slider", Icon = "sliders" })
     local PerfSec = SliderTab:Section({ Title = "Rendimiento" })
     
     PerfSec:Slider({ 
@@ -101,7 +104,7 @@ return function(DeluxeUI, Loading)
     })
 
     -- */  Dropdown Tab  /* --
-    local DropdownTab = Window:Tab({ Title = "Dropdown", Icon = "list" })
+    local DropdownTab = ControlesFolder:Tab({ Title = "Dropdown", Icon = "list" })
     local SelectorSec = DropdownTab:Section({ Title = "Selectores" })
 
     SelectorSec:Dropdown({ 

@@ -6,7 +6,7 @@
   \___/ \___||_|\__,_| .__/ \___|\___/|___|
                      |_|                  
                                     
-    v1.7.0  |  2026-06-02  |  Roblox UI Library - DeluxeUI v2.0
+    v1.7.0  |  2026-06-03  |  Roblox UI Library - DeluxeUI v2.0
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -111,11 +111,14 @@ do
         }
 
         for name, id in next, IconModule.LocalIcons do
+            local imageId = 'rbxassetid://' .. tostring(id)
+
             IconModule.Icons['lucide'].Icons[name] = {
-                Image = 'rbxassetid://' .. tostring(id),
+                Image = imageId,
                 ImageRectSize = Vector2.new(0, 0),
                 ImageRectPosition = Vector2.new(0, 0),
             }
+            IconModule.Icons['lucide'].Spritesheets[imageId] = imageId
         end
 
         task.spawn(IconModule.FetchIcons)
@@ -10912,7 +10915,8 @@ do
                 }),
                 New('Frame', {
                     Name = 'LeftColumn',
-                    Size = UDim2.new(1, 0, 0, 0),
+                    Size = UDim2.new(1, not Window.HidePanelBackground and -40 or 
+-20, 0, 0),
                     AutomaticSize = 'Y',
                     BackgroundTransparency = 1,
                 }, {
@@ -10929,7 +10933,7 @@ do
                 Visible = false,
                 Parent = Window.UIElements.MainBar,
                 ZIndex = 5,
-                Position = UDim2.new(0, 0, 0, 5),
+                Position = UDim2.new(0, 5, 0, 5),
             }, {
                 Tab.UIElements.ContainerFrame,
                 New('Frame', {
@@ -11481,6 +11485,212 @@ do
         return Section
     end
     function __DARKLUA_BUNDLE_MODULES.aa()
+        local Creator = __DARKLUA_BUNDLE_MODULES.load'c'
+        local New = Creator.New
+        local Tween = Creator.Tween
+        local Folder = {}
+
+        Folder.__index = Folder
+
+        function Folder.New(Config, Window, TabModule, UIScale)
+            local self = setmetatable({
+                Window = Window,
+                TabModule = TabModule,
+                UIScale = UIScale,
+                Title = Config.Title or 'Folder',
+                Icon = Config.Icon or 'folder',
+                IconColor = Config.IconColor,
+                IconThemed = Config.IconThemed,
+                Locked = Config.Locked or false,
+                Opened = Config.Opened or false,
+                Tabs = {},
+                UICorner = Window.UICorner - (Window.UIPadding / 2),
+            }, Folder)
+
+            table.insert(Window.Folders, self)
+            Window:UpdateSidebarSeparator()
+
+            local folderLayoutOrder = 1000 + #Window.Folders
+            local MainFrame = New('Frame', {
+                Name = self.Title .. 'FolderContainer',
+                Size = UDim2.new(1, 0, 0, 0),
+                AutomaticSize = 'Y',
+                BackgroundTransparency = 1,
+                LayoutOrder = folderLayoutOrder,
+                Parent = Window.UIElements.SideBar.Frame,
+            }, {
+                New('UIListLayout', {
+                    SortOrder = 'LayoutOrder',
+                    Padding = UDim.new(0, Window.Gap or 6),
+                }),
+            })
+
+            self.MainFrame = MainFrame
+
+            local HeaderButton = Creator.NewRoundFrame(self.UICorner, 'Squircle', {
+                BackgroundTransparency = 1,
+                Size = UDim2.new(1, -7, 0, 32),
+                Parent = MainFrame,
+                LayoutOrder = 1,
+                ThemeTag = {
+                    ImageColor3 = 'TabBackground',
+                },
+                ImageTransparency = 1,
+            }, {
+                Creator.NewRoundFrame(self.UICorner, 'Squircle', {
+                    Size = UDim2.new(1, 0, 1, 0),
+                    ThemeTag = {
+                        ImageColor3 = 'Text',
+                    },
+                    ImageTransparency = 1,
+                    Name = 'Frame',
+                }, {
+                    New('UIListLayout', {
+                        SortOrder = 'LayoutOrder',
+                        Padding = UDim.new(0, 8),
+                        FillDirection = 'Horizontal',
+                        VerticalAlignment = 'Center',
+                    }),
+                    New('UIPadding', {
+                        PaddingTop = UDim.new(0, 4),
+                        PaddingLeft = UDim.new(0, 8),
+                        PaddingRight = UDim.new(0, 8),
+                        PaddingBottom = UDim.new(0, 4),
+                    }),
+                }),
+            }, true)
+
+            self.HeaderButton = HeaderButton
+
+            local FolderIcon = Creator.Image(self.Icon, self.Icon .. ':' .. self.Title, 0, Window.Folder, 'FolderIcon', self.IconColor and false or true, self.IconThemed, 'TabIcon')
+
+            FolderIcon.Size = UDim2.new(0, 16, 0, 16)
+
+            if self.IconColor then
+                FolderIcon.ImageLabel.ImageColor3 = self.IconColor
+            end
+
+            FolderIcon.Parent = HeaderButton.Frame
+            FolderIcon.ImageLabel.ImageTransparency = self.Locked and 0.7 or 0.4
+            FolderIcon.LayoutOrder = 1
+            self.FolderIcon = FolderIcon
+
+            local TitleLabel = New('TextLabel', {
+                Text = self.Title,
+                ThemeTag = {
+                    TextColor3 = 'TabTitle',
+                },
+                TextTransparency = self.Locked and 0.7 or 0.4,
+                TextSize = 14,
+                Size = UDim2.new(1, -40, 1, 0),
+                FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
+                TextWrapped = true,
+                RichText = true,
+                TextXAlignment = 'Left',
+                BackgroundTransparency = 1,
+                LayoutOrder = 2,
+            })
+
+            TitleLabel.Parent = HeaderButton.Frame
+            self.TitleLabel = TitleLabel
+
+            local Chevron = New('Frame', {
+                Size = UDim2.new(0, 14, 0, 14),
+                BackgroundTransparency = 1,
+                LayoutOrder = 3,
+            }, {
+                New('ImageLabel', {
+                    Size = UDim2.new(1, 0, 1, 0),
+                    BackgroundTransparency = 1,
+                    Image = Creator.Icon'chevron-down'[1],
+                    ImageRectSize = Creator.Icon'chevron-down'[2].ImageRectSize,
+                    ImageRectOffset = Creator.Icon'chevron-down'[2].ImageRectPosition,
+                    ThemeTag = {
+                        ImageColor3 = 'Icon',
+                    },
+                    ImageTransparency = 0.5,
+                }),
+            })
+
+            Chevron.Parent = HeaderButton.Frame
+            self.Chevron = Chevron
+
+            local TabsFrame = New('Frame', {
+                Name = 'Tabs',
+                Size = UDim2.new(1, 0, 0, 0),
+                AutomaticSize = 'Y',
+                BackgroundTransparency = 1,
+                Visible = self.Opened,
+                Parent = MainFrame,
+                LayoutOrder = 2,
+            }, {
+                New('UIListLayout', {
+                    SortOrder = 'LayoutOrder',
+                    Padding = UDim.new(0, Window.Gap or 6),
+                }),
+                New('UIPadding', {
+                    PaddingLeft = UDim.new(0, 12),
+                    PaddingTop = UDim.new(0, 4),
+                    PaddingBottom = UDim.new(0, 4),
+                }),
+            })
+
+            self.TabsFrame = TabsFrame
+
+            Creator.AddSignal(HeaderButton.MouseEnter, function()
+                if not self.Locked then
+                    Creator.SetThemeTag(HeaderButton.Frame, {
+                        ImageTransparency = 'TabBackgroundHoverTransparency',
+                        ImageColor3 = 'TabBackgroundHover',
+                    }, 0.1)
+                end
+            end)
+            Creator.AddSignal(HeaderButton.MouseLeave, function()
+                if not self.Locked then
+                    Creator.SetThemeTag(HeaderButton.Frame, {ImageTransparency = 1}, 0.1)
+                end
+            end)
+            Creator.AddSignal(HeaderButton.MouseButton1Click, function()
+                if not self.Locked then
+                    self:Toggle()
+                end
+            end)
+
+            if self.Opened then
+                local ImageLabel = Chevron:FindFirstChildWhichIsA('ImageLabel', true)
+
+                if ImageLabel then
+                    ImageLabel.Rotation = 180
+                end
+            end
+
+            return self
+        end
+        function Folder:Toggle()
+            self.Opened = not self.Opened
+            self.TabsFrame.Visible = self.Opened
+
+            local ImageLabel = self.Chevron:FindFirstChildWhichIsA('ImageLabel', true)
+
+            if ImageLabel then
+                Tween(ImageLabel, 0.2, {
+                    Rotation = self.Opened and 180 or 0,
+                }):Play()
+            end
+        end
+        function Folder:Tab(TabConfig)
+            TabConfig.Parent = self.TabsFrame
+
+            local tab = self.TabModule.New(TabConfig, self.UIScale)
+
+            table.insert(self.Tabs, tab)
+
+            return tab
+        end
+
+        return Folder
+    end
+    function __DARKLUA_BUNDLE_MODULES.ab()
         local cloneref = (cloneref or clonereference or function(instance)
             return instance
         end)
@@ -11524,7 +11734,7 @@ do
                 Title = Config.Title or 'UI Library',
                 Author = Config.Author,
                 Icon = Config.Icon or 
-[[https://i.ibb.co/6Q7Zp4K/Chat-GPT-Image-2-jun-2026-07-32-02-p-m.png]],
+[[https://i.ibb.co/r9RtLZB/Chat-GPT-Image-2-jun-2026-07-32-02-p-m.png]],
                 IconSize = Config.IconSize or 22,
                 IconThemed = Config.IconThemed,
                 IconRadius = Config.IconRadius or 0,
@@ -11534,6 +11744,9 @@ do
                 Background = Config.Background,
                 BackgroundImageTransparency = Config.BackgroundImageTransparency or 0,
                 ShadowTransparency = Config.ShadowTransparency or 0.6,
+                Folders = {},
+                StandaloneTabs = {},
+                SidebarSeparator = nil,
                 User = Config.User or {},
                 Footer = Config.Footer or {},
                 Topbar = Config.Topbar or {
@@ -11716,6 +11929,27 @@ do
                     PaddingRight = UDim.new(0, Window.UIPadding / 2),
                 }),
             })
+
+            local SidebarSeparator = New('Frame', {
+                Name = 'Separator',
+                Size = UDim2.new(1, -12, 0, 15),
+                BackgroundTransparency = 1,
+                LayoutOrder = 1000,
+                Visible = false,
+                Parent = Window.UIElements.SideBar.Frame,
+            }, {
+                New('Frame', {
+                    Size = UDim2.new(0, 40, 0, 2),
+                    Position = UDim2.new(0.5, 0, 0.5, 0),
+                    AnchorPoint = Vector2.new(0.5, 0.5),
+                    ThemeTag = {
+                        BackgroundColor3 = 'Outline',
+                    },
+                    BackgroundTransparency = 0.5,
+                }),
+            })
+
+            Window.SidebarSeparator = SidebarSeparator
 
             local SubHeaderHeight = 35
 
@@ -12595,7 +12829,7 @@ do
                                     }),
                                     (function()
                                         local icon = Creator.Image(
-[[https://i.ibb.co/6Q7Zp4K/Chat-GPT-Image-2-jun-2026-07-32-02-p-m.png]], 'BrandingLogo', 0, Window.Folder, 'Topbar', false, false)
+[[https://i.ibb.co/r9RtLZB/Chat-GPT-Image-2-jun-2026-07-32-02-p-m.png]], 'BrandingLogo', 0, Window.Folder, 'Topbar', false, false)
 
                                         icon.Size = UDim2.fromOffset(28, 28)
                                         icon.LayoutOrder = 1
@@ -13258,13 +13492,39 @@ do
 
             Window.TabModule = TabModule
 
+            local FolderModule = __DARKLUA_BUNDLE_MODULES.load'aa'
+
+            function Window:UpdateSidebarSeparator()
+                if Window.SidebarSeparator then
+                    local hasStandalone = #Window.StandaloneTabs > 0
+                    local hasFolders = #Window.Folders > 0
+
+                    Window.SidebarSeparator.Visible = hasStandalone and hasFolders
+                end
+            end
             function Window:Tab(TabConfig)
                 TabConfig.Parent = Window.UIElements.SideBar.Frame
 
-                return TabModule.New(TabConfig, Config.IntiHub.UIScale)
+                local tab = TabModule.New(TabConfig, Config.IntiHub.UIScale)
+
+                table.insert(Window.StandaloneTabs, tab)
+
+                if tab.UIElements and tab.UIElements.Main then
+                    tab.UIElements.Main.LayoutOrder = #Window.StandaloneTabs
+                end
+
+                Window:UpdateSidebarSeparator()
+
+                return tab
             end
 
             Window.CreateTab = Window.Tab
+
+            function Window:CreateFolder(FolderConfig)
+                return FolderModule.New(FolderConfig, Window, TabModule, Config.IntiHub.UIScale)
+            end
+
+            Window.FolderGroup = Window.CreateFolder
 
             function Window:SelectTab(Tab)
                 TabModule:SelectTab(Tab)
@@ -13283,10 +13543,25 @@ do
 
                     if TabModule then
                         for _, Container in next, TabModule.Containers do
-                            Container.ScrollingFrame.UIPadding.PaddingTop = UDim.new(0, Window.HidePanelBackground and 20 or 10)
-                            Container.ScrollingFrame.UIPadding.PaddingLeft = UDim.new(0, Window.HidePanelBackground and 20 or 10)
-                            Container.ScrollingFrame.UIPadding.PaddingRight = UDim.new(0, Window.HidePanelBackground and 20 or 10)
-                            Container.ScrollingFrame.UIPadding.PaddingBottom = UDim.new(0, Window.HidePanelBackground and 20 or 10)
+                            local padding = not Window.HidePanelBackground and 20 or 10
+                            local ScrollingFrame = Container:FindFirstChildOfClass'ScrollingFrame'
+
+                            if ScrollingFrame then
+                                local UIPadding = ScrollingFrame:FindFirstChildOfClass'UIPadding'
+
+                                if UIPadding then
+                                    UIPadding.PaddingTop = UDim.new(0, padding)
+                                    UIPadding.PaddingLeft = UDim.new(0, padding)
+                                    UIPadding.PaddingRight = UDim.new(0, padding)
+                                    UIPadding.PaddingBottom = UDim.new(0, padding)
+                                end
+
+                                local LeftColumn = ScrollingFrame:FindFirstChild'LeftColumn'
+
+                                if LeftColumn then
+                                    LeftColumn.Size = UDim2.new(1, -padding * 2, 0, 0)
+                                end
+                            end
                         end
                     end
                 end
@@ -14040,7 +14315,7 @@ do
             return Window
         end
     end
-    function __DARKLUA_BUNDLE_MODULES.ab()
+    function __DARKLUA_BUNDLE_MODULES.ac()
         local cloneref = (cloneref or clonereference or function(instance)
             return instance
         end)
@@ -14186,7 +14461,7 @@ do
                         Position = UDim2.new(0.5, 0, 0.5, 0),
                         AnchorPoint = Vector2.new(0.5, 0.5),
                         BackgroundTransparency = 1,
-                        ImageColor3 = Color3.new(0, 0, 0),
+                        ImageColor3 = Color3.new(1, 1, 1),
                     }),
                 }),
                 New('TextLabel', {
@@ -14316,7 +14591,7 @@ do
 
         return StatusBar
     end
-    function __DARKLUA_BUNDLE_MODULES.ac()
+    function __DARKLUA_BUNDLE_MODULES.ad()
         local DeluxeUI = {
             Window = nil,
             Theme = nil,
@@ -14550,7 +14825,7 @@ do
         DeluxeUI:SetLanguage(Creator.Language)
 
         function DeluxeUI:CreateWindow(Config)
-            local CreateWindow = __DARKLUA_BUNDLE_MODULES.load'aa'
+            local CreateWindow = __DARKLUA_BUNDLE_MODULES.load'ab'
 
             if not RunService:IsStudio() and writefile then
                 pcall(function()
@@ -14688,7 +14963,7 @@ do
 
             DeluxeUI.Transparent = Config.Transparent
             DeluxeUI.Window = Window
-            DeluxeUI.StatusBar = __DARKLUA_BUNDLE_MODULES.load'ab'.New{
+            DeluxeUI.StatusBar = __DARKLUA_BUNDLE_MODULES.load'ac'.New{
                 IntiHub = DeluxeUI,
                 Window = Window,
             }
@@ -14713,7 +14988,7 @@ do
 
         return DeluxeUI
     end
-    function __DARKLUA_BUNDLE_MODULES.ad()
+    function __DARKLUA_BUNDLE_MODULES.ae()
         local Loading = {}
 
         Loading.__index = Loading
@@ -14858,7 +15133,7 @@ do
 
         return Loading
     end
-    function __DARKLUA_BUNDLE_MODULES.ae()
+    function __DARKLUA_BUNDLE_MODULES.af()
         return function(DeluxeUI, Loading)
             Loading:Update'Inicializando Interfaz...'
             task.wait(0.5)
@@ -14938,7 +15213,11 @@ do
                 end,
             }
 
-            local ButtonTab = Window:Tab{
+            local ControlesFolder = Window:CreateFolder{
+                Title = 'Controles',
+                Icon = 'folder',
+            }
+            local ButtonTab = ControlesFolder:Tab{
                 Title = 'Button',
                 Icon = 'mouse-pointer',
             }
@@ -14957,7 +15236,7 @@ do
                 end,
             }
 
-            local InputTab = Window:Tab{
+            local InputTab = ControlesFolder:Tab{
                 Title = 'Input',
                 Icon = 'type',
             }
@@ -14972,7 +15251,7 @@ do
                 end,
             }
 
-            local SliderTab = Window:Tab{
+            local SliderTab = ControlesFolder:Tab{
                 Title = 'Slider',
                 Icon = 'sliders',
             }
@@ -14999,7 +15278,7 @@ do
                 end,
             }
 
-            local DropdownTab = Window:Tab{
+            local DropdownTab = ControlesFolder:Tab{
                 Title = 'Dropdown',
                 Icon = 'list',
             }
@@ -15054,9 +15333,9 @@ do
     end
 end
 
-local DeluxeUI = __DARKLUA_BUNDLE_MODULES.load'ac'
-local Loading = __DARKLUA_BUNDLE_MODULES.load'ad'
-local App = __DARKLUA_BUNDLE_MODULES.load'ae'
+local DeluxeUI = __DARKLUA_BUNDLE_MODULES.load'ad'
+local Loading = __DARKLUA_BUNDLE_MODULES.load'ae'
+local App = __DARKLUA_BUNDLE_MODULES.load'af'
 local loader = Loading.new{
     IntiHub = DeluxeUI,
     InitialMessage = 'Verificando Versi\u{f3}n Noble Deluxe...',

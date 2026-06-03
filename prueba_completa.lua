@@ -171,10 +171,16 @@ do
 end
 
 -- ========================================================
--- TAB 3: ENTRADAS Y MENÚS DESPLEGABLES
+-- TAB 3: ENTRADAS Y MENÚS DESPLEGABLES (DENTRO DE LA CARPETA EXTRAS)
 -- ========================================================
 do
-    local InputTab = Window:Tab({
+    local ExtrasFolder = Window:CreateFolder({
+        Title = "Extras",
+        Icon = "folder",
+        Opened = true,
+    })
+
+    local InputTab = ExtrasFolder:Tab({
         Title = "Interacción",
         Icon = "text-cursor-input",
     })
@@ -239,13 +245,11 @@ do
             print("¡Tecla de Toggle UI presionada!")
         end
     })
-end
 
 -- ========================================================
--- TAB 4: MANTENIMIENTO
+-- TAB 4: MANTENIMIENTO (DENTRO DE LA CARPETA EXTRAS)
 -- ========================================================
-do
-    local UtilTab = Window:Tab({
+    local UtilTab = ExtrasFolder:Tab({
         Title = "Mantenimiento",
         Icon = "settings",
     })

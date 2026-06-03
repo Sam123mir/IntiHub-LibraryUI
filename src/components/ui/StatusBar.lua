@@ -136,7 +136,7 @@ function StatusBar.New(Config)
 				Position = UDim2.new(0.5, 0, 0.5, 0),
 				AnchorPoint = Vector2.new(0.5, 0.5),
 				BackgroundTransparency = 1,
-				ImageColor3 = Color3.new(0, 0, 0),
+				ImageColor3 = Color3.new(1, 1, 1),
 			}),
 		}),
 		New("TextLabel", {

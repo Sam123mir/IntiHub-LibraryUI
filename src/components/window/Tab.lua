@@ -270,7 +270,7 @@ function TabModule.New(Config, UIScale)
 		}),
 		New("Frame", {
             Name = "LeftColumn",
-            Size = UDim2.new(1, 0, 0, 0),
+            Size = UDim2.new(1, not Window.HidePanelBackground and -40 or -20, 0, 0),
             AutomaticSize = "Y",
             BackgroundTransparency = 1,
         }, {
@@ -292,7 +292,7 @@ function TabModule.New(Config, UIScale)
 		Visible = false,
 		Parent = Window.UIElements.MainBar,
 		ZIndex = 5,
-        Position = UDim2.new(0, 0, 0, 5),
+        Position = UDim2.new(0, 5, 0, 5),
 	}, {
 		Tab.UIElements.ContainerFrame,
 		New("Frame", {

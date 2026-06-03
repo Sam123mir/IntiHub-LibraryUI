@@ -63,11 +63,13 @@ end
 -- Initialize local icons
 IconModule.Icons["lucide"] = { Icons = {}, Spritesheets = {} }
 for name, id in next, IconModule.LocalIcons do
+    local imageId = "rbxassetid://" .. tostring(id)
     IconModule.Icons["lucide"].Icons[name] = {
-        Image = "rbxassetid://" .. tostring(id),
+        Image = imageId,
         ImageRectSize = Vector2.new(0,0),
         ImageRectPosition = Vector2.new(0,0)
     }
+    IconModule.Icons["lucide"].Spritesheets[imageId] = imageId
 end
 
 -- Try fetching external icons in background
