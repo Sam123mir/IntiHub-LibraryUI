@@ -12161,13 +12161,6 @@ do
                 if isOpen then
                     Panel.Visible = true
 
-                    local Group = Panel:FindFirstChild'Group'
-
-                    if Group then
-                        Group.GroupTransparency = 1
-
-                        Tween(Group, 0.3, {GroupTransparency = 0.05}):Play()
-                    end
                     if Button then
                         Tween(Button:FindFirstChildWhichIsA('ImageLabel', true), 0.3, {Rotation = 180}):Play()
                     end
